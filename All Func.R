@@ -26,6 +26,8 @@ judul=gsub('\\|','.',judul)
 judul=gsub('\r','.',judul)
 judul=gsub('\n','.',judul)
 judul=gsub('\t','.',judul)
+judul=gsub('\\(','',judul)
+judul=gsub('\\)','',judul)
 judul=gsub('..','.',judul,fixed=T)
 judul=gsub('..','.',judul,fixed=T)
 judul=gsub('..','.',judul,fixed=T)
@@ -553,5 +555,5 @@ for(i in 2:12){
 }
 print('===============================================================================================================')
 print('https://passingthroughresearcher.wordpress.com/')
-print('Last update: 7 Sept 2019')
+print('Last update: 9 Sept 2019')
 #sir.ikanx
