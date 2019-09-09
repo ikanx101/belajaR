@@ -24,6 +24,9 @@ judul=gsub('_','.',judul)
 judul=gsub('-','.',judul)
 judul=gsub('\\|','.',judul)
 judul=gsub('..','',judul,fixed=T)
+judul=gsub('\r','.',judul)
+judul=gsub('\n','.',judul)
+judul=gsub('\t','.',judul)
 return(judul)
 }
 
