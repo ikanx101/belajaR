@@ -415,7 +415,7 @@ gabung.string.donk=function(vector,vector.number){
   i=1
   while(i<n){
     y=vector.number[i+1]
-    x=paste(x,vector[y])
+    x=paste(x,vector[y],sep=' --> ')
     i=i+1
   }
   return(x)
@@ -556,5 +556,5 @@ for(i in 2:12){
 }
 print('===============================================================================================================')
 print('https://passingthroughresearcher.wordpress.com/')
-print('Last update: 10 Sept 2019')
+print('Last update: 10 Sept 2019 v2')
 #sir.ikanx
