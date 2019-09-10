@@ -427,29 +427,6 @@ ubahin.rasio.jadi.persen.donk=function(rasio){
   return(rasio)
 }
 
-############################################################
-# scrap detik.com
-############################################################
-cariin.berita.detik.com.donk = function(url){
-    library(rvest)
-    webpage <- read_html(url)
-    links <- webpage %>% html_nodes("a") %>% html_attr("href")
-    judul <- webpage %>% html_nodes("a") %>% html_text()
-    data = data.frame(judul,links)
-    return(data)
-}
-
-bacain.artikel.dari.link.detik.com.donk = function(url){
-    webpage <- read_html(url)
-    teks = webpage %>% html_nodes("#detikdetailtext") %>% html_text()
-    hapus=c('\r','googletag display div gpt ad','googletag cmd push function',
-                '1535944519982 0 ','\\{','\\}','\\;','msh','  ','  ','  ','  ')
-    for(i in 1:length(hapus)){
-        teks = gsub(hapus[i],' ',teks)
-    }
-    return(teks)
-    }
-
 x='i'
 print(x)
 for(i in 2:12){
