@@ -24,7 +24,7 @@ cari <- function(bot, update){
   url='https://harga-emas.org/1-gram/'
   txt = read_html(url) %>% html_nodes('td') %>% html_text()
   bot$sendMessage(chat_id = update$message$chat_id,
-                  text = paste('Pada ',txt[13],', per 1 gram emas harganya Rp',txt[11],sep=''))
+                  text = paste('Pada ',txt[13],', per 1 gram emas harganya Rp',txt[11],'\n\nsumber: ',url,sep=''))
 }
 start_handler <- CommandHandler('emas', cari)
 updater <- updater + start_handler
