@@ -14,7 +14,7 @@ update <- bot$getUpdates()
 
 start <- function(bot, update){
   bot$sendMessage(chat_id = update$message$chat_id,
-                  text = paste('Hai Kak ',update$message$from$first_name,', perkenalkan saya i.k.a.n.x_bot_ver_1.1\nSilakan tanyakan tentang machine learning, artificial intelligence, atau apapun itu ya... #projectiseng\nContoh: Apa itu machine learning?\n Cari tahu harga emas saat ini, ketik /emas',sep=''))
+                  text = paste('Hai Kak ',update$message$from$first_name,', perkenalkan saya i.k.a.n.x_bot_ver_1.5\nSilakan tanyakan tentang machine learning, artificial intelligence, atau apapun itu ya... #projectiseng\nContoh: Apa itu machine learning?\nCari tahu harga emas saat ini, ketik /emas',sep=''))
 }
 
 start_handler <- CommandHandler('start', start)
@@ -24,10 +24,46 @@ cari <- function(bot, update){
   url='https://harga-emas.org/1-gram/'
   txt = read_html(url) %>% html_nodes('td') %>% html_text()
   bot$sendMessage(chat_id = update$message$chat_id,
-                  text = paste('Pada ',txt[13],', per 1 gram emas harganya Rp',txt[11],'\n\nsumber: ',url,sep=''))
+                  text = paste('Pada ',txt[13],', per 1 gram emas harganya Rp',txt[11],sep=''))
 }
 start_handler <- CommandHandler('emas', cari)
 updater <- updater + start_handler
+
+cari <- function(bot, update){
+  url='https://harga-emas.org/1-gram/'
+  txt = read_html(url) %>% html_nodes('td') %>% html_text()
+  bot$sendMessage(chat_id = update$message$chat_id,
+                  text = paste('Pada ',txt[13],', per 1 USD nilai tukarnya adalah Rp',txt[8],sep=''))
+}
+start_handler <- CommandHandler('rupiah', cari)
+updater <- updater + start_handler
+
+##########################
+#Trial detik.com
+cari <- function(bot, update){
+  url='https://www.detik.com/'
+  webpage <- read_html(url)
+  links <- webpage %>% html_nodes("a") %>% html_attr("href")
+  judul <- webpage %>% html_nodes("a") %>% html_text()
+  data = data.frame(judul,links)
+  data = data[26:30,]
+  for(i in 1:5){
+    artikel = read_html(as.character(data$links[i])) %>% html_nodes("#detikdetailtext") %>% html_text()
+    hapus = c('\n','\t','\r','googletag display div gpt ad','googletag.cmd.push','googletag.display',
+              'function()',"('div-gpt-ad-1535944306169-0')","Gambas:Video 20detik",
+                '1535944519982 0 ','\\{','\\}','\\;','msh','  ','  ','  ','  ','  ')
+    for(j in 1:length(hapus)){
+      artikel = gsub(hapus[j],' ',artikel)
+    }
+    bot$sendMessage(chat_id = update$message$chat_id,
+                    text = paste(data$judul[i],'\n',artikel,'\n\n\n',data$links[i]))
+  }
+}
+start_handler <- CommandHandler('detik', cari)
+updater <- updater + start_handler
+##########################
+
+
 
 tolong.donk = function(judul){
   judul=tolower(judul)
@@ -43,7 +79,7 @@ tolong.donk = function(judul){
 }
 
 start_handler <- function(bot, update){
-  text <- "Saya masih belum belajar itu... Maklum #projectiseng, mau bantu develop bot ini? hehehe.\nTry: `Apa itu machine learning?`\n Try: `Apa itu algoritma?`\n atau silakan berkunjung ke blog saya di: https://passingthroughresearcher.wordpress.com/"
+  text <- "Saya masih belum belajar itu... Maklum #projectiseng, mau bantu develop bot ini? hehehe.\nTry: `Apa itu machine learning?`\n Try: `Apa itu algoritma?`\natau ketik: /start /emas /rupiah /detik\n\n\natau silakan berkunjung ke blog saya di: https://passingthroughresearcher.wordpress.com/"
   if (grepl('mean',tolong.donk(update$message$text),ignore.case = T)){text = "Salah satu ukuran pemusatan data. Biasa disebut dengan rata - rata. Dihitung dengan membagi jumlah data dengan banyaknya data. Contoh kasus: https://passingthroughresearcher.wordpress.com/2019/01/01/market-research-101-analisa-punya-point-of-view-lhoo/"}
   else if (grepl('belajar',tolong.donk(update$message$text),ignore.case = T)){text = "Ada berbagai macam cara untuk belajar machine learning. Bisa ambil online course atau hands on dan melihat forum tanya jawab seperti stackoverflow. Tapi pertanyaan yang lebih mendasar adalah `kapan saya harus mulai belajar machine learning?`. Silakan membaca tulisan lengkap saya di: https://passingthroughresearcher.wordpress.com/2018/12/18/kapan-saya-harus-belajar-machine-learning"}
   else if (grepl('median',tolong.donk(update$message$text),ignore.case = T)){text = "Salah satu ukuran pemusatan data. Biasa disebut dengan nilai tengah. Dicari dengan mengurutkan data dari terkecil ke terbesar lalu lihat di mana tengahnya. Contoh kasus: https://passingthroughresearcher.wordpress.com/2019/01/01/market-research-101-analisa-punya-point-of-view-lhoo/"}
@@ -86,7 +122,5 @@ start_handler <- function(bot, update){
 }
 
 updater <- updater + MessageHandler(start_handler, MessageFilters$text)
-
+print('Versi 1.5')
 updater$start_polling()
-
-#last update 10 Sept 2019
