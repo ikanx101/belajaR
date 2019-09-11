@@ -14,6 +14,8 @@ colnames(data) = c('jabatan','tahun','value')
 data = data %>% filter(tahun!='JUMLAH') %>% mutate(tahun = as.numeric(as.character(tahun))) %>% 
   mutate(value = as.numeric(as.character(value)))
 
+data %>% group_by(tahun) %>% summarise(sum(value))
+
 target = c('Anggota DPR dan DPRD',
            'Eselon I / II / III',
            'Swasta','Walikota/Bupati dan Wakil')
