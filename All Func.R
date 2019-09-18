@@ -14,6 +14,7 @@ library(gridExtra)
 library(ggplot2)
 library(foreign)
 library(expss)
+library (RDCOMClient)
 
 #membersihkan nama variabel dalam data frame
 tolong.bersihin.judul.donk = function(data){
@@ -421,10 +422,23 @@ gabung.string.donk=function(vector,vector.number){
   return(x)
 }
 
-
 ubahin.rasio.jadi.persen.donk=function(rasio){
   rasio=round(rasio*100,2)
   return(rasio)
+}
+
+#Send email outlook via RDCOM
+Outlook <- COMCreate("Outlook.Application")
+kirim.email.nutrifood.donk = function(email.to,email.cc,email.bcc,subject,body){
+Email = Outlook$CreateItem(0)
+# Set the recipient, subject, and body
+Email[["to"]] = email.to
+Email[["cc"]] = email.cc
+Email[["bcc"]] = email.bcc
+Email[["subject"]] = subject
+Email[["body"]] = body
+# Send the message
+Email$Send()
 }
 
 x='i'
