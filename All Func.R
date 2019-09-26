@@ -1,11 +1,3 @@
-print('===============================================================================================================')
-print('Syarat dan ketentuan berlaku')
-print('Pastikan library berikut ini sudah terinstall yah:')
-print('readxl, dplyr, officer, gridExtra, ggplot2, expss, foreign')
-print('Khusus untuk membuat powerpoint menggunakan officer, pastikan bahwa template powerpoint diberikan nama doc yah')
-print('Khusus untuk melakukan tabulasi data, pastikan bahwa data diberikan nama data yah')
-print('===============================================================================================================')
-
 #load library yg dbutuhkan
 library(readxl)
 library(dplyr)
@@ -15,6 +7,8 @@ library(ggplot2)
 library(foreign)
 library(expss)
 library (RDCOMClient)
+library(tidyr)
+library(ggrepel)
 
 #membersihkan nama variabel dalam data frame
 tolong.bersihin.judul.donk = function(data){
