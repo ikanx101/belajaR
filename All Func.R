@@ -117,9 +117,8 @@ tambahin.slide.isi.donk=function(slide.title,isi){
 
 #tambahin slide Ending
 tambahin.slide.ending.donk=function(){
-  doc <- add_slide(doc,layout = "Title Slide", master = "Office Theme")
-  doc <- ph_with(x=doc,"This is AI Generated Presentation\nUsing R\ni k A n g", location = ph_location_type(type = "subTitle"))
-  doc <- ph_with(x=doc,"Thank You", location = ph_location_type(type = "ctrTitle"))
+  doc <- add_slide(doc,layout = "Title Only", master = "Office Theme")
+  doc <- ph_with(x=doc,"This is AI Generated Presentation\nUsing R\ni k A n g\n\nThank You", location = ph_location_type(type = "title"))
 }
 
 #tambahin slide title dan two content
@@ -452,5 +451,5 @@ for(i in 2:12){
 }
 print('===============================================================================================================')
 print('https://passingthroughresearcher.wordpress.com/')
-print('Last update: 10 Sept 2019 v2')
+print('Last update: 26 Sept 2019')
 #sir.ikanx
