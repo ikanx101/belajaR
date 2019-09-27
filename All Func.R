@@ -435,6 +435,12 @@ Email[["body"]] = body
 Email$Send()
 }
 
+#hitung modus
+modus <- function(v) {
+   uniqv <- unique(v)
+   uniqv[which.max(tabulate(match(v, uniqv)))]
+}
+
 x='i'
 print(x)
 for(i in 2:12){
@@ -445,5 +451,5 @@ for(i in 2:12){
 }
 print('===============================================================================================================')
 print('https://passingthroughresearcher.wordpress.com/')
-print('Last update: 26 Sept 2019')
+print('Last update: 27 Sept 2019')
 #sir.ikanx
