@@ -44,7 +44,6 @@ gabungin.data.csv.saya.donk = function(path){
     data=rbind(data,temp)}
   write.csv(data,'Hasil Gabung Metode Ikanx.csv')
 }
-path=('D:/Project_R/Belajar R/Rocky Nutrimart/Extento')
 
 #Gabung data dalam satu folder excel
 gabungin.data.xls.saya.donk = function(path,skip){
