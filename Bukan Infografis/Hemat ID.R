@@ -26,7 +26,7 @@ if(!require(reshape2)){
   install.packages("reshape2")
   library(reshape2)
 }
-
+print('Proses sedang berjalan... Harap sabar yah...')
 url = c('https://www.hemat.id/katalog/makanan-minuman/',
         paste('https://www.hemat.id/katalog/makanan-minuman/?page=',
               c(2:30),sep=''))
@@ -110,3 +110,4 @@ final_data = final_data %>% mutate(
 )
 
 openxlsx::write.xlsx(final_data,file='Promo Makanan dan Minuman dalam minggu ini.xlsx')
+print('Proses sudah selesai, silakan cek my document. Ada file baru bernama: Promo Makanan dan Minuman dalam minggu ini.xlsx')
