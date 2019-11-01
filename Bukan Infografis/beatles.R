@@ -60,12 +60,12 @@ write.csv(data,'the beatles.csv')
 
 #kita liat dulu berapa banyak lagu yang ditulis dari sudut pandang pertama
 song_without_i = data %>% unnest_tokens('words',lirik) %>% 
-  filter(words=='i' | words=='me') %>% distinct()
+  filter(words=='i' | words=='me' | words=='my') %>% distinct()
 song_without_i = song_without_i$id
 
 song_without_i = data %>% filter(!id %in% song_without_i)
 
-data.frame(label=c('1st person pov','not 1st person pov'),value=c(200-26,26)) %>%
+data.frame(label=c('1st person pov','not 1st person pov'),value=c(200-22,22)) %>%
   mutate(percent=100*value/sum(value)) %>% 
   ggplot(aes(x=label,y=percent)) +
   geom_col(fill='white',color='blue',size=1) +
@@ -114,7 +114,7 @@ wordcloud2::wordcloud2(tes,
                        fontFamily = "Miso",
                        size=2)
 htmlwidgets::saveWidget(word,'dummy.html',selfcontained = F)
-webshot::webshot('dummy.html',"wordcloud.png", delay =5, vwidth = 700, vheight=700)
+webshot::webshot('dummy.html',"wordcloud.png", delay =5, vwidth = 1000, vheight=1000)
 
 #bigrams
 data %>% unnest_tokens('words',lirik) %>%
@@ -122,15 +122,16 @@ data %>% unnest_tokens('words',lirik) %>%
   group_by(judul) %>%
   summarise(lirik = stringr::str_c(words,collapse = ' ')) %>%
   unnest_tokens(bigram,lirik,token='ngrams',n=2) %>%
-  count(bigram,sort=T) %>% filter(bigram>1) %>%
+  count(bigram,sort=T) %>% 
   separate(bigram,into=c('word1','word2'),sep=' ') %>%
+  filter(n>30) %>%
   graph_from_data_frame() %>%
-  ggraph(layout = 'kk') +
+  ggraph(layout = 'fr') +
   theme_pubclean() +
   geom_edge_link(aes(edge_alpha=n),
                  show.legend = F,
                  color='darkred') +
   geom_node_point(size=1,color='steelblue') +
-  geom_node_text(aes(label=name),size=3,vjust=1,hjust=1) +
+  geom_node_text(aes(label=name),repel=T,size=3,vjust=1,hjust=1) +
   theme_void()
-ggsave('bigrams bitels.png',width = 17,height = 17)
+ggsave('bigrams bitels.png',width = 6,height = 4)
