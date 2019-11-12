@@ -17,10 +17,11 @@ data %>% mutate(tgl = as.character(tgl),
 #bebersih penulisan simpang
 library(tidytext)
 data = 
-data %>% select(no,simpang) %>% unnest_tokens(words,simpang,to_lower = T) %>% 
-  mutate(words=ifelse(words=='buahbatu','buah batu',words)) %>%
+  data %>% select(no,simpang) %>% unnest_tokens(words,simpang,to_lower = T) %>% 
   group_by(no) %>%
   summarise(simpang = stringr::str_c(words,collapse = ' ')) %>% 
+  mutate(simpang=ifelse(simpang=='buahbatu','buah batu',simpang),
+         simpang=ifelse(simpang=='cikapayang ptz','cikapayang',simpang)) %>%
   View()
 
 #ini utk ngecek yah
