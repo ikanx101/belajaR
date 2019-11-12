@@ -13,8 +13,34 @@ data =
 data %>% mutate(tgl = as.character(tgl),
                 tgl = lubridate::date(tgl),
                 simpang = as.character(simpang))
+
+#bebersih penulisan simpang
+library(tidytext)
+data = 
+data %>% select(no,simpang) %>% unnest_tokens(words,simpang,to_lower = T) %>% 
+  mutate(words=ifelse(words=='buahbatu','buah batu',words)) %>%
+  group_by(no) %>%
+  summarise(simpang = stringr::str_c(words,collapse = ' ')) %>% 
+  View()
+
+#ini utk ngecek yah
+data %>% select(no,simpang) %>% unnest_tokens(words,simpang,to_lower = T) %>% group_by(no) %>%
+  summarise(simpang = stringr::str_c(words,collapse = ' ')) %>% View()
 write.csv(data,'pelanggaran kota bandung.csv')
 
 #kita buat visualisasinya yah
 library(ggplot2)
 library(ggthemes)
+library(ggpubr)
+
+#pertama
+data %>% select(simpang,waktu,total.pelanggaran) %>% group_by(simpang,waktu) %>% 
+  summarise(total.pelanggaran=sum(total.pelanggaran)) %>% 
+  ggplot(aes(x=simpang,y=total.pelanggaran)) + 
+  geom_col(color='steelblue',fill='white') +
+  geom_label(aes(label=total.pelanggaran),size=1) +
+  facet_wrap(~waktu,ncol = 1,nrow = 2) +
+  theme_pubclean() +
+  theme(axis.title = element_blank(),
+        axis.text.x = element_text(angle=90))
+ggsave('')
