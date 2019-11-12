@@ -18,3 +18,4 @@ write.csv(data,'pelanggaran kota bandung.csv')
 #kita buat visualisasinya yah
 library(ggplot2)
 library(ggthemes)
+data
