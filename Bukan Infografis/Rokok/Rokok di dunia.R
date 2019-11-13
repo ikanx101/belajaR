@@ -32,3 +32,9 @@ data %>% filter(entity %in% target) %>%
         plot.subtitle = element_text(size=15),
         plot.caption = element_text(size=9,face='italic'))
 ggsave('Smokeys.png',width=10,height=8,dpi=500)
+
+#kita bikin growth 10 tahun terakhir yah
+data.baru =
+  data %>% filter(year %in% c(1992,2012)) %>%
+  select(entity,year,total)
+
