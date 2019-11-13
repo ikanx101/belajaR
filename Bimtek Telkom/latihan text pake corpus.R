@@ -37,7 +37,6 @@ dtm
 m1 = as.matrix(dtm)
 m1
 
-
 #ini mah iseng2 aja yah
 library(igraph)
 library(ggraph)

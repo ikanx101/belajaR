@@ -1,5 +1,5 @@
 rm(list=ls())
-setwd('D:/Project_R/TelegramBOT')
+setwd("/cloud/project/Tong sampah untuk telebot")
 library(telegram.bot)
 library(telegram)
 library(readxl)
