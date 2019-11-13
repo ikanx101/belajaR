@@ -59,8 +59,8 @@ data.baru %>% mutate(growth = round(((total.2012 - total.2002)/total.2002)*100,2
        caption='Scraped and Visualised\nusing R\ni k A n x') +
   theme(legend.position = 'none',
         axis.title = element_blank(),
-        axis.text.y=element_text(size=8,face='bold'),
+        axis.text.y=element_text(size=4,face='bold'),
         plot.title=element_text(size=14,face='bold'),
         plot.subtitle = element_text(size=10),
         plot.caption = element_text(size=9,face='italic'))
-ggsave('Smokeys growth.png',width=8,height=10,dpi=700)
+ggsave('Smokeys growth.png',width=8,height=10,dpi=300)
