@@ -27,14 +27,8 @@ clean =
   data %>% mutate(string = tolower(string)) %>%
   unnest_tokens(words,string) %>% count(words,sort = T) %>% filter(!words %in% stopwords_indo)
 
+#ambil kata dasar pake lib katadasaR
 library(katadasaR)
-katadasaR(clean$words)
 tes = sapply(clean$words, katadasaR)
-
-wordcloud2(wc,
-           color = "random-dark", 
-           backgroundColor = "white",
-           shape = 'cardioid',
-           fontFamily = "Miso",
-           size=2)
-
+attributes(tes) = NULL
+clean$kata.dasar = tes
