@@ -1,17 +1,6 @@
 #EXERCISE USING THE SNA PACKAGE
 setwd("/cloud/project/Bukan Infografis/Social Network Analysis")
 
-data = read.table('http://vlado.fmf.uni-lj.si/pub/networks/data/Ucinet/zachary.dat',header=F, skip=7)
-B = as.matrix(data)
-
-#kita pakai edge list baru kita bisa pakai igraph graph_from_data_frame
-#coba pakai data workplace yah
-
-
-
-
-
-
 #ini ambil dari tel-u
 people <- c("dandi", "lala", "reza", "ais", "eci")
 people
