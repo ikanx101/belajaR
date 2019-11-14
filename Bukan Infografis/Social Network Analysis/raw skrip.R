@@ -1,6 +1,13 @@
 #EXERCISE USING THE SNA PACKAGE
 setwd("/cloud/project/Bukan Infografis/Social Network Analysis")
 
+data = read.table('http://vlado.fmf.uni-lj.si/pub/networks/data/Ucinet/zachary.dat',header=F, skip=7)
+B = as.matrix(data)
+
+#kita pakai edge list baru kita bisa pakai igraph graph_from_data_frame
+#coba pakai data workplace yah
+
+
 people <- c("dandi", "lala", "reza", "ais", "eci")
 people
 
@@ -43,5 +50,5 @@ network.density(B)
 
 library(dils)
 combn(10,2)
-edgelist <- cbind(expand.grid(letters[1:2], letters[1:2]), runif(4))
+edgelist <- cbind(expand.grid(letters[1:3], letters[1:3]), runif(4))
 AdjacencyFromEdgelist(edgelist)
