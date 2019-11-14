@@ -8,6 +8,11 @@ B = as.matrix(data)
 #coba pakai data workplace yah
 
 
+
+
+
+
+#ini ambil dari tel-u
 people <- c("dandi", "lala", "reza", "ais", "eci")
 people
 
@@ -24,7 +29,6 @@ B
 library(sna)
 
 gplot (B, displaylabels=TRUE)
-
 
 od <-degree(B, cmode = 'outdegree')
 gplot (B, displaylabels=TRUE, vertex.cex = od )
@@ -45,10 +49,3 @@ betweenness(B)
 network(B)
 B <- network(B)
 network.density(B)
-
-
-
-library(dils)
-combn(10,2)
-edgelist <- cbind(expand.grid(letters[1:3], letters[1:3]), runif(4))
-AdjacencyFromEdgelist(edgelist)
