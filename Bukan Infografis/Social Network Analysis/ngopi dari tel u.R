@@ -31,6 +31,7 @@ gplot (B, displaylabels=TRUE, vertex.cex = fr)
 #closeness
 closeness(B)
 
+B
 #betweeness
 betweenness(B)
 

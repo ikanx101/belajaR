@@ -2,7 +2,7 @@ rm(list=ls())
 
 #bikin nama
 library(randomNames)
-intr = randomNames(20,gender = 'female',which.names = 'first')
+intr = randomNames(30,gender = 'female',which.names = 'first')
 hasil = combn(intr,2,simplify = T)
 n = length(hasil)/2
 
@@ -17,7 +17,7 @@ for(i in 1:n){
 data = data.frame(id=(1:n),from,to)
 
 #random angka
-target = sample(n,36)
+target = sample(n,60)
 
 #final data
 library(dplyr)
@@ -43,8 +43,22 @@ colnames(hasil) = tes$nodelist
 rownames(hasil) = tes$nodelist
 
 library(sna)
-sna::closeness(hasil)
-sna::betweenness(hasil)
-sna::degree(hasil)
+close = sna::closeness(hasil)
+between = sna::betweenness(hasil)
+degree = sna::degree(hasil)
+eigen = sna::evcent(hasil)
 
-tes$nodelist
+analisa.hasil = data.frame(nama=tes$nodelist,
+                           close,
+                           between,
+                           degree,
+                           eigen)
+View(analisa.hasil)
+
+#bikin chart yg sama
+g = graph.adjacency(hasil,weighted = T, mode='undirected')
+g = simplify(g)
+set.seed(3952)
+layout1 = layout.fruchterman.reingold(g)
+png('between.png',width = 1024,height = 768,units = 'px');plot(g, layout=layout1,edge.curved=0.2,vertex.label.cex=1.25,vertex.size=between);dev.off()
+png('degree.png',width = 1024,height = 768,units = 'px');plot(g, layout=layout1,edge.curved=0.2,vertex.label.cex=1.25,vertex.size=degree/2);dev.off()
