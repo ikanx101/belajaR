@@ -62,3 +62,11 @@ set.seed(3952)
 layout1 = layout.fruchterman.reingold(g)
 png('between.png',width = 1024,height = 768,units = 'px');plot(g, layout=layout1,edge.curved=0.2,vertex.label.cex=1.25,vertex.size=between/2);dev.off()
 png('degree.png',width = 1024,height = 768,units = 'px');plot(g, layout=layout1,edge.curved=0.2,vertex.label.cex=1.25,vertex.size=degree);dev.off()
+
+g
+fc = fastgreedy.community(as.undirected(g))
+V(g)$color <- ifelse(membership(fc)==1,"red","blue")
+png('cluster membership.png',
+    width = 1024,
+    height = 768,
+    units = 'px');plot(g);dev.off()
