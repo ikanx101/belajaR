@@ -1,0 +1,23 @@
+
+Call:
+lm(formula = life.satisfaction ~ gdp.per.capita, data = data.lm)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-2.06541 -0.50551  0.00623  0.55957  1.90277 
+
+Coefficients:
+                Estimate Std. Error t value
+(Intercept)    4.649e+00  9.235e-02   50.34
+gdp.per.capita 4.338e-05  3.430e-06   12.65
+               Pr(>|t|)    
+(Intercept)      <2e-16 ***
+gdp.per.capita   <2e-16 ***
+---
+Signif. codes:  
+0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.7673 on 140 degrees of freedom
+Multiple R-squared:  0.5333,	Adjusted R-squared:   0.53 
+F-statistic:   160 on 1 and 140 DF,  p-value: < 2.2e-16
+

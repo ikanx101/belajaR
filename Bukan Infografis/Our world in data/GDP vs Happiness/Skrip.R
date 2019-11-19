@@ -68,4 +68,7 @@ model.reg =
      data=data.lm)
 summary(model.reg)
 str(model.reg)
-model.reg$terms
+
+sink('summary reg model.txt')
+print(summary(model.reg))
+sink()
