@@ -26,7 +26,7 @@ data %>% filter(tahun==2017) %>%
   theme_tufte() +
   geom_point(aes(size = population,color = population),alpha=.7) +
   geom_text(aes(label = negara),size=2.25,alpha=.45) +
-  #geom_smooth(method = 'lm',alpha=.1) +
+  geom_smooth(method = 'lm',alpha=.1) +
   theme(legend.position = 'none') +
   labs(title = 'Money Can`t Buy Happiness...\nIs that true?',
        subtitle = 'Each dot in the visualization represents one country. The vertical position of the dots shows national average self-reported life satisfaction\nin the Cantril Ladder (a scale ranging from 0-10 where 10 is the highest possible life satisfaction)\nwhile the horizontal position shows GDP per capita based on purchasing power parity (i.e. GDP per head after adjusting for inflation and cross-country price differences).',
@@ -37,8 +37,19 @@ data %>% filter(tahun==2017) %>%
         plot.title = element_text(size=24,face='bold'),
         plot.subtitle = element_text(size=10),
         plot.caption = element_text(size=8,face='bold.italic'),
-        axis.title = element_text(size=15,face='bold'))
-ggsave('money cant buy happiness.png',
+        axis.title = element_text(size=15,face='bold')) +
+  stat_regline_equation(
+    aes(label =  paste(..eq.label.., ..adj.rr.label.., sep = "~~~~"))
+  )
+ggsave('reg model 2.png',
        width = 10,
        height = 8,
        dpi = 600)
+
+#kita lagi dengan tambahan korelasi yah
+data %>% filter(tahun==2017) %>%
+  filter(!is.na(gdp.per.capita)) %>%
+  filter(!is.na(life.satisfaction)) %>%
+  filter(!is.na(population)) %>% 
+  summarise(cor(gdp.per.capita,life.satisfaction))
+# ditemukan korelasi yang tinggi
