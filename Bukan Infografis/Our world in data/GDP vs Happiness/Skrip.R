@@ -47,9 +47,25 @@ ggsave('reg model 2.png',
        dpi = 600)
 
 #kita lagi dengan tambahan korelasi yah
-data %>% filter(tahun==2017) %>%
+korel =
+  data %>% filter(tahun==2017) %>%
   filter(!is.na(gdp.per.capita)) %>%
   filter(!is.na(life.satisfaction)) %>%
   filter(!is.na(population)) %>% 
   summarise(cor(gdp.per.capita,life.satisfaction))
 # ditemukan korelasi yang tinggi
+write.table(korel,file='Hasil korelasi.txt')
+
+#kita bikin modelnya yah
+data.lm =
+  data %>% filter(tahun==2017) %>%
+  filter(!is.na(gdp.per.capita)) %>%
+  filter(!is.na(life.satisfaction)) %>%
+  filter(!is.na(population))
+
+model.reg =
+  lm(life.satisfaction~gdp.per.capita,
+     data=data.lm)
+summary(model.reg)
+str(model.reg)
+model.reg$terms

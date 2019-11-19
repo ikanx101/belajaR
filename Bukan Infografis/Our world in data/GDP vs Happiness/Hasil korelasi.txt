@@ -1,0 +1,2 @@
+"cor(gdp.per.capita, life.satisfaction)"
+"1" 0.730272665223131
