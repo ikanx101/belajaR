@@ -68,8 +68,8 @@ data.new.1 %>%
   scale_color_brewer(palette = 'Dark2') +
   geom_text(aes(label = negara),size=2.25,alpha=.45) +
   theme(legend.position = 'none') +
-  labs(title = 'Cluster Analysis - Setiap Warna Merepresentasikan Kelompok Negara',
-       subtitle = 'Klasifikasi menggunakan algoritma k-means clustering.\nSuatu teknik unsupervised yang digunakan untuk mengelompokkan data berdasarkan cluster center.\nDidapat 7 buah cluster negara.',
+  labs(title = 'Cluster Analysis\nSetiap Warna Merepresentasikan Kelompok Negara',
+       subtitle = 'Klasifikasi menggunakan algoritma k-means clustering.\nSuatu teknik unsupervised yang digunakan untuk mengelompokkan data berdasarkan cluster center.\nDidapat 7 buah cluster negara.\nVariabel yang digunakan: GDP per kapita, happiness index, dan populasi.',
        caption = 'Scraped and Visualized from ourworldindata.org\nusing R\ni k A n x',
        x = 'GDP per Capita',
        y = 'Life satisfaction') +
