@@ -58,3 +58,27 @@ head(data.new.1)
 sink('hasil clustering.txt')
 print(final)
 sink()
+
+#kita buat grafik terbaru yah
+data.new.1 %>%
+  ggplot(aes(x = gdp.per.capita,
+             y = life.satisfaction)) +
+  theme_tufte() +
+  geom_point(aes(color = as.factor(cluster)),size=3) +
+  scale_color_brewer(palette = 'Dark2') +
+  geom_text(aes(label = negara),size=2.25,alpha=.45) +
+  theme(legend.position = 'none') +
+  labs(title = 'Cluster Analysis - Setiap Warna Merepresentasikan Kelompok Negara',
+       subtitle = 'Klasifikasi menggunakan algoritma k-means clustering.\nSuatu teknik unsupervised yang digunakan untuk mengelompokkan data berdasarkan cluster center.\nDidapat 7 buah cluster negara.',
+       caption = 'Scraped and Visualized from ourworldindata.org\nusing R\ni k A n x',
+       x = 'GDP per Capita',
+       y = 'Life satisfaction') +
+  theme(axis.text = element_blank(),
+        plot.title = element_text(size=24,face='bold'),
+        plot.subtitle = element_text(size=10),
+        plot.caption = element_text(size=8,face='bold.italic'),
+        axis.title = element_text(size=15,face='bold'))
+ggsave('Cluster Model.png',
+       width = 10,
+       height = 8,
+       dpi = 600)
