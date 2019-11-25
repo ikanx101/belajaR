@@ -1,4 +1,4 @@
-setwd('D:/Project_R/Kamis Data/the_flash_s6')
+setwd("/cloud/project/Bukan Infografis/the Flash")
 rm(list=ls())
 
 library(rvest)
@@ -15,8 +15,9 @@ url = 'https://en.wikipedia.org/wiki/The_Flash_(season_6)'
 sinopsis = 
   read_html(url) %>% html_nodes('.description') %>% html_text()
 
-data = data.frame(eps=c(1:3),sinopsis)
+data = data.frame(eps=c(1:7),sinopsis)
 
+data
 #wordcloud
 d = 
 data %>% mutate(sinopsis = as.character(sinopsis),
@@ -36,7 +37,7 @@ wordcloud2(d,
            size=1)
 saveWidget(word,'dummy.html',selfcontained = F)
 library(webshot)
-webshot('dummy.html',"wordcloud.png", delay =5, vwidth = 900, vheight=800)
+webshot('dummy.html',"wordcloud.png", delay =5, vwidth = 700, vheight=600)
 
 #bigrams
 data %>% mutate(sinopsis = as.character(sinopsis),
