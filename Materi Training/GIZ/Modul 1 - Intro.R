@@ -12,6 +12,7 @@ tes_vector=c(1,3,6,5,4,7)
 a=c(1:10) #contoh generating sequence
 a=seq(1,10,0.5) #contoh generating sequence by 0.5
 sample(100,5,replace=F) #generating random number
+kalimat = 'saya biasa pergi ke kantor setiap jam 7 pagi'
 pecah.kata=strsplit(kalimat,' ') #pecah kalimat menjadi kata dan mengubahnya menjadi array
 
 #Yang penting di array
