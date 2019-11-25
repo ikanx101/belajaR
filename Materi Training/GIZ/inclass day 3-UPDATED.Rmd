@@ -1,0 +1,877 @@
+---
+title: "Inclass Material RM Iris Night B"
+author: "Sitta"
+date: "`r format(Sys.Date(), '%B %e, %Y')`"
+output: 
+  html_document:
+    theme: darkly
+    highlight: tango
+    df_print: paged
+    toc: true
+    toc_depth: 3
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      warning = FALSE,
+                      message = FALSE)
+```
+
+# Regression Model
+
+## Day 1
+
+Review tipe data
+
+---------------------------------------------------------------------------
+
+Regression model merupakan Supervised Learning karena data yang dibutuhkan harus memiliki target variabel (y).
+
+Target variabel dari Regression Model harus bertipe numerik, kalau prediktornya (x) boleh numerik/categorical.
+
+Sebelum membuat Linear Model, sebaiknya dilakukan
+
+1. load library yang dibutuhkan
+
+```{r, warning=F, message=F}
+library(dplyr)
+```
+
+2. Baca data `copiers`
+
+```{r}
+copiers <- read.csv("copiers.csv")
+```
+
+3. Investigasi Data
+
+```{r}
+str(copiers)
+```
+
+Sebelum melakukan analisa, kita perlu explorasi datanya. Salah satunya yaitu persebaran data, bisa di cek dengan menggunakan histogram atau boxplot.
+
+Misal kita ingin cek sebaran data profit kita
+```{r}
+hist(copiers$Profit)
+```
+
+Kemudian, kita ingin cek sebaran data dari sales kita
+```{r}
+hist(copiers$Sales)
+```
+
+Dari dua histogram di atas, dapat kita simpulkan bahwa baik variabel Sales maupun Profit, keduanya memiliki outlier(data pencilan). Selanjutnya, akan kita cek data outliernya menggunakan boxplot.
+
+Untuk variabel Profit
+```{r}
+boxplot(copiers$Profit)
+boxplot(copiers$Profit, plot = F)$out
+```
+
+Untuk variabel Sales
+```{r}
+boxplot(copiers$Sales)
+boxplot(copiers$Sales, plot = F)$out
+```
+
+
+Statistik tidak mungkin memprediksi tepat 100%. Maka dari itu, untuk memperoleh model yang baik kita perlu menghasilkan error yang minimum (Least Square Error). Cara memperoleh error yang minimum menggunakan pendekatan OLS (Ordinary Least Square).
+
+```{r eval=FALSE}
+library(manipulate)
+
+expr1 <- function(mn) {
+  
+  mse <- mean((copiers$Sales - mn)^2)
+  
+  hist(copiers$Sales, breaks = 20, main = paste("mean = ", mn, "MSE = ", round(mse, 2), sep = ""))
+    abline(v = mn, lwd = 2, col = "darkred")
+    
+}
+
+manipulate(expr1(mn), mn = slider(1260, 1360, step = 10))
+mean(copiers$Sales)
+```
+
+Note:
+Dari ilustrasi di atas, didapat bahwa ketika nilai prediksi kita mendekati nilai reratanya, maka erronya semakin kecil.
+
+## Simple Linear Regression
+
+Formula dari simple linear regression sama seperti persamaan garis, yakni : 
+<center>
+$\hat{y} = b_0 + b_1*x1$
+</center>
+<center>
+atau kalau di persamaan garis
+</center>
+<center>
+$y = mx+c$
+</center>
+
+di mana :   
+$\hat{y}$ = target variabel yang ingin dipredisi   
+$b_0$ = intercept/constanta   
+$b_1$ = slope/gradient/coefficient/kemiringan   
+$x_1$ = variabel prediktor   
+
+Pertama-tama, mari kita cek untuk memprediksi Profit dengan dirinya sendiri (tanpa prediktor)
+`lm(formula = ..., data = ...)`
+
+```{r}
+model_init <- lm(formula = Profit~1, data = copiers)
+model_init
+```
+
+Hasil model init yang dihasilkan, akan sama dengan nilai reratanya
+```{r}
+mean(copiers$Profit)
+```
+
+Kesimpulan:
+Ketika profit diprediksi **tanpa prediktor(x)**, akan menghasilkan nilai yang sama dengan mean profitnya
+
+
+Dalam Simple Linear Regression, hanya digunakan **1 variabel prediktor**.
+`lm(formula = target~prediktor, data = ...)`
+
+Misal kita ingin memprediksi Profit (y) berdasarkan Salesnya (x)
+```{r}
+model_ps <- lm(formula = Profit ~ Sales, data = copiers)
+```
+
+Dari model di atas, didapat bahwa `intercept = -114.0625` dan `Sales = 0.4229`, sehingga model_ps menghasilkan formula
+<center>
+$Profit = -114.0625 + 0.4229*Sales$
+</center>
+
+
+Dari formula di atas, apa kesimpulan yang bisa kita dapatkan?   
+1. Ketika Sales = 0, maka nilai profitnya sama dengan intercept (-114.0625). Maka perusahaan mengalami kerugian   
+2. Sales berkorelasi positif terhadap profit   
+3. Setiap kenaikan 1 sales, berkontribusi sebesar 0.4229 terhadap Profit   
+
+Buatlah plotnya untuk melihat sebaran data dan model yang dihasilkan
+```{r}
+plot(copiers$Sales, copiers$Profit)
+abline(model_ps)
+```
+
+Prediksilah data Sales yang baru menggunakan model_ps. Misal saya memiliki Sales 2000, berapakah hasil prediksi Profit saya?
+
+```{r}
+-114.0625 + 0.4229 * 2000
+```
+
+Berapakah Profit ketika perusahaan ketika sales = 300?
+```{r}
+-114.0625 + 0.4229 * 300
+```
+
+Fungsi predict, untuk memprediksi variabel prediktor (Sales) secara otomatis
+```{r}
+predict(object = model_ps, newdata = data.frame(Sales = 300))
+```
+
+Memprediksi nilai-nilai Sales yang terdapat pada objek `transaksi`
+```{r}
+transaksi <- data.frame(Sales = c(2000, 300, 1500, 4500))
+predict(object = model_ps, newdata = transaksi)
+```
+
+Memprediksi nilai-nilai Sales pada data copiers, agar mendapatkan hasil **prediksi yang akan dibandingkan dengan nilai actual**
+```{r}
+copiers$pred <- predict(model_ps, newdata = data.frame(Sales = copiers$Sales))
+```
+
+Untuk menghitung error dengan SSE
+```{r}
+SSE <- sum((copiers$pred - copiers$Profit)^2)
+SSE
+```
+
+Untuk menghitung error dengan MSE
+```{r}
+MSE <- sum((copiers$pred - copiers$Profit)^2)/nrow(copiers)
+MSE
+```
+
+Untuk menghitung error dengan MAE
+```{r}
+MAE <- sum(abs(copiers$pred - copiers$Profit))/nrow(copiers)
+MAE
+```
+
+Salah satu metric untuk mengevaluasi model dari simple linear regression, dilihat multiple r.squarednya yang bisa diperoleh dari `summary(model)`
+```{r}
+summary(model_ps)
+```
+
+Multiple R-squared = 0.8828 artinya Sales mampu menjelaskan 88% informasi (variansi) untuk variabel Profit, sisanya dijelaskan oleh variabel lain yang tidak dimasukkan ke dalam model
+
+Note:
+# Interpretasi dari summary:
+
+Call:
+lm(formula = Profit ~ Sales, data = copiers)
+menunjukkan formula dari machine learning yang kita buat
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-407.07  -70.08   22.95   76.56  345.05 
+
+Residuals = error. Di atas menunjukkan sebaran dari error yang kita punya 
+
+
+`              Estimate Std. Error t value            Pr(>|t|)`
+(Intercept) -83.54810   32.82978  -2.545              0.0136 *
+Sales         0.39444    0.02146  18.384 <0.0000000000000002 ***
+
+`Pr(<|t|)` menunjukkan signifikansi suatu variabel prediktor terhadap targetnya
+
+
+Estimate pada variabel prediktor Sales menunjukkan 0.39444, artinya setiap kenaikan 1 sales, berkontribusi 0.39444 terhadap profitnya.
+Sedangkan, ketika Salesnya 0, maka nilainya akan sama dengan estimate pada interceptnya (-83.54810).
+
+
+`F-statistic:   338 on 1 and 59 DF,  p-value: < 0.00000000000000022`
+P-value < 0.05 artinya model berpengaruh terhadap profitnya
+
+Multiple R-squared:  0.8828,	Adjusted R-squared:  0.8809 
+
+
+Pada Simple linear regression, metric yang menjadi acuan untuk melihat apakah model yang dibuat sudah bagus atau belum adalah dengan melihat nilai multiple r-squarednya. Pada model_ps, didapat nilai multiple R-squared: 0.8828, artinya variabel Sales mampu menjelaskan 88% informasi (variansi) variabel profit. 
+
+Note: nilai R-squared antara 0 sampai 1, semakin mendekati 1 semakin baik
+
+
+**Discussion Time** Buatlah model yang memprediksi Profit  berdasarkan variabel `Discount`, prediksi hasilnya, dan lihat MSE dan MAEnya
+
+Membuat model_pd
+```{r}
+model_pd <- lm(Profit~Discount, copiers)
+```
+
+Rangkuman dari model_pd
+```{r}
+summary(model_pd)
+```
+
+Kesimpulan:    
+- Dari model_pd di atas, didapat nilai multiple R-squarednya 0.18, artinya variable Discount mampu menjelaskan 18% variansi dari variabel Profit.   
+- Variabel Discount memiliki Pr(>|t|) 0.00045 artinya variabel dicount signifikan berpengaruh terhadap Profit. Atau bisa dilihat dari jumlah bintangnya, semakin banyak bintang semakin berpengaruh
+
+Memprediksi data Discount dan membuat variabel baru di data copiers
+```{r}
+copiers$preddis <- predict(model_pd, newdata = data.frame(Discount = copiers$Discount))
+```
+
+Error model_pd
+```{r}
+MSE_preddis <- sum((copiers$Discount - copiers$preddis)^2)/nrow(copiers)
+MSE_preddis
+```
+
+Pertanyaan:
+web untuk rule of thumb r squared
+
+## Day 2 
+
+## Leverage vs Influence
+
+1. High Leverage, Low Influence
+2. High Leverage, High Influence
+
+Leverage = outliers
+
+Cek apakah ada outlier pada variabel Sales, kemudian remove outlier tersebut dan assign ke objek `copiers_remove`
+
+```{r}
+boxplot(copiers$Sales, plot = F)$out
+```
+
+
+```{r}
+copiers_remove <- copiers %>% 
+  filter(Sales != 4899.93)
+copiers
+copiers_remove
+```
+
+Buatlah model yang memprediksi Profit berdasarkan Salesnya menggunakan data `copiers_remove` 
+
+```{r}
+model_remove <- lm(Profit~Sales, copiers_remove)
+```
+
+Bandingkan model ketika outlier tidak dihapus (model_ps) dengan model tanpa outlier
+```{r}
+summary(model_remove)$r.squared
+summary(model_ps)$r.squared
+```
+```{r}
+summary(model_pd)
+```
+
+
+```{r}
+cor(copiers$Profit, copiers$Sales)
+cor(copiers$Profit, copiers$Discount)
+```
+
+---
+Discussion:
+Model manakah yang lebih baik?   
+1. model_ps (model dengan menyertakan outlier) lebih baik dibandingkan model_remove karena r-squarednya lebih tinggi   
+2. Outlier pada Sales termasuk High Leverage dan Low Influence (karena tidak banyak memperngaruhi model)
+
+---
+
+### [Optional] Beta Coefficient formula
+$\beta = Cor(x,y)\frac{Sd(y)}{Sd(x)}$   
+
+di mana :   
+$\beta$ = beta coefficient $\beta_1, \beta_2, ..., \beta_n$   
+$Cor(x,y)$ = Korelasi antara x dan y   
+$Sd(y)$ = Standar Deviasi y   
+$Sd(x)$ = Standar Deviasi x   
+
+Note:
+Beta coefficietnt dan korelasi sejalan, ketika beta coefficient bernilai positif maka korelasinya juga positif, sedangkan ketika beta coefficient bernilai negatif, maka korelasinya juga negatif.
+
+### Multiple linear regression
+adalah regressi linear dengan lebih dari satu prediktor
+`lm(formula = target ~ Prediktor1 + prediktor 2 +... , data = ...)`
+
+#### Rumus Multiple Linear Regression
+<center>
+$\hat{y} = \beta_0 + \beta_1*x_1 + \beta_2*x_2 + ... + \beta_n*x_n$
+</center>
+
+Untuk mengevaluasi model dari multiple linear regression, digunakan adjusted r.squared.
+
+Load data hills dan investigasi datanya
+```{r}
+library(MASS)
+hills
+```
+
+Lakukan cek korelasi untuk melihat apakah linear
+```{r}
+library(GGally)
+ggcorr(hills, label = T)
+```
+
+Cek apakah terdapat outlier
+```{r}
+boxplot(hills)
+```
+
+Buatlah 2 model, dengan 1 variabel prediktor (dist) dan dengan 2 variabel prediktor (dist + climb) dari data hills yang outliernya belum diremove
+
+```{r}
+model_1 <- lm(time ~ dist, hills)
+model_2 <- lm(time ~ dist + climb, hills)
+
+# cara 2 untuk membuat multiple linear regression
+# model_2 <- lm(time~., hills)
+```
+
+Bandingkan nilai r.squared dan adj.r.squared dari kedua model tersebut
+
+```{r}
+summary(model_1)$r.squared
+summary(model_2)$r.squared
+```
+
+```{r}
+summary(model_1)$adj.r.squared
+summary(model_2)$adj.r.squared
+summary(model_2)
+```
+
+#### Adjusted R-Squared
+
+>merupakan metrics untuk mengevaluasi model multiple linear regression
+
+Fomula:
+$\bar{R^2} = 1(1-R^2)\frac{n-1}{n-p-1}$
+
+di mana:
+$\bar{R^2}$ = Adjusted R-Squared
+$R^2$ = R-Squared
+$n$ = jumlah observasi/data
+$p$ = jumlah prediktor
+
+Adj.r-squared < r-squared-nya.
+Adj.r-squared nilainya antara 0-1. Kalau multiple r-squared, semakin banyak ditambahkan variabelnya, maka nilainya akan sama atau semakin naik mendekati 1, namun kalau adj.r.squared, semakin ditambah variabel prediktornya, maka nilainya belum tentu naik.
+
+---
+Kesimpulan adj.r.squared:     
+1. Adj R-squared akan naik ketika variabel yang ditambahkan signifikan berpengaruh   
+2. Adj R-squared akan turun ketika variabel yang ditambahkan tidak signifikan berpengaruh   
+3. Multiple R-Squared akan naik seiring bertambahnya variabel, walaupun variabel yang ditambahkan tidak signifikan berpengaruh
+---
+
+#### EXERCISE :
+
+```{r}
+library(dplyr)
+crime <- read.csv("data_input/crime.csv") %>% 
+dplyr::select(-X)
+names(crime) <- c("percent_m", "is_south", "mean_education", "police_exp60", "police_exp59", "labour_participation", "m_per1000f", "state_pop", "nonwhites_per1000", "unemploy_m24", "unemploy_m39", "gdp", "inequality", "prob_prison", "time_prison", "crime_rate")
+plot(crime$gdp, crime$inequality)
+```
+
+cek korelasi dari data crime
+```{r}
+ggcorr(crime, label = T, hjust = 0.9, cex = 4, label_size = 3, layout.exp = 3)
+```
+
+1. Buatlah model linear untuk memprediksi inequality berdasarkan gdp
+```{r}
+model_crime1 <- lm(inequality ~ gdp, crime)
+```
+
+Predict nilai inequality menggunakan fungsi predict()
+```{r}
+pred1 <- predict(model_crime1, newdata = data.frame(gdp = crime$gdp))
+```
+
+2. Buatlah model linear untuk memprediksi inequality berdasarkan gdp dan mean education
+
+```{r}
+model_crime2 <- lm(inequality~gdp + mean_education, crime)
+```
+
+Predict nilai inequality menggunakan fungsi predict()
+```{r}
+pred2 <- predict(model_crime2, newdata = data.frame(gdp = crime$gdp, mean_education = crime$mean_education))
+```
+
+3. Buatlah model linier untuk memprediksi inequality berdasarkan gdp, mean_education, labour_participation, m_per1000f, dan time_prison
+
+```{r}
+model_crime3 <- lm(inequality~gdp + mean_education + labour_participation + m_per1000f + time_prison, crime)
+```
+
+Predict nilai inequality menggunakan fungsi predict()
+```{r}
+pred1 <- predict(model_crime1, newdata = data.frame(gdp = crime$gdp, mean_education = crime$mean_education, labour_participant = crime$labour_participation, m_per1000f = crime$m_per1000f, time_prison = crime$time_prison))
+```
+
+4. Bandingkan nilai r.squared, adj.r.squared, dan MSE-nya dari ketiga model tersebut
+
+```{r}
+paste("model_crime1-r2:",summary(model_crime1)$r.squared)
+paste("model_crime2-r2:",summary(model_crime2)$r.squared)
+paste("model_crime3-r2:",summary(model_crime3)$r.squared)
+```
+
+```{r}
+paste("model_crime1-r2:",summary(model_crime1)$adj.r.squared)
+paste("model_crime2-r2:",summary(model_crime2)$adj.r.squared)
+paste("model_crime3-r2:",summary(model_crime3)$adj.r.squared)
+```
+```{r}
+summary(model_crime3)
+```
+
+Nilai MSE dari ketiga model tersebut
+```{r}
+library(MLmetrics)
+MSE(model_crime3$fitted.values, crime$inequality)
+MSE(model_crime2$fitted.values, crime$inequality)
+MSE(model_crime1$fitted.values, crime$inequality)
+```
+
+5. Manakah model yang terbaik?
+
+Model 3 karena menghasilkan adj.r.squared yang paling tinggi, dan MSE (Mean Squared Error) yang paling kecil
+
+#### Tambahan1 : tentang MAPE(Mean Absolut Percentage Error)
+
+$MAPE = \frac{1}{n}\sum|\frac{A_t-F_t}{A_t}|$
+
+di mana:
+$A_t$ = Actual value
+$F_t$ = Forecast value
+
+Kekurangan: tidak bisa digunakan ketika ada actual value ($A_t$) yang nilainya 0 (karena $A_t$ di formula sebagai penyebut, sehingga nilainya tidak boleh 0)
+
+Contoh MAPE untuk model_crime3
+```{r}
+MAPE(model_crime3$fitted.values, crime$inequality)
+```
+
+MAPE dari model_crime3 adalah 0.07161653 artinya, hasil prediksi kita rata-rata meleset 7% dari data actualnya. MAPE tidak menghasilkan NaN, artinya tidak ada actual value kita yang nilainya 0. 
+
+Cek apakah benar tidak ada actual value yang nilainya 0
+
+```{r}
+crime %>% 
+  filter(inequality == 0)
+```
+
+#### Tambahan2 : Contoh nilai adjusted R-Squared yang tidak selalu naik nilainya ketika variabelnya semakin banyak
+
+Membuat model_crime4 dari data crime yang memiliki 16 variabel (15prediktor + 1 target)
+```{r}
+model_crime4 <- lm(inequality~., crime)
+```
+
+Misal kita ingin membandingkan model_crime5 dengan dengan meremove variabel police_exp59 yang mana variabel tersebut sangat tidak signifikan. Sehingga objek crime2 hanya memiliki 15 variabel (14 prediktor + 1 target)
+
+```{r}
+crime2 <- crime[, -5]
+model_crime5 <- lm(inequality~., crime2)
+```
+
+Nilai Adjusted R-Squared pada kedua model
+
+```{r}
+summary(model_crime4)$adj.r.squared
+summary(model_crime5)$adj.r.squared
+```
+
+Kesimpulan:   
+model_crime5 (dengan 14 variabel prediktor) mempunyai adjusted R-Squared yang **lebih besar** daripada adjusted R-Squared pada model_crime4(dengan 15 variabel prediktor)
+
+```{r}
+summary(model_crime4)$r.squared
+summary(model_crime5)$r.squared
+```
+
+Kesimpulan:   
+model_crime5 mempunyai R-Squared yang **lebih kecil** daripada R-Squared pada model_crime4. Hal ini berkebalikan dengan nilai adjusted R-Squared. Artinya variabel police_exp59 tidak berpengaruh terhadap variabel inequality
+
+## Day 3
+
+## Confidence Interval (contoh menggunakan model_ps)
+
+argumen `level` = confidence level, yang mana 
+alpha = 1-confidence level
+
+```{r}
+predict(model_ps, newdata = data.frame(Sales = c(2000, 300, 1500)), interval = "confidence", level = 0.90)
+predict(model_ps, newdata = data.frame(Sales = c(2000, 300, 1500)), interval = "confidence", level = 0.95)
+predict(model_ps, newdata = data.frame(Sales = c(2000, 300, 1500)), interval = "confidence", level = 1)
+```
+Semakin tinggi confidence levelnya, maka rangenya semakin lebar.
+
+Perbedaan confidence Interval dengan prediction interval
+```{r}
+predict(model_ps, newdata = data.frame(Sales = c(2000, 300, 1500)), interval = "confidence", level = 0.95)
+predict(model_ps, newdata = data.frame(Sales = c(2000, 300, 1500)), interval = "prediction", level = 0.95)
+```
+
+Kesimpulan:
+1. Prediction interval, mempunyai range yang lebih lebar dari pada confidence interval. 
+2. Prediction interval digunakan untuk data-data yang baru (belum pernah dilihat oleh model/ unseen data)
+
+## Feature Selection using Stepwise Regression
+
+Stepwise Regression merupakan salah satu greedy algorithm (akan menghasilkan model yang local optima, bukan global optima)
+
+Terminologi:
+Local optima = model yang baik namun belum tentu terbaik
+Global optima = model terbaik
+
+Mengevaluasi model stepwise menggunakan nilai AIC (Akaike Information Criterion/ Information Loss), model dengan AIC yang terkecil, itu yang dipilih
+```{r}
+# model tanpa prediktor
+lm.none <- lm(inequality~1, crime)
+# model dengan semua prediktor
+lm.all <- lm(inequality~., crime)
+```
+
+Stepwise regression mempunyai 3 metode yaitu: backward, forward, both
+
+- Backward (Dari semua prediktor, dieliminasi satu satu untuk mendapat model yang baik, dievaluasi dari nilai AIC)
+
+```{r}
+crime_back <- step(lm.all, direction = "backward")
+```
+
+```{r}
+summary(crime_back)
+```
+
+- Forward (Dari tidak ada prediktor, ditambahkan satu per satu sampai mendapat model yang local optima(**baik tapi belum tentu terbaik**))
+
+```{r}
+crime_forward <- step(lm.none, scope = list(lower = lm.none, upper = lm.all), direction = "forward")
+```
+
+```{r}
+summary(crime_forward)
+summary(crime_back)
+```
+
+- Both (Backward and Forward)
+
+```{r}
+crime_both <- step(lm.none, scope = list(lower = lm.none, upper = lm.all), direction = "both")
+```
+
+Perbandingan nilai adjusted r-squared pada ketiga model yang sudah dibuat
+```{r}
+summary(crime_back)$adj.r.squared
+summary(crime_forward)$adj.r.squared
+summary(crime_both)$adj.r.squared
+```
+
+## Stepwise Regression dengan data mtcars (direction backward dan forward). Var target = mpg. Bandingkan nilai adj.r-squarednya.
+
+```{r}
+mtcars
+```
+    
+```{r}
+mt.none <- lm(mpg~1, mtcars)
+mt.all <- lm(mpg~., mtcars)
+```
+
+### Backward
+
+```{r}
+mt_back <- step(mt.all, direction = "backward")
+```
+
+### Forward
+```{r}
+mt_forward <- step(mt.none, scope = list(lower = mt.none, upper = mt.all), direction = "forward")
+```
+
+Perbandingan Nilai Adjusted R-Squared pada model backward dan forward
+```{r}
+summary(mt_back)$adj.r.squared
+summary(mt_forward)$adj.r.squared
+```
+
+
+`- cek asumsi `
+
+  - *linearity check* (cek linearity antar variabel x dan y linear)
+```{r}
+ggcorr(crime, label = T, hjust = 1, layout.exp = 3)
+summary(crime_back)
+```
+Uji asumsi untuk linearity
+H0 : Tidak Linear
+H1 : Linear
+Mencari p-value < 0.05 agar tolak H0, sehingga kesimpulannya adalah linear
+
+Notes: Bisa cek cor.test untuk variabel2 yang korelasinya mendekati 0 saja
+```{r}
+cor.test(crime$gdp, crime$inequality)
+cor.test(crime$unemploy_m24, crime$inequality)
+```
+
+Note:
+Coba satu2 variabel(terutama yg korelasinya mendekati 0),
+ketika salah satu variabel prediktor *tidak terpenuhi(p-value > 0.05)*, maka kesimpulannya model yg kita buat tidak linear.
+
+
+  - *normality of residual* (Errornya berdistribusi normal)
+  
+  `cek errorny berdistribusi normal atau ngga`
+
+  H0: residual berdistribusi normal
+  H1: residual tidak berdistribusi normal
+
+  pvalue < 0.05, tolak H0, residual tidak berdistribusi normal
+  
+  Kita ingin pvalue > 0.05 agar error berdistribusi normal
+  
+Dari data crime_back, pertama-tama cek terlebih dahulu sebaran errornya dengan menggunakan histogram
+
+```{r}
+hist(crime_back$residuals)
+```
+
+Uji kenormalan errornya dengan uji statistik `shapiro.test`
+```{r}
+# pengujian statistik untuk normality
+shapiro.test(crime_back$residuals)
+```
+
+Kesimpulan : 
+
+error harus berdistribusi normal agar tidak ada kecenderungan error besar di salah satu range data
+
+
+- *homoscedascity* (Errornya tidak memiliki pola)
+Homoscedasticity = error tidak memiliki pola
+Heteroscedasticity = errornya berpola
+  
+H0: model homoscedasticity
+H1: model heteroscedasticity
+pvalue < alpha, tolak H0
+alpha = 0.05
+  
+Kalau terdapat heteroscedasticity, kemungkinan ada outlier yang harus dibuang
+
+Plot error dan nilai aktualnya
+```{r}
+plot(crime_back$residuals, crime$inequality)
+```
+
+Uji statistiknya dengan fungsi bptest() dari library lmtest
+
+```{r}
+# test statistik untuk cek homoscedasticity
+library(lmtest)
+bptest(crime_back)
+```
+  
+`kesimpulan : `
+karena p-value > 0.05 maka gagal tolak H0, artinya lolos uji Homoscedasticity
+
+
+- *little to no multicollinearity* (Antar variabel x tidak berkorelasi tinggi)
+
+Cek korelasi tiap variabel
+```{r}
+ggcorr(crime, label = T, hjust = 1)
+```
+
+Cek dengan fungsi `vif()` dari library car untuk mengetahui variabel-variabel mana yang tidak bisa ditoleransi menjadi sebuah prediktor
+```{r}
+library(car)
+vif(crime_back)
+vif(lm.all)
+```
+Ketika **VIF nilainya > 10**, maka harus ada variabel yang dieliminasi atau dilakukan feature engineering (membuat variabel baru dari variabel2 yang sudah ada)
+
+kalau ad VIF yang nilainya > 10, maka harus ada salah 1 variabel yg dihilangkan, atau gabungin variabel yg berkorelasi kuat menjadi 1 variabel baru
+
+##Tambahan:
+Feature Engineering
+
+```{r}
+crime <- crime %>%
+  mutate(police_exp = (police_exp59 + police_exp60)/2)
+crime
+```
+
+
+### EXERCISE
+
+```{r}
+library(dplyr)
+crime <- read.csv("data_input/crime.csv") %>% 
+dplyr::select(-X)
+names(crime) <- c("percent_m", "is_south", "mean_education", "police_exp60", "police_exp59", "labour_participation", "m_per1000f", "state_pop", "nonwhites_per1000", "unemploy_m24", "unemploy_m39", "gdp", "inequality", "prob_prison", "time_prison", "crime_rate")
+plot(crime$gdp, crime$inequality)
+```
+
+## Exercise Workflow Regression Model
+
+- import data
+```{r}
+library(dplyr)
+crime <- read.csv("data_input/crime.csv") %>% 
+dplyr::select(-X)
+names(crime) <- c("percent_m", "is_south", "mean_education", "police_exp60", "police_exp59", "labour_participation", "m_per1000f", "state_pop", "nonwhites_per1000", "unemploy_m24", "unemploy_m39", "gdp", "inequality", "prob_prison", "time_prison", "crime_rate")
+```
+
+- Cek korelasi dari tiap prediktor terhadap variabel targetnya
+```{r}
+
+```
+
+- Tentukan variable yang ingin dipakai, bussiness wise untuk bantuan kita step wise. Setelah itu bisa pilih untuk membuang variable yang tidak signifikan (secara business wise). 
+
+- Cek apakah terdapat outlier
+```{r}
+
+```
+
+- buat model lm() dengan dan tanpa outlier
+```{r}
+
+```
+
+- cek summary dari model-model yang dibuat
+```{r}
+
+```
+
+- cek error dari model-model yang dibuat
+```{r}
+
+```
+
+- pilih satu model dengan Adjusted R Squared terbesar dan error terkecil
+```{r}
+
+```
+
+- cek asumsi
++ normality residual
+  H0 = Residual/error berdistribusi normal
+  H1 = Redidual/error tidak berdistribusi normal
+```{r}
+
+```
+  
++ homoscedascity
+```{r}
+
+```
+  
++ No multicollinearity
+```{r}
+
+```
+
++ Linearity
+```{r}
+
+```
+
+#### **[Optional]** Mengubah Variabel Categorical menjadi Numerik
+
+Pada kasus regresi, ketika kita mempunyai variabel prediktor bertipe kategorikal, variabel tersebut harus diubah menjadi numerik terlebih dahulu yang disebut dengan dummy variabel.
+
+Mengapa mengubah variabel bertipe categorical penting?
+Karena kalau kita mengeliminasi variabel categorical padahal variabel tersebut cukup berpengaruh, kita akan kehilangan banyak informasi.
+
+Dalam *dummy variabel*, setiap variabel kategori diubah ke bentuk kolom biner (1/0).
+
+*dummy variabel* = Ketika variabel categorical mempunyai n levels, akan diubah menjadi (0/1) sebanyak n-1 variabel baru 
+
+*one hot encoding* = ketika variabel categorical mempunyai n levels, akan diubah menjadi (0/1) sebanyak n variabel baru
+
+```{r}
+copiers_dummy <- copiers[,-c(1:4,6,8,11)]
+levels(copiers_dummy$Ship.Mode)
+```
+
+```{r}
+library(caret)
+# Dummyvar Variabel Ship.Mode
+dum_cop <- dummyVars(Profit~Ship.Mode+Segment, data = copiers_dummy, fullRank = T)
+dum_cop_df <- predict(object = dum_cop,newdata = copiers_dummy)
+copiers_new <- cbind(copiers_dummy, dum_cop_df)
+
+```
+Buat model lm-nya
+```{r}
+
+```
+
+Cek performa modelnya
+```{r}
+
+```
+
+
+## Kekurangan dari Regression Model
+1.
+2.
+
+
