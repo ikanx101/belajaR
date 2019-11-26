@@ -10,6 +10,7 @@ setwd("/cloud/project/Materi Training/GIZ")
 #####################################
 # AMBIL DATA
 # yuk kita mulai untuk ambil datanya
+# alternatif data: https://raw.githubusercontent.com/rc-dbe/bigdatacertification/master/dataset/Salary_Data.csv
 data = read.csv('latihan regresi.csv')
 
 #####################################
