@@ -1,8 +1,9 @@
 rm(list=ls())
 
-library(dplyr)
-library(ggplot2)
-library(tidyr)
+#load libraries
+library(dplyr) #for data carpentry
+library(ggplot2) #for graphic
+library(tidyr) #tambahan dari dplyr
 
 # set working directory
 setwd("/cloud/project/Materi Training/GIZ")
