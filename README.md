@@ -10,4 +10,4 @@ Atau bisa lihat __IG__ saya di: __mr.ikanx
 
 Atau bisa hubungi __chatbot telegram__ saya di: __ikanx.bot
 
-__Terima kasih**
+Terima kasih
