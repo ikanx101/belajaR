@@ -4,6 +4,7 @@ Dalam folder ini ada beberapa dataset, yakni:
 1. GDP vs Happiness
 2. Sales vs Profit
 3. Lama kerja vs Gaji
+4. Production budget vs Box office -- Marvel Cinematic Universe
 
 Masing-masing kelompok akan mengerjakan satu dataset, tujuannya adalah menjawab pertanyaan-pertanyaan berikut ini:
 1. Apakah kedua data tersebut berhubungan?
