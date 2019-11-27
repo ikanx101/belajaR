@@ -11,3 +11,5 @@ Atau bisa lihat __IG__ saya di: __mr.ikanx__
 Atau bisa hubungi __chatbot telegram__ saya di: __ikanx.bot__
 
 Terima kasih
+
+###### __i k A n x__
