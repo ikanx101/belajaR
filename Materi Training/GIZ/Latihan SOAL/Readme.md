@@ -9,6 +9,7 @@ Masing-masing kelompok akan mengerjakan satu dataset, tujuannya adalah menjawab 
 1. Apakah kedua data tersebut berhubungan?
 2. Jika iya, bagaimana model kausalitas dari kedua data tersebut?
 3. Apakah mode tersebut sudah baik? Jelaskan!
+
 Narasikan hasil temuan kelompok di akhir waktu pengerjaan.
 
 ## Kalian punya waktu 30 menit yah.
