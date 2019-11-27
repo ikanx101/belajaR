@@ -1,13 +1,13 @@
 # belajaR
-Dokumentasi Keisengan dengan R
+## Dokumentasi Keisengan dengan R
 
-Hai selamat datang di repositori #belajaR.
+Hai selamat datang di repositori __#belajaR__.
 
-Saya dedikasikan repositori ini untuk bisa bertukar algoritma R terkait analisa data, visualisasi data, web scrap, dll.
-SIlakan kunjungi blog pribadi saya di: http://passingthroughresearcher.wordpress.com
+Saya dedikasikan repositori ini untuk bisa bertukar algoritma __R__ terkait analisa data, visualisasi data, _web scrap_, dll.
+Silakan kunjungi _blog_ pribadi saya di: __http://passingthroughresearcher.wordpress.com__
 
-atau bisa lihat IG saya di: mr.ikanx
+Atau bisa lihat __IG__ saya di: __mr.ikanx
 
-atau bisa hubungi chatbot telegram saya di: ikanx.bot
+Atau bisa hubungi __chatbot telegram__ saya di: __ikanx.bot
 
-Terima kasih
+__Terima kasih**
