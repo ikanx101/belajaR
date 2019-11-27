@@ -9,4 +9,6 @@ Ini adalah kompilasi materi intro to R yang saya share di __@nutrifood__. Materi
 5. Correlation dan General Linear Model
 6. Advance automation and modelling
 
-_notes_: Jangan mencari-cari prediction atau classification modelling yah. Bukan materi untuk diajarkan tapi kalau mau lihat, ada di __bukan infografis__ atau __experienced__.
+_notes_: Jangan mencari-cari _prediction_ atau _classification modelling_ yah. Bukan materi untuk diajarkan tapi kalau mau lihat, ada di __bukan infografis__ atau __experienced__.
+
+###### __i k A n x__
