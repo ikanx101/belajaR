@@ -8,6 +8,6 @@ Materi yang akan disampaikan:
 3. Regresi (_extracting insight_)
 4. Optimasi (_take action from insight_)
 
-Tgku __@lenny.wibisana__ utk tambahan materi regresinya.
+Tgkyu __@lenny.wibisana__ utk tambahan materi dan data untuk latihan regresinya.
 
 ###### __i k A n x__
