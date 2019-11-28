@@ -14,7 +14,7 @@ doc = read_pptx('template.pptx')
 tambahin.slide.judul.donk('Time Series Decomposition','Granger Causality')
 
 # kita ambil datanya
-url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRnPxduyaDGHSqR_Wz39y_bSsN-4rO4hZQoRkd6HXNviSw4eEE3mp71kzdmm2eDbxIolzWaPIMyYtMB/pubhtml'
+url = 'lalala yeyeyeye lalalala'
 data = read_html(url) %>% html_table()
 data = data[[1]]
 colnames(data) = data[1,]
@@ -39,19 +39,29 @@ all
 str(all)
 summary(all)
 decompose=stl(all,s.window='periodic')
-decompose
+png(filename = 'decompose sweetener market.png',
+    res = 10)
+plot(decompose)
+dev.off()
+
 decompose=data.frame(decompose$time.series)
+decompose
 seasonal=decompose$seasonal
 trend=decompose$trend
 remainder=decompose$remainder
 
-hasil = data.frame(seasonal,trend,decompose,
-                   bulan = tes$bulan,
-                   tahun = tes$tahun)
-hasil %>% ggplot(aes(x=paste(bulan,tahun,sep='-'),
-                     y=trend)) +
-  geom_line(group=1) + theme(axis.text.x = element_text(angle=90))
-ggsave('Decompose.png')
+hasil = data.frame(id=c(1:length(seasonal)),
+                   seasonal,
+                   trend,
+                   remainder)
+
+library(scales)
+hasil %>% mutate(id = as.factor(id)) %>%
+  ggplot(aes(x=id,y=trend)) +
+  geom_line(group=1) +
+  scale_y_continuous(labels = comma) +
+  theme(axis.text.x = element_text(angle=90))
+ggsave('Decompose.png',width=10,height=8,dpi=450)
 
 tambahin.slide.ending.donk()
 export.powerpoint.saya.donk('hasil sementara')
