@@ -2,7 +2,7 @@
 ### Disusun dan dimodifikasi berdasarkan pengalaman pribadi menghadapi data beserta masalahnya selama ini
 
 Ini adalah kompilasi materi intro to R yang saya share di __@nutrifood__. Materinya dipecah menjadi beberapa bagian, seperti:
-1. Introduction to R
+1. Introduction to R --> __kindly check and open the .R file yah__
 2. Part 1: Mengenal data frame dan tibble
 3. Part 2: looping and conditional
 4. Data carpentry using tidy principle + reshape2
