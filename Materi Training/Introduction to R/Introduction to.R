@@ -81,36 +81,3 @@ library(plyr)
 detach(plyr)
 
 # Sampai sini ada pertanyaan?
-
-#################
-#Ganti nama kolom yuk
-#kepanjangan kayaknya
-colnames(dataset)=c('tgl','bln','status','id.produk','nama.produk','qty','sku','harga','telp')
-
-data=dataset
-
-#mengenal filter
-#filter --> selecting in variabel
-data %>% filter(bln=='Sep')
-
-#mengenal select variabel / select kolom
-data %>% select(contains('produk'))
-
-
-#mengetahui grepl
-grepl('selesai',data$status)
-table(grepl('selesai',data$status))
-
-#sekarang kita cek dulu order status
-table((data$status))
-#ternyata ada yg komplain. Mana aja yg komplain?
-filter(data,grepl('komplain',status))
-
-#hitung total qty jualan produk
-qty.produk=data %>% group_by(nama.produk) %>% summarize(total.qty=sum(qty))
-
-#ordering dari yang tertinggi
-top.produk=qty.produk[order(-top.produk$total.qty),]
-
-#gimana dapet top 20 produk?
-top.produk=head(top.produk,20)
