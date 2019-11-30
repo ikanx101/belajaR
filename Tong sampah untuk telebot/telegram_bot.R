@@ -14,6 +14,7 @@ print(bot$getMe())
 
 # Get updates
 update <- bot$getUpdates()
+update
 
 ##########################
 #start
@@ -58,7 +59,7 @@ cari <- function(bot, update){
   data$value = as.numeric(data$value)
   prov = data %>% filter(variable=='Sep') %>% filter(!is.na(value)) %>% arrange(value) %>% tail(5)
   prov = prov$Provinsi
-  bulan = c('Jul','Agu','Sep')
+  bulan = c('Sep','Okt','Nov')
   judul = print(Sys.time())
   judul = gsub(' +07','',judul,fixed = T)
   data %>% filter(variable %in% bulan) %>% filter(Provinsi %in% prov) %>% ggplot(aes(x=variable,y=value,group=Provinsi)) +
