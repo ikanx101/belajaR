@@ -1,0 +1,114 @@
+---
+title: "Marvel Cinematic Universe"
+author: 'mr.ikanx'
+date: '12/1/2019'
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Marvel CInematics Universe
+## Pendahuluan
+Siapa sih yang gak pernah nonton minimal satu film dari Marvel Cinematic Universe?
+
+Dimulai dari film __Iron Man__ pertama dan diakhiri sampai __Spiderman Far From Home__ yang _release_ di tahun ini.
+
+Dari sekian banyak film tersebut, pasti ada sekian film yang menjadi favorit banyak orang. Salah satu parameternya adalah tingginya pendapatan yang diterima oleh film tersebut.
+
+Disadari atau tidak, film yang bagus biasanya dibuat dengan serius juga. Salah satu parameter suatu film digarap dengan serius dapat dilihat dari _budget_ pembuatan film tersebut.
+
+## Budget vs Box Office
+Dari data yang didapatkan, mari kita lihat hubungan dan apakah mungkin dibuat model antara _budget_ dan _box office_ dari film-film di __MCU__?
+
+```{r}
+data=read.csv('/cloud/project/Materi Training/GIZ/Latihan SOAL/Marvel Cinematic Universe.csv')
+str(data)
+```
+Kalau kita lihat, dari dataset terdapat variabel-variabel berikut ini:
+
+- `X`: nomor urut
+- `release_date`: tanggal _release_ film
+- `title`: judul film __MCU__
+- `production_budget`: _budget_ produksi film
+- `worldwide_box_office`: pendapatan film _worldwide_
+
+Nah, sebenarnya tidak semua data ini kita butuhkan yah. Minimal kita hanya butuh judul film dan dua variabel yang akan kita buat modelnya.
+
+_So_, mari kita bebersih dulu.
+
+```{r,warning=FALSE,message=FALSE}
+library(dplyr)
+data = 
+  data %>% mutate(X=NULL,release_date=NULL)
+colnames(data) = c('judul','budget','box_office')
+head(data)
+summary(data)
+```
+
+## Statistika deskripsi
+Sebelum mulai bagian serunya, kita akan liat statistika deskripsi dari variabel `budget` dan `box_office` yuk.
+
+### Budget
+Mari kita lihat sebaran dari variabel `budget`.
+
+```{r,warning=FALSE,message=FALSE}
+library(ggplot2)
+#histogram dengan ggplot2
+data %>% 
+  ggplot(aes(x=budget)) +
+  geom_histogram(aes(y=..density..)) +
+  geom_density() +
+  labs(title='Histogram + Density Plot using ggplot2',
+       subtitle='source: Budget MCU movies') +
+  theme_minimal() +
+  theme(axis.text = element_blank())
+#histogram dengan base
+hist(data$budget)
+#boxplot dengan base
+data %>% ggplot(aes(y=budget)) + geom_boxplot()
+```
+
+Dari sebaran datanya, terlihat bahwa `budget` agak miring ke kiri. Ada tiga film yang memiliki budget sangat tinggi yang berada di luar jangkauan __boxplot__-nya.
+
+Apakah `budget` berdistribusi normal? Kita lakukan uji _shapiro-wilk_
+
+```{r}
+stat_uji = shapiro.test(data$budget)
+ifelse(stat_uji$p.value < 0.05,
+       'Tolak H0 -- tidak normal',
+       'H0 tidak ditolak -- normal')
+```
+Ternyata didapatkan bahwa variabel `budget` __tidak berdistribusi normal__.
+
+### Box Office
+Sekarang giliran kita lihat sebaran dari variabel `Box Office`.
+```{r,warning=FALSE,message=FALSE}
+library(ggplot2)
+#histogram dengan ggplot2
+data %>% 
+  ggplot(aes(x=box_office)) +
+  geom_histogram(aes(y=..density..)) +
+  geom_density() +
+  labs(title='Histogram + Density Plot using ggplot2',
+       subtitle='source: Box Office MCU movies') +
+  theme_minimal() +
+  theme(axis.text = element_blank())
+#histogram dengan base
+hist(data$box_office)
+#boxplot dengan base
+data %>% ggplot(aes(y=box_office)) + geom_boxplot()
+```
+
+Dari sebaran datanya, terlihat bahwa `box_office` agak miring ke kiri. Ada dua film yang memiliki _box_office_ sangat tinggi yang berada di luar jangkauan __boxplot__-nya. _Menarique_, ternyata ada dua yang tinggi sedangkan tadi pas _budget_ ada tiga film.
+
+Apakah `box_office` berdistribusi normal? Kita lakukan uji _shapiro-wilk_
+
+```{r}
+stat_uji = shapiro.test(data$box_office)
+ifelse(stat_uji$p.value < 0.05,
+       'Tolak H0 -- tidak normal',
+       'H0 tidak ditolak -- normal')
+```
+Ternyata didapatkan bahwa variabel `box_office` __tidak berdistribusi normal__.
