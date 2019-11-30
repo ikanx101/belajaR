@@ -201,3 +201,9 @@ data %>% ggplot(aes(x=harga,y=qty)) +
         plot.caption = element_text(size=10,face='italic'))
 ggsave('hasil regresi linear.png',width = 13, height = 7, dpi = 450)
 ```
+
+## Materi 4: Optimasi
+Pertanyaan dari model tersebut adalah, mungkinkan kita menghitung harga yang menyebabkan omset paling tinggi?
+```
+
+```
