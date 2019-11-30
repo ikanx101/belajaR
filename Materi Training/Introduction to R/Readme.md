@@ -1,6 +1,6 @@
 # Selamat datang di R
 ## Perkenalan tentang tipe data
-### Data ada banyak tipenya, contoh: bisa berupa character, numerik, logic (boolean).
+Data ada banyak tipenya, contoh: bisa berupa character, numerik, logic (boolean).
 
 ## Ada banyak object di R
 ### ada yang berupa single variable
@@ -47,7 +47,7 @@ ifelse(1+2>3,'anda benar','anda salah')
 ```
 
 ### Bentuk object lain di R bisa berupa matriks, data.frame, tibble, dan list.
-### pembahasan mengenai objects lain ini akan dibahas pada materi selanjutnya.
+Pembahasan mengenai objects lain ini akan dibahas pada materi selanjutnya.
 
 ## Some useful function
 ### Generate sequential number
@@ -108,3 +108,10 @@ detach(plyr)
 ```
 
 # Sampai sini ada pertanyaan?
+
+### i k A n x
+
+find me at:
+https://passingthroughresearcher.wordpress.com/
+IG:  mr.ikanx
+Telegram: ikanx.bot
