@@ -4,15 +4,11 @@
 
 ## Ada banyak object di R
 ### ada yang berupa single variable
-a=7
-
+```a=7
 b<-3
-
 a+b
-
 c=a+b
-
-kalimat='saya suka pergi ke pasar' #jika variabelnya berupa text
+kalimat='saya suka pergi ke pasar' #jika variabelnya berupa text```
 
 ### Ada berupa array atau vector
 ikang=c(1,3,6,5,4,7)
