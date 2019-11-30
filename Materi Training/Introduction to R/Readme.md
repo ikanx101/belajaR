@@ -112,6 +112,9 @@ detach(plyr)
 ### i k A n x
 
 find me at:
+
 https://passingthroughresearcher.wordpress.com/
+
 IG:  mr.ikanx
+
 Telegram: ikanx.bot
