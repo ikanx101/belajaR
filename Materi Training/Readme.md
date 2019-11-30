@@ -18,5 +18,7 @@ _notes_: Jangan mencari-cari _prediction_ atau _classification modelling_ yah. B
 
 __find me at:
 https://passingthroughresearcher.wordpress.com/
+
 IG: mr.ikanx
+
 Telegram: ikanx.bot__
