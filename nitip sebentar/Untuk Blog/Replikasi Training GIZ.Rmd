@@ -1,0 +1,168 @@
+---
+title: "Replikasi Training GIZ di @nutrifood part 1"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Ceritanya beberapa waktu silam, @nutrifood mendapatkan _training data analytics_ menggunakan __Python__ dari GIZ. Sebagai tindak lanjutnya, peserta training dari @nutrifood yang berjumlah lima orang (termasuk saya) wajib untuk mereplikasi training tersebut kepada karyawan lainnya.
+
+Oleh karena beberapa hal, materi yang akan kami berikan kepada _trainee_ selanjutnya akan dimodifikasi menjadi _training_ __R__. Materi yang disampaikanpun kami modifikasi menjadi sebagai berikut:
+
+1. Intro to R
+2. Korelasi
+3. Regresi (_extracting insight_)
+4. Optimasi (_take action from insight_)
+
+_notes:_
+
+Tgkyu **@lenny.wibisana** untuk tambahan materi dan data untuk latihan regresinya.
+
+_Alhamdulillah_, pihak GIZ bisa memaklumi dan menerima usulan materi _training_ yang akan kami lakukan 6 Desember 2019 nanti.
+
+Karena materinya cukup padat dan harus disampaikan dalam waktu satu hari kerja saja, maka materinya akan dibuat _express_. 
+
+Sebagai gambaran, berikut adalah materi yang akan disampaikan:
+
+# Intro to R (Express Version)
+
+## Berkenalan dengan berbagai macam tipe data
+
+Tidak hanya di __R__, sejatinya kita mengenal beberapa tipe data, yakni:
+
+1. Character
+2. Numerik
+3. Boolean (logic)
+
+Perlu diperhatikan bahwa secara hierarki tipe data memiliki urutan sebagai berikut:
+
+Character >> Numerik >> Boolean
+
+## Berkenalan dengan berbagai tipe object di R
+
+### Ada yang berupa single variable
+```{r}
+#define variabel
+a=7
+b<-3
+a+b
+c=a+b
+kalimat='saya suka pergi ke pasar' #jika variabelnya berupa text
+```
+### Ada yang berupa array atau vector
+```{r}
+#define array atau vector
+tes_vector=c(1,3,6,5,4,7)
+a=c(1:10) #contoh generating sequence
+a=seq(1,10,0.5) #contoh generating sequence by 0.5
+sample(100,5,replace=F) #generating random number
+kalimat = 'saya biasa pergi ke kantor setiap jam 7 pagi'
+pecah.kata=strsplit(kalimat,' ') #pecah kalimat menjadi kata dan mengubahnya menjadi array
+```
+
+### Beberapa fungsi yang penting di array
+```{r}
+length(a)
+a[2]
+summary(a)
+```
+
+### Array juga bisa diberikan atau dilakukan operasi aritmatika
+```{r}
+a+3
+a*6
+```
+
+### Boolean expression atau logical operator
+```{r}
+#TRUE or FALSE
+1==2
+ifelse(1+2==3,'anda benar','anda salah')
+ifelse(1+2!=3,'anda benar','anda salah')
+ifelse(1+2<=3,'anda benar','anda salah')
+ifelse(1+2>=3,'anda benar','anda salah')
+ifelse(1+2<3,'anda benar','anda salah')
+ifelse(1+2>3,'anda benar','anda salah')
+```
+## Beberapa fungsi yang berguna di R
+
+### Generate sequencial number
+```{r}
+nomor=c(1:100)
+nomor_2=seq(10,20,.2)
+```
+### Mengenal paste
+```{r}
+nomor=c(1:100)
+nama.toko=paste('toko',nomor,sep='-')
+```
+
+### Mengenal print
+```{r}
+print(nomor)
+```
+
+## Bridging utk ke data frame
+Bentuk data seperti tabel (di excel), disebut __data.frame__ atau __tibble__ di __R__. Bentuk data tabel tersebut juga bisa didefinisikan sebagai gabungan beberapa _array_ yang memiliki panjang sama.
+
+Sebelum membahas lebih lanjut, kita lihat dulu beberapa fungsi yang mungkin akan berguna bagi hidup kita kelak:
+```{r}
+suhu=sample(100,50,replace=T)
+cacat=sample(10,50,replace=T)
+hist(suhu)
+
+cor(suhu,cacat) #korelasi antara suhu dan cacat
+plot(suhu,cacat)
+```
+
+### Bagaimana membuat data frame?
+Data frame disusun atas beberapa array yang memiliki panjang sama.
+
+```{r}
+data=data.frame(suhu,cacat)
+data
+```
+
+### Beberapa fungsi yang penting di data frame
+```{r}
+str(data)
+summary(data)
+length(data)
+head(data,5) #menampilkan data 5 teratas
+tail(data,5) #menampilkan data 5 terbawah
+#View(data) --> untuk melihat data
+data[1]
+data[,1]
+data[2]
+data[,2]
+
+data[1,1] #melihat data di posisi row,column
+data[1,2] #melihat data di posisi row,column
+data[1,1]=NA #menghapus data di posisi row,column
+
+data$suhu
+data$cacat
+data[-1]
+
+is.na(data) #melihat ada yang kosong
+!is.na(data) #melihat pasti terisi
+
+data.baru = data[complete.cases(data), ] #jika mau menghapus baris2 yang ada NA nya! 
+data.baru
+
+ifelse(data$suhu<50,NA,data$suhu) #menghapus data suhu yang aneh (di bawah 50'C)
+cor(data.baru$suhu,data.baru$cacat) #hitung korelasi baru
+
+#sorting data
+data.baru[order(data.baru$suhu),] #descending
+data.baru[order(-data.baru$suhu),] #ascending
+```
+## Beberapa fungsi lain terkait dengan bekerja dengan R
+```{r}
+rm(list=ls()) #digunakan untuk membersihkan global data environment
+
+#set working directory
+#setwd('D:/Project_R/Belajar R/sharing session')
+```
