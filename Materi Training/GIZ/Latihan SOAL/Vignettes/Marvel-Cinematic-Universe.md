@@ -3,7 +3,7 @@ Marvel Cinematic Universe
 mr.ikanx
 12/1/2019
 
-# Marvel CInematics Universe
+# Marvel Cinematics Universe
 
 ## Pendahuluan
 
