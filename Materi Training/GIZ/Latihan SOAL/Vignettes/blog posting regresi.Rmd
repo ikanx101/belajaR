@@ -1,0 +1,75 @@
+---
+title: "Price Elasticity"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Old but not obsolete
+
+Begitulah kira-kira kondisi dari analisa regresi linear. Walaupun usianya sudah sangat jadul tapi sampai sekarang analisa ini masih sering dipakai banyak orang karena kemudahan dalam melakukan dan menginterpretasikannya.
+
+Analisa ini digunakan untuk memodelkan hubungan kausalitas antara variabel independen terhadap dependen. Biasanya, regresi linear dinotasikan dalam formula: `y = a*x + b`.
+
+Di mana `y` dan `x` merupakan data numerik yang biasanya memiliki korelasi kuat (baik positif atau negatif). Kenapa demikian? Karena salah satu _goodness of fit_ dari model regresi linear adalah __R-Squared__ yang didapatkan dari kuadrat dari angka korelasi.
+
+Bukan cuma memodelkan `x` dan `y` saja. Untuk beberapa kasus, kita bisa membuat _optimization_ dari model regresi linear ini.
+
+Salah satu contoh yang paling sering saya berikan adalah model _price elasticity_.
+
+Secara logika, semakin tinggi harga suatu barang, semakin sedikit orang yang akan membelinya. Secara simpel kita bisa bilang bahwa `harga` berkorelasi negatif dengan `sales_qty`. Tapi untuk mengatakan ada kausalitas antara `harga`dan `sales_qty`, kita harus cek dulu model regresinya.
+
+Contoh yah, misalkan saya punya data jualan harian suatu barang beserta harganya di suatu minimarket sebagai berikut:
+
+```{r,message=FALSE}
+library(dplyr)
+data = read.csv('/cloud/project/Materi Training/GIZ/latihan regresi.csv') %>% 
+  mutate(X = NULL)
+str(data)
+summary(data)
+head(data,10)
+```
+Berapa sih nilai kodelasi antara `harga` dan `qty`?
+
+```{r}
+cor(data$harga,data$qty)
+```
+
+Ternyata angka korelasinya kuat negatif. Sekarang kita coba buat model regresinya.
+
+```{r}
+model_reg = lm(qty~harga,data = data)
+model_reg
+summary(model_reg)
+```
+
+# sekarang kita lihat goodness of fit dari modell regresi
+# pertama R-squared, diambil dari nilai multiple R-squared 
+# atau bisa juga dihitung menggunakan:
+r_squared = modelr::rsquare(model_reg,data)
+# apa arti dari r_squared?
+
+# lalu ada p-value ~ 0
+# karena p-value < 0.05 artinya model berpengaruh terhadap sales qty-nya
+
+# ada yang namanya mean absolut error
+mean_absolut_error = modelr::mae(model_reg,data) #harus  bernilai kecil
+
+#####################################
+# METODE LAIN
+# cara membangun model regresi menggunakan visual grafis
+data %>% ggplot(aes(x=harga,y=qty)) + 
+  geom_point() + 
+  geom_smooth(method='lm') +
+  theme_pubclean() + 
+  stat_regline_equation(label.y = 7,aes(label =  paste(..eq.label.., ..rr.label.., sep = "~~~~"))) +
+  labs(title = 'Model Regresi: Price Elasticity Index',
+                          subtitle = 'Data harga vs sales qty',
+                          caption = 'Created using R',
+                          x = 'Harga produk (dalam ribu rupiah)',
+                          y = 'Sales Qty') +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        plot.title = element_text(size=25,face='bold.italic'),
+        plot.caption = element_text(size=10,face='italic'))
