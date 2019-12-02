@@ -3,12 +3,12 @@ Marvel Cinematic Universe
 mr.ikanx
 12/1/2019
 
-# Marvel Cinematics Universe
+# Marvel CInematics Universe
 
 ## Pendahuluan
 
-Siapa sih yang gak pernah nonton minimal satu film dari Marvel Cinematic
-Universe?
+Siapa sih yang gak pernah nonton minimal satu film dari **Marvel
+Cinematic Universe**?
 
 Dimulai dari film **Iron Man** pertama dan diakhiri sampai **Spiderman
 Far From Home** yang *release* di tahun ini.
@@ -23,12 +23,67 @@ Salah satu parameter suatu film digarap dengan serius dapat dilihat dari
 
 ## Budget vs Box Office
 
-Dari data yang didapatkan, mari kita lihat hubungan dan apakah mungkin
-dibuat model antara *budget* dan *box office* dari film-film di
+Dari data yang di- *scrap* dari
+[the-numbers.com](https://www.the-numbers.com), mari kita lihat hubungan
+dan apakah mungkin dibuat model antara *budget* dan *box office* dari
+film-film di
 **MCU**?
 
 ``` r
 data=read.csv('/cloud/project/Materi Training/GIZ/Latihan SOAL/Marvel Cinematic Universe.csv')
+data
+```
+
+    ##     X release_date                         title production_budget
+    ## 1   1  Jul 2, 2019     Spider-Man: Far From Home         160000000
+    ## 2   2 Apr 26, 2019             Avengers: Endgame         400000000
+    ## 3   3  Mar 8, 2019                Captain Marvel         175000000
+    ## 4   4  Jul 6, 2018          Ant-Man and the Wasp         130000000
+    ## 5   5 Apr 27, 2018        Avengers: Infinity War         300000000
+    ## 6   6 Feb 16, 2018                 Black Panther         200000000
+    ## 7   7  Nov 3, 2017                Thor: Ragnarok         180000000
+    ## 8   8  Jul 7, 2017        Spider-Man: Homecoming         175000000
+    ## 9   9  May 5, 2017 Guardians of the Galaxy Vol 2         200000000
+    ## 10 10  Nov 4, 2016                Doctor Strange         165000000
+    ## 11 11  May 6, 2016    Captain America: Civil War         250000000
+    ## 12 12 Jul 17, 2015                       Ant-Man         130000000
+    ## 13 13  May 1, 2015       Avengers: Age of Ultron         330600000
+    ## 14 14  Aug 1, 2014       Guardians of the Galaxy         170000000
+    ## 15 15  Apr 4, 2014  Captain America: The Winter…         170000000
+    ## 16 16  Nov 8, 2013          Thor: The Dark World         150000000
+    ## 17 17  May 3, 2013                    Iron Man 3         200000000
+    ## 18 18  May 4, 2012                  The Avengers         225000000
+    ## 19 19 Jul 22, 2011  Captain America: The First …         140000000
+    ## 20 20  May 6, 2011                          Thor         150000000
+    ## 21 21  May 7, 2010                    Iron Man 2         170000000
+    ## 22 22 Jun 13, 2008           The Incredible Hulk         137500000
+    ## 23 23  May 2, 2008                      Iron Man         186000000
+    ##    worldwide_box_office
+    ## 1            1131723455
+    ## 2            2797800564
+    ## 3            1126129839
+    ## 4             623144660
+    ## 5            2048359754
+    ## 6            1348258224
+    ## 7             853958289
+    ## 8             880166350
+    ## 9             869113101
+    ## 10            676404566
+    ## 11           1153284349
+    ## 12            518858449
+    ## 13           1403013963
+    ## 14            772772112
+    ## 15            714401889
+    ## 16            644602516
+    ## 17           1215392272
+    ## 18           1517935897
+    ## 19            370569776
+    ## 20            449326618
+    ## 21            621156389
+    ## 22            265573859
+    ## 23            585171547
+
+``` r
 str(data)
 ```
 
@@ -189,3 +244,172 @@ ifelse(stat_uji$p.value < 0.05,
 
 Ternyata didapatkan bahwa variabel `box_office` **tidak berdistribusi
 normal**.
+
+## Korelasi Antara Budget dan Box Office
+
+Sekarang, kita akan hitung korelasi antara keduanya yah. Karena kita
+tahu bahwa kedua variabel tersebut **tidak berdistribusi normal**, maka
+kita akan gunakan korelasi *spearman*.
+
+``` r
+korel = cor(data$budget,data$box_office,method = 'spearman')
+korel
+```
+
+    ## [1] 0.8476623
+
+Ternyata didapatkan angka korelasi yang kuat dan positif. Yakni sebesar
+`0.8476623`. Apa sih artinya?
+
+## Model Kausalitas Budget dan Box Office
+
+Perlu diingat bahwa korelasi hanya menghitung hubungan linear antara dua
+variabel saja. Jika kita ingin mencari tahu apakah `budget` menyebabkan
+`box_office`, dinotasikan: `(box_office~budget)`, maka perlu dibuat
+modelnya.
+
+Model paling mudah untuk tipe data numerik - numerik adalah model
+regresi linear.
+
+`y = a*x + b + error` biasa ditulis dengan simpel sebagai: `y = a*x +
+b`.
+
+Oh iya, apakah model regresi linear mengharusnya variabel X dan Y
+berdistribusi normal? **Kindly komen yah…**
+
+### Yuk kita buat model regresi linearnya\!
+
+``` r
+#membuat modelnya
+model_reg = lm(box_office~budget,data = data)
+
+# memanggil modelnya
+model_reg
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = box_office ~ budget, data = data)
+    ## 
+    ## Coefficients:
+    ## (Intercept)       budget  
+    ##  -5.245e+08    7.710e+00
+
+``` r
+# melihat keseluruhan model
+summary(model_reg)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = box_office ~ budget, data = data)
+    ## 
+    ## Residuals:
+    ##        Min         1Q     Median         3Q        Max 
+    ## -621459620 -173906794   -9389925  218048707  422575157 
+    ## 
+    ## Coefficients:
+    ##               Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept) -5.245e+08  1.699e+08  -3.087  0.00558 ** 
+    ## budget       7.710e+00  8.240e-01   9.357 6.12e-09 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 259700000 on 21 degrees of freedom
+    ## Multiple R-squared:  0.8065, Adjusted R-squared:  0.7973 
+    ## F-statistic: 87.55 on 1 and 21 DF,  p-value: 6.122e-09
+
+### Model fitness
+
+Ada beberapa parameter yang bisa digunakan untuk melihat apakah model
+kita *fit* atau tidak, yakni:
+
+1.  R squared
+2.  P-value
+3.  MAE ( *mean absolut error* )
+4.  Lainnya
+
+#### R squared
+
+Nilainya bisa diambil dari nilai **multiple R-squared** pada model atau
+bisa juga dihitung menggunakan:
+
+``` r
+r_squared = modelr::rsquare(model_reg,data)
+r_squared
+```
+
+    ## [1] 0.8065491
+
+Perlu diperhatikan, bahwa nilai **R squared** bisa dihitung juga dari
+nilai korelasi yang dikuadratkan. Namun ternyata untuk kali ini tidak
+bisa dilakukan.
+
+``` r
+r_squared == korel^2
+```
+
+    ## [1] FALSE
+
+Ada yang tahu kenapa?
+
+Jawabnya karena korelasi yang digunakan adalah *spearman*. Jika
+digunakan dengan *pearson* maka pasti nilainya sama.
+
+Oh iya, ada yang tahu gak apa arti dari **R-squared**? **R-squared**
+bisa diartikan sebagai:
+
+Berapa persen variabel X meng- *explain* variabel Y.
+
+#### P-value
+
+Nilai P-value didapatkan dari `summary(model_reg)`, yakni mendekati nol
+(sangat kecil). Oleh karena `p-value < 0.05` bisa diambil kesimpulan
+bahwa model berpengaruh terhadap `box_office`.
+
+#### MAE
+
+*Mean absolut error* dapat diartikan sebagai rata-rata nilai mutlak
+*error* yang dapat kita terima. Tidak ada angka pasti harus berapa, tapi
+semakin kecil *error*, berarti semakin baik model kita.
+
+``` r
+mean_absolut_error = modelr::mae(model_reg,data) 
+mean_absolut_error
+```
+
+    ## [1] 201077629
+
+### Kesimpulan
+
+Berhubung dari p-value dan R squared menghasilkan nilai yang baik, dapat
+disimpulkan bahwa `budget` film **MCU** mempengaruhi dan mengakibatkan
+`box_office` secara positif dan kuat.
+
+### Cara lain
+
+Sebenarnya ada cara lain untuk melakukan analisa regresi linear
+menggunakan **R**, yakni dengan memanfaatkan *library* `ggplot2` dan
+`ggpubr`.
+
+``` r
+library(ggplot2)
+library(ggpubr)
+data %>% ggplot(aes(x=budget,y=box_office)) + 
+  geom_point() + 
+  geom_text(aes(label=judul),alpha=.4,size=2) +
+  geom_smooth(method='lm') +
+  theme_pubclean() + 
+  stat_regline_equation(label.y = 7,aes(label =  paste(..eq.label.., ..rr.label.., sep = "~~~~"))) +
+  labs(title = 'Model Regresi Linear',
+       subtitle = 'Data budget vs box office',
+       caption = 'Created using R',
+       x = 'Budget',
+       y = 'Box Office') +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        plot.title = element_text(size=25,face='bold.italic'),
+        plot.caption = element_text(size=10,face='italic'))
+```
+
+![](Marvel-Cinematic-Universe_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->

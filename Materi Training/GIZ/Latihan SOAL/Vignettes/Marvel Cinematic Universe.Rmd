@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Marvel CInematics Universe
 ## Pendahuluan
-Siapa sih yang gak pernah nonton minimal satu film dari Marvel Cinematic Universe?
+Siapa sih yang gak pernah nonton minimal satu film dari __Marvel Cinematic Universe__?
 
 Dimulai dari film __Iron Man__ pertama dan diakhiri sampai __Spiderman Far From Home__ yang _release_ di tahun ini.
 
@@ -20,10 +20,11 @@ Dari sekian banyak film tersebut, pasti ada sekian film yang menjadi favorit ban
 Disadari atau tidak, film yang bagus biasanya dibuat dengan serius juga. Salah satu parameter suatu film digarap dengan serius dapat dilihat dari _budget_ pembuatan film tersebut.
 
 ## Budget vs Box Office
-Dari data yang didapatkan, mari kita lihat hubungan dan apakah mungkin dibuat model antara _budget_ dan _box office_ dari film-film di __MCU__?
+Dari data yang di- _scrap_ dari [the-numbers.com](https://www.the-numbers.com), mari kita lihat hubungan dan apakah mungkin dibuat model antara _budget_ dan _box office_ dari film-film di __MCU__?
 
 ```{r}
 data=read.csv('/cloud/project/Materi Training/GIZ/Latihan SOAL/Marvel Cinematic Universe.csv')
+data
 str(data)
 ```
 Kalau kita lihat, dari dataset terdapat variabel-variabel berikut ini:
@@ -112,3 +113,100 @@ ifelse(stat_uji$p.value < 0.05,
        'H0 tidak ditolak -- normal')
 ```
 Ternyata didapatkan bahwa variabel `box_office` __tidak berdistribusi normal__.
+
+## Korelasi Antara Budget dan Box Office
+Sekarang, kita akan hitung korelasi antara keduanya yah. Karena kita tahu bahwa kedua variabel tersebut __tidak berdistribusi normal__, maka kita akan gunakan korelasi _spearman_.
+```{r}
+korel = cor(data$budget,data$box_office,method = 'spearman')
+korel
+```
+Ternyata didapatkan angka korelasi yang kuat dan positif. Yakni sebesar `0.8476623`. Apa sih artinya?
+
+## Model Kausalitas Budget dan Box Office
+Perlu diingat bahwa korelasi hanya menghitung hubungan linear antara dua variabel saja. Jika kita ingin mencari tahu apakah `budget` menyebabkan `box_office`, dinotasikan: `(box_office~budget)`, maka perlu dibuat modelnya.
+
+Model paling mudah untuk tipe data numerik - numerik adalah model regresi linear.
+
+`y = a*x + b + error` biasa ditulis dengan simpel sebagai: `y = a*x + b`.
+
+Oh iya, apakah model regresi linear mengharusnya  variabel X dan Y berdistribusi normal? __Kindly komen yah...__
+
+### Yuk kita buat model regresi linearnya!
+
+```{r}
+#membuat modelnya
+model_reg = lm(box_office~budget,data = data)
+
+# memanggil modelnya
+model_reg
+
+# melihat keseluruhan model
+summary(model_reg)
+```
+
+### Model fitness
+Ada beberapa parameter yang bisa digunakan untuk melihat apakah model kita _fit_ atau tidak, yakni:
+
+1. R squared
+2. P-value
+3. MAE ( _mean absolut error_ )
+4. Lainnya
+
+#### R squared
+Nilainya bisa diambil dari nilai __multiple R-squared__ pada model atau bisa juga dihitung menggunakan:
+```{r}
+r_squared = modelr::rsquare(model_reg,data)
+r_squared
+```
+
+Perlu diperhatikan, bahwa nilai __R squared__ bisa dihitung juga dari nilai korelasi yang dikuadratkan. Namun ternyata untuk kali ini tidak bisa dilakukan.
+
+```{r}
+r_squared == korel^2
+```
+
+Ada yang tahu kenapa?
+
+Jawabnya karena korelasi yang digunakan adalah _spearman_. Jika digunakan dengan _pearson_ maka pasti nilainya sama.
+
+Oh iya, ada yang tahu gak apa arti dari __R-squared__? __R-squared__ bisa diartikan sebagai:
+
+Berapa persen variabel X meng- _explain_ variabel Y.
+
+#### P-value
+Nilai P-value didapatkan dari `summary(model_reg)`, yakni mendekati nol (sangat kecil). Oleh karena `p-value < 0.05` bisa diambil kesimpulan bahwa model berpengaruh terhadap `box_office`.
+
+#### MAE
+_Mean absolut error_ dapat diartikan sebagai rata-rata nilai mutlak _error_ yang dapat kita terima. Tidak ada angka pasti harus berapa, tapi semakin kecil _error_, berarti semakin baik model kita.
+
+```{r}
+mean_absolut_error = modelr::mae(model_reg,data) 
+mean_absolut_error
+```
+
+### Kesimpulan
+Berhubung dari p-value dan R squared menghasilkan nilai yang baik, dapat disimpulkan bahwa `budget` film __MCU__ mempengaruhi dan mengakibatkan `box_office` secara positif dan kuat.
+
+### Cara lain
+Sebenarnya ada cara lain untuk melakukan analisa regresi linear menggunakan __R__, yakni dengan memanfaatkan _library_ `ggplot2` dan `ggpubr`.
+
+```{r,warning=FALSE,message=FALSE}
+library(ggplot2)
+library(ggpubr)
+data %>% ggplot(aes(x=budget,y=box_office)) + 
+  geom_point() + 
+  geom_text(aes(label=judul),alpha=.4,size=2) +
+  geom_smooth(method='lm') +
+  theme_pubclean() + 
+  stat_regline_equation(label.y = 7,aes(label =  paste(..eq.label.., ..rr.label.., sep = "~~~~"))) +
+  labs(title = 'Model Regresi Linear',
+       subtitle = 'Data budget vs box office',
+       caption = 'Created using R',
+       x = 'Budget',
+       y = 'Box Office') +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        plot.title = element_text(size=25,face='bold.italic'),
+        plot.caption = element_text(size=10,face='italic'))
+
+```
