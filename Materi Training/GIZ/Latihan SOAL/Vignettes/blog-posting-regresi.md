@@ -1,11 +1,13 @@
 Price Elasticity
 ================
+mr.ikanx
+2019/12/3
 
 # Old but not obsolete
 
-Begitulah kira-kira kondisi dari analisa regresi linear. Walaupun
-usianya sudah sangat jadul tapi sampai sekarang analisa ini masih sering
-dipakai banyak orang karena kemudahan dalam melakukan dan
+Begitulah kira-kira ungkapan yang tepat dari analisa regresi linear.
+Walaupun usianya sudah sangat jadul tapi sampai sekarang analisa ini
+masih sering dipakai banyak orang karena kemudahan dalam melakukan dan
 menginterpretasikannya.
 
 Analisa ini digunakan untuk memodelkan hubungan kausalitas antara
@@ -15,18 +17,20 @@ dinotasikan dalam formula: `y = a*x + b`.
 Di mana `y` dan `x` merupakan data numerik yang biasanya memiliki
 korelasi kuat (baik positif atau negatif). Kenapa demikian? Karena salah
 satu *goodness of fit* dari model regresi linear adalah **R-Squared**
-yang didapatkan dari kuadrat dari angka korelasi.
+yang didapatkan dengan cara mengkuadratkan angka korelasi.
 
 Bukan cuma memodelkan `x` dan `y` saja. Untuk beberapa kasus, kita bisa
 membuat *optimization* dari model regresi linear ini.
 
-Salah satu contoh yang paling sering saya berikan adalah model *price
-elasticity*.
+## Contoh aplikasi regresi linear
+
+Salah satu contoh yang paling sering saya berikan setiap kali *training*
+adalah model *price elasticity*.
 
 Secara logika, semakin tinggi harga suatu barang, semakin sedikit orang
 yang akan membelinya. Secara simpel kita bisa bilang bahwa `harga`
-berkorelasi negatif dengan `sales_qty`. Tapi untuk mengatakan ada
-kausalitas antara `harga`dan `sales_qty`, kita harus cek dulu model
+berkorelasi negatif dengan sales `qty`. Tapi untuk mengatakan ada
+kausalitas antara `harga`dan sales `qty`, kita harus cek dulu model
 regresinya.
 
 Contoh yah, misalkan saya punya data jualan harian suatu barang beserta
@@ -75,13 +79,16 @@ head(data,10)
 Berapa sih nilai kodelasi antara `harga` dan `qty`?
 
 ``` r
-cor(data$harga,data$qty)
+korel = cor(data$harga,data$qty)
+korel
 ```
 
     ## [1] -0.8323464
 
-Ternyata angka korelasinya kuat negatif. Sekarang kita coba buat model
-regresinya.
+Ternyata angka korelasinya kuat negatif. Artinya, jika kita membuat
+model regresi linear dari kedua data ini, maka akan didapat
+**R-Squared** sebesar kuadrat nilai korelasinya. *Nah*, sekarang kita
+coba buat model regresinya *yuk*.
 
 ``` r
 model_reg = lm(qty~harga,data = data)
@@ -119,37 +126,94 @@ summary(model_reg)
     ## Multiple R-squared:  0.6928, Adjusted R-squared:  0.6875 
     ## F-statistic: 130.8 on 1 and 58 DF,  p-value: < 2.2e-16
 
-# sekarang kita lihat goodness of fit dari modell regresi
+## Evaluasi model
 
-# pertama R-squared, diambil dari nilai multiple R-squared
+Sekarang kita lihat *goodness of fit* dari model regresi di atas. Untuk
+mengevaluasi apakah suatu model regresi baik, kita bisa lihat dari
+beberapa hal seperti:
 
-# atau bisa juga dihitung menggunakan:
+1.  **R-squared**
+2.  **P-value**
+3.  MAE ( *mean absolut error* )
+4.  Lainnya
 
-r\_squared = modelr::rsquare(model\_reg,data) \# apa arti dari
-r\_squared?
+### R squared
 
-# lalu ada p-value ~ 0
+Nilainya bisa diambil dari nilai **multiple R-squared** pada model atau
+bisa juga dihitung menggunakan:
 
-# karena p-value \< 0.05 artinya model berpengaruh terhadap sales qty-nya
+``` r
+r_squared = modelr::rsquare(model_reg,data)
+r_squared
+```
 
-# ada yang namanya mean absolut error
+    ## [1] 0.6928005
 
-mean\_absolut\_error = modelr::mae(model\_reg,data) \#harus bernilai
-kecil
+Mari kita cek apakah nilai **R-Squared** sama dengan korelasi yang
+dikuadratkan yah. Ini sengaja saya *round* biar memudahkan yah.
 
-# 
+``` r
+round(r_squared,5) == round(korel^2,5)
+```
 
-# METODE LAIN
+    ## [1] TRUE
 
-# cara membangun model regresi menggunakan visual grafis
+**R-squared** bisa diartikan sebagai berapa persen variabel X meng-
+*explain* variabel Y.
 
-data %\>% ggplot(aes(x=harga,y=qty)) + geom\_point() +
-geom\_smooth(method=‘lm’) + theme\_pubclean() +
-stat\_regline\_equation(label.y = 7,aes(label = paste(..eq.label..,
-..rr.label.., sep = “~~~~”))) + labs(title = ‘Model Regresi: Price
-Elasticity Index’, subtitle = ‘Data harga vs sales qty’, caption =
-‘Created using R’, x = ‘Harga produk (dalam ribu rupiah)’, y = ‘Sales
-Qty’) + theme(axis.text = element\_blank(), axis.ticks =
-element\_blank(), plot.title =
-element\_text(size=25,face=‘bold.italic’), plot.caption =
-element\_text(size=10,face=‘italic’))
+### P-value
+
+Nilai P-value didapatkan dari `summary(model_reg)`, yakni mendekati nol
+(sangat kecil). Oleh karena `p-value < 0.05` bisa diambil kesimpulan
+bahwa model `harga` berpengaruh terhadap sales `qty`.
+
+### MAE
+
+*Mean absolut error* dapat diartikan sebagai rata-rata nilai mutlak
+*error* yang dapat kita terima. Tidak ada angka pasti harus berapa, tapi
+semakin kecil *error*, berarti semakin baik model kita.
+
+``` r
+mean_absolut_error = modelr::mae(model_reg,data) 
+mean_absolut_error
+```
+
+    ## [1] 0.563642
+
+### Kesimpulan
+
+Berhubung dari p-value dan R squared menghasilkan nilai yang baik, dapat
+disimpulkan bahwa `harga` mempengaruhi dan mengakibatkan perubahan pada
+sales `qty` secara negatif.
+
+### Cara lain
+
+Sebenarnya ada cara lain untuk melakukan analisa regresi linear
+menggunakan **R**, yakni dengan memanfaatkan *library* `ggplot2` dan
+`ggpubr`.
+
+``` r
+library(ggplot2)
+library(ggpubr)
+```
+
+    ## Loading required package: magrittr
+
+``` r
+data %>% ggplot(aes(x=harga,y=qty)) + 
+  geom_point() + 
+  geom_smooth(method='lm') +
+  theme_pubclean() + 
+  stat_regline_equation(label.y = 7,aes(label =  paste(..eq.label.., ..rr.label.., sep = "~~~~"))) +
+  labs(title = 'Model Regresi: Price Elasticity Index',
+                          subtitle = 'Data harga vs sales qty',
+                          caption = 'Created using R',
+                          x = 'Harga produk (dalam ribu rupiah)',
+                          y = 'Sales Qty') +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        plot.title = element_text(size=25,face='bold.italic'),
+        plot.caption = element_text(size=10,face='italic'))
+```
+
+![](blog-posting-regresi_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->

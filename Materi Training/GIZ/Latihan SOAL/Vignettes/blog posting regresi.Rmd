@@ -1,5 +1,7 @@
 ---
 title: "Price Elasticity"
+author: mr.ikanx
+date: 2019/12/3
 output: github_document
 ---
 
@@ -8,17 +10,21 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 # Old but not obsolete
 
-Begitulah kira-kira kondisi dari analisa regresi linear. Walaupun usianya sudah sangat jadul tapi sampai sekarang analisa ini masih sering dipakai banyak orang karena kemudahan dalam melakukan dan menginterpretasikannya.
+Begitulah kira-kira ungkapan yang tepat dari analisa regresi linear. Walaupun usianya sudah sangat jadul tapi sampai sekarang analisa ini masih sering dipakai banyak orang karena kemudahan dalam melakukan dan menginterpretasikannya.
 
 Analisa ini digunakan untuk memodelkan hubungan kausalitas antara variabel independen terhadap dependen. Biasanya, regresi linear dinotasikan dalam formula: `y = a*x + b`.
 
-Di mana `y` dan `x` merupakan data numerik yang biasanya memiliki korelasi kuat (baik positif atau negatif). Kenapa demikian? Karena salah satu _goodness of fit_ dari model regresi linear adalah __R-Squared__ yang didapatkan dari kuadrat dari angka korelasi.
+Di mana `y` dan `x` merupakan data numerik yang biasanya memiliki korelasi kuat (baik positif atau negatif). Kenapa demikian? Karena salah satu _goodness of fit_ dari model regresi linear adalah __R-Squared__ yang didapatkan dengan cara mengkuadratkan angka korelasi.
 
 Bukan cuma memodelkan `x` dan `y` saja. Untuk beberapa kasus, kita bisa membuat _optimization_ dari model regresi linear ini.
 
-Salah satu contoh yang paling sering saya berikan adalah model _price elasticity_.
+## Contoh aplikasi regresi linear
 
-Secara logika, semakin tinggi harga suatu barang, semakin sedikit orang yang akan membelinya. Secara simpel kita bisa bilang bahwa `harga` berkorelasi negatif dengan `sales_qty`. Tapi untuk mengatakan ada kausalitas antara `harga`dan `sales_qty`, kita harus cek dulu model regresinya.
+Salah satu contoh yang paling sering saya berikan setiap kali _training_ adalah model _price elasticity_.
+
+Secara logika, semakin tinggi harga suatu barang, semakin sedikit orang yang akan membelinya. Secara simpel kita bisa bilang bahwa `harga` berkorelasi negatif dengan sales `qty`. Tapi untuk mengatakan ada kausalitas antara `harga`dan sales `qty`, kita harus cek dulu model regresinya.
+
+Selain itu, kita ingin menghitung suatu nilai _fixed_ (kita sebut saja suatu _price elasticity index_). Dimana jika `harga` naik sebesar __a %__ maka sales `qty` akan turun sebesar __index %___.
 
 Contoh yah, misalkan saya punya data jualan harian suatu barang beserta harganya di suatu minimarket sebagai berikut:
 
@@ -33,32 +39,63 @@ head(data,10)
 Berapa sih nilai kodelasi antara `harga` dan `qty`?
 
 ```{r}
-cor(data$harga,data$qty)
+korel = cor(data$harga,data$qty)
+korel
 ```
 
-Ternyata angka korelasinya kuat negatif. Sekarang kita coba buat model regresinya.
+Ternyata angka korelasinya kuat negatif. Artinya, jika kita membuat model regresi linear dari kedua data ini, maka akan didapat __R-Squared__ sebesar kuadrat nilai korelasinya. _Nah_, sekarang kita coba buat model regresinya _yuk_.
 
 ```{r}
 model_reg = lm(qty~harga,data = data)
-model_reg
 summary(model_reg)
 ```
 
-# sekarang kita lihat goodness of fit dari modell regresi
-# pertama R-squared, diambil dari nilai multiple R-squared 
-# atau bisa juga dihitung menggunakan:
+## Evaluasi model
+
+Sekarang kita lihat _goodness of fit_ dari model regresi di atas. Untuk mengevaluasi apakah suatu model regresi baik, kita bisa lihat dari beberapa hal seperti:
+
+1. __R-squared__
+2. __P-value__
+3. MAE ( _mean absolut error_ )
+4. Lainnya
+
+### R squared
+Nilainya bisa diambil dari nilai __multiple R-squared__ pada model atau bisa juga dihitung menggunakan:
+```{r}
 r_squared = modelr::rsquare(model_reg,data)
-# apa arti dari r_squared?
+r_squared
+```
 
-# lalu ada p-value ~ 0
-# karena p-value < 0.05 artinya model berpengaruh terhadap sales qty-nya
+Mari kita cek apakah nilai __R-Squared__ sama dengan korelasi yang dikuadratkan yah. Ini sengaja saya _round_ biar memudahkan yah.
 
-# ada yang namanya mean absolut error
-mean_absolut_error = modelr::mae(model_reg,data) #harus  bernilai kecil
+```{r}
+round(r_squared,5) == round(korel^2,5)
+```
 
-#####################################
-# METODE LAIN
-# cara membangun model regresi menggunakan visual grafis
+__R-squared__ bisa diartikan sebagai berapa persen variabel X meng- _explain_ variabel Y.
+
+### P-value
+Nilai __P-value__ didapatkan dari `summary(model_reg)`, yakni mendekati nol (sangat kecil). Oleh karena `p-value < 0.05` bisa diambil kesimpulan bahwa model `harga` berpengaruh terhadap sales `qty`.
+
+### MAE
+_Mean absolut error_ dapat diartikan sebagai rata-rata nilai mutlak _error_ yang dapat kita terima. Tidak ada angka pasti harus berapa, tapi semakin kecil _error_, berarti semakin baik model kita.
+
+Menurut pengetahuan saya, __MAE__ digunakan jika kita memiliki lebih dari satu model regresi yang ingin dibandingkan mana yang terbaik.
+
+```{r}
+mean_absolut_error = modelr::mae(model_reg,data) 
+mean_absolut_error
+```
+
+### Kesimpulan
+Berhubung dari __P-value__ dan __R-squared__ menghasilkan nilai yang baik, dapat disimpulkan bahwa `harga` mempengaruhi dan mengakibatkan perubahan pada sales `qty` secara negatif.
+
+### Cara lain
+Sebenarnya ada cara lain untuk melakukan analisa regresi linear menggunakan __R__, yakni dengan memanfaatkan _library_ `ggplot2` dan `ggpubr`.
+
+```{r}
+library(ggplot2)
+library(ggpubr)
 data %>% ggplot(aes(x=harga,y=qty)) + 
   geom_point() + 
   geom_smooth(method='lm') +
@@ -73,3 +110,10 @@ data %>% ggplot(aes(x=harga,y=qty)) +
         axis.ticks = element_blank(),
         plot.title = element_text(size=25,face='bold.italic'),
         plot.caption = element_text(size=10,face='italic'))
+```
+
+## Optimization dari model regresi
+
+Kita telah mendapatkan model regresi linear yang baik. Kita juga sudah menghitung _price elasticty index_. Pertanyaan selanjutnya adalah: _Apakah kita bisa menghitung harga terbaik untuk produk tersebut?_
+
+Mari 
