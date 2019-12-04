@@ -3,9 +3,7 @@ Lama Kerja vs Gaji
 Lenny M. Wibisana
 3 Desember 2019
 
-Apakah benar lama kerja seseorang berpengaruh terhadap gaji yang
-diterima
-?
+Apakah benar lama kerja seseorang berpengaruh terhadap gaji yang diterima ?
 
 ## Read data
 
@@ -37,9 +35,12 @@ str(data_gaji)
     ##  $ Salary         : int  39343 46205 37731 43525 39891 56642 60150 54445 64445 57189 ...
     ##  $ EmployeeName   : Factor w/ 30 levels "Akina, Elijah",..: 5 20 18 7 25 19 6 17 8 28 ...
 
-Dari dataset `data_gaji` diperoleh informasi variabel berikut: \* `X`:
-nomor urut \* `YearsExperience`: lama bekerja dalam tahun \* `Salary`:
-gaji \* `EmployeeName`: nama pegawai
+Dari dataset `data_gaji` diperoleh informasi variabel berikut: 
+
+* `X`: nomor urut 
+* `YearsExperience`: lama bekerja dalam tahun 
+* `Salary`: gaji 
+* `EmployeeName`: nama pegawai
 
 ## Preparation Data
 
