@@ -1,0 +1,25 @@
+---
+title: "Sunyi Web Series by Tropicana Slim"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Tropicana Slim selalu saja membuat _web series_ yang menarik dan layak ditunggu. Setelah meluncurkan _web series_ __Sore__ dan __Janji__, kini ada __Sunyi__. Hal yang paling serunya lagi adalah __Sunyi__ bertemakan _difabel_ dan _disabilitas_. 
+
+Cobain deh, nonton episode [pertamanya](https://www.youtube.com/watch?v=7_0V14TYVzc). Dijamin bikin penasaran (_dan mungkin baper bagi Anda yang jomblo_). _hehe_
+
+Sampai tulisan ini saya buat, __Sunyi__ sudah sampai episode 3 _lhoo_. _Viewers_ -nya sudah belasan ribu. 
+
+_Nah_, sekarang saya coba _iseng_ mengambil data dari __Youtube__ terkait _web series_ ini. Untuk melakukannya saya menggunakan bantuan ~~Python~~ __R__ dan __Youtube Data API__. 
+
+Proses membuat _Google Authetication_ -nya mirip dengan layanan _Google Vision AI_, yakni tidak menggunakan __API__. Bagian ini saya _skip_ yah. Kita langsung ke bagian ambil dan ekstrak datanya.
+
+## Ambil data
+
+
+```{r,echo=FALSE}
+
+```
