@@ -11,19 +11,65 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Masih ingat dengan _quotes_ di atas? Di tulisan saya yang [lalu](https://ikanx101.github.io/blog/kuliah-umum-tel-u/), saya pernah menyebutkan bahwa salah satu tantangan bagi kita saat ini terkait data adalah __di mana kita bisa mendapatkannya__. Sejatinya di zaman digital ini, data bertebaran di mana-mana.
 
-Kembali ke judul tulisan ini, Tropicana Slim selalu saja membuat _web series_ yang menarik dan layak ditunggu di _channel_ __Youtube__ -nya. Setelah meluncurkan _web series_ __Sore__ dan __Janji__, kini ada __Sunyi__. Hal yang paling serunya lagi adalah __Sunyi__ bertemakan dunia _difabel_ atau _disabilitas_. 
+Kembali ke judul tulisan ini, __Tropicana Slim__ selalu saja membuat _web series_ yang menarik dan layak ditunggu di _channel_ __Youtube__-nya. Setelah meluncurkan _web series_ __Sore__ dan __Janji__, kini ada __Sunyi__. Hal yang paling serunya lagi adalah __Sunyi__ bertemakan dunia _difabel_ atau _disabilitas_. 
 
-Cobain deh, nonton episode [pertamanya](https://www.youtube.com/watch?v=7_0V14TYVzc). Dijamin bikin penasaran (_dan mungkin baper bagi Anda yang jomblo_). _hehe_
+_Cobain deh_, nonton episode [pertamanya](https://www.youtube.com/watch?v=7_0V14TYVzc). Dijamin bikin penasaran (_dan mungkin baper bagi Anda yang jomblo_). _hehe_
 
-Sampai tulisan ini saya buat, __Sunyi__ sudah sampai episode 3 _lhoo_. _Viewers_ -nya sudah belasan ribu. 
+Sampai tulisan ini saya buat, __Sunyi__ sudah sampai episode 3 _lhoo_. _Viewers_-nya sudah belasan ribu. 
 
 _Nah_, sekarang saya coba _iseng_ mengambil data dari __Youtube__ terkait _web series_ ini. Untuk melakukannya saya menggunakan bantuan ~~Python~~ __R__ dan __Youtube Data API__. 
 
-Proses membuat _Google Authetication_ -nya mirip dengan layanan _Google Vision AI_, yakni tidak menggunakan __API__. Bagian ini saya _skip_ yah. Kita langsung ke bagian ambil dan ekstrak datanya.
+Proses membuat _Google Authetication_ -nya mirip dengan layanan _Google Vision AI_, yakni tidak menggunakan __API__. Bagian ini saya _skip_ yah. Kita langsung ke bagian ambil dan ekstrak datanya. Penasaran data apa saja yang bisa diambil? _Yuk cekidot!_
 
-## Ambil data
+## Data pertama
 
+Data yang paling mudah diambil adalah data berapa banyak _view_, _like_, _dislike_, _favourite_, dan _comment_. Sepertinya hal yang receh yah. Gak pake bantuan __R__ sebenarnya bisa diambil sendiri _manual_ satu-persatu. Tapi kalau _web series_-nya kayak [Tersanjung](https://id.wikipedia.org/wiki/Tersanjung) _gimana hayo_?
+
+Hasil datanya seperti ini:
+
+```{r,echo=FALSE,message=FALSE}
+library(dplyr)
+library(ggplot2)
+library(wordcloud2)
+data = read.csv('stat eps.csv')
+```
 
 ```{r,echo=FALSE}
-data = load('stat eps.rda')
+data = data %>% mutate(X = NULL,
+                id = NULL)
+data
+```
+
+Heran yah, padahal sudah bagus gitu _web series_-nya, masih ada aja yang _dislike_. _hehe_
+
+Kalau dilihat sekilas, _viewers_-nya menurun tiap episode. Bisa jadi karena memang _web series_-nya baru saja mulai. Jadi belum banyak yang menonton. 
+
+```{r,echo=FALSE}
+library(ggthemes)
+data %>% ggplot(aes(x=as.factor(episode),y=viewCount)) + geom_line(group=1,color='#fcc603',size=1.2) +
+  geom_label(aes(label=viewCount/1000),size=3) + 
+  labs(x = 'Episode ke-',y='Banyak netizen yang melihat',
+       title = 'Penonton SUNYI dari episode ke episode',
+       subtitle = 'source: Youtube DATA API 4 Des 2019 4:00 pm',
+       caption = 'https://ikanx101.github.io/') +
+  theme_minimal() +
+  theme(axis.text.y = element_blank())
+```
+
+Walaupun begitu, tren yang berbeda ditunjukkan pada variabel `likeCount` dan `commentCount`. Sempat menurun pada episode kedua tapi naik di episode ketiga.
+
+```{r,echo=FALSE}
+library(ggthemes)
+library(reshape2)
+data %>% select(episode,likeCount,commentCount) %>% melt(id.vars='episode') %>% 
+  ggplot(aes(x=as.factor(episode),y=value,group=variable)) + 
+  geom_line(aes(color=variable),size=1.2) +
+  geom_label(aes(label=value),size=3) +
+  labs(x = 'Episode ke-',y='Banyak netizen yang like (merah)\nBanyak netizen yang comment (biru)',
+       title = 'Penonton SUNYI dari episode ke episode',
+       subtitle = 'source: Youtube DATA API 4 Des 2019 4:00 pm',
+       caption = 'https://ikanx101.github.io/') +
+  theme_minimal() +
+  theme(axis.text.y = element_blank(),
+        legend.position = 'none')
 ```
