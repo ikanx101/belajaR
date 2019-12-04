@@ -25,5 +25,5 @@ Proses membuat _Google Authetication_ -nya mirip dengan layanan _Google Vision A
 
 
 ```{r,echo=FALSE}
-
+data = load('stat eps.rda')
 ```
