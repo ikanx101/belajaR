@@ -7,7 +7,11 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Tropicana Slim selalu saja membuat _web series_ yang menarik dan layak ditunggu. Setelah meluncurkan _web series_ __Sore__ dan __Janji__, kini ada __Sunyi__. Hal yang paling serunya lagi adalah __Sunyi__ bertemakan _difabel_ dan _disabilitas_. 
+> Data is the new oil
+
+Masih ingat dengan _quotes_ di atas? Di tulisan saya yang [lalu](https://ikanx101.github.io/blog/kuliah-umum-tel-u/), saya pernah menyebutkan bahwa salah satu tantangan bagi kita saat ini terkait data adalah __di mana kita bisa mendapatkannya__. Sejatinya di zaman digital ini, data bertebaran di mana-mana.
+
+Kembali ke judul tulisan ini, Tropicana Slim selalu saja membuat _web series_ yang menarik dan layak ditunggu di _channel_ __Youtube__ -nya. Setelah meluncurkan _web series_ __Sore__ dan __Janji__, kini ada __Sunyi__. Hal yang paling serunya lagi adalah __Sunyi__ bertemakan dunia _difabel_ atau _disabilitas_. 
 
 Cobain deh, nonton episode [pertamanya](https://www.youtube.com/watch?v=7_0V14TYVzc). Dijamin bikin penasaran (_dan mungkin baper bagi Anda yang jomblo_). _hehe_
 
