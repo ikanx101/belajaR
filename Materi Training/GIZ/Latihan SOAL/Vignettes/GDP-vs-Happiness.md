@@ -38,9 +38,12 @@ str(Happy)
     ##  $ gdp.per.capita   : num  1804 11803 13914 18934 8788 ...
     ##  $ life.satisfaction: num  2.66 4.64 5.25 6.04 4.29 ...
 
-Dari dataset `Happy` maka diperoleh variabel berikut: \* `X`: nomor urut
-\* `negara`: Nama negara \* `gdp.per.capita`: GDP per kapita dari suatu
-negara \* `life.satisfaction`: tingkat kebahagiaan suatu negara
+Dari dataset `Happy` maka diperoleh variabel berikut: 
+
+* `X`: nomor urut
+* `negara`: Nama negara 
+* `gdp.per.capita`: GDP per kapita dari suatu negara 
+* `life.satisfaction`: tingkat kebahagiaan suatu negara
 
 ## Preparation Data
 
