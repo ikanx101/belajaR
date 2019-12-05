@@ -19,7 +19,7 @@ Sampai tulisan ini saya buat, __Sunyi__ sudah sampai episode 3 _lhoo_. _Viewers_
 
 _Nah_, sekarang saya coba _iseng_ mengambil data dari __Youtube__ terkait _web series_ ini. Untuk melakukannya saya menggunakan bantuan ~~Python~~ __R__ dan __Youtube Data API__. 
 
-Proses membuat _Google Authetication_ -nya mirip dengan layanan _Google Vision AI_, yakni tidak menggunakan __API__. Bagian ini saya _skip_ yah. Kita langsung ke bagian ambil dan ekstrak datanya. Penasaran data apa saja yang bisa diambil? _Yuk cekidot!_
+Proses membuat _Google Authetication_ -nya mirip dengan layanan _Google Vision AI_, yakni tidak menggunakan __API key__ walau nama layanannya __API__. Bagian ini saya _skip_ yah. Kita langsung ke bagian ambil dan ekstrak datanya. Penasaran data apa saja yang bisa diambil? _Yuk cekidot!_
 
 ## Data pertama
 
@@ -48,9 +48,9 @@ Kalau dilihat sekilas, _viewers_-nya menurun tiap episode. Bisa jadi karena mema
 library(ggthemes)
 data %>% ggplot(aes(x=as.factor(episode),y=viewCount)) + geom_line(group=1,color='#fcc603',size=1.2) +
   geom_label(aes(label=viewCount/1000),size=3) + 
-  labs(x = 'Episode ke-',y='Banyak netizen yang melihat',
-       title = 'Penonton SUNYI dari episode ke episode',
-       subtitle = 'source: Youtube DATA API 4 Des 2019 4:00 pm',
+  labs(x = 'Episode ke-',y='Total viewers',
+       title = 'Viewers: SUNYI dari episode ke episode',
+       subtitle = 'source: Youtube DATA API 5 Des 2019 3:56 pm',
        caption = 'https://ikanx101.github.io/') +
   theme_minimal() +
   theme(axis.text.y = element_blank())
@@ -59,17 +59,92 @@ data %>% ggplot(aes(x=as.factor(episode),y=viewCount)) + geom_line(group=1,color
 Walaupun begitu, tren yang berbeda ditunjukkan pada variabel `likeCount` dan `commentCount`. Sempat menurun pada episode kedua tapi naik di episode ketiga.
 
 ```{r,echo=FALSE}
-library(ggthemes)
 library(reshape2)
 data %>% select(episode,likeCount,commentCount) %>% melt(id.vars='episode') %>% 
   ggplot(aes(x=as.factor(episode),y=value,group=variable)) + 
   geom_line(aes(color=variable),size=1.2) +
   geom_label(aes(label=value),size=3) +
-  labs(x = 'Episode ke-',y='Banyak netizen yang like (merah)\nBanyak netizen yang comment (biru)',
-       title = 'Penonton SUNYI dari episode ke episode',
-       subtitle = 'source: Youtube DATA API 4 Des 2019 4:00 pm',
+  labs(x = 'Episode ke-',y='Banyak viewers yang like (merah)\nBanyak viewers yang comment (biru)',
+       title = 'Likes dan Comments: SUNYI dari episode ke episode',
+       subtitle = 'source: Youtube DATA API 5 Des 2019 3:56 pm',
        caption = 'https://ikanx101.github.io/') +
   theme_minimal() +
   theme(axis.text.y = element_blank(),
         legend.position = 'none')
+```
+
+Coba yah kalau kita buat variabel `likeCount` dan `commentCount` dalam bentuk rasio terhadap `viewCount`. Bentuknya jadi sebagai berikut:
+
+```{r,echo=FALSE}
+# likeCount rasio
+data %>% ggplot(aes(x=as.factor(episode),y=likeCount/viewCount)) + geom_line(group=1,color='#d9111b',size=1.2) +
+  geom_label(aes(label=round(100*likeCount/viewCount,2)),size=3) + 
+  labs(x = 'Episode ke-',y='Rasio likes per total viewers',
+       title = 'Rasio Likes: SUNYI dari episode ke episode',
+       subtitle = 'source: Youtube DATA API 5 Des 2019 3:56 pm',
+       caption = 'https://ikanx101.github.io/') +
+  theme_minimal() +
+  theme(axis.text.y = element_blank())
+
+# commentCount rasio
+data %>% ggplot(aes(x=as.factor(episode),y=commentCount/viewCount)) + geom_line(group=1,color='#0b75b8',size=1.2) +
+  geom_label(aes(label=round(100*commentCount/viewCount,2)),size=3) + 
+  labs(x = 'Episode ke-',y='Rasio Comments per total viewers',
+       title = 'Rasio Comments: SUNYI dari episode ke episode',
+       subtitle = 'source: Youtube DATA API 5 Des 2019 3:56 pm',
+       caption = 'https://ikanx101.github.io/') +
+  theme_minimal() +
+  theme(axis.text.y = element_blank())
+```
+
+Nah kalau dari rasio sudah terlihat mirip kan yah polanya.
+
+#### Kalau punya data ini trus _So What Gitu Lho?_
+
+Nah, kira-kira ada yang kebayang gak data ini bisa diapakan saja? Nih, saya kasih ide. Satu aja yah tapinya (lainnya harus dipikirkan sendiri donk). _hehe_
+
+> Misal, saya punya data ini (plus data durasi video) dari keseluruhan video yang ada di suatu _channel Youtube_, saya bisa bikin clustering analysis dari semua video itu. Lalu saya bisa analisa, karakteristik dari masing-masing cluster video yang terbentuk. Jangan-jangan ada pola antar beberapa video yang ada. Bisa jadi ide untuk _next content development_-nya. 
+
+Di tulisan berikutnya yah, saya cobain kayak gimana sih analisanya _real_-nya.
+
+## Data kedua
+
+Berikutnya adalah data detail properties dari video tersebut. Mencakup: judul, waktu _upload_, deskripsi, resolusi, _hashtags_ yang digunakan, dll. Contohnya untuk episode 1, data yang dapat dilihat adalah sbb:
+
+```{r,echo=FALSE}
+load("/cloud/project/Bukan Infografis/Sunyi/info.rda")
+(detail)
+```
+
+Saya kurang tertarik dengan data kedua ini, mungkin akan saya _skip_ dulu yah. Kalau teman-teman ada ide untuk melakukan analisa apa, _let me know yah_.
+
+## Data ketiga
+
+Data berikutnya yang bisa diambil adalah data komentar _viewers_ di masing-masing video. Nah, ini baru menarik. Apa aja isinya? Berikut nama variabelnya yah:
+
+```{r,echo=FALSE,warning=FALSE}
+library(readr)
+komen <- read_csv("komen.csv", col_types = cols(X1 = col_skip(), 
+    authorChannelId.value = col_skip(), canRate = col_skip(), 
+    textDisplay = col_skip(), videoId = col_skip(), 
+    viewerRating = col_skip()))
+attributes(komen)$spec=NULL
+```
+
+```{r}
+str(komen)
+```
+Setidaknya ada delapan variabel yang bisa kita ambil dan analisa, yakni:
+
+1. `authorDisplayName`: nama _commenter_.
+2. `authorProfileImageUrl`: _profil pic Youtube account_ dari _commenter_.
+3. `authorChannelUrl`: _link channel Youtube_ dari _commenter_.
+4. `textOriginal`: komentar.
+5. `likeCount`: Berapa bayak yang _likes_ komentar tersebut.
+6. `publishedAt`: Kapan pertama kali komentar tersebut _published_.
+7. `updatedAt`: Kapan komentar tersebut diedit (jika ada).
+8. `episode`: Episode _web series_ sunyi.
+
+```{r}
+head(komen,15)
 ```
