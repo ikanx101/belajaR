@@ -221,8 +221,21 @@ str(komen)
     ##  $ episode              : num  1 1 1 1 1 1 1 1 1 1 ...
 
 Setidaknya ada delapan variabel yang bisa kita ambil dan analisa, yakni:
-1. `authorDisplayName`: nama *commenter*. 2. `authorProfileImageUrl`:
-*profil pic Youtube account* dari *commenter*.
+
+1.  `authorDisplayName`: nama *commenter*.
+2.  `authorProfileImageUrl`: *profil pic Youtube account* dari
+    *commenter*.
+3.  `authorChannelUrl`: *link channel Youtube* dari *commenter*.
+4.  `textOriginal`: komentar.
+5.  `likeCount`: Berapa bayak yang *likes* komentar tersebut.
+6.  `publishedAt`: Kapan pertama kali komentar tersebut *published*.
+7.  `updatedAt`: Kapan komentar tersebut diedit (jika ada).
+8.  `episode`: Episode *web series* sunyi.
+
+Oh iya, bagi rekan-rekan yang mau membedah sendiri datanya, saya
+lampirkan di
+[sini](https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Sunyi/komen.csv)
+yah.
 
 ``` r
 head(komen,15)
@@ -248,3 +261,74 @@ head(komen,15)
     ## 15 nur widyastuti   https://yt3.ggp… http://www.yout… Lanjut mba …
     ## # … with 4 more variables: likeCount <dbl>, publishedAt <dttm>,
     ## #   updatedAt <dttm>, episode <dbl>
+
+### *Let the fun parts begin\!*
+
+Bermodalkan data ketiga, mari kita oprek-oprek data ini. Kita mulai dari
+yang paling sederhana dulu
+yah.
+
+#### Komentar paling banyak di- *like* per episode
+
+``` r
+new = komen %>% group_by(episode) %>% filter(likeCount == max(likeCount)) %>%
+  select(episode,authorDisplayName,textOriginal,likeCount) %>% arrange(episode)
+new
+```
+
+    ## # A tibble: 3 x 4
+    ## # Groups:   episode [3]
+    ##   episode authorDisplayName textOriginal                          likeCount
+    ##     <dbl> <chr>             <chr>                                     <dbl>
+    ## 1       1 Beela Shabeela    "Tropicana Slim memang terbaik soal …        18
+    ## 2       2 SETYA NOVANTOL    PENGEN TAU ALASAN TROPICANA SLIM BUA…        17
+    ## 3       3 Sunyi Coffee      Mini Series hasil kolaborasi dengan …        29
+
+**Pada episode pertama**, komentar yang paling banyak di- *like* adalah
+komentar:
+
+    ## [1] "Tropicana Slim memang terbaik soal web series  ga sabar lanjutannya "
+
+Dengan `likeCount` sebanyak 18.
+
+> Sebuah pujian yang tulus dari viewer terkait betapa bagusnya *web
+> series*-nya TropicanaSlim.
+
+**Sedangkan pada episode kedua**, komentar yang paling banyak di- *like*
+adalah
+    komentar:
+
+    ## [1] "PENGEN TAU ALASAN TROPICANA SLIM BUAT PER EPS 1 MENIT GITUKENAPAAAAA?  MOHON ALASANNYA PAPA INGIN TAU"
+
+Dengan `likeCount` sebanyak 17.
+
+> Nah, ini adalah pertanyaan viewer terkait durasi *web series* iniyang
+> lebih singkat dibandingkan **Sore** dan **Janji**.
+
+**Sedangkan pada episode ketiga**, komentar yang paling banyak di-
+*like* adalah
+    komentar:
+
+    ## [1] "Mini Series hasil kolaborasi dengan TropicanaSlim dengan aktor asli tuli dan kerjasama komunitas seni fantasi tuli Sunyi hadir sebagai tempat pertemuan 2 dunia yg sebelumnya tidak terbayang dapat bertemu Sunyi ingin terus berkembang untuk dapat memperkenalkan dunia disabilitas sebagai dunia yg mengagumkan dan penuh kejutan Oleh karena itu setiap like pada video CeritaSunyi di YouTube akan dikonversikan menjadi Rp 500 untuk pengembangan Sunyi House of Coffee and Hope dalam membantu memperluas kesempatan teman - teman disabilitas untuk berkreasi dan berekspresi melalui kopiAyo kita menjadi duta dunia yg menakjubkan ini dengan like dan share kepada rekan - rekan kalian semua karena setiap dukungan pasti sangat berartitropicanaslim CeritaSunyi SahabatSunyi"
+
+Dengan `likeCount` sebanyak 29.
+
+> Ini adalah komen dari akun resmi **Sunyi Coffee**. Sebenarnya, komen
+> ini selalu muncul di setiap episode. Tapi baru di episode ketiga ini
+> yang paling banyak di- *likes* oleh *viewer*.
+
+#### *Text analysis* dari komentar *viewer*
+
+Ini bagian paling seru. Bagaimana kita bisa melakukan *text analysis*
+dari komentar-komentar *viewers*. Setidaknya ada tiga analisa yang bisa
+dilakukan:
+
+1.  **Wordcloud**: Menghitung berapa banyak kata keluar dalam suatu data
+    teks (*Word counting*).
+2.  **Bi-Gram**: Melihat dua kata yang sering bermunculan bersamaan.
+3.  **Word Association**: Melihat kumpulan dan hubungan kata-kata yang
+    memiliki asosiasi tinggi.
+
+Oke, kita mulai dari yang paling gampang dulu yah.
+
+##### Wordcloud

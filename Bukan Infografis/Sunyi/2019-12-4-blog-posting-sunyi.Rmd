@@ -145,6 +145,63 @@ Setidaknya ada delapan variabel yang bisa kita ambil dan analisa, yakni:
 7. `updatedAt`: Kapan komentar tersebut diedit (jika ada).
 8. `episode`: Episode _web series_ sunyi.
 
+Oh iya, bagi rekan-rekan yang mau membedah sendiri datanya, saya lampirkan di [sini](https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Sunyi/komen.csv) yah.
+
 ```{r}
 head(komen,15)
 ```
+
+### _Let the fun parts begin!_
+
+Bermodalkan data ketiga, mari kita oprek-oprek data ini. Kita mulai dari yang paling sederhana dulu yah.
+
+#### Komentar paling banyak di- _like_ per episode
+
+```{r,echo=FALSE}
+komen$textOriginal = gsub("[^[:alnum:][:blank:]?&/\\-]", "", komen$textOriginal)
+komen$textOriginal = gsub("U000.....", " ", komen$textOriginal)
+```
+```{r}
+new = komen %>% group_by(episode) %>% filter(likeCount == max(likeCount)) %>%
+  select(episode,authorDisplayName,textOriginal,likeCount) %>% arrange(episode)
+new
+```
+
+__Pada episode pertama__, komentar yang paling banyak di- _like_ adalah komentar:
+```{r,echo=FALSE}
+new$textOriginal[1]
+```
+
+Dengan `likeCount` sebanyak 18. 
+
+> Sebuah pujian yang tulus dari viewer terkait betapa bagusnya _web series_-nya TropicanaSlim.
+
+__Sedangkan pada episode kedua__, komentar yang paling banyak di- _like_ adalah komentar:
+```{r,echo=FALSE}
+new$textOriginal[2]
+```
+
+Dengan `likeCount` sebanyak 17.
+
+> Nah, ini adalah pertanyaan viewer terkait durasi _web series_ iniyang lebih singkat dibandingkan __Sore__ dan __Janji__.
+
+__Sedangkan pada episode ketiga__, komentar yang paling banyak di- _like_ adalah komentar:
+```{r,echo=FALSE}
+new$textOriginal[3]
+```
+
+Dengan `likeCount` sebanyak 29.
+
+> Ini adalah komen dari akun resmi __Sunyi Coffee__. Sebenarnya, komen ini selalu muncul di setiap episode. Tapi baru di episode ketiga ini yang paling banyak di- _likes_ oleh _viewer_.
+
+#### _Text analysis_ dari komentar _viewer_
+
+Ini bagian paling seru. Bagaimana kita bisa melakukan _text analysis_ dari komentar-komentar _viewers_. Setidaknya ada tiga analisa yang bisa dilakukan:
+
+1. __Wordcloud__: Menghitung berapa banyak kata keluar dalam suatu data teks (_Word counting_).
+2. __Bi-Gram__: Melihat dua kata yang sering bermunculan bersamaan.
+3. __Word Association__: Melihat kumpulan dan hubungan kata-kata yang memiliki asosiasi tinggi.
+
+Oke, kita mulai dari yang paling gampang dulu yah.
+
+##### Wordcloud
