@@ -1,5 +1,6 @@
 Bahan Training R - GIZ
 ================
+@mr.ikanx & @lenny.wibisana
 
 # Selamat datang di R
 
@@ -23,13 +24,23 @@ Ada beberapa tipe data di data science, yakni:
 
 # Yuk kita mulai materinya
 
-# Selamat datang di R
-
 ## Single variabel
 
 ``` r
 a = 10
+a
+```
+
+    ## [1] 10
+
+``` r
 b <- 3
+b
+```
+
+    ## [1] 3
+
+``` r
 a+b
 ```
 
@@ -37,25 +48,66 @@ a+b
 
 ``` r
 c=a*b^2/100
-kalimat='saya suka pergi ke pasar' #jika variabelnya berupa text
-kalimat_baru = "i don't like pizza"
+c
 ```
+
+    ## [1] 0.9
+
+``` r
+kalimat='saya suka pergi ke pasar' #jika variabelnya berupa text
+kalimat 
+```
+
+    ## [1] "saya suka pergi ke pasar"
+
+**Perhatikan penggunakan tanda `"` dan `'` pada perintah di bawah
+ini\!**
+
+``` r
+kalimat_baru = "i don't like pizza"
+kalimat_baru
+```
+
+    ## [1] "i don't like pizza"
 
 ## Vector atau array
 
 ``` r
 tes_vector=c(1,3,6,5,4,7)
+tes_vector
+```
+
+    ## [1] 1 3 6 5 4 7
+
+``` r
 id=c(1:10) #contoh generating sequence
+id
+```
+
+    ##  [1]  1  2  3  4  5  6  7  8  9 10
+
+``` r
 a=seq(1,10,0.5) #contoh generating sequence by 0.5
+a
+```
+
+    ##  [1]  1.0  1.5  2.0  2.5  3.0  3.5  4.0  4.5  5.0  5.5  6.0  6.5  7.0  7.5
+    ## [15]  8.0  8.5  9.0  9.5 10.0
+
+``` r
 sample(c(100:200),5,replace=F) #generating random number
 ```
 
-    ## [1] 194 130 139 169 153
+    ## [1] 120 195 190 130 134
 
 ``` r
 kalimat = 'saya biasa pergi ke kantor setiap jam 7 pagi'
 pecah.kata=strsplit(kalimat,' ') #pecah kalimat menjadi kata dan mengubahnya menjadi array
+```
 
+Beberapa fungsi yang mungkin berguna di array:
+
+``` r
 # Yang penting di array
 length(a)
 ```
@@ -122,18 +174,6 @@ ifelse(1+2>=3,'anda benar','anda salah')
 
     ## [1] "anda benar"
 
-``` r
-ifelse(1+2<3,'anda benar','anda salah')
-```
-
-    ## [1] "anda salah"
-
-``` r
-ifelse(1+2>3,'anda benar','anda salah')
-```
-
-    ## [1] "anda salah"
-
 ### Another useful function
 
 #### Paste
@@ -176,76 +216,124 @@ print(nomor)
     ##  [69]  69  70  71  72  73  74  75  76  77  78  79  80  81  82  83  84  85
     ##  [86]  86  87  88  89  90  91  92  93  94  95  96  97  98  99 100
 
-## Tibble atau Data Frame
-
-Struktur data tibble atau data frame sejatinya mirip dengan data
-tradisional di **MS. EXCEL**.
-
 ### Sebelum masuk ke data frame:
 
 ``` r
 # Misalkan kita buat dua variabel sbb:
 suhu=sample(100,50,replace=T)
-cacat=sample(10,50,replace=T)
+defect=sample(10,50,replace=T)
 
 # Membuat histogram dari suhu
 hist(suhu)
 ```
 
-![](Readme_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 ``` r
-# Membuat histogram dari cacat
-hist(cacat)
+# Membuat histogram dari defect
+hist(defect)
 ```
 
-![](Readme_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->
+
+Untuk membuat *boxplot* bisa menggunakan perintah ini:
 
 ``` r
-# Uji Korelasi
-cor.test(suhu,cacat)
+# Membuat boxplot dari defect
+boxplot(defect)
+```
+
+![](Readme_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
+``` r
+# Membuat boxplot dari suhu
+boxplot(suhu)
+```
+
+![](Readme_files/figure-gfm/unnamed-chunk-9-2.png)<!-- -->
+
+### Uji Korelasi
+
+Kita mulai masuk ke uji korelasi. Setidaknya ada tiga informasi utama
+saat kita melakukan **uji korelasi**, yakni:
+
+1.  Apakah korelasi antara dua variabel tersebut signifikan?
+2.  Apakah korelasi yang ada kuat, sedang, atau lemah?
+3.  Bagaimana hubungan antara dua variabel tersebut? Berbanding lurus
+    atau terbalik?
+
+Kita bisa melakukannya di **R** dengan perintah `cor.test()`.
+
+``` r
+uji_korelasi = cor.test(suhu,defect)
+uji_korelasi
 ```
 
     ## 
     ##  Pearson's product-moment correlation
     ## 
-    ## data:  suhu and cacat
-    ## t = -0.11272, df = 48, p-value = 0.9107
+    ## data:  suhu and defect
+    ## t = -1.3356, df = 48, p-value = 0.188
     ## alternative hypothesis: true correlation is not equal to 0
     ## 95 percent confidence interval:
-    ##  -0.2932875  0.2632721
+    ##  -0.44423289  0.09400971
     ## sample estimates:
-    ##         cor 
-    ## -0.01626777
+    ##        cor 
+    ## -0.1892913
 
 ``` r
-# save into variabel
-uji_korelasi = cor.test(suhu,cacat)
-
+# Melihat p-value dari hasil uji korelasi 
 uji_korelasi$p.value
 ```
 
-    ## [1] 0.9107216
+    ## [1] 0.1879807
 
 ``` r
+# Kesimpulan uji korelasi
 ifelse(uji_korelasi$p.value<0.05,'Signifikan berkorelasi','Tidak signifikan berkorelasi')
 ```
 
     ## [1] "Tidak signifikan berkorelasi"
 
 ``` r
-# Hanya menampilkan angka korelasi saja
-cor(suhu,cacat)
+# Menampilkan angka korelasi
+cor(suhu,defect)
 ```
 
-    ## [1] -0.01626777
+    ## [1] -0.1892913
 
 ``` r
-# Simple plot suhu vs cacat
-plot(suhu,cacat)
+# Simple plot suhu vs defect
+plot(suhu,defect)
 ```
 
-![](Readme_files/figure-gfm/unnamed-chunk-6-3.png)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+
+Apa yang bisa kita simpulkan dari data `suhu` dan `defect` tersebut?
+
+### Uji kenormalan di **R**
+
+Untuk melakukan uji kenormalan, setidaknya ada dua cara, yakni:
+
+1.  Shapiro-Wilk
+2.  Kolmogorov-Smirnov
+
+Kita bisa menggunakan perintah `shapiro.test()` untuk melakukan uji
+kenormalan. Contoh melakukan uji kenormalan untuk `suhu`.
+
+``` r
+stat_uji = shapiro.test(suhu)
+ifelse(stat_uji$p.value < 0.05,
+       'Tolak H0 -- tidak normal',
+       'H0 tidak ditolak -- normal')
+```
+
+    ## [1] "Tolak H0 -- tidak normal"
+
+## Tibble atau Data Frame
+
+Struktur data **tibble** atau **data frame** sejatinya mirip dengan data
+tradisional di **MS. EXCEL**.
 
 ### Membangun data frame dari kumpulan vector
 
@@ -254,61 +342,61 @@ Data frame bisa dibangun dari dua atau lebih vector yang memiliki
 
 ``` r
 #membuat data frame
-data=data.frame(suhu,cacat)
+data=data.frame(suhu,defect)
 data
 ```
 
-    ##    suhu cacat
-    ## 1    88     6
-    ## 2    55     7
-    ## 3    53     5
-    ## 4    70     2
-    ## 5    17     2
-    ## 6     2     9
-    ## 7    63     8
-    ## 8    62     3
-    ## 9    24     6
-    ## 10   34     2
-    ## 11   60     7
-    ## 12   19     1
-    ## 13   38     7
-    ## 14   22     4
-    ## 15   85     7
-    ## 16   67     4
-    ## 17   49     9
-    ## 18   42    10
-    ## 19    6     5
-    ## 20   24    10
-    ## 21   38     8
-    ## 22   38     5
-    ## 23   39     1
-    ## 24   39     7
-    ## 25   71     3
-    ## 26  100     1
-    ## 27   43     6
-    ## 28   74     1
-    ## 29   28     4
-    ## 30   20     4
-    ## 31   52     3
-    ## 32   27     4
-    ## 33   11     2
-    ## 34   13     9
-    ## 35   85     6
-    ## 36   35     3
-    ## 37   49     7
-    ## 38   37     1
-    ## 39   67     5
-    ## 40  100     8
-    ## 41   90     6
-    ## 42   41     4
-    ## 43   35     4
-    ## 44   60     7
-    ## 45   10     9
-    ## 46   14     6
-    ## 47   65     6
-    ## 48   72     8
-    ## 49   70     5
-    ## 50   96     6
+    ##    suhu defect
+    ## 1    73      4
+    ## 2    25      9
+    ## 3    77      7
+    ## 4    47      9
+    ## 5    17      2
+    ## 6    65      2
+    ## 7    13      9
+    ## 8    92      3
+    ## 9   100      5
+    ## 10   10      8
+    ## 11   20      2
+    ## 12   87      5
+    ## 13   55      4
+    ## 14   60      1
+    ## 15   53     10
+    ## 16   18      2
+    ## 17   89      9
+    ## 18   69      6
+    ## 19   41      4
+    ## 20   12      3
+    ## 21   71      1
+    ## 22   61     10
+    ## 23   86      1
+    ## 24   40     10
+    ## 25  100      1
+    ## 26   50      1
+    ## 27   19      1
+    ## 28   51      6
+    ## 29   54      1
+    ## 30   97      7
+    ## 31   65      4
+    ## 32   28      8
+    ## 33   42      6
+    ## 34   18      9
+    ## 35   28      1
+    ## 36   91      6
+    ## 37   28      5
+    ## 38   35      4
+    ## 39   87      2
+    ## 40    2      5
+    ## 41   77      9
+    ## 42   14     10
+    ## 43    4     10
+    ## 44   52      5
+    ## 45   48      7
+    ## 46   22      9
+    ## 47   43      4
+    ## 48    3      6
+    ## 49   65      4
+    ## 50  100      5
 
 ### Another useful function di data frame
 
@@ -319,19 +407,19 @@ str(data)
 ```
 
     ## 'data.frame':    50 obs. of  2 variables:
-    ##  $ suhu : int  88 55 53 70 17 2 63 62 24 34 ...
-    ##  $ cacat: int  6 7 5 2 2 9 8 3 6 2 ...
+    ##  $ suhu  : int  73 25 77 47 17 65 13 92 100 10 ...
+    ##  $ defect: int  4 9 7 9 2 2 9 3 5 8 ...
 
 ``` r
 summary(data)
 ```
 
-    ##       suhu            cacat      
+    ##       suhu            defect     
     ##  Min.   :  2.00   Min.   : 1.00  
-    ##  1st Qu.: 27.25   1st Qu.: 3.25  
-    ##  Median : 42.50   Median : 5.50  
-    ##  Mean   : 47.98   Mean   : 5.26  
-    ##  3rd Qu.: 67.00   3rd Qu.: 7.00  
+    ##  1st Qu.: 22.75   1st Qu.: 2.25  
+    ##  Median : 50.50   Median : 5.00  
+    ##  Mean   : 50.08   Mean   : 5.24  
+    ##  3rd Qu.: 72.50   3rd Qu.: 8.00  
     ##  Max.   :100.00   Max.   :10.00
 
 ``` r
@@ -344,163 +432,163 @@ length(data)
 head(data,5) #menampilkan data 5 teratas
 ```
 
-    ##   suhu cacat
-    ## 1   88     6
-    ## 2   55     7
-    ## 3   53     5
-    ## 4   70     2
-    ## 5   17     2
+    ##   suhu defect
+    ## 1   73      4
+    ## 2   25      9
+    ## 3   77      7
+    ## 4   47      9
+    ## 5   17      2
 
 ``` r
 tail(data,5) #menampilkan data 5 terbawah
 ```
 
-    ##    suhu cacat
-    ## 46   14     6
-    ## 47   65     6
-    ## 48   72     8
-    ## 49   70     5
-    ## 50   96     6
+    ##    suhu defect
+    ## 46   22      9
+    ## 47   43      4
+    ## 48    3      6
+    ## 49   65      4
+    ## 50  100      5
 
 ``` r
 data[1]
 ```
 
     ##    suhu
-    ## 1    88
-    ## 2    55
-    ## 3    53
-    ## 4    70
+    ## 1    73
+    ## 2    25
+    ## 3    77
+    ## 4    47
     ## 5    17
-    ## 6     2
-    ## 7    63
-    ## 8    62
-    ## 9    24
-    ## 10   34
-    ## 11   60
-    ## 12   19
-    ## 13   38
-    ## 14   22
-    ## 15   85
-    ## 16   67
-    ## 17   49
-    ## 18   42
-    ## 19    6
-    ## 20   24
-    ## 21   38
-    ## 22   38
-    ## 23   39
-    ## 24   39
-    ## 25   71
-    ## 26  100
-    ## 27   43
-    ## 28   74
-    ## 29   28
-    ## 30   20
-    ## 31   52
-    ## 32   27
-    ## 33   11
-    ## 34   13
-    ## 35   85
-    ## 36   35
-    ## 37   49
-    ## 38   37
-    ## 39   67
-    ## 40  100
-    ## 41   90
-    ## 42   41
-    ## 43   35
-    ## 44   60
-    ## 45   10
-    ## 46   14
-    ## 47   65
-    ## 48   72
-    ## 49   70
-    ## 50   96
+    ## 6    65
+    ## 7    13
+    ## 8    92
+    ## 9   100
+    ## 10   10
+    ## 11   20
+    ## 12   87
+    ## 13   55
+    ## 14   60
+    ## 15   53
+    ## 16   18
+    ## 17   89
+    ## 18   69
+    ## 19   41
+    ## 20   12
+    ## 21   71
+    ## 22   61
+    ## 23   86
+    ## 24   40
+    ## 25  100
+    ## 26   50
+    ## 27   19
+    ## 28   51
+    ## 29   54
+    ## 30   97
+    ## 31   65
+    ## 32   28
+    ## 33   42
+    ## 34   18
+    ## 35   28
+    ## 36   91
+    ## 37   28
+    ## 38   35
+    ## 39   87
+    ## 40    2
+    ## 41   77
+    ## 42   14
+    ## 43    4
+    ## 44   52
+    ## 45   48
+    ## 46   22
+    ## 47   43
+    ## 48    3
+    ## 49   65
+    ## 50  100
 
 ``` r
 data[,1]
 ```
 
-    ##  [1]  88  55  53  70  17   2  63  62  24  34  60  19  38  22  85  67  49
-    ## [18]  42   6  24  38  38  39  39  71 100  43  74  28  20  52  27  11  13
-    ## [35]  85  35  49  37  67 100  90  41  35  60  10  14  65  72  70  96
+    ##  [1]  73  25  77  47  17  65  13  92 100  10  20  87  55  60  53  18  89
+    ## [18]  69  41  12  71  61  86  40 100  50  19  51  54  97  65  28  42  18
+    ## [35]  28  91  28  35  87   2  77  14   4  52  48  22  43   3  65 100
 
 ``` r
 data[2]
 ```
 
-    ##    cacat
-    ## 1      6
-    ## 2      7
-    ## 3      5
-    ## 4      2
-    ## 5      2
-    ## 6      9
-    ## 7      8
-    ## 8      3
-    ## 9      6
-    ## 10     2
-    ## 11     7
-    ## 12     1
-    ## 13     7
-    ## 14     4
-    ## 15     7
-    ## 16     4
-    ## 17     9
-    ## 18    10
-    ## 19     5
-    ## 20    10
-    ## 21     8
-    ## 22     5
-    ## 23     1
-    ## 24     7
-    ## 25     3
-    ## 26     1
-    ## 27     6
-    ## 28     1
-    ## 29     4
-    ## 30     4
-    ## 31     3
-    ## 32     4
-    ## 33     2
-    ## 34     9
-    ## 35     6
-    ## 36     3
-    ## 37     7
-    ## 38     1
-    ## 39     5
-    ## 40     8
-    ## 41     6
-    ## 42     4
-    ## 43     4
-    ## 44     7
-    ## 45     9
-    ## 46     6
-    ## 47     6
-    ## 48     8
-    ## 49     5
-    ## 50     6
+    ##    defect
+    ## 1       4
+    ## 2       9
+    ## 3       7
+    ## 4       9
+    ## 5       2
+    ## 6       2
+    ## 7       9
+    ## 8       3
+    ## 9       5
+    ## 10      8
+    ## 11      2
+    ## 12      5
+    ## 13      4
+    ## 14      1
+    ## 15     10
+    ## 16      2
+    ## 17      9
+    ## 18      6
+    ## 19      4
+    ## 20      3
+    ## 21      1
+    ## 22     10
+    ## 23      1
+    ## 24     10
+    ## 25      1
+    ## 26      1
+    ## 27      1
+    ## 28      6
+    ## 29      1
+    ## 30      7
+    ## 31      4
+    ## 32      8
+    ## 33      6
+    ## 34      9
+    ## 35      1
+    ## 36      6
+    ## 37      5
+    ## 38      4
+    ## 39      2
+    ## 40      5
+    ## 41      9
+    ## 42     10
+    ## 43     10
+    ## 44      5
+    ## 45      7
+    ## 46      9
+    ## 47      4
+    ## 48      6
+    ## 49      4
+    ## 50      5
 
 ``` r
 data[,2]
 ```
 
-    ##  [1]  6  7  5  2  2  9  8  3  6  2  7  1  7  4  7  4  9 10  5 10  8  5  1
-    ## [24]  7  3  1  6  1  4  4  3  4  2  9  6  3  7  1  5  8  6  4  4  7  9  6
-    ## [47]  6  8  5  6
+    ##  [1]  4  9  7  9  2  2  9  3  5  8  2  5  4  1 10  2  9  6  4  3  1 10  1
+    ## [24] 10  1  1  1  6  1  7  4  8  6  9  1  6  5  4  2  5  9 10 10  5  7  9
+    ## [47]  4  6  4  5
 
 ``` r
 data[1,1] #melihat data di posisi row,column
 ```
 
-    ## [1] 88
+    ## [1] 73
 
 ``` r
 data[1,2] #melihat data di posisi row,column
 ```
 
-    ## [1] 6
+    ## [1] 4
 
 ``` r
 data[1,1]=NA #menghapus data di posisi row,column
@@ -511,27 +599,27 @@ data$hari = paste('hari ke',c(1:50),'dari 50 hari',sep=' ')
 head(data,20)
 ```
 
-    ##    suhu cacat                    hari
-    ## 1    NA     6  hari ke 1 dari 50 hari
-    ## 2    55     7  hari ke 2 dari 50 hari
-    ## 3    53     5  hari ke 3 dari 50 hari
-    ## 4    70     2  hari ke 4 dari 50 hari
-    ## 5    17     2  hari ke 5 dari 50 hari
-    ## 6     2     9  hari ke 6 dari 50 hari
-    ## 7    63     8  hari ke 7 dari 50 hari
-    ## 8    62     3  hari ke 8 dari 50 hari
-    ## 9    24     6  hari ke 9 dari 50 hari
-    ## 10   34     2 hari ke 10 dari 50 hari
-    ## 11   60     7 hari ke 11 dari 50 hari
-    ## 12   19     1 hari ke 12 dari 50 hari
-    ## 13   38     7 hari ke 13 dari 50 hari
-    ## 14   22     4 hari ke 14 dari 50 hari
-    ## 15   85     7 hari ke 15 dari 50 hari
-    ## 16   67     4 hari ke 16 dari 50 hari
-    ## 17   49     9 hari ke 17 dari 50 hari
-    ## 18   42    10 hari ke 18 dari 50 hari
-    ## 19    6     5 hari ke 19 dari 50 hari
-    ## 20   24    10 hari ke 20 dari 50 hari
+    ##    suhu defect                    hari
+    ## 1    NA      4  hari ke 1 dari 50 hari
+    ## 2    25      9  hari ke 2 dari 50 hari
+    ## 3    77      7  hari ke 3 dari 50 hari
+    ## 4    47      9  hari ke 4 dari 50 hari
+    ## 5    17      2  hari ke 5 dari 50 hari
+    ## 6    65      2  hari ke 6 dari 50 hari
+    ## 7    13      9  hari ke 7 dari 50 hari
+    ## 8    92      3  hari ke 8 dari 50 hari
+    ## 9   100      5  hari ke 9 dari 50 hari
+    ## 10   10      8 hari ke 10 dari 50 hari
+    ## 11   20      2 hari ke 11 dari 50 hari
+    ## 12   87      5 hari ke 12 dari 50 hari
+    ## 13   55      4 hari ke 13 dari 50 hari
+    ## 14   60      1 hari ke 14 dari 50 hari
+    ## 15   53     10 hari ke 15 dari 50 hari
+    ## 16   18      2 hari ke 16 dari 50 hari
+    ## 17   89      9 hari ke 17 dari 50 hari
+    ## 18   69      6 hari ke 18 dari 50 hari
+    ## 19   41      4 hari ke 19 dari 50 hari
+    ## 20   12      3 hari ke 20 dari 50 hari
 
 ``` r
 # Cara 2
@@ -546,74 +634,74 @@ data$bulan[32:50]='Februari'
 data$suhu
 ```
 
-    ##  [1]  NA  55  53  70  17   2  63  62  24  34  60  19  38  22  85  67  49
-    ## [18]  42   6  24  38  38  39  39  71 100  43  74  28  20  52  27  11  13
-    ## [35]  85  35  49  37  67 100  90  41  35  60  10  14  65  72  70  96
+    ##  [1]  NA  25  77  47  17  65  13  92 100  10  20  87  55  60  53  18  89
+    ## [18]  69  41  12  71  61  86  40 100  50  19  51  54  97  65  28  42  18
+    ## [35]  28  91  28  35  87   2  77  14   4  52  48  22  43   3  65 100
 
 ``` r
-data$cacat
+data$defect
 ```
 
-    ##  [1]  6  7  5  2  2  9  8  3  6  2  7  1  7  4  7  4  9 10  5 10  8  5  1
-    ## [24]  7  3  1  6  1  4  4  3  4  2  9  6  3  7  1  5  8  6  4  4  7  9  6
-    ## [47]  6  8  5  6
+    ##  [1]  4  9  7  9  2  2  9  3  5  8  2  5  4  1 10  2  9  6  4  3  1 10  1
+    ## [24] 10  1  1  1  6  1  7  4  8  6  9  1  6  5  4  2  5  9 10 10  5  7  9
+    ## [47]  4  6  4  5
 
 ``` r
 data.baru=data[-1]
 data.baru
 ```
 
-    ##    cacat                    hari    bulan
-    ## 1      6  hari ke 1 dari 50 hari  Januari
-    ## 2      7  hari ke 2 dari 50 hari  Januari
-    ## 3      5  hari ke 3 dari 50 hari  Januari
-    ## 4      2  hari ke 4 dari 50 hari  Januari
-    ## 5      2  hari ke 5 dari 50 hari  Januari
-    ## 6      9  hari ke 6 dari 50 hari  Januari
-    ## 7      8  hari ke 7 dari 50 hari  Januari
-    ## 8      3  hari ke 8 dari 50 hari  Januari
-    ## 9      6  hari ke 9 dari 50 hari  Januari
-    ## 10     2 hari ke 10 dari 50 hari  Januari
-    ## 11     7 hari ke 11 dari 50 hari  Januari
-    ## 12     1 hari ke 12 dari 50 hari  Januari
-    ## 13     7 hari ke 13 dari 50 hari  Januari
-    ## 14     4 hari ke 14 dari 50 hari  Januari
-    ## 15     7 hari ke 15 dari 50 hari  Januari
-    ## 16     4 hari ke 16 dari 50 hari  Januari
-    ## 17     9 hari ke 17 dari 50 hari  Januari
-    ## 18    10 hari ke 18 dari 50 hari  Januari
-    ## 19     5 hari ke 19 dari 50 hari  Januari
-    ## 20    10 hari ke 20 dari 50 hari  Januari
-    ## 21     8 hari ke 21 dari 50 hari  Januari
-    ## 22     5 hari ke 22 dari 50 hari  Januari
-    ## 23     1 hari ke 23 dari 50 hari  Januari
-    ## 24     7 hari ke 24 dari 50 hari  Januari
-    ## 25     3 hari ke 25 dari 50 hari  Januari
-    ## 26     1 hari ke 26 dari 50 hari  Januari
-    ## 27     6 hari ke 27 dari 50 hari  Januari
-    ## 28     1 hari ke 28 dari 50 hari  Januari
-    ## 29     4 hari ke 29 dari 50 hari  Januari
-    ## 30     4 hari ke 30 dari 50 hari  Januari
-    ## 31     3 hari ke 31 dari 50 hari  Januari
-    ## 32     4 hari ke 32 dari 50 hari Februari
-    ## 33     2 hari ke 33 dari 50 hari Februari
-    ## 34     9 hari ke 34 dari 50 hari Februari
-    ## 35     6 hari ke 35 dari 50 hari Februari
-    ## 36     3 hari ke 36 dari 50 hari Februari
-    ## 37     7 hari ke 37 dari 50 hari Februari
-    ## 38     1 hari ke 38 dari 50 hari Februari
-    ## 39     5 hari ke 39 dari 50 hari Februari
-    ## 40     8 hari ke 40 dari 50 hari Februari
-    ## 41     6 hari ke 41 dari 50 hari Februari
-    ## 42     4 hari ke 42 dari 50 hari Februari
-    ## 43     4 hari ke 43 dari 50 hari Februari
-    ## 44     7 hari ke 44 dari 50 hari Februari
-    ## 45     9 hari ke 45 dari 50 hari Februari
-    ## 46     6 hari ke 46 dari 50 hari Februari
-    ## 47     6 hari ke 47 dari 50 hari Februari
-    ## 48     8 hari ke 48 dari 50 hari Februari
-    ## 49     5 hari ke 49 dari 50 hari Februari
-    ## 50     6 hari ke 50 dari 50 hari Februari
+    ##    defect                    hari    bulan
+    ## 1       4  hari ke 1 dari 50 hari  Januari
+    ## 2       9  hari ke 2 dari 50 hari  Januari
+    ## 3       7  hari ke 3 dari 50 hari  Januari
+    ## 4       9  hari ke 4 dari 50 hari  Januari
+    ## 5       2  hari ke 5 dari 50 hari  Januari
+    ## 6       2  hari ke 6 dari 50 hari  Januari
+    ## 7       9  hari ke 7 dari 50 hari  Januari
+    ## 8       3  hari ke 8 dari 50 hari  Januari
+    ## 9       5  hari ke 9 dari 50 hari  Januari
+    ## 10      8 hari ke 10 dari 50 hari  Januari
+    ## 11      2 hari ke 11 dari 50 hari  Januari
+    ## 12      5 hari ke 12 dari 50 hari  Januari
+    ## 13      4 hari ke 13 dari 50 hari  Januari
+    ## 14      1 hari ke 14 dari 50 hari  Januari
+    ## 15     10 hari ke 15 dari 50 hari  Januari
+    ## 16      2 hari ke 16 dari 50 hari  Januari
+    ## 17      9 hari ke 17 dari 50 hari  Januari
+    ## 18      6 hari ke 18 dari 50 hari  Januari
+    ## 19      4 hari ke 19 dari 50 hari  Januari
+    ## 20      3 hari ke 20 dari 50 hari  Januari
+    ## 21      1 hari ke 21 dari 50 hari  Januari
+    ## 22     10 hari ke 22 dari 50 hari  Januari
+    ## 23      1 hari ke 23 dari 50 hari  Januari
+    ## 24     10 hari ke 24 dari 50 hari  Januari
+    ## 25      1 hari ke 25 dari 50 hari  Januari
+    ## 26      1 hari ke 26 dari 50 hari  Januari
+    ## 27      1 hari ke 27 dari 50 hari  Januari
+    ## 28      6 hari ke 28 dari 50 hari  Januari
+    ## 29      1 hari ke 29 dari 50 hari  Januari
+    ## 30      7 hari ke 30 dari 50 hari  Januari
+    ## 31      4 hari ke 31 dari 50 hari  Januari
+    ## 32      8 hari ke 32 dari 50 hari Februari
+    ## 33      6 hari ke 33 dari 50 hari Februari
+    ## 34      9 hari ke 34 dari 50 hari Februari
+    ## 35      1 hari ke 35 dari 50 hari Februari
+    ## 36      6 hari ke 36 dari 50 hari Februari
+    ## 37      5 hari ke 37 dari 50 hari Februari
+    ## 38      4 hari ke 38 dari 50 hari Februari
+    ## 39      2 hari ke 39 dari 50 hari Februari
+    ## 40      5 hari ke 40 dari 50 hari Februari
+    ## 41      9 hari ke 41 dari 50 hari Februari
+    ## 42     10 hari ke 42 dari 50 hari Februari
+    ## 43     10 hari ke 43 dari 50 hari Februari
+    ## 44      5 hari ke 44 dari 50 hari Februari
+    ## 45      7 hari ke 45 dari 50 hari Februari
+    ## 46      9 hari ke 46 dari 50 hari Februari
+    ## 47      4 hari ke 47 dari 50 hari Februari
+    ## 48      6 hari ke 48 dari 50 hari Februari
+    ## 49      4 hari ke 49 dari 50 hari Februari
+    ## 50      5 hari ke 50 dari 50 hari Februari
 
 ### Another useful function di data frame (part 2)
 
@@ -621,122 +709,122 @@ data.baru
 is.na(data) #melihat ada yang kosong
 ```
 
-    ##        suhu cacat  hari bulan
-    ##  [1,]  TRUE FALSE FALSE FALSE
-    ##  [2,] FALSE FALSE FALSE FALSE
-    ##  [3,] FALSE FALSE FALSE FALSE
-    ##  [4,] FALSE FALSE FALSE FALSE
-    ##  [5,] FALSE FALSE FALSE FALSE
-    ##  [6,] FALSE FALSE FALSE FALSE
-    ##  [7,] FALSE FALSE FALSE FALSE
-    ##  [8,] FALSE FALSE FALSE FALSE
-    ##  [9,] FALSE FALSE FALSE FALSE
-    ## [10,] FALSE FALSE FALSE FALSE
-    ## [11,] FALSE FALSE FALSE FALSE
-    ## [12,] FALSE FALSE FALSE FALSE
-    ## [13,] FALSE FALSE FALSE FALSE
-    ## [14,] FALSE FALSE FALSE FALSE
-    ## [15,] FALSE FALSE FALSE FALSE
-    ## [16,] FALSE FALSE FALSE FALSE
-    ## [17,] FALSE FALSE FALSE FALSE
-    ## [18,] FALSE FALSE FALSE FALSE
-    ## [19,] FALSE FALSE FALSE FALSE
-    ## [20,] FALSE FALSE FALSE FALSE
-    ## [21,] FALSE FALSE FALSE FALSE
-    ## [22,] FALSE FALSE FALSE FALSE
-    ## [23,] FALSE FALSE FALSE FALSE
-    ## [24,] FALSE FALSE FALSE FALSE
-    ## [25,] FALSE FALSE FALSE FALSE
-    ## [26,] FALSE FALSE FALSE FALSE
-    ## [27,] FALSE FALSE FALSE FALSE
-    ## [28,] FALSE FALSE FALSE FALSE
-    ## [29,] FALSE FALSE FALSE FALSE
-    ## [30,] FALSE FALSE FALSE FALSE
-    ## [31,] FALSE FALSE FALSE FALSE
-    ## [32,] FALSE FALSE FALSE FALSE
-    ## [33,] FALSE FALSE FALSE FALSE
-    ## [34,] FALSE FALSE FALSE FALSE
-    ## [35,] FALSE FALSE FALSE FALSE
-    ## [36,] FALSE FALSE FALSE FALSE
-    ## [37,] FALSE FALSE FALSE FALSE
-    ## [38,] FALSE FALSE FALSE FALSE
-    ## [39,] FALSE FALSE FALSE FALSE
-    ## [40,] FALSE FALSE FALSE FALSE
-    ## [41,] FALSE FALSE FALSE FALSE
-    ## [42,] FALSE FALSE FALSE FALSE
-    ## [43,] FALSE FALSE FALSE FALSE
-    ## [44,] FALSE FALSE FALSE FALSE
-    ## [45,] FALSE FALSE FALSE FALSE
-    ## [46,] FALSE FALSE FALSE FALSE
-    ## [47,] FALSE FALSE FALSE FALSE
-    ## [48,] FALSE FALSE FALSE FALSE
-    ## [49,] FALSE FALSE FALSE FALSE
-    ## [50,] FALSE FALSE FALSE FALSE
+    ##        suhu defect  hari bulan
+    ##  [1,]  TRUE  FALSE FALSE FALSE
+    ##  [2,] FALSE  FALSE FALSE FALSE
+    ##  [3,] FALSE  FALSE FALSE FALSE
+    ##  [4,] FALSE  FALSE FALSE FALSE
+    ##  [5,] FALSE  FALSE FALSE FALSE
+    ##  [6,] FALSE  FALSE FALSE FALSE
+    ##  [7,] FALSE  FALSE FALSE FALSE
+    ##  [8,] FALSE  FALSE FALSE FALSE
+    ##  [9,] FALSE  FALSE FALSE FALSE
+    ## [10,] FALSE  FALSE FALSE FALSE
+    ## [11,] FALSE  FALSE FALSE FALSE
+    ## [12,] FALSE  FALSE FALSE FALSE
+    ## [13,] FALSE  FALSE FALSE FALSE
+    ## [14,] FALSE  FALSE FALSE FALSE
+    ## [15,] FALSE  FALSE FALSE FALSE
+    ## [16,] FALSE  FALSE FALSE FALSE
+    ## [17,] FALSE  FALSE FALSE FALSE
+    ## [18,] FALSE  FALSE FALSE FALSE
+    ## [19,] FALSE  FALSE FALSE FALSE
+    ## [20,] FALSE  FALSE FALSE FALSE
+    ## [21,] FALSE  FALSE FALSE FALSE
+    ## [22,] FALSE  FALSE FALSE FALSE
+    ## [23,] FALSE  FALSE FALSE FALSE
+    ## [24,] FALSE  FALSE FALSE FALSE
+    ## [25,] FALSE  FALSE FALSE FALSE
+    ## [26,] FALSE  FALSE FALSE FALSE
+    ## [27,] FALSE  FALSE FALSE FALSE
+    ## [28,] FALSE  FALSE FALSE FALSE
+    ## [29,] FALSE  FALSE FALSE FALSE
+    ## [30,] FALSE  FALSE FALSE FALSE
+    ## [31,] FALSE  FALSE FALSE FALSE
+    ## [32,] FALSE  FALSE FALSE FALSE
+    ## [33,] FALSE  FALSE FALSE FALSE
+    ## [34,] FALSE  FALSE FALSE FALSE
+    ## [35,] FALSE  FALSE FALSE FALSE
+    ## [36,] FALSE  FALSE FALSE FALSE
+    ## [37,] FALSE  FALSE FALSE FALSE
+    ## [38,] FALSE  FALSE FALSE FALSE
+    ## [39,] FALSE  FALSE FALSE FALSE
+    ## [40,] FALSE  FALSE FALSE FALSE
+    ## [41,] FALSE  FALSE FALSE FALSE
+    ## [42,] FALSE  FALSE FALSE FALSE
+    ## [43,] FALSE  FALSE FALSE FALSE
+    ## [44,] FALSE  FALSE FALSE FALSE
+    ## [45,] FALSE  FALSE FALSE FALSE
+    ## [46,] FALSE  FALSE FALSE FALSE
+    ## [47,] FALSE  FALSE FALSE FALSE
+    ## [48,] FALSE  FALSE FALSE FALSE
+    ## [49,] FALSE  FALSE FALSE FALSE
+    ## [50,] FALSE  FALSE FALSE FALSE
 
 ``` r
 !is.na(data) #melihat pasti terisi
 ```
 
-    ##        suhu cacat hari bulan
-    ##  [1,] FALSE  TRUE TRUE  TRUE
-    ##  [2,]  TRUE  TRUE TRUE  TRUE
-    ##  [3,]  TRUE  TRUE TRUE  TRUE
-    ##  [4,]  TRUE  TRUE TRUE  TRUE
-    ##  [5,]  TRUE  TRUE TRUE  TRUE
-    ##  [6,]  TRUE  TRUE TRUE  TRUE
-    ##  [7,]  TRUE  TRUE TRUE  TRUE
-    ##  [8,]  TRUE  TRUE TRUE  TRUE
-    ##  [9,]  TRUE  TRUE TRUE  TRUE
-    ## [10,]  TRUE  TRUE TRUE  TRUE
-    ## [11,]  TRUE  TRUE TRUE  TRUE
-    ## [12,]  TRUE  TRUE TRUE  TRUE
-    ## [13,]  TRUE  TRUE TRUE  TRUE
-    ## [14,]  TRUE  TRUE TRUE  TRUE
-    ## [15,]  TRUE  TRUE TRUE  TRUE
-    ## [16,]  TRUE  TRUE TRUE  TRUE
-    ## [17,]  TRUE  TRUE TRUE  TRUE
-    ## [18,]  TRUE  TRUE TRUE  TRUE
-    ## [19,]  TRUE  TRUE TRUE  TRUE
-    ## [20,]  TRUE  TRUE TRUE  TRUE
-    ## [21,]  TRUE  TRUE TRUE  TRUE
-    ## [22,]  TRUE  TRUE TRUE  TRUE
-    ## [23,]  TRUE  TRUE TRUE  TRUE
-    ## [24,]  TRUE  TRUE TRUE  TRUE
-    ## [25,]  TRUE  TRUE TRUE  TRUE
-    ## [26,]  TRUE  TRUE TRUE  TRUE
-    ## [27,]  TRUE  TRUE TRUE  TRUE
-    ## [28,]  TRUE  TRUE TRUE  TRUE
-    ## [29,]  TRUE  TRUE TRUE  TRUE
-    ## [30,]  TRUE  TRUE TRUE  TRUE
-    ## [31,]  TRUE  TRUE TRUE  TRUE
-    ## [32,]  TRUE  TRUE TRUE  TRUE
-    ## [33,]  TRUE  TRUE TRUE  TRUE
-    ## [34,]  TRUE  TRUE TRUE  TRUE
-    ## [35,]  TRUE  TRUE TRUE  TRUE
-    ## [36,]  TRUE  TRUE TRUE  TRUE
-    ## [37,]  TRUE  TRUE TRUE  TRUE
-    ## [38,]  TRUE  TRUE TRUE  TRUE
-    ## [39,]  TRUE  TRUE TRUE  TRUE
-    ## [40,]  TRUE  TRUE TRUE  TRUE
-    ## [41,]  TRUE  TRUE TRUE  TRUE
-    ## [42,]  TRUE  TRUE TRUE  TRUE
-    ## [43,]  TRUE  TRUE TRUE  TRUE
-    ## [44,]  TRUE  TRUE TRUE  TRUE
-    ## [45,]  TRUE  TRUE TRUE  TRUE
-    ## [46,]  TRUE  TRUE TRUE  TRUE
-    ## [47,]  TRUE  TRUE TRUE  TRUE
-    ## [48,]  TRUE  TRUE TRUE  TRUE
-    ## [49,]  TRUE  TRUE TRUE  TRUE
-    ## [50,]  TRUE  TRUE TRUE  TRUE
+    ##        suhu defect hari bulan
+    ##  [1,] FALSE   TRUE TRUE  TRUE
+    ##  [2,]  TRUE   TRUE TRUE  TRUE
+    ##  [3,]  TRUE   TRUE TRUE  TRUE
+    ##  [4,]  TRUE   TRUE TRUE  TRUE
+    ##  [5,]  TRUE   TRUE TRUE  TRUE
+    ##  [6,]  TRUE   TRUE TRUE  TRUE
+    ##  [7,]  TRUE   TRUE TRUE  TRUE
+    ##  [8,]  TRUE   TRUE TRUE  TRUE
+    ##  [9,]  TRUE   TRUE TRUE  TRUE
+    ## [10,]  TRUE   TRUE TRUE  TRUE
+    ## [11,]  TRUE   TRUE TRUE  TRUE
+    ## [12,]  TRUE   TRUE TRUE  TRUE
+    ## [13,]  TRUE   TRUE TRUE  TRUE
+    ## [14,]  TRUE   TRUE TRUE  TRUE
+    ## [15,]  TRUE   TRUE TRUE  TRUE
+    ## [16,]  TRUE   TRUE TRUE  TRUE
+    ## [17,]  TRUE   TRUE TRUE  TRUE
+    ## [18,]  TRUE   TRUE TRUE  TRUE
+    ## [19,]  TRUE   TRUE TRUE  TRUE
+    ## [20,]  TRUE   TRUE TRUE  TRUE
+    ## [21,]  TRUE   TRUE TRUE  TRUE
+    ## [22,]  TRUE   TRUE TRUE  TRUE
+    ## [23,]  TRUE   TRUE TRUE  TRUE
+    ## [24,]  TRUE   TRUE TRUE  TRUE
+    ## [25,]  TRUE   TRUE TRUE  TRUE
+    ## [26,]  TRUE   TRUE TRUE  TRUE
+    ## [27,]  TRUE   TRUE TRUE  TRUE
+    ## [28,]  TRUE   TRUE TRUE  TRUE
+    ## [29,]  TRUE   TRUE TRUE  TRUE
+    ## [30,]  TRUE   TRUE TRUE  TRUE
+    ## [31,]  TRUE   TRUE TRUE  TRUE
+    ## [32,]  TRUE   TRUE TRUE  TRUE
+    ## [33,]  TRUE   TRUE TRUE  TRUE
+    ## [34,]  TRUE   TRUE TRUE  TRUE
+    ## [35,]  TRUE   TRUE TRUE  TRUE
+    ## [36,]  TRUE   TRUE TRUE  TRUE
+    ## [37,]  TRUE   TRUE TRUE  TRUE
+    ## [38,]  TRUE   TRUE TRUE  TRUE
+    ## [39,]  TRUE   TRUE TRUE  TRUE
+    ## [40,]  TRUE   TRUE TRUE  TRUE
+    ## [41,]  TRUE   TRUE TRUE  TRUE
+    ## [42,]  TRUE   TRUE TRUE  TRUE
+    ## [43,]  TRUE   TRUE TRUE  TRUE
+    ## [44,]  TRUE   TRUE TRUE  TRUE
+    ## [45,]  TRUE   TRUE TRUE  TRUE
+    ## [46,]  TRUE   TRUE TRUE  TRUE
+    ## [47,]  TRUE   TRUE TRUE  TRUE
+    ## [48,]  TRUE   TRUE TRUE  TRUE
+    ## [49,]  TRUE   TRUE TRUE  TRUE
+    ## [50,]  TRUE   TRUE TRUE  TRUE
 
 ``` r
 data.baru <- data[complete.cases(data), ] #jika mau menghapus baris2 yang ada NA nya! 
 
 data$suhu=ifelse(data$suhu<50,NA,data$suhu) #menghapus data suhu yang aneh (di bawah 50'C)
-cor(data.baru$suhu,data.baru$cacat) #hitung korelasi baru
+cor(data.baru$suhu,data.baru$defect) #hitung korelasi baru
 ```
 
-    ## [1] -0.02607325
+    ## [1] -0.1842251
 
 ### Sorting data frame
 
@@ -762,116 +850,116 @@ library(tidyverse)
 data.baru %>% arrange(suhu)
 ```
 
-    ##    suhu cacat                    hari    bulan
-    ## 1     2     9  hari ke 6 dari 50 hari  Januari
-    ## 2     6     5 hari ke 19 dari 50 hari  Januari
-    ## 3    10     9 hari ke 45 dari 50 hari Februari
-    ## 4    11     2 hari ke 33 dari 50 hari Februari
-    ## 5    13     9 hari ke 34 dari 50 hari Februari
-    ## 6    14     6 hari ke 46 dari 50 hari Februari
-    ## 7    17     2  hari ke 5 dari 50 hari  Januari
-    ## 8    19     1 hari ke 12 dari 50 hari  Januari
-    ## 9    20     4 hari ke 30 dari 50 hari  Januari
-    ## 10   22     4 hari ke 14 dari 50 hari  Januari
-    ## 11   24     6  hari ke 9 dari 50 hari  Januari
-    ## 12   24    10 hari ke 20 dari 50 hari  Januari
-    ## 13   27     4 hari ke 32 dari 50 hari Februari
-    ## 14   28     4 hari ke 29 dari 50 hari  Januari
-    ## 15   34     2 hari ke 10 dari 50 hari  Januari
-    ## 16   35     3 hari ke 36 dari 50 hari Februari
-    ## 17   35     4 hari ke 43 dari 50 hari Februari
-    ## 18   37     1 hari ke 38 dari 50 hari Februari
-    ## 19   38     7 hari ke 13 dari 50 hari  Januari
-    ## 20   38     8 hari ke 21 dari 50 hari  Januari
-    ## 21   38     5 hari ke 22 dari 50 hari  Januari
-    ## 22   39     1 hari ke 23 dari 50 hari  Januari
-    ## 23   39     7 hari ke 24 dari 50 hari  Januari
-    ## 24   41     4 hari ke 42 dari 50 hari Februari
-    ## 25   42    10 hari ke 18 dari 50 hari  Januari
-    ## 26   43     6 hari ke 27 dari 50 hari  Januari
-    ## 27   49     9 hari ke 17 dari 50 hari  Januari
-    ## 28   49     7 hari ke 37 dari 50 hari Februari
-    ## 29   52     3 hari ke 31 dari 50 hari  Januari
-    ## 30   53     5  hari ke 3 dari 50 hari  Januari
-    ## 31   55     7  hari ke 2 dari 50 hari  Januari
-    ## 32   60     7 hari ke 11 dari 50 hari  Januari
-    ## 33   60     7 hari ke 44 dari 50 hari Februari
-    ## 34   62     3  hari ke 8 dari 50 hari  Januari
-    ## 35   63     8  hari ke 7 dari 50 hari  Januari
-    ## 36   65     6 hari ke 47 dari 50 hari Februari
-    ## 37   67     4 hari ke 16 dari 50 hari  Januari
-    ## 38   67     5 hari ke 39 dari 50 hari Februari
-    ## 39   70     2  hari ke 4 dari 50 hari  Januari
-    ## 40   70     5 hari ke 49 dari 50 hari Februari
-    ## 41   71     3 hari ke 25 dari 50 hari  Januari
-    ## 42   72     8 hari ke 48 dari 50 hari Februari
-    ## 43   74     1 hari ke 28 dari 50 hari  Januari
-    ## 44   85     7 hari ke 15 dari 50 hari  Januari
-    ## 45   85     6 hari ke 35 dari 50 hari Februari
-    ## 46   90     6 hari ke 41 dari 50 hari Februari
-    ## 47   96     6 hari ke 50 dari 50 hari Februari
-    ## 48  100     1 hari ke 26 dari 50 hari  Januari
-    ## 49  100     8 hari ke 40 dari 50 hari Februari
+    ##    suhu defect                    hari    bulan
+    ## 1     2      5 hari ke 40 dari 50 hari Februari
+    ## 2     3      6 hari ke 48 dari 50 hari Februari
+    ## 3     4     10 hari ke 43 dari 50 hari Februari
+    ## 4    10      8 hari ke 10 dari 50 hari  Januari
+    ## 5    12      3 hari ke 20 dari 50 hari  Januari
+    ## 6    13      9  hari ke 7 dari 50 hari  Januari
+    ## 7    14     10 hari ke 42 dari 50 hari Februari
+    ## 8    17      2  hari ke 5 dari 50 hari  Januari
+    ## 9    18      2 hari ke 16 dari 50 hari  Januari
+    ## 10   18      9 hari ke 34 dari 50 hari Februari
+    ## 11   19      1 hari ke 27 dari 50 hari  Januari
+    ## 12   20      2 hari ke 11 dari 50 hari  Januari
+    ## 13   22      9 hari ke 46 dari 50 hari Februari
+    ## 14   25      9  hari ke 2 dari 50 hari  Januari
+    ## 15   28      8 hari ke 32 dari 50 hari Februari
+    ## 16   28      1 hari ke 35 dari 50 hari Februari
+    ## 17   28      5 hari ke 37 dari 50 hari Februari
+    ## 18   35      4 hari ke 38 dari 50 hari Februari
+    ## 19   40     10 hari ke 24 dari 50 hari  Januari
+    ## 20   41      4 hari ke 19 dari 50 hari  Januari
+    ## 21   42      6 hari ke 33 dari 50 hari Februari
+    ## 22   43      4 hari ke 47 dari 50 hari Februari
+    ## 23   47      9  hari ke 4 dari 50 hari  Januari
+    ## 24   48      7 hari ke 45 dari 50 hari Februari
+    ## 25   50      1 hari ke 26 dari 50 hari  Januari
+    ## 26   51      6 hari ke 28 dari 50 hari  Januari
+    ## 27   52      5 hari ke 44 dari 50 hari Februari
+    ## 28   53     10 hari ke 15 dari 50 hari  Januari
+    ## 29   54      1 hari ke 29 dari 50 hari  Januari
+    ## 30   55      4 hari ke 13 dari 50 hari  Januari
+    ## 31   60      1 hari ke 14 dari 50 hari  Januari
+    ## 32   61     10 hari ke 22 dari 50 hari  Januari
+    ## 33   65      2  hari ke 6 dari 50 hari  Januari
+    ## 34   65      4 hari ke 31 dari 50 hari  Januari
+    ## 35   65      4 hari ke 49 dari 50 hari Februari
+    ## 36   69      6 hari ke 18 dari 50 hari  Januari
+    ## 37   71      1 hari ke 21 dari 50 hari  Januari
+    ## 38   77      7  hari ke 3 dari 50 hari  Januari
+    ## 39   77      9 hari ke 41 dari 50 hari Februari
+    ## 40   86      1 hari ke 23 dari 50 hari  Januari
+    ## 41   87      5 hari ke 12 dari 50 hari  Januari
+    ## 42   87      2 hari ke 39 dari 50 hari Februari
+    ## 43   89      9 hari ke 17 dari 50 hari  Januari
+    ## 44   91      6 hari ke 36 dari 50 hari Februari
+    ## 45   92      3  hari ke 8 dari 50 hari  Januari
+    ## 46   97      7 hari ke 30 dari 50 hari  Januari
+    ## 47  100      5  hari ke 9 dari 50 hari  Januari
+    ## 48  100      1 hari ke 25 dari 50 hari  Januari
+    ## 49  100      5 hari ke 50 dari 50 hari Februari
 
 ``` r
-data.baru %>% arrange(desc(cacat))
+data.baru %>% arrange(desc(defect))
 ```
 
-    ##    suhu cacat                    hari    bulan
-    ## 1    42    10 hari ke 18 dari 50 hari  Januari
-    ## 2    24    10 hari ke 20 dari 50 hari  Januari
-    ## 3     2     9  hari ke 6 dari 50 hari  Januari
-    ## 4    49     9 hari ke 17 dari 50 hari  Januari
-    ## 5    13     9 hari ke 34 dari 50 hari Februari
-    ## 6    10     9 hari ke 45 dari 50 hari Februari
-    ## 7    63     8  hari ke 7 dari 50 hari  Januari
-    ## 8    38     8 hari ke 21 dari 50 hari  Januari
-    ## 9   100     8 hari ke 40 dari 50 hari Februari
-    ## 10   72     8 hari ke 48 dari 50 hari Februari
-    ## 11   55     7  hari ke 2 dari 50 hari  Januari
-    ## 12   60     7 hari ke 11 dari 50 hari  Januari
-    ## 13   38     7 hari ke 13 dari 50 hari  Januari
-    ## 14   85     7 hari ke 15 dari 50 hari  Januari
-    ## 15   39     7 hari ke 24 dari 50 hari  Januari
-    ## 16   49     7 hari ke 37 dari 50 hari Februari
-    ## 17   60     7 hari ke 44 dari 50 hari Februari
-    ## 18   24     6  hari ke 9 dari 50 hari  Januari
-    ## 19   43     6 hari ke 27 dari 50 hari  Januari
-    ## 20   85     6 hari ke 35 dari 50 hari Februari
-    ## 21   90     6 hari ke 41 dari 50 hari Februari
-    ## 22   14     6 hari ke 46 dari 50 hari Februari
-    ## 23   65     6 hari ke 47 dari 50 hari Februari
-    ## 24   96     6 hari ke 50 dari 50 hari Februari
-    ## 25   53     5  hari ke 3 dari 50 hari  Januari
-    ## 26    6     5 hari ke 19 dari 50 hari  Januari
-    ## 27   38     5 hari ke 22 dari 50 hari  Januari
-    ## 28   67     5 hari ke 39 dari 50 hari Februari
-    ## 29   70     5 hari ke 49 dari 50 hari Februari
-    ## 30   22     4 hari ke 14 dari 50 hari  Januari
-    ## 31   67     4 hari ke 16 dari 50 hari  Januari
-    ## 32   28     4 hari ke 29 dari 50 hari  Januari
-    ## 33   20     4 hari ke 30 dari 50 hari  Januari
-    ## 34   27     4 hari ke 32 dari 50 hari Februari
-    ## 35   41     4 hari ke 42 dari 50 hari Februari
-    ## 36   35     4 hari ke 43 dari 50 hari Februari
-    ## 37   62     3  hari ke 8 dari 50 hari  Januari
-    ## 38   71     3 hari ke 25 dari 50 hari  Januari
-    ## 39   52     3 hari ke 31 dari 50 hari  Januari
-    ## 40   35     3 hari ke 36 dari 50 hari Februari
-    ## 41   70     2  hari ke 4 dari 50 hari  Januari
-    ## 42   17     2  hari ke 5 dari 50 hari  Januari
-    ## 43   34     2 hari ke 10 dari 50 hari  Januari
-    ## 44   11     2 hari ke 33 dari 50 hari Februari
-    ## 45   19     1 hari ke 12 dari 50 hari  Januari
-    ## 46   39     1 hari ke 23 dari 50 hari  Januari
-    ## 47  100     1 hari ke 26 dari 50 hari  Januari
-    ## 48   74     1 hari ke 28 dari 50 hari  Januari
-    ## 49   37     1 hari ke 38 dari 50 hari Februari
+    ##    suhu defect                    hari    bulan
+    ## 1    53     10 hari ke 15 dari 50 hari  Januari
+    ## 2    61     10 hari ke 22 dari 50 hari  Januari
+    ## 3    40     10 hari ke 24 dari 50 hari  Januari
+    ## 4    14     10 hari ke 42 dari 50 hari Februari
+    ## 5     4     10 hari ke 43 dari 50 hari Februari
+    ## 6    25      9  hari ke 2 dari 50 hari  Januari
+    ## 7    47      9  hari ke 4 dari 50 hari  Januari
+    ## 8    13      9  hari ke 7 dari 50 hari  Januari
+    ## 9    89      9 hari ke 17 dari 50 hari  Januari
+    ## 10   18      9 hari ke 34 dari 50 hari Februari
+    ## 11   77      9 hari ke 41 dari 50 hari Februari
+    ## 12   22      9 hari ke 46 dari 50 hari Februari
+    ## 13   10      8 hari ke 10 dari 50 hari  Januari
+    ## 14   28      8 hari ke 32 dari 50 hari Februari
+    ## 15   77      7  hari ke 3 dari 50 hari  Januari
+    ## 16   97      7 hari ke 30 dari 50 hari  Januari
+    ## 17   48      7 hari ke 45 dari 50 hari Februari
+    ## 18   69      6 hari ke 18 dari 50 hari  Januari
+    ## 19   51      6 hari ke 28 dari 50 hari  Januari
+    ## 20   42      6 hari ke 33 dari 50 hari Februari
+    ## 21   91      6 hari ke 36 dari 50 hari Februari
+    ## 22    3      6 hari ke 48 dari 50 hari Februari
+    ## 23  100      5  hari ke 9 dari 50 hari  Januari
+    ## 24   87      5 hari ke 12 dari 50 hari  Januari
+    ## 25   28      5 hari ke 37 dari 50 hari Februari
+    ## 26    2      5 hari ke 40 dari 50 hari Februari
+    ## 27   52      5 hari ke 44 dari 50 hari Februari
+    ## 28  100      5 hari ke 50 dari 50 hari Februari
+    ## 29   55      4 hari ke 13 dari 50 hari  Januari
+    ## 30   41      4 hari ke 19 dari 50 hari  Januari
+    ## 31   65      4 hari ke 31 dari 50 hari  Januari
+    ## 32   35      4 hari ke 38 dari 50 hari Februari
+    ## 33   43      4 hari ke 47 dari 50 hari Februari
+    ## 34   65      4 hari ke 49 dari 50 hari Februari
+    ## 35   92      3  hari ke 8 dari 50 hari  Januari
+    ## 36   12      3 hari ke 20 dari 50 hari  Januari
+    ## 37   17      2  hari ke 5 dari 50 hari  Januari
+    ## 38   65      2  hari ke 6 dari 50 hari  Januari
+    ## 39   20      2 hari ke 11 dari 50 hari  Januari
+    ## 40   18      2 hari ke 16 dari 50 hari  Januari
+    ## 41   87      2 hari ke 39 dari 50 hari Februari
+    ## 42   60      1 hari ke 14 dari 50 hari  Januari
+    ## 43   71      1 hari ke 21 dari 50 hari  Januari
+    ## 44   86      1 hari ke 23 dari 50 hari  Januari
+    ## 45  100      1 hari ke 25 dari 50 hari  Januari
+    ## 46   50      1 hari ke 26 dari 50 hari  Januari
+    ## 47   19      1 hari ke 27 dari 50 hari  Januari
+    ## 48   54      1 hari ke 29 dari 50 hari  Januari
+    ## 49   28      1 hari ke 35 dari 50 hari Februari
 
 ### Menghapus global environment
 
 ``` r
-rm(cacat) #hanya menghapus variabel cacat
+rm(defect) #hanya menghapus variabel defect
 rm(list=ls()) #digunakan untuk membersihkan global data environment
 ```
 
@@ -881,7 +969,13 @@ rm(list=ls()) #digunakan untuk membersihkan global data environment
 
 ### Get working directory
 
-`getwd()`
+``` r
+getwd()
+```
+
+    ## [1] "/cloud/project/Materi Training/GIZ"
+
+-----
 
 # Kita mulai bagian serunya yah\!\!\!
 
@@ -1082,7 +1176,7 @@ data %>% ggplot(aes(x=harga,y=qty)) +
         plot.caption = element_text(size=10,face='italic'))
 ```
 
-![](Readme_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
 
 ## Optimization dari model regresi
 
@@ -1128,7 +1222,7 @@ contoh = data.frame(x,y)
 contoh %>% ggplot(aes(x,y)) + geom_line()
 ```
 
-![](Readme_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-27-1.png)<!-- -->
 
 Jika kita punya persamaan kuadrat positif semacam ini, akan selalu ada
 nilai `x` yang memberikan `y` minimum.
@@ -1143,7 +1237,7 @@ contoh = data.frame(x,y)
 contoh %>% ggplot(aes(x,y)) + geom_line()
 ```
 
-![](Readme_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-28-1.png)<!-- -->
 
 Jadi, jika kita memiliki persamaan kuadrat dengan konstanta negatif,
 maka akan selalu ada nilai `x` yang memberikan `y` maksimum\!
@@ -1168,7 +1262,7 @@ hasil %>%
   geom_line()
 ```
 
-![](Readme_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-29-1.png)<!-- -->
 
 Secara grafis dapat dilihat bahwa sebenarnya ada satu titik `harga_baru`
 yang memberikan `omset` paling tinggi. Yakni pada harga:

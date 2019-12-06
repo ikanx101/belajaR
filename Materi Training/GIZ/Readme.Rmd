@@ -1,6 +1,7 @@
 ---
 title: "Bahan Training R - GIZ"
 output: github_document
+author: '@mr.ikanx & @lenny.wibisana'
 ---
 
 ```{r setup, include=FALSE}
@@ -29,29 +30,44 @@ Ada beberapa tipe data di data science, yakni:
 
 # Yuk kita mulai materinya
 
-# Selamat datang di R
-
 ## Single variabel
 
 ```{r}
 a = 10
+a
 b <- 3
+b
 a+b
 c=a*b^2/100
+c
 kalimat='saya suka pergi ke pasar' #jika variabelnya berupa text
+kalimat 
+```
+
+__Perhatikan penggunakan tanda `"` dan `'` pada perintah di bawah ini!__
+
+```{r}
 kalimat_baru = "i don't like pizza"
+kalimat_baru
 ```
 
 ## Vector atau array
 
 ```{r}
 tes_vector=c(1,3,6,5,4,7)
+tes_vector
 id=c(1:10) #contoh generating sequence
+id
 a=seq(1,10,0.5) #contoh generating sequence by 0.5
+a
 sample(c(100:200),5,replace=F) #generating random number
 kalimat = 'saya biasa pergi ke kantor setiap jam 7 pagi'
 pecah.kata=strsplit(kalimat,' ') #pecah kalimat menjadi kata dan mengubahnya menjadi array
+```
 
+Beberapa fungsi yang mungkin berguna di array:
+
+```{r}
 # Yang penting di array
 length(a)
 a[2]
@@ -71,8 +87,6 @@ ifelse(1+2==3,'anda benar','anda salah')
 ifelse(1+2!=3,'anda benar','anda salah')
 ifelse(1+2<=3,'anda benar','anda salah')
 ifelse(1+2>=3,'anda benar','anda salah')
-ifelse(1+2<3,'anda benar','anda salah')
-ifelse(1+2>3,'anda benar','anda salah')
 ```
 
 ### Another useful function
@@ -90,39 +104,78 @@ nomor=c(1:100)
 print(nomor)
 ```
 
-## Tibble atau Data Frame
-
-Struktur data tibble atau data frame sejatinya mirip dengan data tradisional di __MS. EXCEL__.
-
 ### Sebelum masuk ke data frame:
 
 ```{r}
 # Misalkan kita buat dua variabel sbb:
 suhu=sample(100,50,replace=T)
-cacat=sample(10,50,replace=T)
+defect=sample(10,50,replace=T)
 
 # Membuat histogram dari suhu
 hist(suhu)
 
-# Membuat histogram dari cacat
-hist(cacat)
+# Membuat histogram dari defect
+hist(defect)
+```
 
-# Uji Korelasi
-cor.test(suhu,cacat)
+Untuk membuat _boxplot_ bisa menggunakan perintah ini:
 
-# save into variabel
-uji_korelasi = cor.test(suhu,cacat)
+```{r}
+# Membuat boxplot dari defect
+boxplot(defect)
 
+# Membuat boxplot dari suhu
+boxplot(suhu)
+```
+
+### Uji Korelasi
+
+Kita mulai masuk ke uji korelasi. Setidaknya ada tiga informasi utama saat kita melakukan __uji korelasi__, yakni:
+
+1. Apakah korelasi antara dua variabel tersebut signifikan?
+2. Apakah korelasi yang ada kuat, sedang, atau lemah?
+3. Bagaimana hubungan antara dua variabel tersebut? Berbanding lurus atau terbalik?
+
+Kita bisa melakukannya di __R__ dengan perintah `cor.test()`.
+
+```{r}
+uji_korelasi = cor.test(suhu,defect)
+uji_korelasi
+
+# Melihat p-value dari hasil uji korelasi 
 uji_korelasi$p.value
 
+# Kesimpulan uji korelasi
 ifelse(uji_korelasi$p.value<0.05,'Signifikan berkorelasi','Tidak signifikan berkorelasi')
 
-# Hanya menampilkan angka korelasi saja
-cor(suhu,cacat)
+# Menampilkan angka korelasi
+cor(suhu,defect)
 
-# Simple plot suhu vs cacat
-plot(suhu,cacat)
+# Simple plot suhu vs defect
+plot(suhu,defect)
 ```
+
+Apa yang bisa kita simpulkan dari data `suhu` dan `defect` tersebut?
+
+### Uji kenormalan di __R__
+
+Untuk melakukan uji kenormalan, setidaknya ada dua cara, yakni:
+
+1. Shapiro-Wilk
+2. Kolmogorov-Smirnov
+
+Kita bisa menggunakan perintah `shapiro.test()` untuk melakukan uji kenormalan. Contoh melakukan uji kenormalan untuk `suhu`.
+
+```{r}
+stat_uji = shapiro.test(suhu)
+ifelse(stat_uji$p.value < 0.05,
+       'Tolak H0 -- tidak normal',
+       'H0 tidak ditolak -- normal')
+```
+
+## Tibble atau Data Frame
+
+Struktur data __tibble__ atau __data frame__ sejatinya mirip dengan data tradisional di __MS. EXCEL__.
 
 ### Membangun data frame dari kumpulan vector
 
@@ -130,7 +183,7 @@ Data frame bisa dibangun dari dua atau lebih vector yang memiliki `length` sama.
 
 ```{r}
 #membuat data frame
-data=data.frame(suhu,cacat)
+data=data.frame(suhu,defect)
 data
 ```
 
@@ -168,7 +221,7 @@ data$bulan[32:50]='Februari'
 
 ```{r}
 data$suhu
-data$cacat
+data$defect
 data.baru=data[-1]
 data.baru
 ```
@@ -182,7 +235,7 @@ is.na(data) #melihat ada yang kosong
 data.baru <- data[complete.cases(data), ] #jika mau menghapus baris2 yang ada NA nya! 
 
 data$suhu=ifelse(data$suhu<50,NA,data$suhu) #menghapus data suhu yang aneh (di bawah 50'C)
-cor(data.baru$suhu,data.baru$cacat) #hitung korelasi baru
+cor(data.baru$suhu,data.baru$defect) #hitung korelasi baru
 ```
 
 ### Sorting data frame
@@ -206,13 +259,13 @@ Menggunakan `library(tidyverse)` ATAU minimal dengan `library(dplyr)`
 ```{r,warning=FALSE,message=FALSE}
 library(tidyverse)
 data.baru %>% arrange(suhu)
-data.baru %>% arrange(desc(cacat))
+data.baru %>% arrange(desc(defect))
 ```
 
 ### Menghapus global environment
 
 ```{r}
-rm(cacat) #hanya menghapus variabel cacat
+rm(defect) #hanya menghapus variabel defect
 rm(list=ls()) #digunakan untuk membersihkan global data environment
 ```
 
@@ -222,7 +275,11 @@ rm(list=ls()) #digunakan untuk membersihkan global data environment
 
 ### Get working directory
 
-`getwd()`
+```{r}
+getwd()
+```
+
+____________________
 
 # Kita mulai bagian serunya yah!!!
 
