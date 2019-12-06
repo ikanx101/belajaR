@@ -351,6 +351,8 @@ dilakukan:
     memiliki asosiasi tinggi.
 4.  **Topic modellling**: mencari tahu kesamaan dari sekian banyak
     komentar itu dan dikelompokkan berdasarkan kesamaannya tersebut.
+5.  **Sentiment Analysis**: Menganalisa sentimen dari masing-masing
+    komentar *viewers*. Apakah positif atau negatif?
 
 Oke, kita mulai dari yang paling gampang dulu yah.
 
@@ -399,7 +401,20 @@ Ada yang mau *ngerjain* *wordcloud* per episodenya?
 
 Bi-gram adalah pasangan kata yang selalu muncul secara bersamaan dan
 berurutan. Nah, kita akan lihat, apakah ada pasangan kata yang sering
-muncul pada komentar
-*viewers*?
+muncul pada komentar *viewers*?
+
+Berikut adalah grafik dari *bigrams* yang memiliki frekuensi kemunculan
+lebih dari dua
+(`>2`):
 
 ![](2019-12-4-blog-posting-sunyi_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+
+##### Word Association
+
+NAME=gsub(“\[^\\x01-\\x7F\]”, "“, NAME) \#menghilangkan emoticons
+NAME=iconv(NAME,”latin1“,”ASCII“, sub=”“) \#MENGHILANGKAN karakter non
+ascii NAME=Corpus(VectorSource(NAME)) NAME = tm\_map(NAME,
+content\_transformer(tolower)) NAME = tm\_map(NAME,removePunctuation)
+NAME= tm\_map(NAME, stripWhitespace) NAME=tm\_map(NAME,removeWords,
+stopwords(”en“)) NAME=tm\_map(NAME,removeNumbers) \#NAME \<-
+tm\_map(NAME, stemDocument, language =”english")
