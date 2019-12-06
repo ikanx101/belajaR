@@ -94,6 +94,7 @@ is.na(data) #melihat ada yang kosong
 data.baru <- data[complete.cases(data), ] #jika mau menghapus baris2 yang ada NA nya! 
 
 data$suhu=ifelse(data$suhu<50,NA,data$suhu) #menghapus data suhu yang aneh (di bawah 50'C)
+cor.test(data.baru$suhu,data.baru$cacat)
 cor(data.baru$suhu,data.baru$cacat) #hitung korelasi data
 
 #sorting data
