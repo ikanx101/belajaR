@@ -120,13 +120,13 @@ Saya kurang tertarik dengan data kedua ini, mungkin akan saya _skip_ dulu yah. K
 
 ## Data ketiga
 
-Data berikutnya yang bisa diambil adalah data komentar _viewers_ di masing-masing video. Nah, ini baru menarik. Apa aja isinya? Berikut nama variabelnya yah:
+Data berikutnya yang bisa diambil adalah data komentar _viewers_ di masing-masing video. Jadi ini data murni komen terhadap videonya yah. Jika ada _reply_ dari komen, datanya ternyata tidak ada. Nah, ini baru menarik. Apa aja isinya? Berikut nama variabelnya yah:
 
 ```{r,echo=FALSE,warning=FALSE}
 library(readr)
 komen <- read_csv("komen.csv", col_types = cols(X1 = col_skip(), 
     authorChannelId.value = col_skip(), canRate = col_skip(), 
-    textDisplay = col_skip(), videoId = col_skip(), 
+    textDisplay  = col_skip(), videoId = col_skip(), 
     viewerRating = col_skip()))
 attributes(komen)$spec=NULL
 ```
@@ -140,7 +140,7 @@ Setidaknya ada delapan variabel yang bisa kita ambil dan analisa, yakni:
 2. `authorProfileImageUrl`: _profil pic Youtube account_ dari _commenter_.
 3. `authorChannelUrl`: _link channel Youtube_ dari _commenter_.
 4. `textOriginal`: komentar.
-5. `likeCount`: Berapa bayak yang _likes_ komentar tersebut.
+5. `likeCount`: Berapa banyak yang _likes_ komentar tersebut.
 6. `publishedAt`: Kapan pertama kali komentar tersebut _published_.
 7. `updatedAt`: Kapan komentar tersebut diedit (jika ada).
 8. `episode`: Episode _web series_ sunyi.
@@ -158,8 +158,11 @@ Bermodalkan data ketiga, mari kita oprek-oprek data ini. Kita mulai dari yang pa
 #### Komentar paling banyak di- _like_ per episode
 
 ```{r,echo=FALSE}
-komen$textOriginal = gsub("[^[:alnum:][:blank:]?&/\\-]", "", komen$textOriginal)
-komen$textOriginal = gsub("U000.....", " ", komen$textOriginal)
+komen$textOriginal = gsub("\\+", "", komen$textOriginal)
+komen$textOriginal = gsub("U000.....", "", komen$textOriginal)
+komen$textOriginal = gsub("[^[:alnum:][:blank:]?&/\\-]", " ", komen$textOriginal)
+komen$textOriginal = gsub('  ',' ',komen$textOriginal)
+komen$textOriginal = gsub('  ',' ',komen$textOriginal)
 ```
 ```{r}
 new = komen %>% group_by(episode) %>% filter(likeCount == max(likeCount)) %>%
@@ -183,7 +186,7 @@ new$textOriginal[2]
 
 Dengan `likeCount` sebanyak 17.
 
-> Nah, ini adalah pertanyaan viewer terkait durasi _web series_ iniyang lebih singkat dibandingkan __Sore__ dan __Janji__.
+> Nah, ini adalah pertanyaan viewer terkait durasi _web series_ ini yang lebih singkat dibandingkan __Sore__ dan __Janji__.
 
 __Sedangkan pada episode ketiga__, komentar yang paling banyak di- _like_ adalah komentar:
 ```{r,echo=FALSE}
@@ -194,14 +197,75 @@ Dengan `likeCount` sebanyak 29.
 
 > Ini adalah komen dari akun resmi __Sunyi Coffee__. Sebenarnya, komen ini selalu muncul di setiap episode. Tapi baru di episode ketiga ini yang paling banyak di- _likes_ oleh _viewer_.
 
+#### Siapa yang komen?
+
+Saya sih penasaran, apakah yang komen di ketiga video itu selalu orang yang sama atau beda-beda yah. Yuk kita cek datanya.
+
+```{r,echo=FALSE}
+kesimpulan = 
+  komen %>% group_by(authorDisplayName) %>% summarise(freq=n()) %>% 
+  mutate(summary = case_when(freq>=3 ~ 'Viewers yang komen di 3 video',
+                             freq==2 ~ 'Viewers yang komen di 2 video',
+                             freq==1 ~ 'Viewers yang komen di 1 video')) %>%
+  group_by(summary) %>% summarise(banyak=n())
+kesimpulan
+```
+
+```{r,echo=FALSE}
+library(ggpubr)
+kesimpulan %>% ggplot(aes(x=summary,y=banyak)) + geom_col(color='steelblue',fill='white') + 
+  geom_label(aes(label=banyak),size=3) + theme_pubclean() +
+  labs(y='Berapa banyak viewers',
+       title='Berapa banyak viewer yang komen di web Series Sunyi?',
+       subtitle = 'source: Youtube DATA API 5 Des 2019 3:56 pm',
+       caption = 'https://ikanx101.github.io/') +
+  theme(axis.text.y = element_blank(),
+        axis.title.x = element_blank())
+```
+
+> Ternyata ada juga lho viewers yang selalu komen di 3 video. Selain __Sunyi Coffee__, ada yang bisa kasih tau siapa saja mereka? Dan apa komentarnya?
+
 #### _Text analysis_ dari komentar _viewer_
 
-Ini bagian paling seru. Bagaimana kita bisa melakukan _text analysis_ dari komentar-komentar _viewers_. Setidaknya ada tiga analisa yang bisa dilakukan:
+Ini bagian paling seru. Bagaimana kita bisa melakukan _text analysis_ dari komentar-komentar _viewers_. Setidaknya ada empat analisa yang bisa dilakukan:
 
 1. __Wordcloud__: Menghitung berapa banyak kata keluar dalam suatu data teks (_Word counting_).
 2. __Bi-Gram__: Melihat dua kata yang sering bermunculan bersamaan.
 3. __Word Association__: Melihat kumpulan dan hubungan kata-kata yang memiliki asosiasi tinggi.
+4. __Topic modellling__: mencari tahu kesamaan dari sekian banyak komentar itu dan dikelompokkan berdasarkan kesamaannya tersebut.
 
 Oke, kita mulai dari yang paling gampang dulu yah.
 
 ##### Wordcloud
+
+Analisa ini sebenarnya sangat mudah. Hanya menghitung ada berapa banyak kata yang keluar dalam suatu data teks. Sebelum mulai, kita akan lakukan _preparation_ terhadap data teksnya. Apa itu? Mengubah tulisannya jadi _lowercase_ biar mudah dianalisa. 
+
+Berhubung ini hanya untuk _fun_ aja, saya akan _skip_ bagian _word stemming_ dan _remove stopwords_.
+
+> _Kindly Googling about those two terms yah in parts of text analytics_
+
+_Yuk_ kita lihat kata-kata apa saja yang sering muncul!
+
+Berikut adalah semua kata yang punya frekuensi minimal 5 yah:
+
+```{r,echo=FALSE}
+komen$textOriginal = tolower(komen$textOriginal)
+
+library(tidytext)
+tes = komen %>% mutate(id = c(1:length(textOriginal))) %>%
+  select(id,textOriginal) %>%
+  unnest_tokens('words',textOriginal) %>%
+  count(words,sort=T) %>% filter(n>=5)
+tes
+```
+
+Kita buat _wordcloud_-nya yuk:
+
+```{r}
+wordcloud2::wordcloud2(tes,
+                       color = "random-dark", 
+                       backgroundColor = "white",
+                       shape = 'cardioid',
+                       fontFamily = "Miso",
+                       size=2)
+```

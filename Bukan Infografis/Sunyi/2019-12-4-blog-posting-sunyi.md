@@ -202,8 +202,9 @@ know yah*.
 ## Data ketiga
 
 Data berikutnya yang bisa diambil adalah data komentar *viewers* di
-masing-masing video. Nah, ini baru menarik. Apa aja isinya? Berikut nama
-variabelnya
+masing-masing video. Jadi ini data murni komen terhadap videonya yah.
+Jika ada *reply* dari komen, datanya ternyata tidak ada. Nah, ini baru
+menarik. Apa aja isinya? Berikut nama variabelnya
     yah:
 
 ``` r
@@ -227,7 +228,7 @@ Setidaknya ada delapan variabel yang bisa kita ambil dan analisa, yakni:
     *commenter*.
 3.  `authorChannelUrl`: *link channel Youtube* dari *commenter*.
 4.  `textOriginal`: komentar.
-5.  `likeCount`: Berapa bayak yang *likes* komentar tersebut.
+5.  `likeCount`: Berapa banyak yang *likes* komentar tersebut.
 6.  `publishedAt`: Kapan pertama kali komentar tersebut *published*.
 7.  `updatedAt`: Kapan komentar tersebut diedit (jika ada).
 8.  `episode`: Episode *web series* sunyi.
@@ -281,13 +282,13 @@ new
     ##   episode authorDisplayName textOriginal                          likeCount
     ##     <dbl> <chr>             <chr>                                     <dbl>
     ## 1       1 Beela Shabeela    "Tropicana Slim memang terbaik soal …        18
-    ## 2       2 SETYA NOVANTOL    PENGEN TAU ALASAN TROPICANA SLIM BUA…        17
+    ## 2       2 SETYA NOVANTOL    "PENGEN TAU ALASAN TROPICANA SLIM BU…        17
     ## 3       3 Sunyi Coffee      Mini Series hasil kolaborasi dengan …        29
 
 **Pada episode pertama**, komentar yang paling banyak di- *like* adalah
 komentar:
 
-    ## [1] "Tropicana Slim memang terbaik soal web series  ga sabar lanjutannya "
+    ## [1] "Tropicana Slim memang terbaik soal web series ga sabar lanjutannya "
 
 Dengan `likeCount` sebanyak 18.
 
@@ -298,18 +299,18 @@ Dengan `likeCount` sebanyak 18.
 adalah
     komentar:
 
-    ## [1] "PENGEN TAU ALASAN TROPICANA SLIM BUAT PER EPS 1 MENIT GITUKENAPAAAAA?  MOHON ALASANNYA PAPA INGIN TAU"
+    ## [1] "PENGEN TAU ALASAN TROPICANA SLIM BUAT PER EPS 1 MENIT GITU  KENAPAAAAA ?  MOHON ALASANNYA  PAPA INGIN TAU "
 
 Dengan `likeCount` sebanyak 17.
 
-> Nah, ini adalah pertanyaan viewer terkait durasi *web series* iniyang
+> Nah, ini adalah pertanyaan viewer terkait durasi *web series* ini yang
 > lebih singkat dibandingkan **Sore** dan **Janji**.
 
 **Sedangkan pada episode ketiga**, komentar yang paling banyak di-
 *like* adalah
     komentar:
 
-    ## [1] "Mini Series hasil kolaborasi dengan TropicanaSlim dengan aktor asli tuli dan kerjasama komunitas seni fantasi tuli Sunyi hadir sebagai tempat pertemuan 2 dunia yg sebelumnya tidak terbayang dapat bertemu Sunyi ingin terus berkembang untuk dapat memperkenalkan dunia disabilitas sebagai dunia yg mengagumkan dan penuh kejutan Oleh karena itu setiap like pada video CeritaSunyi di YouTube akan dikonversikan menjadi Rp 500 untuk pengembangan Sunyi House of Coffee and Hope dalam membantu memperluas kesempatan teman - teman disabilitas untuk berkreasi dan berekspresi melalui kopiAyo kita menjadi duta dunia yg menakjubkan ini dengan like dan share kepada rekan - rekan kalian semua karena setiap dukungan pasti sangat berartitropicanaslim CeritaSunyi SahabatSunyi"
+    ## [1] "Mini Series hasil kolaborasi dengan TropicanaSlim dengan aktor asli tuli dan kerjasama komunitas seni fantasi tuli Sunyi hadir sebagai tempat pertemuan 2 dunia yg sebelumnya tidak terbayang dapat bertemu  Sunyi ingin terus berkembang untuk dapat memperkenalkan dunia disabilitas sebagai dunia yg mengagumkan dan penuh kejutan Oleh karena itu setiap like pada video CeritaSunyi di YouTube akan dikonversikan menjadi Rp 500 untuk pengembangan Sunyi House of Coffee and Hope dalam membantu memperluas kesempatan teman - teman disabilitas untuk berkreasi dan berekspresi melalui kopi  Ayo kita menjadi duta dunia yg menakjubkan ini dengan like dan share kepada rekan - rekan kalian semua karena setiap dukungan pasti sangat berarti  tropicanaslim CeritaSunyi SahabatSunyi"
 
 Dengan `likeCount` sebanyak 29.
 
@@ -317,10 +318,30 @@ Dengan `likeCount` sebanyak 29.
 > ini selalu muncul di setiap episode. Tapi baru di episode ketiga ini
 > yang paling banyak di- *likes* oleh *viewer*.
 
+#### Siapa yang komen?
+
+Saya sih penasaran, apakah yang komen di ketiga video itu selalu orang
+yang sama atau beda-beda yah. Yuk kita cek datanya.
+
+    ## # A tibble: 3 x 2
+    ##   summary                       banyak
+    ##   <chr>                          <int>
+    ## 1 Viewers yang komen di 1 video     92
+    ## 2 Viewers yang komen di 2 video     18
+    ## 3 Viewers yang komen di 3 video      7
+
+    ## Loading required package: magrittr
+
+![](2019-12-4-blog-posting-sunyi_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+
+> Ternyata ada juga lho viewers yang selalu komen di 3 video. Selain
+> **Sunyi Coffee**, ada yang bisa kasih tau siapa saja mereka? Dan apa
+> komentarnya?
+
 #### *Text analysis* dari komentar *viewer*
 
 Ini bagian paling seru. Bagaimana kita bisa melakukan *text analysis*
-dari komentar-komentar *viewers*. Setidaknya ada tiga analisa yang bisa
+dari komentar-komentar *viewers*. Setidaknya ada empat analisa yang bisa
 dilakukan:
 
 1.  **Wordcloud**: Menghitung berapa banyak kata keluar dalam suatu data
@@ -328,7 +349,38 @@ dilakukan:
 2.  **Bi-Gram**: Melihat dua kata yang sering bermunculan bersamaan.
 3.  **Word Association**: Melihat kumpulan dan hubungan kata-kata yang
     memiliki asosiasi tinggi.
+4.  **Topic modellling**: mencari tahu kesamaan dari sekian banyak
+    komentar itu dan dikelompokkan berdasarkan kesamaannya tersebut.
 
 Oke, kita mulai dari yang paling gampang dulu yah.
 
 ##### Wordcloud
+
+Analisa ini sebenarnya sangat mudah. Hanya menghitung ada berapa banyak
+kata yang keluar dalam suatu data teks. Sebelum mulai, kita akan lakukan
+*preparation* terhadap data teksnya. Apa itu? Mengubah tulisannya jadi
+*lowercase* biar mudah dianalisa.
+
+Berhubung ini hanya untuk *fun* aja, saya akan *skip* bagian *word
+stemming* dan *remove stopwords*.
+
+> *Kindly Googling about those two terms yah in parts of text analytics*
+
+*Yuk* kita lihat kata-kata apa saja yang sering muncul\!
+
+Berikut adalah semua kata yang punya frekuensi minimal 5 yah:
+
+    ## # A tibble: 70 x 2
+    ##    words         n
+    ##    <chr>     <int>
+    ##  1 dan          22
+    ##  2 ini          22
+    ##  3 tropicana    18
+    ##  4 banget       15
+    ##  5 episode      15
+    ##  6 sunyi        15
+    ##  7 di           13
+    ##  8 keren        13
+    ##  9 teman        13
+    ## 10 yg           13
+    ## # … with 60 more rows
