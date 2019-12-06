@@ -158,21 +158,21 @@ data %>%
   theme(axis.text = element_blank())
 ```
 
-![](Marvel-Cinematic-Universe_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
 ``` r
 #histogram dengan base
 hist(data$budget)
 ```
 
-![](Marvel-Cinematic-Universe_files/figure-gfm/unnamed-chunk-3-2.png)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-3-2.png)<!-- -->
 
 ``` r
 #boxplot dengan base
 data %>% ggplot(aes(y=budget)) + geom_boxplot()
 ```
 
-![](Marvel-Cinematic-Universe_files/figure-gfm/unnamed-chunk-3-3.png)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-3-3.png)<!-- -->
 
 Dari sebaran datanya, terlihat bahwa `budget` agak miring ke kiri. Ada
 tiga film yang memiliki budget sangat tinggi yang berada di luar
@@ -209,21 +209,21 @@ data %>%
   theme(axis.text = element_blank())
 ```
 
-![](Marvel-Cinematic-Universe_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 ``` r
 #histogram dengan base
 hist(data$box_office)
 ```
 
-![](Marvel-Cinematic-Universe_files/figure-gfm/unnamed-chunk-5-2.png)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-5-2.png)<!-- -->
 
 ``` r
 #boxplot dengan base
 data %>% ggplot(aes(y=box_office)) + geom_boxplot()
 ```
 
-![](Marvel-Cinematic-Universe_files/figure-gfm/unnamed-chunk-5-3.png)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-5-3.png)<!-- -->
 
 Dari sebaran datanya, terlihat bahwa `box_office` agak miring ke kiri.
 Ada dua film yang memiliki *box\_office* sangat tinggi yang berada di
@@ -412,4 +412,4 @@ data %>% ggplot(aes(x=budget,y=box_office)) +
         plot.caption = element_text(size=10,face='italic'))
 ```
 
-![](Marvel-Cinematic-Universe_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
