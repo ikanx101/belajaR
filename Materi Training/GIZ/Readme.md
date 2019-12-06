@@ -23,6 +23,7 @@ Ada beberapa tipe data di data science, yakni:
 4.  Logical (TRUE / FALSE)
 
 # Yuk kita mulai materinya
+##### Sebagai catatan, karena bahasan utama training ini adalah regresi linear, maka intro to R nya akan sangat express.
 
 ## Single variabel
 
