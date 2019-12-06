@@ -104,11 +104,18 @@ cacat=sample(10,50,replace=T)
 # Membuat histogram dari suhu
 hist(suhu)
 
-# Membuat histogram dari suhu
+# Membuat histogram dari cacat
 hist(cacat)
 
 # Uji Korelasi
 cor.test(suhu,cacat)
+
+# save into variabel
+uji_korelasi = cor.test(suhu,cacat)
+
+uji_korelasi$p.value
+
+ifelse(uji_korelasi$p.value<0.05,'Signifikan berkorelasi','Tidak signifikan berkorelasi')
 
 # Hanya menampilkan angka korelasi saja
 cor(suhu,cacat)
@@ -131,7 +138,7 @@ data
 
 Untuk melihat data frame bisa menggunakan fungsi `View(data)`.
 
-```{r}
+```{r,message=FALSE}
 str(data)
 summary(data)
 length(data)
@@ -145,6 +152,16 @@ data[,2]
 data[1,1] #melihat data di posisi row,column
 data[1,2] #melihat data di posisi row,column
 data[1,1]=NA #menghapus data di posisi row,column
+
+# Menambah variabel
+# Cara 1
+data$hari = paste('hari ke',c(1:50),'dari 50 hari',sep=' ')
+head(data,20)
+
+# Cara 2
+library(dplyr)
+data = data %>% mutate(bulan='Januari')
+data$bulan[32:50]='Februari'
 ```
 
 ### Bermain dengan element dan tanda `$`
@@ -195,12 +212,17 @@ data.baru %>% arrange(desc(cacat))
 ### Menghapus global environment
 
 ```{r}
+rm(cacat) #hanya menghapus variabel cacat
 rm(list=ls()) #digunakan untuk membersihkan global data environment
 ```
 
 ### Set working directory
 
 `setwd('/cloud/project/Materi Training/GIZ')`
+
+### Get working directory
+
+`getwd()`
 
 # Kita mulai bagian serunya yah!!!
 

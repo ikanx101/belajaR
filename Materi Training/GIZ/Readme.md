@@ -50,7 +50,7 @@ a=seq(1,10,0.5) #contoh generating sequence by 0.5
 sample(c(100:200),5,replace=F) #generating random number
 ```
 
-    ## [1] 141 188 113 118 172
+    ## [1] 194 130 139 169 153
 
 ``` r
 kalimat = 'saya biasa pergi ke kantor setiap jam 7 pagi'
@@ -195,7 +195,7 @@ hist(suhu)
 ![](Readme_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 ``` r
-# Membuat histogram dari suhu
+# Membuat histogram dari cacat
 hist(cacat)
 ```
 
@@ -210,20 +210,35 @@ cor.test(suhu,cacat)
     ##  Pearson's product-moment correlation
     ## 
     ## data:  suhu and cacat
-    ## t = 0.95624, df = 48, p-value = 0.3437
+    ## t = -0.11272, df = 48, p-value = 0.9107
     ## alternative hypothesis: true correlation is not equal to 0
     ## 95 percent confidence interval:
-    ##  -0.1472252  0.3998558
+    ##  -0.2932875  0.2632721
     ## sample estimates:
-    ##       cor 
-    ## 0.1367255
+    ##         cor 
+    ## -0.01626777
+
+``` r
+# save into variabel
+uji_korelasi = cor.test(suhu,cacat)
+
+uji_korelasi$p.value
+```
+
+    ## [1] 0.9107216
+
+``` r
+ifelse(uji_korelasi$p.value<0.05,'Signifikan berkorelasi','Tidak signifikan berkorelasi')
+```
+
+    ## [1] "Tidak signifikan berkorelasi"
 
 ``` r
 # Hanya menampilkan angka korelasi saja
 cor(suhu,cacat)
 ```
 
-    ## [1] 0.1367255
+    ## [1] -0.01626777
 
 ``` r
 # Simple plot suhu vs cacat
@@ -244,56 +259,56 @@ data
 ```
 
     ##    suhu cacat
-    ## 1    33    10
-    ## 2    33     4
-    ## 3    48     7
-    ## 4    36     9
-    ## 5    26     2
-    ## 6    56     8
-    ## 7    58    10
-    ## 8    54     7
-    ## 9    53     3
-    ## 10   30     8
-    ## 11   13     2
-    ## 12   92     8
-    ## 13   50     2
-    ## 14   11     1
-    ## 15   70    10
-    ## 16   88     8
-    ## 17   48     8
-    ## 18    4     8
-    ## 19   54     7
-    ## 20   37     1
-    ## 21   85     5
-    ## 22   20     2
-    ## 23   62     8
-    ## 24   54     8
-    ## 25   33     3
-    ## 26   36     6
-    ## 27   18     9
-    ## 28  100     3
-    ## 29   19     8
-    ## 30   30     9
-    ## 31   49     5
-    ## 32   64     9
-    ## 33   59     2
-    ## 34   58     4
-    ## 35   14     9
-    ## 36   81     7
-    ## 37   27     6
-    ## 38   10     6
-    ## 39   83    10
-    ## 40   68    10
-    ## 41   81     8
-    ## 42   43    10
-    ## 43   17    10
-    ## 44   66     5
-    ## 45   25     6
-    ## 46   21     1
-    ## 47   57     8
-    ## 48   41    10
-    ## 49   77     1
-    ## 50   15     4
+    ## 1    88     6
+    ## 2    55     7
+    ## 3    53     5
+    ## 4    70     2
+    ## 5    17     2
+    ## 6     2     9
+    ## 7    63     8
+    ## 8    62     3
+    ## 9    24     6
+    ## 10   34     2
+    ## 11   60     7
+    ## 12   19     1
+    ## 13   38     7
+    ## 14   22     4
+    ## 15   85     7
+    ## 16   67     4
+    ## 17   49     9
+    ## 18   42    10
+    ## 19    6     5
+    ## 20   24    10
+    ## 21   38     8
+    ## 22   38     5
+    ## 23   39     1
+    ## 24   39     7
+    ## 25   71     3
+    ## 26  100     1
+    ## 27   43     6
+    ## 28   74     1
+    ## 29   28     4
+    ## 30   20     4
+    ## 31   52     3
+    ## 32   27     4
+    ## 33   11     2
+    ## 34   13     9
+    ## 35   85     6
+    ## 36   35     3
+    ## 37   49     7
+    ## 38   37     1
+    ## 39   67     5
+    ## 40  100     8
+    ## 41   90     6
+    ## 42   41     4
+    ## 43   35     4
+    ## 44   60     7
+    ## 45   10     9
+    ## 46   14     6
+    ## 47   65     6
+    ## 48   72     8
+    ## 49   70     5
+    ## 50   96     6
 
 ### Another useful function di data frame
 
@@ -304,19 +319,19 @@ str(data)
 ```
 
     ## 'data.frame':    50 obs. of  2 variables:
-    ##  $ suhu : int  33 33 48 36 26 56 58 54 53 30 ...
-    ##  $ cacat: int  10 4 7 9 2 8 10 7 3 8 ...
+    ##  $ suhu : int  88 55 53 70 17 2 63 62 24 34 ...
+    ##  $ cacat: int  6 7 5 2 2 9 8 3 6 2 ...
 
 ``` r
 summary(data)
 ```
 
     ##       suhu            cacat      
-    ##  Min.   :  4.00   Min.   : 1.00  
-    ##  1st Qu.: 26.25   1st Qu.: 4.00  
-    ##  Median : 48.00   Median : 7.00  
-    ##  Mean   : 46.14   Mean   : 6.30  
-    ##  3rd Qu.: 61.25   3rd Qu.: 8.75  
+    ##  Min.   :  2.00   Min.   : 1.00  
+    ##  1st Qu.: 27.25   1st Qu.: 3.25  
+    ##  Median : 42.50   Median : 5.50  
+    ##  Mean   : 47.98   Mean   : 5.26  
+    ##  3rd Qu.: 67.00   3rd Qu.: 7.00  
     ##  Max.   :100.00   Max.   :10.00
 
 ``` r
@@ -330,165 +345,199 @@ head(data,5) #menampilkan data 5 teratas
 ```
 
     ##   suhu cacat
-    ## 1   33    10
-    ## 2   33     4
-    ## 3   48     7
-    ## 4   36     9
-    ## 5   26     2
+    ## 1   88     6
+    ## 2   55     7
+    ## 3   53     5
+    ## 4   70     2
+    ## 5   17     2
 
 ``` r
 tail(data,5) #menampilkan data 5 terbawah
 ```
 
     ##    suhu cacat
-    ## 46   21     1
-    ## 47   57     8
-    ## 48   41    10
-    ## 49   77     1
-    ## 50   15     4
+    ## 46   14     6
+    ## 47   65     6
+    ## 48   72     8
+    ## 49   70     5
+    ## 50   96     6
 
 ``` r
 data[1]
 ```
 
     ##    suhu
-    ## 1    33
-    ## 2    33
-    ## 3    48
-    ## 4    36
-    ## 5    26
-    ## 6    56
-    ## 7    58
-    ## 8    54
-    ## 9    53
-    ## 10   30
-    ## 11   13
-    ## 12   92
-    ## 13   50
-    ## 14   11
-    ## 15   70
-    ## 16   88
-    ## 17   48
-    ## 18    4
-    ## 19   54
-    ## 20   37
-    ## 21   85
-    ## 22   20
-    ## 23   62
-    ## 24   54
-    ## 25   33
-    ## 26   36
-    ## 27   18
-    ## 28  100
-    ## 29   19
-    ## 30   30
-    ## 31   49
-    ## 32   64
-    ## 33   59
-    ## 34   58
-    ## 35   14
-    ## 36   81
-    ## 37   27
-    ## 38   10
-    ## 39   83
-    ## 40   68
-    ## 41   81
-    ## 42   43
-    ## 43   17
-    ## 44   66
-    ## 45   25
-    ## 46   21
-    ## 47   57
-    ## 48   41
-    ## 49   77
-    ## 50   15
+    ## 1    88
+    ## 2    55
+    ## 3    53
+    ## 4    70
+    ## 5    17
+    ## 6     2
+    ## 7    63
+    ## 8    62
+    ## 9    24
+    ## 10   34
+    ## 11   60
+    ## 12   19
+    ## 13   38
+    ## 14   22
+    ## 15   85
+    ## 16   67
+    ## 17   49
+    ## 18   42
+    ## 19    6
+    ## 20   24
+    ## 21   38
+    ## 22   38
+    ## 23   39
+    ## 24   39
+    ## 25   71
+    ## 26  100
+    ## 27   43
+    ## 28   74
+    ## 29   28
+    ## 30   20
+    ## 31   52
+    ## 32   27
+    ## 33   11
+    ## 34   13
+    ## 35   85
+    ## 36   35
+    ## 37   49
+    ## 38   37
+    ## 39   67
+    ## 40  100
+    ## 41   90
+    ## 42   41
+    ## 43   35
+    ## 44   60
+    ## 45   10
+    ## 46   14
+    ## 47   65
+    ## 48   72
+    ## 49   70
+    ## 50   96
 
 ``` r
 data[,1]
 ```
 
-    ##  [1]  33  33  48  36  26  56  58  54  53  30  13  92  50  11  70  88  48
-    ## [18]   4  54  37  85  20  62  54  33  36  18 100  19  30  49  64  59  58
-    ## [35]  14  81  27  10  83  68  81  43  17  66  25  21  57  41  77  15
+    ##  [1]  88  55  53  70  17   2  63  62  24  34  60  19  38  22  85  67  49
+    ## [18]  42   6  24  38  38  39  39  71 100  43  74  28  20  52  27  11  13
+    ## [35]  85  35  49  37  67 100  90  41  35  60  10  14  65  72  70  96
 
 ``` r
 data[2]
 ```
 
     ##    cacat
-    ## 1     10
-    ## 2      4
-    ## 3      7
-    ## 4      9
+    ## 1      6
+    ## 2      7
+    ## 3      5
+    ## 4      2
     ## 5      2
-    ## 6      8
-    ## 7     10
-    ## 8      7
-    ## 9      3
-    ## 10     8
-    ## 11     2
-    ## 12     8
-    ## 13     2
-    ## 14     1
-    ## 15    10
-    ## 16     8
-    ## 17     8
-    ## 18     8
-    ## 19     7
-    ## 20     1
-    ## 21     5
-    ## 22     2
-    ## 23     8
-    ## 24     8
+    ## 6      9
+    ## 7      8
+    ## 8      3
+    ## 9      6
+    ## 10     2
+    ## 11     7
+    ## 12     1
+    ## 13     7
+    ## 14     4
+    ## 15     7
+    ## 16     4
+    ## 17     9
+    ## 18    10
+    ## 19     5
+    ## 20    10
+    ## 21     8
+    ## 22     5
+    ## 23     1
+    ## 24     7
     ## 25     3
-    ## 26     6
-    ## 27     9
-    ## 28     3
-    ## 29     8
-    ## 30     9
-    ## 31     5
-    ## 32     9
+    ## 26     1
+    ## 27     6
+    ## 28     1
+    ## 29     4
+    ## 30     4
+    ## 31     3
+    ## 32     4
     ## 33     2
-    ## 34     4
-    ## 35     9
-    ## 36     7
-    ## 37     6
-    ## 38     6
-    ## 39    10
-    ## 40    10
-    ## 41     8
-    ## 42    10
-    ## 43    10
-    ## 44     5
-    ## 45     6
-    ## 46     1
-    ## 47     8
-    ## 48    10
-    ## 49     1
-    ## 50     4
+    ## 34     9
+    ## 35     6
+    ## 36     3
+    ## 37     7
+    ## 38     1
+    ## 39     5
+    ## 40     8
+    ## 41     6
+    ## 42     4
+    ## 43     4
+    ## 44     7
+    ## 45     9
+    ## 46     6
+    ## 47     6
+    ## 48     8
+    ## 49     5
+    ## 50     6
 
 ``` r
 data[,2]
 ```
 
-    ##  [1] 10  4  7  9  2  8 10  7  3  8  2  8  2  1 10  8  8  8  7  1  5  2  8
-    ## [24]  8  3  6  9  3  8  9  5  9  2  4  9  7  6  6 10 10  8 10 10  5  6  1
-    ## [47]  8 10  1  4
+    ##  [1]  6  7  5  2  2  9  8  3  6  2  7  1  7  4  7  4  9 10  5 10  8  5  1
+    ## [24]  7  3  1  6  1  4  4  3  4  2  9  6  3  7  1  5  8  6  4  4  7  9  6
+    ## [47]  6  8  5  6
 
 ``` r
 data[1,1] #melihat data di posisi row,column
 ```
 
-    ## [1] 33
+    ## [1] 88
 
 ``` r
 data[1,2] #melihat data di posisi row,column
 ```
 
-    ## [1] 10
+    ## [1] 6
 
 ``` r
 data[1,1]=NA #menghapus data di posisi row,column
+
+# Menambah variabel
+# Cara 1
+data$hari = paste('hari ke',c(1:50),'dari 50 hari',sep=' ')
+head(data,20)
+```
+
+    ##    suhu cacat                    hari
+    ## 1    NA     6  hari ke 1 dari 50 hari
+    ## 2    55     7  hari ke 2 dari 50 hari
+    ## 3    53     5  hari ke 3 dari 50 hari
+    ## 4    70     2  hari ke 4 dari 50 hari
+    ## 5    17     2  hari ke 5 dari 50 hari
+    ## 6     2     9  hari ke 6 dari 50 hari
+    ## 7    63     8  hari ke 7 dari 50 hari
+    ## 8    62     3  hari ke 8 dari 50 hari
+    ## 9    24     6  hari ke 9 dari 50 hari
+    ## 10   34     2 hari ke 10 dari 50 hari
+    ## 11   60     7 hari ke 11 dari 50 hari
+    ## 12   19     1 hari ke 12 dari 50 hari
+    ## 13   38     7 hari ke 13 dari 50 hari
+    ## 14   22     4 hari ke 14 dari 50 hari
+    ## 15   85     7 hari ke 15 dari 50 hari
+    ## 16   67     4 hari ke 16 dari 50 hari
+    ## 17   49     9 hari ke 17 dari 50 hari
+    ## 18   42    10 hari ke 18 dari 50 hari
+    ## 19    6     5 hari ke 19 dari 50 hari
+    ## 20   24    10 hari ke 20 dari 50 hari
+
+``` r
+# Cara 2
+library(dplyr)
+data = data %>% mutate(bulan='Januari')
+data$bulan[32:50]='Februari'
 ```
 
 ### Bermain dengan element dan tanda `$`
@@ -497,74 +546,74 @@ data[1,1]=NA #menghapus data di posisi row,column
 data$suhu
 ```
 
-    ##  [1]  NA  33  48  36  26  56  58  54  53  30  13  92  50  11  70  88  48
-    ## [18]   4  54  37  85  20  62  54  33  36  18 100  19  30  49  64  59  58
-    ## [35]  14  81  27  10  83  68  81  43  17  66  25  21  57  41  77  15
+    ##  [1]  NA  55  53  70  17   2  63  62  24  34  60  19  38  22  85  67  49
+    ## [18]  42   6  24  38  38  39  39  71 100  43  74  28  20  52  27  11  13
+    ## [35]  85  35  49  37  67 100  90  41  35  60  10  14  65  72  70  96
 
 ``` r
 data$cacat
 ```
 
-    ##  [1] 10  4  7  9  2  8 10  7  3  8  2  8  2  1 10  8  8  8  7  1  5  2  8
-    ## [24]  8  3  6  9  3  8  9  5  9  2  4  9  7  6  6 10 10  8 10 10  5  6  1
-    ## [47]  8 10  1  4
+    ##  [1]  6  7  5  2  2  9  8  3  6  2  7  1  7  4  7  4  9 10  5 10  8  5  1
+    ## [24]  7  3  1  6  1  4  4  3  4  2  9  6  3  7  1  5  8  6  4  4  7  9  6
+    ## [47]  6  8  5  6
 
 ``` r
 data.baru=data[-1]
 data.baru
 ```
 
-    ##    cacat
-    ## 1     10
-    ## 2      4
-    ## 3      7
-    ## 4      9
-    ## 5      2
-    ## 6      8
-    ## 7     10
-    ## 8      7
-    ## 9      3
-    ## 10     8
-    ## 11     2
-    ## 12     8
-    ## 13     2
-    ## 14     1
-    ## 15    10
-    ## 16     8
-    ## 17     8
-    ## 18     8
-    ## 19     7
-    ## 20     1
-    ## 21     5
-    ## 22     2
-    ## 23     8
-    ## 24     8
-    ## 25     3
-    ## 26     6
-    ## 27     9
-    ## 28     3
-    ## 29     8
-    ## 30     9
-    ## 31     5
-    ## 32     9
-    ## 33     2
-    ## 34     4
-    ## 35     9
-    ## 36     7
-    ## 37     6
-    ## 38     6
-    ## 39    10
-    ## 40    10
-    ## 41     8
-    ## 42    10
-    ## 43    10
-    ## 44     5
-    ## 45     6
-    ## 46     1
-    ## 47     8
-    ## 48    10
-    ## 49     1
-    ## 50     4
+    ##    cacat                    hari    bulan
+    ## 1      6  hari ke 1 dari 50 hari  Januari
+    ## 2      7  hari ke 2 dari 50 hari  Januari
+    ## 3      5  hari ke 3 dari 50 hari  Januari
+    ## 4      2  hari ke 4 dari 50 hari  Januari
+    ## 5      2  hari ke 5 dari 50 hari  Januari
+    ## 6      9  hari ke 6 dari 50 hari  Januari
+    ## 7      8  hari ke 7 dari 50 hari  Januari
+    ## 8      3  hari ke 8 dari 50 hari  Januari
+    ## 9      6  hari ke 9 dari 50 hari  Januari
+    ## 10     2 hari ke 10 dari 50 hari  Januari
+    ## 11     7 hari ke 11 dari 50 hari  Januari
+    ## 12     1 hari ke 12 dari 50 hari  Januari
+    ## 13     7 hari ke 13 dari 50 hari  Januari
+    ## 14     4 hari ke 14 dari 50 hari  Januari
+    ## 15     7 hari ke 15 dari 50 hari  Januari
+    ## 16     4 hari ke 16 dari 50 hari  Januari
+    ## 17     9 hari ke 17 dari 50 hari  Januari
+    ## 18    10 hari ke 18 dari 50 hari  Januari
+    ## 19     5 hari ke 19 dari 50 hari  Januari
+    ## 20    10 hari ke 20 dari 50 hari  Januari
+    ## 21     8 hari ke 21 dari 50 hari  Januari
+    ## 22     5 hari ke 22 dari 50 hari  Januari
+    ## 23     1 hari ke 23 dari 50 hari  Januari
+    ## 24     7 hari ke 24 dari 50 hari  Januari
+    ## 25     3 hari ke 25 dari 50 hari  Januari
+    ## 26     1 hari ke 26 dari 50 hari  Januari
+    ## 27     6 hari ke 27 dari 50 hari  Januari
+    ## 28     1 hari ke 28 dari 50 hari  Januari
+    ## 29     4 hari ke 29 dari 50 hari  Januari
+    ## 30     4 hari ke 30 dari 50 hari  Januari
+    ## 31     3 hari ke 31 dari 50 hari  Januari
+    ## 32     4 hari ke 32 dari 50 hari Februari
+    ## 33     2 hari ke 33 dari 50 hari Februari
+    ## 34     9 hari ke 34 dari 50 hari Februari
+    ## 35     6 hari ke 35 dari 50 hari Februari
+    ## 36     3 hari ke 36 dari 50 hari Februari
+    ## 37     7 hari ke 37 dari 50 hari Februari
+    ## 38     1 hari ke 38 dari 50 hari Februari
+    ## 39     5 hari ke 39 dari 50 hari Februari
+    ## 40     8 hari ke 40 dari 50 hari Februari
+    ## 41     6 hari ke 41 dari 50 hari Februari
+    ## 42     4 hari ke 42 dari 50 hari Februari
+    ## 43     4 hari ke 43 dari 50 hari Februari
+    ## 44     7 hari ke 44 dari 50 hari Februari
+    ## 45     9 hari ke 45 dari 50 hari Februari
+    ## 46     6 hari ke 46 dari 50 hari Februari
+    ## 47     6 hari ke 47 dari 50 hari Februari
+    ## 48     8 hari ke 48 dari 50 hari Februari
+    ## 49     5 hari ke 49 dari 50 hari Februari
+    ## 50     6 hari ke 50 dari 50 hari Februari
 
 ### Another useful function di data frame (part 2)
 
@@ -572,113 +621,113 @@ data.baru
 is.na(data) #melihat ada yang kosong
 ```
 
-    ##        suhu cacat
-    ##  [1,]  TRUE FALSE
-    ##  [2,] FALSE FALSE
-    ##  [3,] FALSE FALSE
-    ##  [4,] FALSE FALSE
-    ##  [5,] FALSE FALSE
-    ##  [6,] FALSE FALSE
-    ##  [7,] FALSE FALSE
-    ##  [8,] FALSE FALSE
-    ##  [9,] FALSE FALSE
-    ## [10,] FALSE FALSE
-    ## [11,] FALSE FALSE
-    ## [12,] FALSE FALSE
-    ## [13,] FALSE FALSE
-    ## [14,] FALSE FALSE
-    ## [15,] FALSE FALSE
-    ## [16,] FALSE FALSE
-    ## [17,] FALSE FALSE
-    ## [18,] FALSE FALSE
-    ## [19,] FALSE FALSE
-    ## [20,] FALSE FALSE
-    ## [21,] FALSE FALSE
-    ## [22,] FALSE FALSE
-    ## [23,] FALSE FALSE
-    ## [24,] FALSE FALSE
-    ## [25,] FALSE FALSE
-    ## [26,] FALSE FALSE
-    ## [27,] FALSE FALSE
-    ## [28,] FALSE FALSE
-    ## [29,] FALSE FALSE
-    ## [30,] FALSE FALSE
-    ## [31,] FALSE FALSE
-    ## [32,] FALSE FALSE
-    ## [33,] FALSE FALSE
-    ## [34,] FALSE FALSE
-    ## [35,] FALSE FALSE
-    ## [36,] FALSE FALSE
-    ## [37,] FALSE FALSE
-    ## [38,] FALSE FALSE
-    ## [39,] FALSE FALSE
-    ## [40,] FALSE FALSE
-    ## [41,] FALSE FALSE
-    ## [42,] FALSE FALSE
-    ## [43,] FALSE FALSE
-    ## [44,] FALSE FALSE
-    ## [45,] FALSE FALSE
-    ## [46,] FALSE FALSE
-    ## [47,] FALSE FALSE
-    ## [48,] FALSE FALSE
-    ## [49,] FALSE FALSE
-    ## [50,] FALSE FALSE
+    ##        suhu cacat  hari bulan
+    ##  [1,]  TRUE FALSE FALSE FALSE
+    ##  [2,] FALSE FALSE FALSE FALSE
+    ##  [3,] FALSE FALSE FALSE FALSE
+    ##  [4,] FALSE FALSE FALSE FALSE
+    ##  [5,] FALSE FALSE FALSE FALSE
+    ##  [6,] FALSE FALSE FALSE FALSE
+    ##  [7,] FALSE FALSE FALSE FALSE
+    ##  [8,] FALSE FALSE FALSE FALSE
+    ##  [9,] FALSE FALSE FALSE FALSE
+    ## [10,] FALSE FALSE FALSE FALSE
+    ## [11,] FALSE FALSE FALSE FALSE
+    ## [12,] FALSE FALSE FALSE FALSE
+    ## [13,] FALSE FALSE FALSE FALSE
+    ## [14,] FALSE FALSE FALSE FALSE
+    ## [15,] FALSE FALSE FALSE FALSE
+    ## [16,] FALSE FALSE FALSE FALSE
+    ## [17,] FALSE FALSE FALSE FALSE
+    ## [18,] FALSE FALSE FALSE FALSE
+    ## [19,] FALSE FALSE FALSE FALSE
+    ## [20,] FALSE FALSE FALSE FALSE
+    ## [21,] FALSE FALSE FALSE FALSE
+    ## [22,] FALSE FALSE FALSE FALSE
+    ## [23,] FALSE FALSE FALSE FALSE
+    ## [24,] FALSE FALSE FALSE FALSE
+    ## [25,] FALSE FALSE FALSE FALSE
+    ## [26,] FALSE FALSE FALSE FALSE
+    ## [27,] FALSE FALSE FALSE FALSE
+    ## [28,] FALSE FALSE FALSE FALSE
+    ## [29,] FALSE FALSE FALSE FALSE
+    ## [30,] FALSE FALSE FALSE FALSE
+    ## [31,] FALSE FALSE FALSE FALSE
+    ## [32,] FALSE FALSE FALSE FALSE
+    ## [33,] FALSE FALSE FALSE FALSE
+    ## [34,] FALSE FALSE FALSE FALSE
+    ## [35,] FALSE FALSE FALSE FALSE
+    ## [36,] FALSE FALSE FALSE FALSE
+    ## [37,] FALSE FALSE FALSE FALSE
+    ## [38,] FALSE FALSE FALSE FALSE
+    ## [39,] FALSE FALSE FALSE FALSE
+    ## [40,] FALSE FALSE FALSE FALSE
+    ## [41,] FALSE FALSE FALSE FALSE
+    ## [42,] FALSE FALSE FALSE FALSE
+    ## [43,] FALSE FALSE FALSE FALSE
+    ## [44,] FALSE FALSE FALSE FALSE
+    ## [45,] FALSE FALSE FALSE FALSE
+    ## [46,] FALSE FALSE FALSE FALSE
+    ## [47,] FALSE FALSE FALSE FALSE
+    ## [48,] FALSE FALSE FALSE FALSE
+    ## [49,] FALSE FALSE FALSE FALSE
+    ## [50,] FALSE FALSE FALSE FALSE
 
 ``` r
 !is.na(data) #melihat pasti terisi
 ```
 
-    ##        suhu cacat
-    ##  [1,] FALSE  TRUE
-    ##  [2,]  TRUE  TRUE
-    ##  [3,]  TRUE  TRUE
-    ##  [4,]  TRUE  TRUE
-    ##  [5,]  TRUE  TRUE
-    ##  [6,]  TRUE  TRUE
-    ##  [7,]  TRUE  TRUE
-    ##  [8,]  TRUE  TRUE
-    ##  [9,]  TRUE  TRUE
-    ## [10,]  TRUE  TRUE
-    ## [11,]  TRUE  TRUE
-    ## [12,]  TRUE  TRUE
-    ## [13,]  TRUE  TRUE
-    ## [14,]  TRUE  TRUE
-    ## [15,]  TRUE  TRUE
-    ## [16,]  TRUE  TRUE
-    ## [17,]  TRUE  TRUE
-    ## [18,]  TRUE  TRUE
-    ## [19,]  TRUE  TRUE
-    ## [20,]  TRUE  TRUE
-    ## [21,]  TRUE  TRUE
-    ## [22,]  TRUE  TRUE
-    ## [23,]  TRUE  TRUE
-    ## [24,]  TRUE  TRUE
-    ## [25,]  TRUE  TRUE
-    ## [26,]  TRUE  TRUE
-    ## [27,]  TRUE  TRUE
-    ## [28,]  TRUE  TRUE
-    ## [29,]  TRUE  TRUE
-    ## [30,]  TRUE  TRUE
-    ## [31,]  TRUE  TRUE
-    ## [32,]  TRUE  TRUE
-    ## [33,]  TRUE  TRUE
-    ## [34,]  TRUE  TRUE
-    ## [35,]  TRUE  TRUE
-    ## [36,]  TRUE  TRUE
-    ## [37,]  TRUE  TRUE
-    ## [38,]  TRUE  TRUE
-    ## [39,]  TRUE  TRUE
-    ## [40,]  TRUE  TRUE
-    ## [41,]  TRUE  TRUE
-    ## [42,]  TRUE  TRUE
-    ## [43,]  TRUE  TRUE
-    ## [44,]  TRUE  TRUE
-    ## [45,]  TRUE  TRUE
-    ## [46,]  TRUE  TRUE
-    ## [47,]  TRUE  TRUE
-    ## [48,]  TRUE  TRUE
-    ## [49,]  TRUE  TRUE
-    ## [50,]  TRUE  TRUE
+    ##        suhu cacat hari bulan
+    ##  [1,] FALSE  TRUE TRUE  TRUE
+    ##  [2,]  TRUE  TRUE TRUE  TRUE
+    ##  [3,]  TRUE  TRUE TRUE  TRUE
+    ##  [4,]  TRUE  TRUE TRUE  TRUE
+    ##  [5,]  TRUE  TRUE TRUE  TRUE
+    ##  [6,]  TRUE  TRUE TRUE  TRUE
+    ##  [7,]  TRUE  TRUE TRUE  TRUE
+    ##  [8,]  TRUE  TRUE TRUE  TRUE
+    ##  [9,]  TRUE  TRUE TRUE  TRUE
+    ## [10,]  TRUE  TRUE TRUE  TRUE
+    ## [11,]  TRUE  TRUE TRUE  TRUE
+    ## [12,]  TRUE  TRUE TRUE  TRUE
+    ## [13,]  TRUE  TRUE TRUE  TRUE
+    ## [14,]  TRUE  TRUE TRUE  TRUE
+    ## [15,]  TRUE  TRUE TRUE  TRUE
+    ## [16,]  TRUE  TRUE TRUE  TRUE
+    ## [17,]  TRUE  TRUE TRUE  TRUE
+    ## [18,]  TRUE  TRUE TRUE  TRUE
+    ## [19,]  TRUE  TRUE TRUE  TRUE
+    ## [20,]  TRUE  TRUE TRUE  TRUE
+    ## [21,]  TRUE  TRUE TRUE  TRUE
+    ## [22,]  TRUE  TRUE TRUE  TRUE
+    ## [23,]  TRUE  TRUE TRUE  TRUE
+    ## [24,]  TRUE  TRUE TRUE  TRUE
+    ## [25,]  TRUE  TRUE TRUE  TRUE
+    ## [26,]  TRUE  TRUE TRUE  TRUE
+    ## [27,]  TRUE  TRUE TRUE  TRUE
+    ## [28,]  TRUE  TRUE TRUE  TRUE
+    ## [29,]  TRUE  TRUE TRUE  TRUE
+    ## [30,]  TRUE  TRUE TRUE  TRUE
+    ## [31,]  TRUE  TRUE TRUE  TRUE
+    ## [32,]  TRUE  TRUE TRUE  TRUE
+    ## [33,]  TRUE  TRUE TRUE  TRUE
+    ## [34,]  TRUE  TRUE TRUE  TRUE
+    ## [35,]  TRUE  TRUE TRUE  TRUE
+    ## [36,]  TRUE  TRUE TRUE  TRUE
+    ## [37,]  TRUE  TRUE TRUE  TRUE
+    ## [38,]  TRUE  TRUE TRUE  TRUE
+    ## [39,]  TRUE  TRUE TRUE  TRUE
+    ## [40,]  TRUE  TRUE TRUE  TRUE
+    ## [41,]  TRUE  TRUE TRUE  TRUE
+    ## [42,]  TRUE  TRUE TRUE  TRUE
+    ## [43,]  TRUE  TRUE TRUE  TRUE
+    ## [44,]  TRUE  TRUE TRUE  TRUE
+    ## [45,]  TRUE  TRUE TRUE  TRUE
+    ## [46,]  TRUE  TRUE TRUE  TRUE
+    ## [47,]  TRUE  TRUE TRUE  TRUE
+    ## [48,]  TRUE  TRUE TRUE  TRUE
+    ## [49,]  TRUE  TRUE TRUE  TRUE
+    ## [50,]  TRUE  TRUE TRUE  TRUE
 
 ``` r
 data.baru <- data[complete.cases(data), ] #jika mau menghapus baris2 yang ada NA nya! 
@@ -687,7 +736,7 @@ data$suhu=ifelse(data$suhu<50,NA,data$suhu) #menghapus data suhu yang aneh (di b
 cor(data.baru$suhu,data.baru$cacat) #hitung korelasi baru
 ```
 
-    ## [1] 0.1533993
+    ## [1] -0.02607325
 
 ### Sorting data frame
 
@@ -713,121 +762,126 @@ library(tidyverse)
 data.baru %>% arrange(suhu)
 ```
 
-    ##    suhu cacat
-    ## 1     4     8
-    ## 2    10     6
-    ## 3    11     1
-    ## 4    13     2
-    ## 5    14     9
-    ## 6    15     4
-    ## 7    17    10
-    ## 8    18     9
-    ## 9    19     8
-    ## 10   20     2
-    ## 11   21     1
-    ## 12   25     6
-    ## 13   26     2
-    ## 14   27     6
-    ## 15   30     8
-    ## 16   30     9
-    ## 17   33     4
-    ## 18   33     3
-    ## 19   36     9
-    ## 20   36     6
-    ## 21   37     1
-    ## 22   41    10
-    ## 23   43    10
-    ## 24   48     7
-    ## 25   48     8
-    ## 26   49     5
-    ## 27   50     2
-    ## 28   53     3
-    ## 29   54     7
-    ## 30   54     7
-    ## 31   54     8
-    ## 32   56     8
-    ## 33   57     8
-    ## 34   58    10
-    ## 35   58     4
-    ## 36   59     2
-    ## 37   62     8
-    ## 38   64     9
-    ## 39   66     5
-    ## 40   68    10
-    ## 41   70    10
-    ## 42   77     1
-    ## 43   81     7
-    ## 44   81     8
-    ## 45   83    10
-    ## 46   85     5
-    ## 47   88     8
-    ## 48   92     8
-    ## 49  100     3
+    ##    suhu cacat                    hari    bulan
+    ## 1     2     9  hari ke 6 dari 50 hari  Januari
+    ## 2     6     5 hari ke 19 dari 50 hari  Januari
+    ## 3    10     9 hari ke 45 dari 50 hari Februari
+    ## 4    11     2 hari ke 33 dari 50 hari Februari
+    ## 5    13     9 hari ke 34 dari 50 hari Februari
+    ## 6    14     6 hari ke 46 dari 50 hari Februari
+    ## 7    17     2  hari ke 5 dari 50 hari  Januari
+    ## 8    19     1 hari ke 12 dari 50 hari  Januari
+    ## 9    20     4 hari ke 30 dari 50 hari  Januari
+    ## 10   22     4 hari ke 14 dari 50 hari  Januari
+    ## 11   24     6  hari ke 9 dari 50 hari  Januari
+    ## 12   24    10 hari ke 20 dari 50 hari  Januari
+    ## 13   27     4 hari ke 32 dari 50 hari Februari
+    ## 14   28     4 hari ke 29 dari 50 hari  Januari
+    ## 15   34     2 hari ke 10 dari 50 hari  Januari
+    ## 16   35     3 hari ke 36 dari 50 hari Februari
+    ## 17   35     4 hari ke 43 dari 50 hari Februari
+    ## 18   37     1 hari ke 38 dari 50 hari Februari
+    ## 19   38     7 hari ke 13 dari 50 hari  Januari
+    ## 20   38     8 hari ke 21 dari 50 hari  Januari
+    ## 21   38     5 hari ke 22 dari 50 hari  Januari
+    ## 22   39     1 hari ke 23 dari 50 hari  Januari
+    ## 23   39     7 hari ke 24 dari 50 hari  Januari
+    ## 24   41     4 hari ke 42 dari 50 hari Februari
+    ## 25   42    10 hari ke 18 dari 50 hari  Januari
+    ## 26   43     6 hari ke 27 dari 50 hari  Januari
+    ## 27   49     9 hari ke 17 dari 50 hari  Januari
+    ## 28   49     7 hari ke 37 dari 50 hari Februari
+    ## 29   52     3 hari ke 31 dari 50 hari  Januari
+    ## 30   53     5  hari ke 3 dari 50 hari  Januari
+    ## 31   55     7  hari ke 2 dari 50 hari  Januari
+    ## 32   60     7 hari ke 11 dari 50 hari  Januari
+    ## 33   60     7 hari ke 44 dari 50 hari Februari
+    ## 34   62     3  hari ke 8 dari 50 hari  Januari
+    ## 35   63     8  hari ke 7 dari 50 hari  Januari
+    ## 36   65     6 hari ke 47 dari 50 hari Februari
+    ## 37   67     4 hari ke 16 dari 50 hari  Januari
+    ## 38   67     5 hari ke 39 dari 50 hari Februari
+    ## 39   70     2  hari ke 4 dari 50 hari  Januari
+    ## 40   70     5 hari ke 49 dari 50 hari Februari
+    ## 41   71     3 hari ke 25 dari 50 hari  Januari
+    ## 42   72     8 hari ke 48 dari 50 hari Februari
+    ## 43   74     1 hari ke 28 dari 50 hari  Januari
+    ## 44   85     7 hari ke 15 dari 50 hari  Januari
+    ## 45   85     6 hari ke 35 dari 50 hari Februari
+    ## 46   90     6 hari ke 41 dari 50 hari Februari
+    ## 47   96     6 hari ke 50 dari 50 hari Februari
+    ## 48  100     1 hari ke 26 dari 50 hari  Januari
+    ## 49  100     8 hari ke 40 dari 50 hari Februari
 
 ``` r
 data.baru %>% arrange(desc(cacat))
 ```
 
-    ##    suhu cacat
-    ## 1    58    10
-    ## 2    70    10
-    ## 3    83    10
-    ## 4    68    10
-    ## 5    43    10
-    ## 6    17    10
-    ## 7    41    10
-    ## 8    36     9
-    ## 9    18     9
-    ## 10   30     9
-    ## 11   64     9
-    ## 12   14     9
-    ## 13   56     8
-    ## 14   30     8
-    ## 15   92     8
-    ## 16   88     8
-    ## 17   48     8
-    ## 18    4     8
-    ## 19   62     8
-    ## 20   54     8
-    ## 21   19     8
-    ## 22   81     8
-    ## 23   57     8
-    ## 24   48     7
-    ## 25   54     7
-    ## 26   54     7
-    ## 27   81     7
-    ## 28   36     6
-    ## 29   27     6
-    ## 30   10     6
-    ## 31   25     6
-    ## 32   85     5
-    ## 33   49     5
-    ## 34   66     5
-    ## 35   33     4
-    ## 36   58     4
-    ## 37   15     4
-    ## 38   53     3
-    ## 39   33     3
-    ## 40  100     3
-    ## 41   26     2
-    ## 42   13     2
-    ## 43   50     2
-    ## 44   20     2
-    ## 45   59     2
-    ## 46   11     1
-    ## 47   37     1
-    ## 48   21     1
-    ## 49   77     1
+    ##    suhu cacat                    hari    bulan
+    ## 1    42    10 hari ke 18 dari 50 hari  Januari
+    ## 2    24    10 hari ke 20 dari 50 hari  Januari
+    ## 3     2     9  hari ke 6 dari 50 hari  Januari
+    ## 4    49     9 hari ke 17 dari 50 hari  Januari
+    ## 5    13     9 hari ke 34 dari 50 hari Februari
+    ## 6    10     9 hari ke 45 dari 50 hari Februari
+    ## 7    63     8  hari ke 7 dari 50 hari  Januari
+    ## 8    38     8 hari ke 21 dari 50 hari  Januari
+    ## 9   100     8 hari ke 40 dari 50 hari Februari
+    ## 10   72     8 hari ke 48 dari 50 hari Februari
+    ## 11   55     7  hari ke 2 dari 50 hari  Januari
+    ## 12   60     7 hari ke 11 dari 50 hari  Januari
+    ## 13   38     7 hari ke 13 dari 50 hari  Januari
+    ## 14   85     7 hari ke 15 dari 50 hari  Januari
+    ## 15   39     7 hari ke 24 dari 50 hari  Januari
+    ## 16   49     7 hari ke 37 dari 50 hari Februari
+    ## 17   60     7 hari ke 44 dari 50 hari Februari
+    ## 18   24     6  hari ke 9 dari 50 hari  Januari
+    ## 19   43     6 hari ke 27 dari 50 hari  Januari
+    ## 20   85     6 hari ke 35 dari 50 hari Februari
+    ## 21   90     6 hari ke 41 dari 50 hari Februari
+    ## 22   14     6 hari ke 46 dari 50 hari Februari
+    ## 23   65     6 hari ke 47 dari 50 hari Februari
+    ## 24   96     6 hari ke 50 dari 50 hari Februari
+    ## 25   53     5  hari ke 3 dari 50 hari  Januari
+    ## 26    6     5 hari ke 19 dari 50 hari  Januari
+    ## 27   38     5 hari ke 22 dari 50 hari  Januari
+    ## 28   67     5 hari ke 39 dari 50 hari Februari
+    ## 29   70     5 hari ke 49 dari 50 hari Februari
+    ## 30   22     4 hari ke 14 dari 50 hari  Januari
+    ## 31   67     4 hari ke 16 dari 50 hari  Januari
+    ## 32   28     4 hari ke 29 dari 50 hari  Januari
+    ## 33   20     4 hari ke 30 dari 50 hari  Januari
+    ## 34   27     4 hari ke 32 dari 50 hari Februari
+    ## 35   41     4 hari ke 42 dari 50 hari Februari
+    ## 36   35     4 hari ke 43 dari 50 hari Februari
+    ## 37   62     3  hari ke 8 dari 50 hari  Januari
+    ## 38   71     3 hari ke 25 dari 50 hari  Januari
+    ## 39   52     3 hari ke 31 dari 50 hari  Januari
+    ## 40   35     3 hari ke 36 dari 50 hari Februari
+    ## 41   70     2  hari ke 4 dari 50 hari  Januari
+    ## 42   17     2  hari ke 5 dari 50 hari  Januari
+    ## 43   34     2 hari ke 10 dari 50 hari  Januari
+    ## 44   11     2 hari ke 33 dari 50 hari Februari
+    ## 45   19     1 hari ke 12 dari 50 hari  Januari
+    ## 46   39     1 hari ke 23 dari 50 hari  Januari
+    ## 47  100     1 hari ke 26 dari 50 hari  Januari
+    ## 48   74     1 hari ke 28 dari 50 hari  Januari
+    ## 49   37     1 hari ke 38 dari 50 hari Februari
 
 ### Menghapus global environment
 
 ``` r
+rm(cacat) #hanya menghapus variabel cacat
 rm(list=ls()) #digunakan untuk membersihkan global data environment
 ```
 
 ### Set working directory
 
 `setwd('/cloud/project/Materi Training/GIZ')`
+
+### Get working directory
+
+`getwd()`
 
 # Kita mulai bagian serunya yah\!\!\!
 
