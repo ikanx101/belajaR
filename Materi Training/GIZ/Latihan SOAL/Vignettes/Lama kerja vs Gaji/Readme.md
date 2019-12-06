@@ -37,9 +37,12 @@ str(data_gaji)
     ##  $ Salary         : int  39343 46205 37731 43525 39891 56642 60150 54445 64445 57189 ...
     ##  $ EmployeeName   : Factor w/ 30 levels "Akina, Elijah",..: 5 20 18 7 25 19 6 17 8 28 ...
 
-Dari dataset `data_gaji` diperoleh informasi variabel berikut: \* `X`:
-nomor urut \* `YearsExperience`: lama bekerja dalam tahun \* `Salary`:
-gaji \* `EmployeeName`: nama pegawai
+Dari dataset `data_gaji` diperoleh informasi variabel berikut:
+
+  - `X`: nomor urut
+  - `YearsExperience`: lama bekerja dalam tahun
+  - `Salary`: gaji
+  - `EmployeeName`: nama pegawai
 
 ## Preparation Data
 
@@ -205,16 +208,22 @@ summary(model_salary)
 
 Cek nilai error dari model yang dibuat
 
-  - MSE (Mean Squared Error) Masing-masing error atau sisa dikuadratkan
-    kemudian dibagi jumlah datanya
-    \(MSE = \frac{1}{n}\sum({A_t-F_t})^2\)
+  - MSE (Mean Squared Error)
 
-di mana: \(A_t\) = Actual value \(F_t\) = Forecast value
+Masing-masing error atau sisa dikuadratkan kemudian dibagi jumlah
+datanya \(MSE = \frac{1}{n}\sum({A_t-F_t})^2\)
+
+di mana:
+
+\(A_t\) = Actual value \(F_t\) = Forecast value
 
   - MAPE (Mean Absolut Percentage Error)
-    \(MAPE = \frac{1}{n}\sum|\frac{A_t-F_t}{A_t}|\)
 
-di mana: \(A_t\) = Actual value \(F_t\) = Forecast value
+\(MAPE = \frac{1}{n}\sum|\frac{A_t-F_t}{A_t}|\)
+
+di mana:
+
+\(A_t\) = Actual value \(F_t\) = Forecast value
 
 Kekurangan MAPE: tidak bisa digunakan ketika ada actual value (\(A_t\))
 yang nilainya 0 (karena \(A_t\) di formula sebagai penyebut, sehingga

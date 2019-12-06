@@ -38,9 +38,12 @@ str(Happy)
     ##  $ gdp.per.capita   : num  1804 11803 13914 18934 8788 ...
     ##  $ life.satisfaction: num  2.66 4.64 5.25 6.04 4.29 ...
 
-Dari dataset `Happy` maka diperoleh variabel berikut: \* `X`: nomor urut
-\* `negara`: Nama negara \* `gdp.per.capita`: GDP per kapita dari suatu
-negara \* `life.satisfaction`: tingkat kebahagiaan suatu negara
+Dari dataset `Happy` maka diperoleh variabel berikut:
+
+  - `X`: nomor urut
+  - `negara`: Nama negara
+  - `gdp.per.capita`: GDP per kapita dari suatu negara
+  - `life.satisfaction`: tingkat kebahagiaan suatu negara
 
 ## Preparation Data
 
@@ -234,16 +237,22 @@ summary(model_reg)
 
 Cek nilai error dari model yang dibuat
 
-  - MSE (Mean Squared Error) Masing-masing error atau sisa dikuadratkan
-    kemudian dibagi jumlah datanya
-    \(MSE = \frac{1}{n}\sum({A_t-F_t})^2\)
+  - MSE (Mean Squared Error)
 
-di mana: \(A_t\) = Actual value \(F_t\) = Forecast value
+Masing-masing error atau sisa dikuadratkan kemudian dibagi jumlah
+datanya \(MSE = \frac{1}{n}\sum({A_t-F_t})^2\)
+
+di mana:
+
+\(A_t\) = Actual value \(F_t\) = Forecast value
 
   - MAPE (Mean Absolut Percentage Error)
-    \(MAPE = \frac{1}{n}\sum|\frac{A_t-F_t}{A_t}|\)
 
-di mana: \(A_t\) = Actual value \(F_t\) = Forecast value
+\(MAPE = \frac{1}{n}\sum|\frac{A_t-F_t}{A_t}|\)
+
+di mana:
+
+\(A_t\) = Actual value \(F_t\) = Forecast value
 
 Kekurangan MAPE: tidak bisa digunakan ketika ada actual value (\(A_t\))
 yang nilainya 0 (karena \(A_t\) di formula sebagai penyebut, sehingga

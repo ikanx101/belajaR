@@ -29,6 +29,7 @@ str(data_gaji)
 ```
 
 Dari dataset `data_gaji` diperoleh informasi variabel berikut:
+
 * `X`: nomor urut
 * `YearsExperience`: lama bekerja dalam tahun
 * `Salary`: gaji
@@ -131,17 +132,21 @@ Sisanya dijelaskan oleh variabel lain yang tidak dimasukkan ke dalam model.
 Cek nilai error dari model yang dibuat
 
 * MSE (Mean Squared Error)
+
 Masing-masing error atau sisa dikuadratkan kemudian dibagi jumlah datanya
 $MSE = \frac{1}{n}\sum({A_t-F_t})^2$
 
 di mana:
+
 $A_t$ = Actual value
 $F_t$ = Forecast value
 
 * MAPE (Mean Absolut Percentage Error)
+
 $MAPE = \frac{1}{n}\sum|\frac{A_t-F_t}{A_t}|$
 
 di mana:
+
 $A_t$ = Actual value
 $F_t$ = Forecast value
 
