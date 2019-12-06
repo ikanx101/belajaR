@@ -298,42 +298,6 @@ komen %>% mutate(id = c(1:length(textOriginal))) %>%
 
 _Word association_ itu sesimpel mencari kata yang berkorelasi dengan kata lain. Bagaimana caranya? Kita gunakan _library_ `NLP` dan `tm`.
 
-```{r,message=FALSE,echo=FALSE}
-library(NLP)
-library(tm)
-library(igraph)
-library(ggraph)
 
-NAME = Corpus(VectorSource(komen$textOriginal))
-NAME = tm_map(NAME, content_transformer(tolower))
-NAME = tm_map(NAME,removePunctuation)
-NAME = tm_map(NAME, stripWhitespace)
-NAME = tm_map(NAME,removeWords, stopwords("en"))
-NAME = tm_map(NAME,removeNumbers)
-
-dtm <- DocumentTermMatrix(NAME)
-rowTotals <- apply(dtm , 1, sum) #Find the sum of words in each Document
-dtm<- dtm[rowTotals> 0, ]           #remove all docs without words
-cor_g <- cor(as.matrix(dtm))
-cor_g <- graph_from_adjacency_matrix(cor_g, mode='undirected', weighted = 'correlation')
-cor_edge_list <- as_data_frame(cor_g, 'edges')
-only_sig <- cor_edge_list[abs(cor_edge_list$correlation) > 1, ]
-
-colnames(only_sig) = c('word1','word2','n')
-
-only_sig$sama = ifelse(only_sig$word1 == only_sig$word2,1,0)
-only_sig = only_sig %>% filter(sama!=1)
-```
-
-```{r}
-only_sig %>% graph_from_data_frame() %>%
-  ggraph(layout = 'fr') +
-  theme_pubclean() +
-  geom_edge_link(show.legend = F,
-                 color='darkred') +
-  geom_node_point(size=1,color='steelblue') +
-  geom_node_text(aes(label=name),alpha=0.4,size=1.25,vjust=1,hjust=1) +
-  theme_void()
-```
 
 
