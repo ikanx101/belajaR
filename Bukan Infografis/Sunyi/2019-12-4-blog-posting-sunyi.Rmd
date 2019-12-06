@@ -233,6 +233,7 @@ Ini bagian paling seru. Bagaimana kita bisa melakukan _text analysis_ dari komen
 2. __Bi-Gram__: Melihat dua kata yang sering bermunculan bersamaan.
 3. __Word Association__: Melihat kumpulan dan hubungan kata-kata yang memiliki asosiasi tinggi.
 4. __Topic modellling__: mencari tahu kesamaan dari sekian banyak komentar itu dan dikelompokkan berdasarkan kesamaannya tersebut.
+5. __Sentiment Analysis__: Menganalisa sentimen dari masing-masing komentar _viewers_. Apakah positif atau negatif?
 
 Oke, kita mulai dari yang paling gampang dulu yah.
 
@@ -259,13 +260,35 @@ tes = komen %>% mutate(id = c(1:length(textOriginal))) %>%
 tes
 ```
 
-Kita buat _wordcloud_-nya yuk:
+_Wordcloud_-nya seperti ini yah:
 
-```{r}
-wordcloud2::wordcloud2(tes,
-                       color = "random-dark", 
-                       backgroundColor = "white",
-                       shape = 'cardioid',
-                       fontFamily = "Miso",
-                       size=2)
+![alt text](https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Sunyi/sunyi%20wordcloud.png "tes")
+
+> _Gimana, ada informasi yang bisa diambil dari wordcloud di atas?_
+
+Ada yang mau _ngerjain_ _wordcloud_ per episodenya?
+
+##### Bi-Gram
+
+Bi-gram adalah pasangan kata yang selalu muncul secara bersamaan dan berurutan. Nah, kita akan lihat, apakah ada pasangan kata yang sering muncul pada komentar _viewers_?
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+library(igraph)
+library(ggraph)
+library(tidyr)
+komen %>% mutate(id = c(1:length(textOriginal))) %>%
+  select(id,textOriginal) %>%
+  unnest_tokens(bigram,textOriginal,token='ngrams',n=2) %>%
+  count(bigram,sort=T) %>% filter(!is.na(bigram)) %>% filter(n>1) %>%
+  separate(bigram,into=c('word1','word2'),sep=' ') %>%
+  graph_from_data_frame() %>%
+  ggraph(layout = 'fr') +
+  theme_pubclean() +
+  geom_edge_link(aes(edge_alpha=n),
+                 show.legend = F,
+                 color='darkred') +
+  geom_node_point(size=1,color='steelblue') +
+  geom_node_text(aes(label=name),alpha=.4,size=3,vjust=1,hjust=1) +
+  theme_void()
 ```
+

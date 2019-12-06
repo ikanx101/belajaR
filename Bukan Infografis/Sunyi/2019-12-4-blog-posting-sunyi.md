@@ -384,3 +384,22 @@ Berikut adalah semua kata yang punya frekuensi minimal 5 yah:
     ##  9 teman        13
     ## 10 yg           13
     ## # … with 60 more rows
+
+*Wordcloud*-nya seperti ini yah:
+
+![alt
+text](https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Sunyi/sunyi%20wordcloud.png
+"tes")
+
+> *Gimana, ada informasi yang bisa diambil dari wordcloud di atas?*
+
+Ada yang mau *ngerjain* *wordcloud* per episodenya?
+
+##### Bi-Gram
+
+Bi-gram adalah pasangan kata yang selalu muncul secara bersamaan dan
+berurutan. Nah, kita akan lihat, apakah ada pasangan kata yang sering
+muncul pada komentar
+*viewers*?
+
+![](2019-12-4-blog-posting-sunyi_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
