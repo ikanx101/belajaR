@@ -3,7 +3,9 @@ Lama Kerja vs Gaji
 Lenny M. Wibisana
 3 Desember 2019
 
-Apakah benar lama kerja seseorang berpengaruh terhadap gaji yang diterima ?
+Apakah benar lama kerja seseorang berpengaruh terhadap gaji yang
+diterima
+?
 
 ## Read data
 
@@ -35,12 +37,9 @@ str(data_gaji)
     ##  $ Salary         : int  39343 46205 37731 43525 39891 56642 60150 54445 64445 57189 ...
     ##  $ EmployeeName   : Factor w/ 30 levels "Akina, Elijah",..: 5 20 18 7 25 19 6 17 8 28 ...
 
-Dari dataset `data_gaji` diperoleh informasi variabel berikut: 
-
-* `X`: nomor urut 
-* `YearsExperience`: lama bekerja dalam tahun 
-* `Salary`: gaji 
-* `EmployeeName`: nama pegawai
+Dari dataset `data_gaji` diperoleh informasi variabel berikut: \* `X`:
+nomor urut \* `YearsExperience`: lama bekerja dalam tahun \* `Salary`:
+gaji \* `EmployeeName`: nama pegawai
 
 ## Preparation Data
 
@@ -80,14 +79,14 @@ Sebelum membuat modelnya, mari lihat dulu sebaran tiap variabelnya
 hist(data_gaji$YearsExperience)
 ```
 
-![](Lama-kerja-vs-Gaji_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 ``` r
 # membuat histogram dari variabel salary
 hist(data_gaji$Salary)
 ```
 
-![](Lama-kerja-vs-Gaji_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 Bagaimana sebaran distribusi yang sebenarnya dari variabel
 `YearsExperience` dan `Salary` ? Kita akan melakukan uji kenormalan data
@@ -128,8 +127,8 @@ Cek apakah ada data outliers?
 boxplot(data_gaji)
 ```
 
-![](Lama-kerja-vs-Gaji_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
-\> Tidak ada data outliers
+![](Readme_files/figure-gfm/unnamed-chunk-8-1.png)<!-- --> \> Tidak ada
+data outliers
 
 Bagaimana plot data dari `YearsExperience` dengan `Salary` ?
 
@@ -140,7 +139,7 @@ ggplot(data_gaji,
   geom_line(aes(x=YearsExperience), color="black")
 ```
 
-![](Lama-kerja-vs-Gaji_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 Bagaimana korelasi antara `YearsExperience` dengan `Salary` ?
 
