@@ -38,12 +38,9 @@ str(Happy)
     ##  $ gdp.per.capita   : num  1804 11803 13914 18934 8788 ...
     ##  $ life.satisfaction: num  2.66 4.64 5.25 6.04 4.29 ...
 
-Dari dataset `Happy` maka diperoleh variabel berikut: 
-
-* `X`: nomor urut
-* `negara`: Nama negara 
-* `gdp.per.capita`: GDP per kapita dari suatu negara 
-* `life.satisfaction`: tingkat kebahagiaan suatu negara
+Dari dataset `Happy` maka diperoleh variabel berikut: \* `X`: nomor urut
+\* `negara`: Nama negara \* `gdp.per.capita`: GDP per kapita dari suatu
+negara \* `life.satisfaction`: tingkat kebahagiaan suatu negara
 
 ## Preparation Data
 
@@ -95,18 +92,17 @@ Sebelum membuat modelnya, mari lihat dulu sebaran tiap variabelnya
 hist(Happy$gdp.per.capita)
 ```
 
-![](GDP-vs-Happiness_files/figure-gfm/unnamed-chunk-6-1.png)<!-- --> \>
-Dari hasil histogram `gdp.per.capita` tampak bahwa sebaran datanya
-cenderung banyak di sebelah kiri.
+![](Readme_files/figure-gfm/unnamed-chunk-6-1.png)<!-- --> \> Dari hasil
+histogram `gdp.per.capita` tampak bahwa sebaran datanya cenderung banyak
+di sebelah kiri.
 
 ``` r
 # membuat histogram life.satisfaction
 hist(Happy$life.satisfaction)
 ```
 
-![](GDP-vs-Happiness_files/figure-gfm/unnamed-chunk-7-1.png)<!-- --> \>
-Dari hasil histogram `life.satisfaction` tampak bahwa data memiliki
-sebaran normal.
+![](Readme_files/figure-gfm/unnamed-chunk-7-1.png)<!-- --> \> Dari hasil
+histogram `life.satisfaction` tampak bahwa data memiliki sebaran normal.
 
 Bagaimana sebaran distribusi yang sebenarnya dari variabel
 `gdp.per.capita` dan `life.satisfaction` ? Kita akan melakukan uji
@@ -147,14 +143,14 @@ Cek apakah ada data outliers?
 boxplot(Happy)
 ```
 
-![](GDP-vs-Happiness_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 ``` r
 # melihat data gdp.per.capita yang out memiliki angka berapa
 boxplot(Happy$gdp.per.capita)$out
 ```
 
-![](GDP-vs-Happiness_files/figure-gfm/unnamed-chunk-9-2.png)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-9-2.png)<!-- -->
 
     ## [1] 67335.29 94277.97 85535.38 67293.48
 
@@ -170,7 +166,7 @@ ggplot(Happy,
   geom_line(aes(x=gdp.per.capita), color="black")
 ```
 
-![](GDP-vs-Happiness_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
 Bagaimana korelasi antara `gdp.per.capita` dengan `life.satisfaction` ?
 
