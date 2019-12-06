@@ -272,6 +272,8 @@ Ada yang mau _ngerjain_ _wordcloud_ per episodenya?
 
 Bi-gram adalah pasangan kata yang selalu muncul secara bersamaan dan berurutan. Nah, kita akan lihat, apakah ada pasangan kata yang sering muncul pada komentar _viewers_?
 
+Berikut adalah grafik dari _bigrams_ yang memiliki frekuensi kemunculan lebih dari dua (`>2`):
+
 ```{r,echo=FALSE,warning=FALSE,message=FALSE}
 library(igraph)
 library(ggraph)
@@ -279,7 +281,7 @@ library(tidyr)
 komen %>% mutate(id = c(1:length(textOriginal))) %>%
   select(id,textOriginal) %>%
   unnest_tokens(bigram,textOriginal,token='ngrams',n=2) %>%
-  count(bigram,sort=T) %>% filter(!is.na(bigram)) %>% filter(n>1) %>%
+  count(bigram,sort=T) %>% filter(!is.na(bigram)) %>% filter(n>2) %>%
   separate(bigram,into=c('word1','word2'),sep=' ') %>%
   graph_from_data_frame() %>%
   ggraph(layout = 'fr') +
@@ -288,7 +290,20 @@ komen %>% mutate(id = c(1:length(textOriginal))) %>%
                  show.legend = F,
                  color='darkred') +
   geom_node_point(size=1,color='steelblue') +
-  geom_node_text(aes(label=name),alpha=.4,size=3,vjust=1,hjust=1) +
+  geom_node_text(aes(label=name),alpha=0.4,size=3,vjust=1,hjust=1) +
   theme_void()
 ```
 
+##### Word Association
+
+
+
+NAME=gsub("[^\x01-\x7F]", "", NAME) #menghilangkan emoticons
+NAME=iconv(NAME, "latin1", "ASCII", sub="") #MENGHILANGKAN karakter non ascii
+NAME=Corpus(VectorSource(NAME))
+NAME = tm_map(NAME, content_transformer(tolower))
+NAME = tm_map(NAME,removePunctuation)
+NAME= tm_map(NAME, stripWhitespace)
+NAME=tm_map(NAME,removeWords, stopwords("en"))
+NAME=tm_map(NAME,removeNumbers)
+#NAME <- tm_map(NAME, stemDocument, language = "english") 
