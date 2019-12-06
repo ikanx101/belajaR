@@ -1,0 +1,375 @@
+---
+title: "Bahan Training R - GIZ"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Selamat datang di R
+
+## _Objects_ di R
+
+Ada beberapa _objects_ atau struktur data di R, yakni:
+
+1. Single variabel
+2. Vector atau array
+3. Tibble atau Data frame
+4. List
+
+## Tipe data
+
+Ada beberapa tipe data di data science, yakni:
+
+1. Character
+2. Numerik
+3. Integer (atau bisa berupa factor)
+4. Logical (TRUE / FALSE)
+
+# Yuk kita mulai materinya
+
+# Selamat datang di R
+
+## Single variabel
+
+```{r}
+a = 10
+b <- 3
+a+b
+c=a*b^2/100
+kalimat='saya suka pergi ke pasar' #jika variabelnya berupa text
+kalimat_baru = "i don't like pizza"
+```
+
+## Vector atau array
+
+```{r}
+tes_vector=c(1,3,6,5,4,7)
+id=c(1:10) #contoh generating sequence
+a=seq(1,10,0.5) #contoh generating sequence by 0.5
+sample(c(100:200),5,replace=F) #generating random number
+kalimat = 'saya biasa pergi ke kantor setiap jam 7 pagi'
+pecah.kata=strsplit(kalimat,' ') #pecah kalimat menjadi kata dan mengubahnya menjadi array
+
+# Yang penting di array
+length(a)
+a[2]
+summary(a)
+
+# Operasi aritmatika pada array
+a+3
+a*6
+```
+
+## Logic atau boolean
+
+```{r}
+#boolean expression
+1==2
+ifelse(1+2==3,'anda benar','anda salah')
+ifelse(1+2!=3,'anda benar','anda salah')
+ifelse(1+2<=3,'anda benar','anda salah')
+ifelse(1+2>=3,'anda benar','anda salah')
+ifelse(1+2<3,'anda benar','anda salah')
+ifelse(1+2>3,'anda benar','anda salah')
+```
+
+### Another useful function
+
+#### Paste
+```{r}
+nomor=c(1:100)
+nama.toko=paste('toko',nomor,sep='_')
+nama.toko
+```
+
+#### Print
+```{r}
+nomor=c(1:100)
+print(nomor)
+```
+
+## Tibble atau Data Frame
+
+Struktur data tibble atau data frame sejatinya mirip dengan data tradisional di __MS. EXCEL__.
+
+### Sebelum masuk ke data frame:
+
+```{r}
+# Misalkan kita buat dua variabel sbb:
+suhu=sample(100,50,replace=T)
+cacat=sample(10,50,replace=T)
+
+# Membuat histogram dari suhu
+hist(suhu)
+
+# Membuat histogram dari suhu
+hist(cacat)
+
+# Uji Korelasi
+cor.test(suhu,cacat)
+
+# Hanya menampilkan angka korelasi saja
+cor(suhu,cacat)
+
+# Simple plot suhu vs cacat
+plot(suhu,cacat)
+```
+
+### Membangun data frame dari kumpulan vector
+
+Data frame bisa dibangun dari dua atau lebih vector yang memiliki `length` sama.
+
+```{r}
+#membuat data frame
+data=data.frame(suhu,cacat)
+data
+```
+
+### Another useful function di data frame
+
+Untuk melihat data frame bisa menggunakan fungsi `View(data)`.
+
+```{r}
+str(data)
+summary(data)
+length(data)
+head(data,5) #menampilkan data 5 teratas
+tail(data,5) #menampilkan data 5 terbawah
+data[1]
+data[,1]
+data[2]
+data[,2]
+
+data[1,1] #melihat data di posisi row,column
+data[1,2] #melihat data di posisi row,column
+data[1,1]=NA #menghapus data di posisi row,column
+```
+
+### Bermain dengan element dan tanda `$`
+
+```{r}
+data$suhu
+data$cacat
+data.baru=data[-1]
+data.baru
+```
+
+### Another useful function di data frame (part 2)
+
+```{r}
+is.na(data) #melihat ada yang kosong
+!is.na(data) #melihat pasti terisi
+
+data.baru <- data[complete.cases(data), ] #jika mau menghapus baris2 yang ada NA nya! 
+
+data$suhu=ifelse(data$suhu<50,NA,data$suhu) #menghapus data suhu yang aneh (di bawah 50'C)
+cor(data.baru$suhu,data.baru$cacat) #hitung korelasi baru
+```
+
+### Sorting data frame
+
+Seringkali pekerjaan kita di data frame banyak melibatkan _sort_ data. Bagaimana melakukannya di __R__?
+
+#### Cara 1
+
+Menggunakan __base R__.
+
+```{r}
+#sorting data
+sorted.data=data.baru[order(data.baru$suhu),] #descending
+sorted.data=data.baru[order(-data.baru$suhu),] #ascending
+```
+
+#### Cara 2
+
+Menggunakan `library(tidyverse)` ATAU minimal dengan `library(dplyr)`
+
+```{r,warning=FALSE,message=FALSE}
+library(tidyverse)
+data.baru %>% arrange(suhu)
+data.baru %>% arrange(desc(cacat))
+```
+
+### Menghapus global environment
+
+```{r}
+rm(list=ls()) #digunakan untuk membersihkan global data environment
+```
+
+### Set working directory
+
+`setwd('/cloud/project/Materi Training/GIZ')`
+
+# Kita mulai bagian serunya yah!!!
+
+## Membuat model _price elasticity_
+
+Secara logika, semakin tinggi harga suatu barang, semakin sedikit orang yang akan membelinya. Secara simpel kita bisa bilang bahwa `harga` berkorelasi negatif dengan sales `qty`. Tapi untuk mengatakan ada kausalitas antara `harga`dan sales `qty`, kita harus cek dulu model regresinya.
+
+Selain itu, kita ingin menghitung suatu nilai _fixed_ (kita sebut saja suatu _price elasticity index_). Dimana jika `harga` naik sebesar __a %__ maka sales `qty` akan turun sebesar __index %___.
+
+Contoh yah, misalkan saya punya data jualan harian suatu barang beserta harganya di suatu minimarket sebagai berikut:
+
+```{r,message=FALSE}
+library(dplyr)
+data = read.csv('/cloud/project/Materi Training/GIZ/latihan regresi.csv') %>% 
+  mutate(X = NULL)
+str(data)
+summary(data)
+head(data,10)
+```
+Berapa sih nilai kodelasi antara `harga` dan `qty`?
+
+```{r}
+korel = cor(data$harga,data$qty)
+korel
+```
+
+Ternyata angka korelasinya kuat negatif. Artinya, jika kita membuat model regresi linear dari kedua data ini, maka akan didapat __R-Squared__ sebesar kuadrat nilai korelasinya. _Nah_, sekarang kita coba buat model regresinya _yuk_.
+
+```{r}
+model_reg = lm(qty~harga,data = data)
+summary(model_reg)
+```
+
+## Evaluasi model
+
+Sekarang kita lihat _goodness of fit_ dari model regresi di atas. Untuk mengevaluasi apakah suatu model regresi baik, kita bisa lihat dari beberapa hal seperti:
+
+1. __R-squared__
+2. __P-value__
+3. MAE ( _mean absolut error_ )
+4. Lainnya
+
+### R squared
+Nilainya bisa diambil dari nilai __multiple R-squared__ pada model atau bisa juga dihitung menggunakan:
+```{r}
+r_squared = modelr::rsquare(model_reg,data)
+r_squared
+```
+
+Mari kita cek apakah nilai __R-Squared__ sama dengan korelasi yang dikuadratkan yah. Ini sengaja saya _round_ biar memudahkan yah.
+
+```{r}
+round(r_squared,5) == round(korel^2,5)
+```
+
+__R-squared__ bisa diartikan sebagai berapa persen variabel X meng- _explain_ variabel Y.
+
+### P-value
+Nilai __P-value__ didapatkan dari `summary(model_reg)`, yakni mendekati nol (sangat kecil). Oleh karena `p-value < 0.05` bisa diambil kesimpulan bahwa model `harga` berpengaruh terhadap sales `qty`.
+
+### MAE
+_Mean absolut error_ dapat diartikan sebagai rata-rata nilai mutlak _error_ yang dapat kita terima. Tidak ada angka pasti harus berapa, tapi semakin kecil _error_, berarti semakin baik model kita.
+
+Menurut pengetahuan saya, __MAE__ digunakan jika kita memiliki lebih dari satu model regresi yang ingin dibandingkan mana yang terbaik.
+
+```{r}
+mean_absolut_error = modelr::mae(model_reg,data) 
+mean_absolut_error
+```
+
+### Kesimpulan
+Berhubung dari __P-value__ dan __R-squared__ menghasilkan nilai yang baik, dapat disimpulkan bahwa `harga` mempengaruhi dan mengakibatkan perubahan pada sales `qty` secara negatif.
+
+### Cara lain
+Sebenarnya ada cara lain untuk melakukan analisa regresi linear menggunakan __R__, yakni dengan memanfaatkan _library_ `ggplot2` dan `ggpubr`.
+
+```{r}
+library(ggplot2)
+library(ggpubr)
+data %>% ggplot(aes(x=harga,y=qty)) + 
+  geom_point() + 
+  geom_smooth(method='lm') +
+  theme_pubclean() + 
+  stat_regline_equation(label.y = 7,aes(label =  paste(..eq.label.., ..rr.label.., sep = "~~~~"))) +
+  labs(title = 'Model Regresi: Price Elasticity Index',
+                          subtitle = 'Data harga vs sales qty',
+                          caption = 'Created using R',
+                          x = 'Harga produk (dalam ribu rupiah)',
+                          y = 'Sales Qty') +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        plot.title = element_text(size=25,face='bold.italic'),
+        plot.caption = element_text(size=10,face='italic'))
+```
+
+## Optimization dari model regresi
+
+Kita telah mendapatkan model regresi linear yang baik. Kita juga sudah menghitung _price elasticty index_. Pertanyaan selanjutnya adalah: _Apakah kita bisa menghitung harga terbaik untuk produk tersebut?_
+
+Mari kita definisikan terlebih dahulu, apa itu harga terbaik? Harga terbaik adalah harga yang membuat kita mendapatkan omset paling maksimal. 
+
+Bagaimana menghitung omset? 
+
+Omset didefinisikan sebagai: `omset = harga*qty`
+
+Coba kita ingat kembali, kita telah memiliki formula regresi: `qty=m*harga + c`
+
+Jika kita substitusi persamaan `qty` ke persamaan `omset`, maka kita akan dapatkan: 
+
+`omset = harga*(m*harga + c)`
+
+`omset = m*harga^2 + c*harga`
+
+Berhubung nilai `m` adalah negatif, maka saya bisa tuliskan persamaan finalnya menjadi:
+
+`omset = -m*harga^2 + c*harga`
+
+_Oke_, mari kita ingat kuliah kalkulus I dulu. Jika kita punya persamaan kuadrat dengan konstanta depan negatif, apa artinya?
+
+### Inget Kalkulus I!
+
+Sebagai _reminder_, coba yah kalau saya buat grafik dari persamaan `y = x^2` seperti di bawah ini:
+
+```{r}
+x = c(-10:10)
+y = x^2
+contoh = data.frame(x,y)
+contoh %>% ggplot(aes(x,y)) + geom_line()
+```
+
+Jika kita punya persamaan kuadrat positif semacam ini, akan selalu ada nilai `x` yang memberikan `y` minimum.
+
+Sekarang jika saya memiliki persamaan kuadrat `y = - x^2`, bentuk grafiknya sebagai berikut:
+
+```{r}
+x = c(-10:10)
+y = -x^2
+contoh = data.frame(x,y)
+contoh %>% ggplot(aes(x,y)) + geom_line()
+```
+
+Jadi, jika kita memiliki persamaan kuadrat dengan konstanta negatif, maka akan selalu ada nilai `x` yang memberikan `y` maksimum!
+
+### Balik lagi ke regresi kita
+
+Nah, berhubung kita punya formula regresi berupa persamaan kuadrat, maka dipastikan akan selalu ada `harga` yang memberikan `omset` maksimum.
+
+Sekarang mari kita lakukan simulasi untuk mendapatkan `harga` paling optimal.
+
+```{r}
+harga_baru = seq(5,50,.5)
+data_simulasi = data.frame(harga = harga_baru)
+qty_baru = predict(model_reg,
+                   newdata = data_simulasi)
+omset = harga_baru * qty_baru
+hasil = data.frame(omset,harga_baru,qty_baru)
+hasil %>% 
+  ggplot(aes(x=harga_baru,y=omset)) +
+  geom_line()
+```
+
+Secara grafis dapat dilihat bahwa sebenarnya ada satu titik `harga_baru` yang memberikan `omset` paling tinggi. Yakni pada harga:
+
+```{r}
+hasil %>% 
+  filter(omset == max(omset)) %>%
+  select(harga_baru)
+```
+
+_So_, harga optimal sudah kita dapatkan.
+
+_Any question?_
