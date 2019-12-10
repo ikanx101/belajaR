@@ -22,6 +22,7 @@ library(ggplot2)
 library(ggthemes)
 library(ggpubr)
 library(ggrepel)
+library(factoextra)
 
 load('film.rda')
 data = data %>% janitor::clean_names()
@@ -61,6 +62,39 @@ Sekarang, mari kita buat _scatter plot_ dari data tersebut yah. Sumbu `x` akan s
 
 ```{r,echo=FALSE}
 data %>% ggplot(aes(x=no_of_movies,y=total_worldwide_box_office)) +
-  geom_point(aes(size=total_domestic_box_office),color='steelblue') +
-  scale_size_manual(values=c(1:10))
+  geom_point(aes(size=total_domestic_box_office),
+             color='steelblue',
+             alpha=.4) +
+  scale_size(range = c(0, 10)) +
+  geom_text(aes(label=production_companies),size=2.5,alpha=.8) +
+  theme_minimal() +
+  geom_vline(xintercept = mean(data$no_of_movies),color='darkred') +
+  geom_hline(yintercept = mean(data$total_worldwide_box_office),color='darkred') +
+  theme(legend.position = 'none',
+        axis.text = element_blank()) +
+  labs(title = 'Number of Movies vs Total Worldwide Box Office',
+       subtitle = 'source: the-numbers.com',
+       caption = 'Scraped and Visualized\nusing R\nikanx101.github.io',
+       x = 'Number of movies',
+       y = 'Total Worldwide Box Office') +
+  theme(plot.title = element_text(face='bold.italic'),
+        plot.subtitle = element_text(face='bold'),
+        plot.caption = element_text(face='italic',size = 8)) 
 ```
+
+_Gimana?_ sudah terlihat `production_companies` favorit kamu?
+
+## _Clustering Analysis_ dari data
+
+Sekarang kita akan mencoba mengelompokkan `production_companies` dari data-data yang ada. Saya akan menggunakan algoritma __k-means clustering__. 
+
+> Contoh lain penggunaan k-means clustering sudah pernah saya tulis di [blog saya yang lama](https://passingthroughresearcher.wordpress.com/2019/11/24/clustering-negara-berdasarkan-gdp-happiness-index-dan-populasi/).
+
+Agar memudahkan, angka real dari masing-masing variabel `no_of_movies`, `total_domestic_box_office`, dan `total_worldwide_box_office` akan saya buat dalam rentang 1-10 dengan fungsi `cut()` di __R__.
+
+```{r,echo=FALSE}
+new_data = new_data %>% select(-production_companies)
+fviz_nbclust(new_data, kmeans, method = "wss")
+```
+
+Tess

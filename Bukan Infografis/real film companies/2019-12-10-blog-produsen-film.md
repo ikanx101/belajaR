@@ -60,4 +60,25 @@ Variabel yang didapatkan antara lain:
 Sekarang, mari kita buat *scatter plot* dari data tersebut yah. Sumbu
 `x` akan saya isi dengan `no_of_movies` dan sumbu `y` akan saya isi
 dengan `total_worldwide_box_office`, sementara *size* dari *point*
-tergantung dari besarnya `total_domestic_box_office`.
+tergantung dari besarnya
+`total_domestic_box_office`.
+
+## *Scatter plot* dari data
+
+![](2019-12-10-blog-produsen-film_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+
+*Gimana?* sudah terlihat `production_companies` favorit kamu?
+
+## *Clustering Analysis* dari data
+
+Sekarang kita akan mencoba mengelompokkan `production_companies` dari
+data-data yang ada. Saya akan menggunakan algoritma **k-means
+clustering**.
+
+Contoh lain penggunaan k-means clustering sudah pernah saya tulis di
+[blog saya yang
+lama](https://passingthroughresearcher.wordpress.com/2019/11/24/clustering-negara-berdasarkan-gdp-happiness-index-dan-populasi/).
+
+Agar memudahkan, angka real dari masing-masing variabel `no_of_movies`,
+`total_domestic_box_office`, dan `total_worldwide_box_office` akan saya
+buat dalam rentang 1-10 dengan fungsi `cut()` di **R**.
