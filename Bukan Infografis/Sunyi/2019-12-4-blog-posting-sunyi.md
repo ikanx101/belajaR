@@ -32,6 +32,8 @@ Vision AI*, yakni tidak menggunakan **API key** walau nama layanannya
 ekstrak datanya. Penasaran data apa saja yang bisa diambil? *Yuk
 cekidot\!*
 
+-----
+
 ## Data pertama
 
 Data yang paling mudah diambil adalah data berapa banyak *view*, *like*,
@@ -87,6 +89,8 @@ donk). *hehe*
 
 Di tulisan berikutnya yah, saya cobain kayak gimana sih analisanya
 *real*-nya.
+
+-----
 
 ## Data kedua
 
@@ -199,6 +203,8 @@ Saya kurang tertarik dengan data kedua ini, mungkin akan saya *skip*
 dulu yah. Kalau teman-teman ada ide untuk melakukan analisa apa, *let me
 know yah*.
 
+-----
+
 ## Data ketiga
 
 Data berikutnya yang bisa diambil adalah data komentar *viewers* di
@@ -262,6 +268,8 @@ head(komen,15)
     ## 15 nur widyastuti   https://yt3.ggp… http://www.yout… Lanjut mba …
     ## # … with 4 more variables: likeCount <dbl>, publishedAt <dttm>,
     ## #   updatedAt <dttm>, episode <dbl>
+
+-----
 
 ### *Let the fun parts begin\!*
 
@@ -338,6 +346,8 @@ yang sama atau beda-beda yah. Yuk kita cek datanya.
 > **Sunyi Coffee**, ada yang bisa kasih tau siapa saja mereka? Dan apa
 > komentarnya?
 
+-----
+
 #### *Text analysis* dari komentar *viewer*
 
 Ini bagian paling seru. Bagaimana kita bisa melakukan *text analysis*
@@ -356,7 +366,9 @@ dilakukan:
 
 Oke, kita mulai dari yang paling gampang dulu yah.
 
-##### Wordcloud
+-----
+
+##### *Wordcloud*
 
 Analisa ini sebenarnya sangat mudah. Hanya menghitung ada berapa banyak
 kata yang keluar dalam suatu data teks. Sebelum mulai, kita akan lakukan
@@ -391,13 +403,15 @@ Berikut adalah semua kata yang punya frekuensi minimal 5 yah:
 
 ![alt
 text](https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Sunyi/sunyi%20wordcloud.png
-"tes")
+"wordcloud")
 
 > *Gimana, ada informasi yang bisa diambil dari wordcloud di atas?*
 
 Ada yang mau *ngerjain* *wordcloud* per episodenya?
 
-##### Bi-Gram
+-----
+
+##### *Bi-Gram*
 
 Bi-gram adalah pasangan kata yang selalu muncul secara bersamaan dan
 berurutan. Nah, kita akan lihat, apakah ada pasangan kata yang sering
@@ -409,7 +423,9 @@ lebih dari dua
 
 ![](2019-12-4-blog-posting-sunyi_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
 
-##### Word Association
+-----
+
+##### *Word Association*
 
 *Word association* itu sesimpel mencari kata yang berkorelasi dengan
 kata lain. Bagaimana caranya? Kita gunakan *library* `NLP` dan `tm`.
@@ -419,4 +435,71 @@ dihitung dengan seberapa sering dua kata muncul di *section* yang sama.
 
 ![alt
 text](https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Sunyi/asosiasi.png
-"tes")
+"association")
+
+Versi asli dari gambar tersebut, bisa di-zoom-in di link [berikut ini
+yah](https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Sunyi/asosiasi.png).
+
+Sekarang kita akan selidiki, kata mana saja yang erat asosiasinya dengan
+kata:
+
+1.  Tropicana
+2.  Sunyi
+3.  Tuli
+
+##### *Word Association*: Tropicana
+
+Sekarang kita selidiki kata mana saja yang berkorelasi dengan kata
+**Tropicana**.
+
+![](2019-12-4-blog-posting-sunyi_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
+
+##### *Word Association*: Sunyi
+
+Sekarang kita selidiki kata mana saja yang berkorelasi dengan kata
+**Sunyi**.
+
+![](2019-12-4-blog-posting-sunyi_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
+
+##### *Word Association*: Tuli
+
+Sekarang kita selidiki kata mana saja yang berkorelasi dengan kata
+**Tuli**.
+
+![](2019-12-4-blog-posting-sunyi_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
+
+-----
+
+##### *Topic Modelling*
+
+Sekarang kita akan lakukan *topic modelling* dari komen *viewers*.
+Apakah bisa mesin menyimpulkan topik apa saja yang dibicarakan oleh
+*viewers*?
+
+Jika saya memilih `topic` = 3, maka didapatlah *keywords* sebagai
+berikut:
+
+    ##         term                                      
+    ## Topic 1 "keren, episode, belajar, rizky, bikin"   
+    ## Topic 2 "tropicana, slim, durasinya, menit, bikin"
+    ## Topic 3 "dunia, tuli, teman, sunyi, like"
+
+Jadi bisa disimpulkan bahwa topik yang dibicarakan *viewers* adalah
+sebagai berikut:
+
+1.  Berbicara mengenai tema disabilitas.
+2.  Berbicara mengenai pujian terhadap web seriesnya.
+3.  Berbicara mengenai
+durasi.
+
+![](2019-12-4-blog-posting-sunyi_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
+
+*How?*
+
+-----
+
+##### *Sentiment Analysis*
+
+*Nah*, untuk melakukan ini kita harus membuat *supervised learning
+model*. Berhubung saya harus membuat *training dataset* dan belum sempat
+membuatnya. Jadi untuk analisa ini sementara saya *skip* dulu yah.

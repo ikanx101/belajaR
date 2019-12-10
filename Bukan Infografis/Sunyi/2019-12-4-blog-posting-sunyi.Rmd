@@ -21,6 +21,8 @@ _Nah_, sekarang saya coba _iseng_ mengambil data dari __Youtube__ terkait _web s
 
 Proses membuat _Google Authetication_ -nya mirip dengan layanan _Google Vision AI_, yakni tidak menggunakan __API key__ walau nama layanannya __API__. Bagian ini saya _skip_ yah. Kita langsung ke bagian ambil dan ekstrak datanya. Penasaran data apa saja yang bisa diambil? _Yuk cekidot!_
 
+_____________
+
 ## Data pertama
 
 Data yang paling mudah diambil adalah data berapa banyak _view_, _like_, _dislike_, _favourite_, dan _comment_. Sepertinya hal yang receh yah. Gak pake bantuan __R__ sebenarnya bisa diambil sendiri _manual_ satu-persatu. Tapi kalau _web series_-nya kayak [Tersanjung](https://id.wikipedia.org/wiki/Tersanjung) _gimana hayo_?
@@ -107,6 +109,8 @@ Nah, kira-kira ada yang kebayang gak data ini bisa diapakan saja? Nih, saya kasi
 
 Di tulisan berikutnya yah, saya cobain kayak gimana sih analisanya _real_-nya.
 
+_____
+
 ## Data kedua
 
 Berikutnya adalah data detail properties dari video tersebut. Mencakup: judul, waktu _upload_, deskripsi, resolusi, _hashtags_ yang digunakan, dll. Contohnya untuk episode 1, data yang dapat dilihat adalah sbb:
@@ -117,6 +121,8 @@ load("/cloud/project/Bukan Infografis/Sunyi/info.rda")
 ```
 
 Saya kurang tertarik dengan data kedua ini, mungkin akan saya _skip_ dulu yah. Kalau teman-teman ada ide untuk melakukan analisa apa, _let me know yah_.
+
+____
 
 ## Data ketiga
 
@@ -150,6 +156,8 @@ Oh iya, bagi rekan-rekan yang mau membedah sendiri datanya, saya lampirkan di [s
 ```{r}
 head(komen,15)
 ```
+
+____
 
 ### _Let the fun parts begin!_
 
@@ -225,6 +233,8 @@ kesimpulan %>% ggplot(aes(x=summary,y=banyak)) + geom_col(color='steelblue',fill
 
 > Ternyata ada juga lho viewers yang selalu komen di 3 video. Selain __Sunyi Coffee__, ada yang bisa kasih tau siapa saja mereka? Dan apa komentarnya?
 
+____
+
 #### _Text analysis_ dari komentar _viewer_
 
 Ini bagian paling seru. Bagaimana kita bisa melakukan _text analysis_ dari komentar-komentar _viewers_. Setidaknya ada empat analisa yang bisa dilakukan:
@@ -237,7 +247,9 @@ Ini bagian paling seru. Bagaimana kita bisa melakukan _text analysis_ dari komen
 
 Oke, kita mulai dari yang paling gampang dulu yah.
 
-##### Wordcloud
+____
+
+##### _Wordcloud_
 
 Analisa ini sebenarnya sangat mudah. Hanya menghitung ada berapa banyak kata yang keluar dalam suatu data teks. Sebelum mulai, kita akan lakukan _preparation_ terhadap data teksnya. Apa itu? Mengubah tulisannya jadi _lowercase_ biar mudah dianalisa. 
 
@@ -268,7 +280,9 @@ _Wordcloud_-nya seperti ini yah:
 
 Ada yang mau _ngerjain_ _wordcloud_ per episodenya?
 
-##### Bi-Gram
+____
+
+##### _Bi-Gram_
 
 Bi-gram adalah pasangan kata yang selalu muncul secara bersamaan dan berurutan. Nah, kita akan lihat, apakah ada pasangan kata yang sering muncul pada komentar _viewers_?
 
@@ -278,6 +292,7 @@ Berikut adalah grafik dari _bigrams_ yang memiliki frekuensi kemunculan lebih da
 library(igraph)
 library(ggraph)
 library(tidyr)
+
 komen %>% mutate(id = c(1:length(textOriginal))) %>%
   select(id,textOriginal) %>%
   unnest_tokens(bigram,textOriginal,token='ngrams',n=2) %>%
@@ -294,7 +309,9 @@ komen %>% mutate(id = c(1:length(textOriginal))) %>%
   theme_void()
 ```
 
-##### Word Association
+____
+
+##### _Word Association_
 
 _Word association_ itu sesimpel mencari kata yang berkorelasi dengan kata lain. Bagaimana caranya? Kita gunakan _library_ `NLP` dan `tm`.
 
@@ -310,3 +327,153 @@ Sekarang kita akan selidiki, kata mana saja yang erat asosiasinya dengan kata:
 2. Sunyi
 3. Tuli
 
+##### _Word Association_: Tropicana
+
+Sekarang kita selidiki kata mana saja yang berkorelasi dengan kata __Tropicana__.
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+stopwords_indo = readLines('https://raw.githubusercontent.com/masdevid/ID-Stopwords/master/id.stopwords.02.01.2016.txt')
+stopwords_indo[759] = 'nya'
+stopwords_indo[760] = 'ufef'
+stopwords_indo[761] = 'aja'
+stopwords_indo[762] = 'you'
+stop = data.frame(words=stopwords_indo,penanda='ada')
+stop = stop %>% mutate(words=as.character(words),
+                       penanda=as.character(penanda))
+
+tes = komen %>% mutate(id = c(1:length(textOriginal))) %>%
+  select(id,textOriginal) %>%
+  unnest_tokens('words',textOriginal)
+
+tes = merge(tes,stop,all = T)
+
+komen = tes %>% filter(is.na(penanda)) %>%group_by(id) %>%
+  summarise(textOriginal = stringr::str_c(words,collapse = ' '))
+```
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+library(NLP)
+library(tm)
+
+NAME = komen$textOriginal
+NAME = gsub("[^\x01-\x7F]", "", NAME) #menghilangkan emoticons
+NAME = iconv(NAME, "latin1", "ASCII", sub="") #MENGHILANGKAN karakter non ascii
+NAME = Corpus(VectorSource(NAME))
+NAME = tm_map(NAME, content_transformer(tolower))
+NAME = tm_map(NAME,removePunctuation)
+NAME = tm_map(NAME, stripWhitespace)
+NAME = tm_map(NAME,removeNumbers)
+NAME=tm_map(NAME,removeWords, stopwords("en"))
+NAME= tm_map(NAME, removeWords, c('ufef','banget','min','sih'))
+tdm = TermDocumentMatrix(NAME)
+
+kata_1 = findAssocs(tdm, "tropicana", 0.3)
+kata_1 = unlist(kata_1)
+kata_1 = data.frame(kata.awal = attributes(kata_1)$names,
+                    korel = kata_1)
+kata_1 %>% mutate(kata.awal = as.character(kata.awal)) %>%
+  separate(kata.awal,into=c('word1','word2'),sep='\\.') %>%
+  ggplot(aes(x=reorder(word2,-korel),y=korel)) + geom_col(color='steelblue',fill='white') + 
+  geom_label(aes(label=korel),size=3) + theme_pubclean() +
+  labs(y='Korelasi',
+       title='Kata apa saja yang berkorelasi dengan kata `tropicana`?',
+       subtitle = 'source: Youtube DATA API 5 Des 2019 3:56 pm',
+       caption = 'https://ikanx101.github.io/') +
+  theme(axis.text.y = element_blank(),
+        axis.title.x = element_blank())
+```
+
+##### _Word Association_: Sunyi
+
+Sekarang kita selidiki kata mana saja yang berkorelasi dengan kata __Sunyi__.
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+kata_1 = findAssocs(tdm, "sunyi", 0.5)
+kata_1 = unlist(kata_1)
+kata_1 = data.frame(kata.awal = attributes(kata_1)$names,
+                    korel = kata_1)
+kata_1 %>% mutate(kata.awal = as.character(kata.awal)) %>%
+  separate(kata.awal,into=c('word1','word2'),sep='\\.') %>%
+  ggplot(aes(x=reorder(word2,-korel),y=korel)) + geom_col(color='steelblue',fill='white') + 
+  geom_text(aes(label=korel),size=2,angle=90) + theme_pubclean() +
+  labs(y='Korelasi',
+       title='Kata apa saja yang berkorelasi dengan kata `sunyi`?',
+       subtitle = 'source: Youtube DATA API 5 Des 2019 3:56 pm',
+       caption = 'https://ikanx101.github.io/') +
+  theme(axis.text.y = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.x = element_text(angle=90,size=7))
+```
+
+##### _Word Association_: Tuli
+
+Sekarang kita selidiki kata mana saja yang berkorelasi dengan kata __Tuli__.
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+kata_1 = findAssocs(tdm, "tuli", 0.5)
+kata_1 = unlist(kata_1)
+kata_1 = data.frame(kata.awal = attributes(kata_1)$names,
+                    korel = kata_1)
+kata_1 %>% mutate(kata.awal = as.character(kata.awal)) %>%
+  separate(kata.awal,into=c('word1','word2'),sep='\\.') %>%
+  ggplot(aes(x=reorder(word2,-korel),y=korel)) + geom_col(color='steelblue',fill='white') + 
+  geom_text(aes(label=korel),size=2,angle=90) + theme_pubclean() +
+  labs(y='Korelasi',
+       title='Kata apa saja yang berkorelasi dengan kata `tuli`?',
+       subtitle = 'source: Youtube DATA API 5 Des 2019 3:56 pm',
+       caption = 'https://ikanx101.github.io/') +
+  theme(axis.text.y = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.x = element_text(angle=90,size=8))
+```
+
+_____
+
+##### _Topic Modelling_
+
+Sekarang kita akan lakukan _topic modelling_ dari komen _viewers_. Apakah bisa mesin menyimpulkan topik apa saja yang dibicarakan oleh _viewers_?
+
+Jika saya memilih `topic` = 3, maka didapatlah _keywords_ sebagai berikut:
+
+```{r,echo=FALSE}
+dtm = as.DocumentTermMatrix(tdm) 
+rowTotals = apply(dtm , 1, sum) 
+dtm = dtm[rowTotals> 0, ]           
+library(topicmodels)
+lda = LDA(dtm, k = 3)  
+term = terms(lda, 5)  
+term = apply(term, MARGIN = 2, paste, collapse = ", ")
+cbind(term)
+```
+
+Jadi bisa disimpulkan bahwa topik yang dibicarakan _viewers_ adalah sebagai berikut:
+
+1. Berbicara mengenai tema disabilitas.
+2. Berbicara mengenai pujian terhadap web seriesnya.
+3. Berbicara mengenai durasi.
+
+```{r,echo=FALSE}
+tidy(lda, matrix = "beta") %>%
+  group_by(topic) %>%
+  top_n(5, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta) %>%
+  mutate(term = as.factor(term),
+         topic = as.factor(paste('Topik',topic,sep='-'))) %>%
+  ggplot(aes(x=term,y=beta,fill=topic)) +
+  geom_col() +
+  facet_wrap(~ topic, scales = "free") +
+  coord_flip() +
+  theme(legend.position = 'none',
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.x = element_blank())
+```
+
+_How?_
+
+_____
+
+##### _Sentiment Analysis_
+
+_Nah_, untuk melakukan ini kita harus membuat _supervised learning model_. Berhubung saya harus membuat _training dataset_ dan belum sempat membuatnya. Jadi untuk analisa ini sementara saya _skip_ dulu yah.
