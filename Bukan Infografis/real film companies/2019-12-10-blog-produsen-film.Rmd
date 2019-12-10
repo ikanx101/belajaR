@@ -1,0 +1,66 @@
+---
+title: "Movie Production Companies: a Clustering Story"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Dalam beberapa waktu ini, saya sedang sering melihat data terkait film yang dihimpun di situs [__the-numbers__](https://www.the-numbers.com/movies/production-companies/). 
+
+> __"Sepertinya ada beberapa topik yang bisa dijadikan tulisan di blog"__, Pikir saya.
+
+# Data __Movie Production Companies__
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+library(rvest)
+library(dplyr)
+library(tidyr)
+library(tidytext)
+library(ggplot2)
+library(ggthemes)
+library(ggpubr)
+library(ggrepel)
+
+load('film.rda')
+data = data %>% janitor::clean_names()
+```
+Dari _web_ tersebut, kita mendapatkan data `12.891` _movie production companies_ yang tersebar di seluruh dunia.
+
+```{r}
+head(data,10)
+str(data)
+```
+
+Variabel yang didapatkan antara lain:
+
+1. `production_companies`: nama perusahaan produsen film.
+2. `no_of_movies`: banyaknya film yang diproduksi.
+3. `total_domestic_box_office`: pendapatan film di pasar domestik.
+4. `total_worldwide_box_office`: pendapatan film total _worldwide_.
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+data = data %>% mutate(total_domestic_box_office = gsub('\\,','',total_domestic_box_office),
+                       total_domestic_box_office = gsub('\\$','',total_domestic_box_office),
+                       total_worldwide_box_office = gsub('\\,','',total_worldwide_box_office),
+                       total_worldwide_box_office = gsub('\\$','',total_worldwide_box_office),
+                       total_domestic_box_office = as.numeric(total_domestic_box_office),
+                       total_worldwide_box_office = as.numeric(total_worldwide_box_office))
+
+new_data = data %>% mutate(no_of_movies = cut(no_of_movies,10,labels = c(1:10)),
+                           total_domestic_box_office = cut(total_domestic_box_office,10,
+                                                       labels = c(1:10)),
+                           total_worldwide_box_office = cut(total_worldwide_box_office,10,
+                                                        labels = c(1:10)))
+```
+
+Sekarang, mari kita buat _scatter plot_ dari data tersebut yah. Sumbu `x` akan saya isi dengan `no_of_movies` dan sumbu `y` akan saya isi dengan `total_worldwide_box_office`, sementara _size_ dari _point_ tergantung dari besarnya `total_domestic_box_office`.
+
+## _Scatter plot_ dari data
+
+```{r,echo=FALSE}
+data %>% ggplot(aes(x=no_of_movies,y=total_worldwide_box_office)) +
+  geom_point(aes(size=total_domestic_box_office),color='steelblue') +
+  scale_size_manual(values=c(1:10))
+```
