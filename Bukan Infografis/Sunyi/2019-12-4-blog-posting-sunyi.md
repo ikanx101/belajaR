@@ -411,10 +411,12 @@ lebih dari dua
 
 ##### Word Association
 
-NAME=gsub(“\[^\\x01-\\x7F\]”, "“, NAME) \#menghilangkan emoticons
-NAME=iconv(NAME,”latin1“,”ASCII“, sub=”“) \#MENGHILANGKAN karakter non
-ascii NAME=Corpus(VectorSource(NAME)) NAME = tm\_map(NAME,
-content\_transformer(tolower)) NAME = tm\_map(NAME,removePunctuation)
-NAME= tm\_map(NAME, stripWhitespace) NAME=tm\_map(NAME,removeWords,
-stopwords(”en“)) NAME=tm\_map(NAME,removeNumbers) \#NAME \<-
-tm\_map(NAME, stemDocument, language =”english")
+*Word association* itu sesimpel mencari kata yang berkorelasi dengan
+kata lain. Bagaimana caranya? Kita gunakan *library* `NLP` dan `tm`.
+
+Simpelnya adalah menghitung frekuensi masing-masing kata. Lalu korelasi
+dihitung dengan seberapa sering dua kata muncul di *section* yang sama.
+
+![alt
+text](https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Sunyi/asosiasi.png
+"tes")

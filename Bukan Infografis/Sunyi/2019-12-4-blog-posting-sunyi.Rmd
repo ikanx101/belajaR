@@ -262,7 +262,7 @@ tes
 
 _Wordcloud_-nya seperti ini yah:
 
-![alt text](https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Sunyi/sunyi%20wordcloud.png "tes")
+![alt text](https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Sunyi/sunyi%20wordcloud.png "wordcloud")
 
 > _Gimana, ada informasi yang bisa diambil dari wordcloud di atas?_
 
@@ -298,6 +298,15 @@ komen %>% mutate(id = c(1:length(textOriginal))) %>%
 
 _Word association_ itu sesimpel mencari kata yang berkorelasi dengan kata lain. Bagaimana caranya? Kita gunakan _library_ `NLP` dan `tm`.
 
+Simpelnya adalah menghitung frekuensi masing-masing kata. Lalu korelasi dihitung dengan seberapa sering dua kata muncul di _section_ yang sama.
 
+![alt text](https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Sunyi/asosiasi.png "association")
 
+Versi asli dari gambar tersebut, bisa di-zoom-in di link [berikut ini yah](https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Sunyi/asosiasi.png).
+
+Sekarang kita akan selidiki, kata mana saja yang erat asosiasinya dengan kata:
+
+1. Tropicana
+2. Sunyi
+3. Tuli
 
