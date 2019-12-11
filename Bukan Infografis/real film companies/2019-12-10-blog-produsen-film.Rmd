@@ -27,7 +27,7 @@ library(factoextra)
 load('film.rda')
 data = data %>% janitor::clean_names()
 ```
-Dari _web_ tersebut, kita mendapatkan data `12.891` _movie production companies_ yang tersebar di seluruh dunia.
+Dari _web_ tersebut, kita mendapatkan data `12.891` _movie production companies_ yang tersebar di seluruh dunia. Mulai dari perusahaan film yang besar dan terkenal sampai perusahaan film "kecil" yang hanya memproduksi satu film saja.
 
 ```{r}
 head(data,10)
@@ -47,16 +47,13 @@ data = data %>% mutate(total_domestic_box_office = gsub('\\,','',total_domestic_
                        total_worldwide_box_office = gsub('\\,','',total_worldwide_box_office),
                        total_worldwide_box_office = gsub('\\$','',total_worldwide_box_office),
                        total_domestic_box_office = as.numeric(total_domestic_box_office),
-                       total_worldwide_box_office = as.numeric(total_worldwide_box_office))
+                       total_worldwide_box_office = as.numeric(total_worldwide_box_office)) %>%
+  filter(no_of_movies>=10)
 
-new_data = data %>% mutate(no_of_movies = cut(no_of_movies,10,labels = c(1:10)),
-                           total_domestic_box_office = cut(total_domestic_box_office,10,
-                                                       labels = c(1:10)),
-                           total_worldwide_box_office = cut(total_worldwide_box_office,10,
-                                                        labels = c(1:10)))
+new_data = data %>% mutate(no_of_movies = cut(no_of_movies,6,labels = c(1:6)),total_domestic_box_office = cut(total_domestic_box_office,6,labels = c(1:6)),total_worldwide_box_office = cut(total_worldwide_box_office,6,labels = c(1:6)))
 ```
 
-Sekarang, mari kita buat _scatter plot_ dari data tersebut yah. Sumbu `x` akan saya isi dengan `no_of_movies` dan sumbu `y` akan saya isi dengan `total_worldwide_box_office`, sementara _size_ dari _point_ tergantung dari besarnya `total_domestic_box_office`.
+Sekarang, saya hanya akan memilih perusahaan yang minimal telah memproduksi 10 film lalu saya buat _scatter plot_ dari data tersebut. Didapat hanya `468` buah perusahaan. Sumbu `x` akan saya isi dengan `no_of_movies` dan sumbu `y` akan saya isi dengan `total_worldwide_box_office`, sementara _size_ dari _point_ tergantung dari besarnya `total_domestic_box_office`.
 
 ## _Scatter plot_ dari data
 
@@ -79,7 +76,7 @@ data %>% ggplot(aes(x=no_of_movies,y=total_worldwide_box_office)) +
        y = 'Total Worldwide Box Office') +
   theme(plot.title = element_text(face='bold.italic'),
         plot.subtitle = element_text(face='bold'),
-        plot.caption = element_text(face='italic',size = 8)) 
+        plot.caption = element_text(face='italic',size = 8))
 ```
 
 _Gimana?_ sudah terlihat `production_companies` favorit kamu?
@@ -92,9 +89,39 @@ Sekarang kita akan mencoba mengelompokkan `production_companies` dari data-data 
 
 Agar memudahkan, angka real dari masing-masing variabel `no_of_movies`, `total_domestic_box_office`, dan `total_worldwide_box_office` akan saya buat dalam rentang 1-10 dengan fungsi `cut()` di __R__.
 
+## Penentuan berapa banyak _cluster_
+
+Seperti biasa, pada analisa _k-means clustering_ langkah paling krusial adalah menentukan berapa banyak _cluster_ yang harus dibuat. Untuk menentukannya, kita bisa menggunakan tiga metode:
+
+1. _Elbow method_
+2. _Sillhoutte method_
+3. _Gap Stat method_
+
+Dengan alasan kemudahan untuk melihat hasil, dari tiga metode tersebut saya akan gunakan _elbow method_ yah.
+
 ```{r,echo=FALSE}
 new_data = new_data %>% select(-production_companies)
 fviz_nbclust(new_data, kmeans, method = "wss")
 ```
 
-Tess
+Ternyata disarankan ada tiga buah _clusters_ yang terbentuk. Mari kita _generate_ _clusters_ nya!
+
+## 8-means clustering
+
+```{r,echo=FALSE}
+set.seed(123)
+final = kmeans(new_data,3,nstart=10)
+centeroids = round(final$centers,2)
+centeroids
+data.frame(cluster=paste('cluster',c(1:3)),
+                             n=final$size) %>%
+  ggplot(aes(x=cluster,y=n)) +
+  geom_col(color='black',fill='steelblue',alpha=.4) +
+  geom_label(aes(label=n)) +
+  labs(title = 'Berapa anggota dari masing-masing cluster?')
+```
+
+
+final$cluster
+new_data$cluster = final$cluster
+head(new_data)

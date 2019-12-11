@@ -11,7 +11,9 @@ yang dihimpun di situs
 # Data **Movie Production Companies**
 
 Dari *web* tersebut, kita mendapatkan data `12.891` *movie production
-companies* yang tersebar di seluruh dunia.
+companies* yang tersebar di seluruh dunia. Mulai dari perusahaan film
+yang besar dan terkenal sampai perusahaan film “kecil” yang hanya
+memproduksi satu film saja.
 
 ``` r
 head(data,10)
@@ -57,10 +59,12 @@ Variabel yang didapatkan antara lain:
 3.  `total_domestic_box_office`: pendapatan film di pasar domestik.
 4.  `total_worldwide_box_office`: pendapatan film total *worldwide*.
 
-Sekarang, mari kita buat *scatter plot* dari data tersebut yah. Sumbu
-`x` akan saya isi dengan `no_of_movies` dan sumbu `y` akan saya isi
-dengan `total_worldwide_box_office`, sementara *size* dari *point*
-tergantung dari besarnya
+Sekarang, saya hanya akan memilih perusahaan yang minimal telah
+memproduksi 10 film lalu saya buat *scatter plot* dari data tersebut.
+Didapat hanya `468` buah perusahaan. Sumbu `x` akan saya isi dengan
+`no_of_movies` dan sumbu `y` akan saya isi dengan
+`total_worldwide_box_office`, sementara *size* dari *point* tergantung
+dari besarnya
 `total_domestic_box_office`.
 
 ## *Scatter plot* dari data
@@ -75,10 +79,41 @@ Sekarang kita akan mencoba mengelompokkan `production_companies` dari
 data-data yang ada. Saya akan menggunakan algoritma **k-means
 clustering**.
 
-Contoh lain penggunaan k-means clustering sudah pernah saya tulis di
-[blog saya yang
-lama](https://passingthroughresearcher.wordpress.com/2019/11/24/clustering-negara-berdasarkan-gdp-happiness-index-dan-populasi/).
+> Contoh lain penggunaan k-means clustering sudah pernah saya tulis di
+> [blog saya yang
+> lama](https://passingthroughresearcher.wordpress.com/2019/11/24/clustering-negara-berdasarkan-gdp-happiness-index-dan-populasi/).
 
 Agar memudahkan, angka real dari masing-masing variabel `no_of_movies`,
 `total_domestic_box_office`, dan `total_worldwide_box_office` akan saya
 buat dalam rentang 1-10 dengan fungsi `cut()` di **R**.
+
+## Penentuan berapa banyak *cluster*
+
+Seperti biasa, pada analisa *k-means clustering* langkah paling krusial
+adalah menentukan berapa banyak *cluster* yang harus dibuat. Untuk
+menentukannya, kita bisa menggunakan tiga metode:
+
+1.  *Elbow method*
+2.  *Sillhoutte method*
+3.  *Gap Stat method*
+
+Dengan alasan kemudahan untuk melihat hasil, dari tiga metode tersebut
+saya akan gunakan *elbow method*
+yah.
+
+![](2019-12-10-blog-produsen-film_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+
+Ternyata disarankan ada tiga buah *clusters* yang terbentuk. Mari kita
+*generate* *clusters*
+    nya\!
+
+## 8-means clustering
+
+    ##   no_of_movies total_domestic_box_office total_worldwide_box_office
+    ## 1         4.43                      5.14                       5.29
+    ## 2         2.78                      1.83                       1.91
+    ## 3         1.06                      1.01                       1.01
+
+![](2019-12-10-blog-produsen-film_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+final\(cluster new_data\)cluster = final$cluster head(new\_data)

@@ -1,0 +1,185 @@
+---
+title: "Mencari Promo di Toko dari hemat.id"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+WARNING: Tulisan ini berisi CURCOL!!!
+
+Sebenarnya tulisan ini sudah pernah saya post di [blog saya yang lama](https://wp.me/p6nlXw-lp). Awalnya saya super happy karena algoritma yang saya bikin bisa menghemat waktu tim sales di kantor dalam merekap data promosi yang sedang berlangsung di toko (minimarket, supermarket, hypermarket, dsb). 
+
+> _Dari proses manual yang memakan waktu berjam-jam, diubah menjadi proses otomatis yang hanya memakan waktu menit (tergantung koneksi internet yah)_. Begitu pikir saya waktu itu.
+
+
+Materi ini pun saya jelaskan ke rekan-rekan mahasiswa saat saya menjadi [dosen tamu di Universitas Telkom](https://ikanx101.github.io/blog/kuliah-umum-tel-u/) beberapa waktu lalu.
+
+Selang beberapa waktu saat saya _launching_ cara penggunaan algoritma ini di _workplace_ kantor. Saya baru menyadari bahwa saya mengubah alamat pada _link_ yang tertera di tulisan blog saya yang lama. Akibatnya, algoritma tersebut pasti tidak akan bisa dijalankan. 
+
+> _TAPI kok email saya adem-adem saja yah?_
+
+Berarti selama ini algoritma saya jangan-jangan gak dipakai? (__mulai baper__).
+
+Memang sih saya mengerjakannya di waktu iseng, tapi bukan berarti keisengan itu gak berguna yah.  _haha_ (ketawa ala Joker)
+
+Yasu deh, daripada makin _baper_, nanti jadi gak _ikhlas_, maka saya putuskan untuk membuka semua kodingannya di sini. Barangkali ada yang butuh data promo yang ada di toko yah.
+
+# Kita mulai kodingnya
+
+## Langkah 1
+
+Kita panggil dulu semua `library` yang dibutuhkan yah!
+
+```{r,warning=FALSE,message=FALSE}
+library(dplyr)
+library(rvest)
+library(tidyr)
+library(tidytext)
+library(openxlsx)
+library(reshape2)
+```
+
+## Langkah 2
+
+Kita definisikan dulu, alamat _url_ dari situs __hemat.id__ yang mau kita ambil datanya.
+
+```{r,warning=FALSE,message=FALSE}
+url = c('https://www.hemat.id/katalog/makanan-minuman/',
+        paste('https://www.hemat.id/katalog/makanan-minuman/?page=',
+              c(2:3),sep=''))
+head(url)
+```
+
+## Langkah 3
+
+Kita buat fungsi untuk _scrap_ _urls_ dari masing-masing produk yang tertera di 3 `url` yang ada di atas. 
+
+> _Kenapa cuma 3 saja?_
+
+Sebenarnya ada 30 _url_ pada kategori makanan / minuman di __hemat.id__. Di algoritma asli yang saya buat juga 30, tapi karena untuk kebutuhan demo di blog ini, saya buat 3 agar proses __knit__ di __R__-nya lebih cepat. 
+
+> _Maklum lagi agak emosi dan buru-buru. hehe_
+
+```{r,warning=FALSE,message=FALSE}
+scrap_links = function(url){
+  link = read_html(url) %>% html_nodes('a') %>% html_attr('href')
+  data = tibble(
+    id = c(1:length(link)),
+    url_produk = link
+  ) %>% filter(grepl('harga',link,ignore.case = T))
+  return(data)
+}
+```
+
+## Langkah 4
+
+Kita mulai _scrap_ _urls_ dari masing-masing produk yang ada di sana yah. Saya tetap konsisten menggunakan _looping_ di __R__. _hehe_
+
+```{r,message=FALSE,warning=FALSE}
+#mulai iterasi
+i=1
+data = scrap_links(url[i])
+for(i in 2:3){
+  temp = scrap_links(url[i])
+  data = rbind(data,temp)
+}
+
+#ditambahkan alamat site awal
+data = data %>% 
+  mutate(url_produk = paste('https://www.hemat.id',
+                            url_produk,
+                            sep=''))
+head(data,10)
+```
+
+## Langkah 5
+
+Sekarang kita telah memiliki informasi _url_ detail per produk pada variabel `url_produk`. 
+
+Gilirannya untuk membuat fungsi untuk _scrap_ semua informasi yang ada di `url_produk`  tersebut.
+
+```{r,message=FALSE,warning=FALSE}
+scrap_info_produk = function(url_dummy){
+  new.data = read_html(url_dummy) %>% {
+    tibble(
+      toko = html_nodes(.,'em') %>% html_text(),
+      produk = html_nodes(.,'.req .title') %>% html_text(),
+      start.date = html_nodes(.,'.start .date') %>% html_text(),
+      end.date = html_nodes(.,'.end .date') %>% html_text(),
+      label = html_nodes(.,'.label:nth-child(1)') %>% html_text(),
+      isi = html_nodes(.,'.req .desc') %>% html_text()
+    )
+  }
+  return(new.data)
+}
+```
+
+## Langkah 6
+
+Kita sudah punya banyak `url_produk` dan fungsi `scrap_info_produk`. Yuk kita mulai prosesnya!
+
+```{r,message=FALSE,warning=FALSE}
+#mulai iterasi untuk url produk
+i = 1
+data_produk = scrap_info_produk(data$url_produk[i])
+data_produk$id = i
+
+for(i in 2:length(data$url_produk)){
+  temp_produk = scrap_info_produk(data$url_produk[i])
+  temp_produk$id = i
+  data_produk = rbind(data_produk,temp_produk)
+}
+head(data_produk,10)
+```
+
+## Langkah 7
+
+Gimana? Sudah mulai terlihat datanya kayak gimana? Sekarang kita akan beberes strukturnya yah. Agar bisa diproses!
+
+```{r,warning=FALSE,message=FALSE}
+dummy = unique(data_produk$label)
+
+rapihin = function(dummy){
+  tes.fungsi = data_produk %>% filter(label %in% dummy) %>% mutate(label=NULL)
+  colnames(tes.fungsi)[length(tes.fungsi)-1] = dummy
+  return(tes.fungsi)
+}
+
+i=1
+final_data = rapihin(dummy[i])
+
+for(i in 2:length(dummy)){
+  final_temp = rapihin(dummy[i])
+  final_data = merge(final_data,final_temp,all=T)
+}
+
+final_data = final_data %>% distinct() %>% mutate(id=NULL)
+
+#sekarang bebersih format
+final_data = final_data %>% mutate(
+  toko = gsub('di ','',toko,fixed = T),
+  `Berlaku di` = gsub('\n','',`Berlaku di`,fixed = T),
+  `Berlaku di` = gsub('  ','',`Berlaku di`,fixed = T),
+  `Harga Promo` = gsub('\n','',`Harga Promo`,fixed = T),
+  `Harga Promo` = gsub('  ','',`Harga Promo`,fixed = T)
+)
+head(final_data,10)
+```
+
+# DONE!!!
+
+Alhamdulillah, sudah selesai proses _scrap_-nya!
+
+Dari data yang ada tinggal di- _export_ saja ke format yang diinginkan atau mau langsung diproses lebih lanjut untuk analisa.
+
+Datanya kalau dilihat masih _semi-unstructured_, tapi __receh__ lah _pre-processing_ utk _next steps_-nya!
+
+____
+
+### Conclusion
+
+Sebenarnya algoritma ini bisa menghemat waktu hingga 95% dibandingkan mengerjakan rekap manual.
+
+Tinggal masalah mau atau tidak mau memakainya saja. _Free_ kok ini...
