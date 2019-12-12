@@ -13,7 +13,7 @@ _Nah_, penasaran gak sih dengan data di _Youtube Channel_-nya __Kalbe__?
 
 Tadinya saya mencari _Youtube Channel_ dari __Diabetasol__, tapi ternyata isinya hanya segelintir video saja. Oleh karena itu, saya mengambil data dari _Youtube Channel_-nya [KalbeFamily](https://www.youtube.com/user/KalbeFamily).
 
-```{r,echo=FALSE,warning=FALSE,message=FALSE}
+```{r,warning=FALSE,message=FALSE}
 #load the data
 library(dplyr)
 library(tidyr)
