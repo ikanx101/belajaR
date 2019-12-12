@@ -7,24 +7,24 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## GitHub Documents
+Sudah lihat tulisan saya sebelumnya tentang [data yang diambil dari Youtube](https://ikanx101.github.io/blog/blog-posting-sunyi/)?
 
-This is an R Markdown format used for publishing markdown documents to GitHub. When you click the **Knit** button all R code chunks are run and a markdown file (.md) suitable for publishing to GitHub is generated.
+_Nah_, penasaran gak sih dengan data di _Youtube Channel_-nya __Kalbe__?
 
-## Including Code
+Tadinya saya mencari _Youtube Channel_ dari __Diabetasol__, tapi ternyata isinya hanya segelintir video saja. Oleh karena itu, saya mengambil data dari _Youtube Channel_-nya [KalbeFamily](https://www.youtube.com/user/KalbeFamily).
 
-You can include R code in the document as follows:
-
-```{r cars}
-summary(cars)
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+#load the data
+library(dplyr)
+library(tidyr)
+library(tidytext)
+library(ggplot2)
+library(ggpubr)
+load("/cloud/project/Bukan Infografis/KalbeFamily/kalbe all data.rda")
 ```
 
-## Including Plots
+Yuk kita mulai penelusuran dan investigasi dari _Youtube Channel_-nya __KalbeFamily__.
 
-You can also embed plots, for example:
+# __bersambung__
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Saya kerjain setelah FINDX yah.

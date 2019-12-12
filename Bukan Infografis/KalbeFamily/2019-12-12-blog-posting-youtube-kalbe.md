@@ -1,0 +1,19 @@
+Stalking Youtube Channel KalbeFamily
+================
+
+Sudah lihat tulisan saya sebelumnya tentang [data yang diambil dari
+Youtube](https://ikanx101.github.io/blog/blog-posting-sunyi/)?
+
+*Nah*, penasaran gak sih dengan data di *Youtube Channel*-nya **Kalbe**?
+
+Tadinya saya mencari *Youtube Channel* dari **Diabetasol**, tapi
+ternyata isinya hanya segelintir video saja. Oleh karena itu, saya
+mengambil data dari *Youtube Channel*-nya
+[KalbeFamily](https://www.youtube.com/user/KalbeFamily).
+
+Yuk kita mulai penelusuran dan investigasi dari *Youtube Channel*-nya
+**KalbeFamily**.
+
+# **bersambung**
+
+Saya kerjain setelah FINDX yah.
