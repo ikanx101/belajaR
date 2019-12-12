@@ -60,8 +60,8 @@ Variabel yang didapatkan antara lain:
 4.  `total_worldwide_box_office`: pendapatan film total *worldwide*.
 
 Sekarang, saya hanya akan memilih perusahaan yang minimal telah
-memproduksi 10 film lalu saya buat *scatter plot* dari data tersebut.
-Didapat hanya `468` buah perusahaan. Sumbu `x` akan saya isi dengan
+memproduksi 30 film lalu saya buat *scatter plot* dari data tersebut.
+Didapat hanya `113` buah perusahaan. Sumbu `x` akan saya isi dengan
 `no_of_movies` dan sumbu `y` akan saya isi dengan
 `total_worldwide_box_office`, sementara *size* dari *point* tergantung
 dari besarnya
@@ -72,6 +72,12 @@ dari besarnya
 ![](2019-12-10-blog-produsen-film_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 *Gimana?* sudah terlihat `production_companies` favorit kamu?
+
+> *Btw menarik yah*, **Marvel Studios** dengan jumlah film lebih sedikit
+> sudah melewati capaian 20th **Century Fox** dan **Paramount
+> Pictures**.
+
+-----
 
 ## *Clustering Analysis* dari data
 
@@ -94,7 +100,7 @@ adalah menentukan berapa banyak *cluster* yang harus dibuat. Untuk
 menentukannya, kita bisa menggunakan tiga metode:
 
 1.  *Elbow method*
-2.  *Sillhoutte method*
+2.  *Silhoutte method*
 3.  *Gap Stat method*
 
 Dengan alasan kemudahan untuk melihat hasil, dari tiga metode tersebut
@@ -103,17 +109,183 @@ yah.
 
 ![](2019-12-10-blog-produsen-film_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
-Ternyata disarankan ada tiga buah *clusters* yang terbentuk. Mari kita
-*generate* *clusters*
-    nya\!
+Nah, salah satu *kelemahan elbow method* adalah penentuan banyaknya
+*clusters* bisa jadi subjektif tergantung *visual* masing-masing orang.
 
-## 8-means clustering
+> *Trus kalau gtu kenapa gak pakai: silhoutte method atau gap stat
+> method saja yang lebih jelas dalam menentukan banyaknya cluster?*
+
+Seperti biasa, hal tersebut sengaja dilakukan sebagai latihan buat
+kalian yang membaca tulisan ini yah *guys*.
+
+Kali ini saya akan memilih banyaknya *cluster* `k
+    = 5`.
+
+-----
+
+## *5-means clustering*
 
     ##   no_of_movies total_domestic_box_office total_worldwide_box_office
-    ## 1         4.43                      5.14                       5.29
-    ## 2         2.78                      1.83                       1.91
-    ## 3         1.06                      1.01                       1.01
+    ## 1         1.83                      2.42                       2.42
+    ## 2         2.75                      4.50                       4.75
+    ## 3         6.00                      6.00                       6.00
+    ## 4         3.86                      1.29                       1.29
+    ## 5         1.10                      1.00                       1.02
 
-![](2019-12-10-blog-produsen-film_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+Kita bisa melihat karakteristik dari masing-masing *cluster*-nya sebagai
+berikut:
 
-final\(cluster new_data\)cluster = final$cluster head(new\_data)
+1.  Cluster 1: `production_companies` yang tidak banyak membuat film
+    tapi pendapatan lokal dan *worldwide*-nya biasa saja.
+2.  Cluster 2: `production_companies` yang lumayan membuat film (tapi
+    tidak bisa dibilang banyak) tapi pendapatan lokal dan
+    *worldwide*-nya termasuk tinggi.
+3.  Cluster 3: `production_companies` yang bisa dibilang *“they are the
+    kings”*. Tinggi di semua aspek.
+4.  Cluster 4: `production_companies` yang lumayan banyak membuat film
+    tapi memiliki pendapatan lokal dan *worldwide* yang kecil.
+5.  Cluster 5: `production_companies` yang kecil di semua
+aspek.
+
+![](2019-12-10-blog-produsen-film_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+### Kita liat `production_companies` mana saja di masing-masing cluster yah
+
+#### Cluster 1
+
+    ##            production_companies
+    ## 1              Relativity Media
+    ## 2           DreamWorks Pictures
+    ## 3            Dune Entertainment
+    ## 4            Legendary Pictures
+    ## 5               New Line Cinema
+    ## 6          Amblin Entertainment
+    ## 7          DreamWorks Animation
+    ## 8  Village Roadshow Productions
+    ## 9  Metro-Goldwyn-Mayer Pictures
+    ## 10          Touchstone Pictures
+    ## 11         RatPac Entertainment
+    ## 12         Summit Entertainment
+
+#### Cluster 2
+
+    ##   production_companies
+    ## 1 Walt Disney Pictures
+    ## 2       Marvel Studios
+    ## 3   Paramount Pictures
+    ## 4     20th Century Fox
+
+#### Cluster 3
+
+    ##   production_companies
+    ## 1         Warner Bros.
+    ## 2    Columbia Pictures
+    ## 3   Universal Pictures
+
+#### Cluster 4
+
+    ##   production_companies
+    ## 1  Regency Enterprises
+    ## 2            Lionsgate
+    ## 3            Blumhouse
+    ## 4           Canal Plus
+    ## 5          StudioCanal
+    ## 6            BBC Films
+    ## 7                  BFI
+
+#### Cluster 5 (yang terbanyak)
+
+    ##              production_companies
+    ## 1         di Bonaventura Pictures
+    ## 2               Fox 2000 Pictures
+    ## 3           Imagine Entertainment
+    ## 4               TSG Entertainment
+    ## 5    The Kennedy/Marshall Company
+    ## 6                   Original Film
+    ## 7             Working Title Films
+    ## 8                   Happy Madison
+    ## 9          Spyglass Entertainment
+    ## 10          Twentieth Century Fox
+    ## 11         Perfect World Pictures
+    ## 12        Scott Rudin Productions
+    ## 13      Temple Hill Entertainment
+    ## 14                Silver Pictures
+    ## 15                    New Regency
+    ## 16              Tri-Star Pictures
+    ## 17      Castle Rock Entertainment
+    ## 18             Revolution Studios
+    ## 19                   Walden Media
+    ## 20                    Screen Gems
+    ## 21               Scott Free Films
+    ## 22                Ingenious Media
+    ## 23              Participant Media
+    ## 24            Davis Entertainment
+    ## 25       Fox Searchlight Pictures
+    ## 26                 Focus Features
+    ## 27              Weinstein Company
+    ## 28           Plan B Entertainment
+    ## 29        Lakeshore Entertainment
+    ## 30          21 Laps Entertainment
+    ## 31               Millennium Films
+    ## 32              Gold Circle Films
+    ## 33                     EuropaCorp
+    ## 34             Annapurna Pictures
+    ## 35                  Miramax Films
+    ## 36                   Tribeca Film
+    ## 37       FilmNation Entertainment
+    ## 38                UK Film Council
+    ## 39              Entertainment One
+    ## 40                      Cine Plus
+    ## 41              Anonymous Content
+    ## 42           TF1 Film Productions
+    ## 43                      IM Global
+    ## 44                          Film4
+    ## 45                          Pathe
+    ## 46           Samuel Goldwyn Films
+    ## 47                            A24
+    ## 48                     Wild Bunch
+    ## 49                         Film 4
+    ## 50                 Amazon Studios
+    ## 51                 Orion Pictures
+    ## 52              The Fyzz Facility
+    ## 53               Voltage Pictures
+    ## 54                      Automatik
+    ## 55               Irish Film Board
+    ## 56                   HanWay Films
+    ## 57                        Gaumont
+    ## 58               Screen Australia
+    ## 59                France 3 Cinema
+    ## 60                     Cinecinema
+    ## 61                Telefilm Canada
+    ## 62                Head Gear Films
+    ## 63       Bord Scannan na hEireann
+    ## 64                France 2 Cinema
+    ## 65                   Bron Studios
+    ## 66            Lipsync Productions
+    ## 67              France Television
+    ## 68             Arte France Cinema
+    ## 69                      XYZ Films
+    ## 70                    Film i Vast
+    ## 71              Creative Scotland
+    ## 72              Metrol Technology
+    ## 73              Magnolia Pictures
+    ## 74                     RAI Cinema
+    ## 75                           Arte
+    ## 76                            CNC
+    ## 77                    ARTE France
+    ## 78                      IFC Films
+    ## 79                            ZDF
+    ## 80                      Eurimages
+    ## 81               Passion Pictures
+    ## 82                    Saban Films
+    ## 83                    The Orchard
+    ## 84                        Netflix
+    ## 85 Grindstone Entertainment Group
+    ## 86                   IFC Midnight
+    ## 87           The Hallmark Channel
+
+### Yuk kita plot kembali ke dalam *scatter plot*
+
+![](2019-12-10-blog-produsen-film_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+
+# *Any comments?*

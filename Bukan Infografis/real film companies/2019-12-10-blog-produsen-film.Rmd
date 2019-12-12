@@ -48,12 +48,16 @@ data = data %>% mutate(total_domestic_box_office = gsub('\\,','',total_domestic_
                        total_worldwide_box_office = gsub('\\$','',total_worldwide_box_office),
                        total_domestic_box_office = as.numeric(total_domestic_box_office),
                        total_worldwide_box_office = as.numeric(total_worldwide_box_office)) %>%
-  filter(no_of_movies>=10)
+  filter(no_of_movies>=29)
 
-new_data = data %>% mutate(no_of_movies = cut(no_of_movies,6,labels = c(1:6)),total_domestic_box_office = cut(total_domestic_box_office,6,labels = c(1:6)),total_worldwide_box_office = cut(total_worldwide_box_office,6,labels = c(1:6)))
+new_data = data %>% mutate(no_of_movies = cut(no_of_movies,6,labels = c(1:6)),
+                           total_domestic_box_office = cut(total_domestic_box_office,6,
+                                                           labels = c(1:6)),
+                           total_worldwide_box_office = cut(total_worldwide_box_office,6,
+                                                            labels = c(1:6)))
 ```
 
-Sekarang, saya hanya akan memilih perusahaan yang minimal telah memproduksi 10 film lalu saya buat _scatter plot_ dari data tersebut. Didapat hanya `468` buah perusahaan. Sumbu `x` akan saya isi dengan `no_of_movies` dan sumbu `y` akan saya isi dengan `total_worldwide_box_office`, sementara _size_ dari _point_ tergantung dari besarnya `total_domestic_box_office`.
+Sekarang, saya hanya akan memilih perusahaan yang minimal telah memproduksi 30 film lalu saya buat _scatter plot_ dari data tersebut. Didapat hanya `113` buah perusahaan. Sumbu `x` akan saya isi dengan `no_of_movies` dan sumbu `y` akan saya isi dengan `total_worldwide_box_office`, sementara _size_ dari _point_ tergantung dari besarnya `total_domestic_box_office`.
 
 ## _Scatter plot_ dari data
 
@@ -63,10 +67,10 @@ data %>% ggplot(aes(x=no_of_movies,y=total_worldwide_box_office)) +
              color='steelblue',
              alpha=.4) +
   scale_size(range = c(0, 10)) +
-  geom_text(aes(label=production_companies),size=2.5,alpha=.8) +
+  geom_text(aes(label=production_companies),size=2.5,alpha=.7,color='darkred') +
   theme_minimal() +
-  geom_vline(xintercept = mean(data$no_of_movies),color='darkred') +
-  geom_hline(yintercept = mean(data$total_worldwide_box_office),color='darkred') +
+  geom_vline(xintercept = mean(data$no_of_movies),color='darkgreen') +
+  geom_hline(yintercept = mean(data$total_worldwide_box_office),color='darkgreen') +
   theme(legend.position = 'none',
         axis.text = element_blank()) +
   labs(title = 'Number of Movies vs Total Worldwide Box Office',
@@ -81,6 +85,10 @@ data %>% ggplot(aes(x=no_of_movies,y=total_worldwide_box_office)) +
 
 _Gimana?_ sudah terlihat `production_companies` favorit kamu?
 
+> _Btw menarik yah_, __Marvel Studios__ dengan jumlah film lebih sedikit sudah melewati capaian 20th __Century Fox__ dan __Paramount Pictures__. 
+
+____
+
 ## _Clustering Analysis_ dari data
 
 Sekarang kita akan mencoba mengelompokkan `production_companies` dari data-data yang ada. Saya akan menggunakan algoritma __k-means clustering__. 
@@ -94,7 +102,7 @@ Agar memudahkan, angka real dari masing-masing variabel `no_of_movies`, `total_d
 Seperti biasa, pada analisa _k-means clustering_ langkah paling krusial adalah menentukan berapa banyak _cluster_ yang harus dibuat. Untuk menentukannya, kita bisa menggunakan tiga metode:
 
 1. _Elbow method_
-2. _Sillhoutte method_
+2. _Silhoutte method_
 3. _Gap Stat method_
 
 Dengan alasan kemudahan untuk melihat hasil, dari tiga metode tersebut saya akan gunakan _elbow method_ yah.
@@ -104,24 +112,109 @@ new_data = new_data %>% select(-production_companies)
 fviz_nbclust(new_data, kmeans, method = "wss")
 ```
 
-Ternyata disarankan ada tiga buah _clusters_ yang terbentuk. Mari kita _generate_ _clusters_ nya!
+Nah, salah satu _kelemahan elbow method_ adalah penentuan banyaknya _clusters_ bisa jadi subjektif tergantung _visual_ masing-masing orang.
 
-## 8-means clustering
+> _Trus kalau gtu kenapa gak pakai: silhoutte method atau gap stat method saja yang lebih jelas dalam menentukan banyaknya cluster?_
+
+Seperti biasa, hal tersebut sengaja dilakukan sebagai latihan buat kalian yang membaca tulisan ini yah _guys_.
+
+Kali ini saya akan memilih banyaknya _cluster_ `k = 5`.
+
+____
+
+## _5-means clustering_
 
 ```{r,echo=FALSE}
 set.seed(123)
-final = kmeans(new_data,3,nstart=10)
+final = kmeans(new_data,5,nstart=10)
 centeroids = round(final$centers,2)
 centeroids
-data.frame(cluster=paste('cluster',c(1:3)),
-                             n=final$size) %>%
+```
+Kita bisa melihat karakteristik dari masing-masing _cluster_-nya sebagai berikut:
+
+1. Cluster 1: `production_companies` yang tidak banyak membuat film tapi pendapatan lokal dan _worldwide_-nya biasa saja.
+2. Cluster 2: `production_companies` yang lumayan membuat film (tapi tidak bisa dibilang banyak) tapi pendapatan lokal dan _worldwide_-nya termasuk tinggi.
+3. Cluster 3: `production_companies` yang bisa dibilang _"they are the kings"_. Tinggi di semua aspek.
+4. Cluster 4: `production_companies` yang lumayan banyak membuat film tapi memiliki pendapatan lokal dan _worldwide_ yang kecil.
+5. Cluster 5: `production_companies` yang kecil di semua aspek.
+
+```{r,echo=FALSE}
+data.frame(cluster=paste('Cluster',c(1:5)), n=final$size) %>%
   ggplot(aes(x=cluster,y=n)) +
   geom_col(color='black',fill='steelblue',alpha=.4) +
   geom_label(aes(label=n)) +
-  labs(title = 'Berapa anggota dari masing-masing cluster?')
+  labs(title = 'Berapa banyak `production_companies` dari masing-masing cluster?',
+       caption = 'ikanx101.github.io',
+       subtitle = 'Hasil 5-cluster analysis') +
+  theme_pubclean() +
+  theme(axis.title = element_blank(),
+        axis.text.y = element_blank(),
+        plot.title = element_text(face='bold.italic'),
+        plot.subtitle = element_text(face='bold'),
+        plot.caption = element_text(face='italic',size = 8))
 ```
 
+### Kita liat `production_companies` mana saja di masing-masing cluster yah
 
-final$cluster
-new_data$cluster = final$cluster
-head(new_data)
+#### Cluster 1
+
+```{r,echo=FALSE}
+data$cluster = as.factor(final$cluster)
+
+data %>% filter(cluster==1) %>% select(production_companies)
+```
+
+#### Cluster 2
+
+```{r,echo=FALSE}
+data$cluster = as.factor(final$cluster)
+
+data %>% filter(cluster==2) %>% select(production_companies)
+```
+
+#### Cluster 3
+
+```{r,echo=FALSE}
+data$cluster = as.factor(final$cluster)
+
+data %>% filter(cluster==3) %>% select(production_companies)
+```
+
+#### Cluster 4
+
+```{r,echo=FALSE}
+data$cluster = as.factor(final$cluster)
+
+data %>% filter(cluster==4) %>% select(production_companies)
+```
+
+#### Cluster 5 (yang terbanyak)
+
+```{r,echo=FALSE}
+data$cluster = as.factor(final$cluster)
+
+data %>% filter(cluster==5) %>% select(production_companies)
+```
+
+### Yuk kita plot kembali ke dalam _scatter plot_
+
+```{r,echo=FALSE}
+data %>% ggplot(aes(x=no_of_movies,y=total_worldwide_box_office)) +
+  geom_point(aes(size=total_domestic_box_office,color=cluster)) +
+  scale_colour_brewer(palette = "Accent") +
+  scale_size(range = c(0, 10)) +
+  geom_text(aes(label=production_companies),size=2.5,alpha=.7,color='darkred') +
+  theme_minimal() +
+  theme(legend.position = 'none',
+        axis.text = element_blank()) +
+  labs(title = 'Number of Movies vs Total Worldwide Box Office',
+       subtitle = 'Each color represent each cluster',
+       caption = 'ikanx101.github.io',
+       x = 'Number of movies',
+       y = 'Total Worldwide Box Office') +
+  theme(plot.title = element_text(face='bold.italic'),
+        plot.subtitle = element_text(face='bold'),
+        plot.caption = element_text(face='italic',size = 8))
+```
+
+# _Any comments?_
