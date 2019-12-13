@@ -20,13 +20,20 @@ library(tidyr)
 library(tidytext)
 library(ggplot2)
 library(ggpubr)
+library(lubridate)
 ```
+
+Untuk mengambil data dari Youtube, ada beberapa hal yang saya butuhkan:
+
+1. __Youtube id__ dari channel _KalbeFamily_. _Hayo, sekarang saya tanya, gimana caranya saya dapetin Youtube id dari user lain?_ __Any ideas?__
+2. __R__ yang dipersenjatai `tuber` _package_.
+3. __Google API__ untuk __Youtube Data__.
 
 Yuk kita mulai penelusuran dan investigasi dari _Youtube Channel_-nya __KalbeFamily__.
 
 # Load the data
 
-Bagi _rekans_ yang mau ikutan ngoprek datanya, bisa diambil sendiri di github saya berikut ini yah. Bentuknya dalam format `.rda`, yakni __R files__ karena berisi lebih dari satu _datasets_.
+Bagi _rekans_ yang mau ikutan ngoprek datanya, bisa diambil sendiri di github saya berikut ini yah. Bentuknya dalam format `.rda`, yakni __R files__ karena berisi lebih dari satu _datasets_. Oh iya, data ini saya ambil pada `12 Desember 2019 pukul 5pm` yah.
 
 ```{r}
 load("/cloud/project/Bukan Infografis/KalbeFamily/kalbe all data.rda")
@@ -35,11 +42,73 @@ ls()
 
 Ada lima _datasets_ pada _file_ tersebut, yakni:
 
-1. `channel`: merupakan __Youtube id__ dari channel _KalbeFamily_. _Hayo, sekarang saya tanya, gimana caranya saya dapetin Youtube id user lain?_
+1. `channel`: __Youtube id__ dari channel _KalbeFamily_. 
 2. `stat_channel`: berisi informasi dan statistik mengenai channel _KalbeFamily_.
 3. `all_videos`: berisi informasi mengenai seluruh video yang ada di channel _KalbeFamily_.
 4. `eps`: berisi statistik semua video yang ada di channel _KalbeFamily_. Apa saja isinya? Contohnya bisa dilihat di [_posting_ saya terdahulu]((https://ikanx101.github.io/blog/blog-posting-sunyi/)).
 5. `komen`: berisi seluruh data komentar _viewers_ di masing-masing video yang ada di channel _KalbeFamily_.
+
+# Let's the fun parts begins!
+
+## `stat_channel`
+
+Mari kita lihat bersama, apa saja isi _dataset_ `stat_channel`
+
+```{r}
+stat_channel
+```
+
+Kita bisa melihat bahwa _Youtube channel_ __KalbeFamily__ berdiri sejak `2013-02-26`. Sampai saat ini, memiliki `77` buah video dan telah dilihat sebanyak `1.101.596` kali. _Channel_ ini memiliki _subscriber_ sebanyak `1.230`.
+
+> __Dengan angka-angka seperti di atas, kira-kira untuk kategori _Youtube channel_ sebuah perusahaan, sudah termasuk tinggi, menengah, atau rendah?__. Silakan komen yah.
+
+## `all_videos`
+
+Ada informasi apa saja di dataset `all_videos`? Yuk kita lihat bersama.
+
+```{r}
+str(all_videos)
+```
+
+_Mmh_, sepertinya saya hanya bisa menganalisa variabel `contentDetails.videoPublishedAt`, yakni kapan masing-masing video tersebut diupload.
+
+```{r,echo=FALSE}
+all_videos$tanggal = as.Date(all_videos$contentDetails.videoPublishedAt)
+all_videos$tahun = year(all_videos$tanggal)
+all_videos$bulan = month(all_videos$tanggal)
+
+all_videos %>% group_by(tahun) %>% summarise(freq=n()) %>% ggplot(aes(x=as.factor(tahun),y=freq)) + 
+  geom_col(fill='steelblue',color='black',alpha=.6) + geom_label(aes(label=freq)) + theme_dark() +
+  labs(title = 'Banyaknya Video yang Diupload di Channel Youtube KalbeFamily',
+       subtitle = 'Ternyata di tahun 2015 tidak ada video yang diupload',
+       caption = 'ikanx101.github.io',
+       x = 'Tahun',y='Banyaknya Video') +
+  theme(axis.text.y = element_blank(),
+        plot.title = element_text(face='bold.italic'),
+        plot.caption = element_text(face='italic'))
+```
+
+Ternyata ada yang menarik nih. Entah kenapa di tahun 2015, tidak ada video yang diupload di _channel_ ini. Setelah __rajin__ _upload_ di tahun pertama, di tahun-tahun berikutnya ada penurunan yang lumayan jauh. Dari sini kita bisa duga bahwa bisa jadi video-video tersebut tidak diupload setiap bulannya. Mari kita buktikan:
+
+```{r,echo=FALSE}
+bulan_dummy = all_videos %>% arrange(tahun,bulan) %>%
+  mutate(new = paste(bulan,tahun,sep='-')) %>% select(new) %>% distinct()
+
+bulan_dummy = bulan_dummy$new
+
+all_videos %>% arrange(tahun,bulan) %>%
+  mutate(new = paste(bulan,tahun,sep='-')) %>%
+  group_by(new) %>% summarise(freq=n()) %>% ggplot(aes(x=factor(new, level=bulan_dummy),y=freq)) + 
+  geom_col(fill='steelblue',color='black',alpha=.6) + geom_label(aes(label=freq)) + theme_dark() +
+  labs(title = 'Banyaknya Video yang Diupload di Channel Youtube KalbeFamily',
+       subtitle = 'Video diupload tidak setiap bulan',
+       caption = 'ikanx101.github.io',
+       x = 'Bulan - Tahun',y='Banyaknya Video') +
+  theme(axis.text.y = element_blank(),
+        axis.text.x = element_text(angle=90),
+        plot.title = element_text(face='bold.italic'),
+        plot.caption = element_text(face='italic'))
+```
 
 
 ### Bersambung...
