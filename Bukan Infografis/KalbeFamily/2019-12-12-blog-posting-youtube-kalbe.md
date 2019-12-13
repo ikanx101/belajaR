@@ -27,7 +27,7 @@ Yuk kita mulai penelusuran dan investigasi dari *Youtube Channel*-nya
 Bagi *rekans* yang mau ikutan ngoprek datanya, bisa diambil sendiri di
 github saya berikut ini yah. Bentuknya dalam format `.rda`, yakni **R
 files** karena berisi lebih dari satu *datasets*. Oh iya, data ini saya
-ambil pada `12 Desember 2019 pukul 5pm` yah.
+ambil pada `13 Desember 2019 pukul 2pm` yah.
 
 ``` r
 load("/cloud/project/Bukan Infografis/KalbeFamily/kalbe all data.rda")
@@ -65,7 +65,7 @@ stat_channel
     ## [1] "youtube#channel"
     ## 
     ## $etag
-    ## [1] "\"p4VTdlkQv3HQeTEaXgvLePAydmU/iX7W0Pj3BS_V1DXAlBezf33nNhk\""
+    ## [1] "\"p4VTdlkQv3HQeTEaXgvLePAydmU/UgN55JqRLL3hhnc8yVWKF3zVbcw\""
     ## 
     ## $id
     ## [1] "UC5vmedW_cnfGUEopPnmMIsw"
@@ -126,7 +126,7 @@ stat_channel
     ## 
     ## $statistics
     ## $statistics$viewCount
-    ## [1] "1101596"
+    ## [1] "1102379"
     ## 
     ## $statistics$commentCount
     ## [1] "0"
@@ -142,7 +142,7 @@ stat_channel
 
 Kita bisa melihat bahwa *Youtube channel* **KalbeFamily** berdiri sejak
 `2013-02-26`. Sampai saat ini, memiliki `77` buah video dan
-*channel*-nya sendiri telah dilihat sebanyak `1.101.596` kali (bukan
+*channel*-nya sendiri telah dilihat sebanyak `1.102.379` kali (bukan
 *view video* yah). *Channel* ini memiliki *subscriber* sebanyak `1.230`
 orang.
 
@@ -158,18 +158,19 @@ Ada informasi apa saja di dataset `all_videos`? Yuk kita lihat bersama.
 str(all_videos)
 ```
 
-    ## 'data.frame':    77 obs. of  6 variables:
+    ## 'data.frame':    77 obs. of  7 variables:
     ##  $ .id                            : chr  "items1" "items2" "items3" "items4" ...
     ##  $ kind                           : chr  "youtube#playlistItem" "youtube#playlistItem" "youtube#playlistItem" "youtube#playlistItem" ...
     ##  $ etag                           : chr  "\"p4VTdlkQv3HQeTEaXgvLePAydmU/Nyd3V6dTtq_D3eB9t4rZGmB036I\"" "\"p4VTdlkQv3HQeTEaXgvLePAydmU/C6ek0C99jKxbrkya6ztkbE-jno8\"" "\"p4VTdlkQv3HQeTEaXgvLePAydmU/05BMIpgFwHuskbT7ZsW04hL2DPE\"" "\"p4VTdlkQv3HQeTEaXgvLePAydmU/3S2Ez0hQLa8MrdRzzVXxxRlw3IA\"" ...
     ##  $ id                             : chr  "VVU1dm1lZFdfY25mR1VFb3BQbm1NSXN3LlpMQk1YRkx0blM4" "VVU1dm1lZFdfY25mR1VFb3BQbm1NSXN3LmNyVFRBZWx6dlQ0" "VVU1dm1lZFdfY25mR1VFb3BQbm1NSXN3LlVmazJLbjJ6eS04" "VVU1dm1lZFdfY25mR1VFb3BQbm1NSXN3LmJuSkVrek01ODVz" ...
     ##  $ contentDetails.videoId         : chr  "ZLBMXFLtnS8" "crTTAelzvT4" "Ufk2Kn2zy-8" "bnJEkzM585s" ...
     ##  $ contentDetails.videoPublishedAt: chr  "2019-09-03T07:26:51.000Z" "2019-09-03T07:24:49.000Z" "2019-04-01T01:11:43.000Z" "2018-01-29T03:05:20.000Z" ...
+    ##  $ episode                        : chr  "video ke 1" "video ke 2" "video ke 3" "video ke 4" ...
 
 *Mmh*, sepertinya saya hanya bisa menganalisa variabel
 `contentDetails.videoPublishedAt`, yakni kapan masing-masing video
-tersebut
-diupload.
+tersebut di-
+*upload*.
 
 ![](2019-12-12-blog-posting-youtube-kalbe_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
@@ -192,12 +193,12 @@ str(eps)
 
     ## 'data.frame':    77 obs. of  7 variables:
     ##  $ id           : chr  "ZLBMXFLtnS8" "crTTAelzvT4" "Ufk2Kn2zy-8" "bnJEkzM585s" ...
-    ##  $ viewCount    : num  1 2 3 4 5 6 7 8 9 10 ...
-    ##  $ likeCount    : num  1 1 2 3 3 2 4 2 5 6 ...
-    ##  $ dislikeCount : num  1 1 1 2 3 1 3 2 4 3 ...
-    ##  $ favoriteCount: num  1 1 1 1 1 1 1 1 1 1 ...
-    ##  $ commentCount : num  1 1 2 1 2 1 1 1 1 1 ...
-    ##  $ .id          : chr  "items1" "items2" "items3" "items4" ...
+    ##  $ viewCount    : num  251 140 574 3608 13911 ...
+    ##  $ likeCount    : num  0 0 4 19 19 4 8 4 44 29 ...
+    ##  $ dislikeCount : num  0 0 0 1 6 0 6 1 20 6 ...
+    ##  $ favoriteCount: num  0 0 0 0 0 0 0 0 0 0 ...
+    ##  $ commentCount : num  0 0 1 0 1 0 0 0 0 0 ...
+    ##  $ episode      : chr  "video ke 1" "video ke 2" "video ke 3" "video ke 4" ...
 
 *Nah*, yang ini baru seru kan?
 
@@ -214,20 +215,21 @@ Berapa banyak sih yang *ngeliat* video di channel ini?
 sum(eps$viewCount)
 ```
 
-    ## [1] 2854
+    ## [1] 1102445
 
-Total ada `2.854` *viewers* dari `77` video. Dengan rata-rata *viewers*
-per episode sebesar:
+Total ada `1.102.445` *viewers* dari `77` video. Dengan rata-rata
+*viewers* per episode sebesar:
 
 ``` r
 round(mean(eps$viewCount),2)
 ```
 
-    ## [1] 37.06
+    ## [1] 14317.47
 
-Satu angka yang lumayan menurut saya, `37` *viewers* per video. Tapi
+Satu angka yang lumayan menurut saya, `14.317` *viewers* per video. Tapi
 dengan karakteristik *channel* yang frekuensi *upload* videonya
-jarang-jarang, maka kita liat dulu sebaran
+jarang-jarang, saya menduga akan ada pencilan atau bentuk *boxplot*-nya
+pasti akan condong ke salah satu sisi. Mari kita liat dulu sebaran
 datanya.
 
 ``` r
@@ -236,6 +238,13 @@ boxplot(eps$viewCount)
 
 ![](2019-12-12-blog-posting-youtube-kalbe_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
+*Tuh kan*, ternyata benar ada pencilan *lhoo*.
+
+Oke, sekarang kita lihat `viewCount` per masing-masing
+video:
+
+![](2019-12-12-blog-posting-youtube-kalbe_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
 # To be continue
 
-Saya selesaikan setelah POK yah…
+Saya selesaikan asap yah…

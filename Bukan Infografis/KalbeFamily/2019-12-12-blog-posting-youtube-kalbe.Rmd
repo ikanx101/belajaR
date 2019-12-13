@@ -15,6 +15,7 @@ Tadinya saya mencari _Youtube Channel_ dari __Diabetasol__, tapi ternyata isinya
 
 ```{r,echo=FALSE,warning=FALSE,message=FALSE}
 #load the data
+rm(list=ls())
 library(dplyr)
 library(tidyr)
 library(tidytext)
@@ -33,7 +34,7 @@ Yuk kita mulai penelusuran dan investigasi dari _Youtube Channel_-nya __KalbeFam
 
 # Load the data
 
-Bagi _rekans_ yang mau ikutan ngoprek datanya, bisa diambil sendiri di github saya berikut ini yah. Bentuknya dalam format `.rda`, yakni __R files__ karena berisi lebih dari satu _datasets_. Oh iya, data ini saya ambil pada `12 Desember 2019 pukul 5pm` yah.
+Bagi _rekans_ yang mau ikutan ngoprek datanya, bisa diambil sendiri di github saya berikut ini yah. Bentuknya dalam format `.rda`, yakni __R files__ karena berisi lebih dari satu _datasets_. Oh iya, data ini saya ambil pada `13 Desember 2019 pukul 2pm` yah.
 
 ```{r}
 load("/cloud/project/Bukan Infografis/KalbeFamily/kalbe all data.rda")
@@ -58,7 +59,7 @@ Mari kita lihat bersama, apa saja isi _dataset_ `stat_channel`
 stat_channel
 ```
 
-Kita bisa melihat bahwa _Youtube channel_ __KalbeFamily__ berdiri sejak `2013-02-26`. Sampai saat ini, memiliki `77` buah video dan _channel_-nya sendiri telah dilihat sebanyak `1.101.596` kali (bukan _view video_ yah). _Channel_ ini memiliki _subscriber_ sebanyak `1.230` orang.
+Kita bisa melihat bahwa _Youtube channel_ __KalbeFamily__ berdiri sejak `2013-02-26`. Sampai saat ini, memiliki `77` buah video dan _channel_-nya sendiri telah dilihat sebanyak `1.102.379` kali (bukan _view video_ yah). _Channel_ ini memiliki _subscriber_ sebanyak `1.230` orang.
 
 > __Dengan angka-angka seperti di atas, kira-kira untuk kategori _Youtube channel_ sebuah perusahaan, sudah termasuk tinggi, menengah, atau rendah?__. Silakan komen yah.
 
@@ -70,7 +71,7 @@ Ada informasi apa saja di dataset `all_videos`? Yuk kita lihat bersama.
 str(all_videos)
 ```
 
-_Mmh_, sepertinya saya hanya bisa menganalisa variabel `contentDetails.videoPublishedAt`, yakni kapan masing-masing video tersebut diupload.
+_Mmh_, sepertinya saya hanya bisa menganalisa variabel `contentDetails.videoPublishedAt`, yakni kapan masing-masing video tersebut di- _upload_.
 
 ```{r,echo=FALSE}
 all_videos$tanggal = as.Date(all_videos$contentDetails.videoPublishedAt)
@@ -117,10 +118,15 @@ Ada informasi apa saja di dataset `eps`? Yuk kita lihat bersama.
 
 ```{r,echo=FALSE,warning=FALSE,message=FALSE}
 eps = eps %>% mutate(id = as.character(id),
+                     viewCount = as.character(viewCount),
                      viewCount = as.numeric(viewCount),
+                     likeCount = as.character(likeCount),
                      likeCount = as.numeric(likeCount),
+                     dislikeCount = as.character(dislikeCount),
                      dislikeCount = as.numeric(dislikeCount),
+                     favoriteCount = as.character(favoriteCount),
                      favoriteCount = as.numeric(favoriteCount),
+                     commentCount = as.character(commentCount),
                      commentCount = as.numeric(commentCount))
 ```
 
@@ -141,29 +147,38 @@ Berapa banyak sih yang _ngeliat_ video di channel ini?
 ```{r}
 sum(eps$viewCount)
 ```
-Total ada `2.854` _viewers_ dari `77` video. Dengan rata-rata _viewers_ per episode sebesar:
+Total ada `1.102.445` _viewers_ dari `77` video. Dengan rata-rata _viewers_ per episode sebesar:
 
 ```{r}
 round(mean(eps$viewCount),2)
 ```
 
-Satu angka yang lumayan menurut saya, `37` _viewers_ per video. Tapi dengan karakteristik _channel_ yang frekuensi _upload_ videonya jarang-jarang, saya menduga akan ada pencilan atau bentuk _boxplot_-nya pasti akan condong ke salah satu sisi. Mari kita liat dulu sebaran datanya.
+Satu angka yang lumayan menurut saya, `14.317` _viewers_ per video. Tapi dengan karakteristik _channel_ yang frekuensi _upload_ videonya jarang-jarang, saya menduga akan ada pencilan atau bentuk _boxplot_-nya pasti akan condong ke salah satu sisi. Mari kita liat dulu sebaran datanya.
 
 ```{r}
 boxplot(eps$viewCount)
 ```
 
-Wah, ternyata dugaan saya salah. Variabel `viewCount` cukup tersebar merata.
+_Tuh kan_, ternyata benar ada pencilan _lhoo_. 
 
 Oke, sekarang kita lihat `viewCount` per masing-masing video:
 
-```{r}
-eps$.id[51:77] = paste('items',c(51:77),sep='')
-id_dummy = eps$.id
-eps %>% ggplot(aes(x=factor(.id,level=id_dummy),y=viewCount)) + 
-  geom_col(fill='steelblue',color='black',alpha=.6) + theme_dark() + 
-  theme(axis.text.x = element_text(angle=90))
+```{r,echo=FALSE}
+episode_dummy = paste('video ke',c(1:77))
+eps %>% ggplot(aes(x=factor(episode,level=episode_dummy),y=viewCount)) + 
+  geom_col(fill='steelblue',color='black',alpha=.6) + 
+  geom_label(aes(label=viewCount),size=2) +
+  theme_dark() + 
+  theme(axis.text.x = element_text(angle=90,size=6),
+        axis.text.y = element_blank(),
+        axis.title = element_blank(),
+        plot.title = element_text(face='bold.italic'),
+        plot.caption = element_text(face='italic')) +
+  labs(caption = 'ikanx101.github.io',
+       title = 'Berapa banyak `viewCount` per masing-masing episode?',
+       subtitle = 'Ada beberapa video yang memiliki `viewCount` yang sangat tinggi')
 ```
+
 # To be continue
 
-Saya selesaikan setelah POK yah...
+Saya selesaikan asap yah...
