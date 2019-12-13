@@ -58,7 +58,7 @@ Mari kita lihat bersama, apa saja isi _dataset_ `stat_channel`
 stat_channel
 ```
 
-Kita bisa melihat bahwa _Youtube channel_ __KalbeFamily__ berdiri sejak `2013-02-26`. Sampai saat ini, memiliki `77` buah video dan telah dilihat sebanyak `1.101.596` kali. _Channel_ ini memiliki _subscriber_ sebanyak `1.230`.
+Kita bisa melihat bahwa _Youtube channel_ __KalbeFamily__ berdiri sejak `2013-02-26`. Sampai saat ini, memiliki `77` buah video dan _channel_-nya sendiri telah dilihat sebanyak `1.101.596` kali (bukan _view video_ yah). _Channel_ ini memiliki _subscriber_ sebanyak `1.230` orang.
 
 > __Dengan angka-angka seperti di atas, kira-kira untuk kategori _Youtube channel_ sebuah perusahaan, sudah termasuk tinggi, menengah, atau rendah?__. Silakan komen yah.
 
@@ -111,6 +111,59 @@ all_videos %>% arrange(tahun,bulan) %>%
 ```
 
 
-### Bersambung...
+## `eps`
 
-Saya selesaikan after FINDx yah...
+Ada informasi apa saja di dataset `eps`? Yuk kita lihat bersama.
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+eps = eps %>% mutate(id = as.character(id),
+                     viewCount = as.numeric(viewCount),
+                     likeCount = as.numeric(likeCount),
+                     dislikeCount = as.numeric(dislikeCount),
+                     favoriteCount = as.numeric(favoriteCount),
+                     commentCount = as.numeric(commentCount))
+```
+
+```{r}
+str(eps)
+```
+
+_Nah_, yang ini baru seru kan? 
+
+> Atau saya doang yang bilang ini seru... _hehehe_
+
+Mari kita mulai _brute force_ analisanya. Terserah saya mau _diapain_ aja yah.
+
+### _viewCount_
+
+Berapa banyak sih yang _ngeliat_ video di channel ini?
+
+```{r}
+sum(eps$viewCount)
+```
+Total ada `2.854` _viewers_ dari `77` video. Dengan rata-rata _viewers_ per episode sebesar:
+
+```{r}
+round(mean(eps$viewCount),2)
+```
+
+Satu angka yang lumayan menurut saya, `37` _viewers_ per video. Tapi dengan karakteristik _channel_ yang frekuensi _upload_ videonya jarang-jarang, saya menduga akan ada pencilan atau bentuk _boxplot_-nya pasti akan condong ke salah satu sisi. Mari kita liat dulu sebaran datanya.
+
+```{r}
+boxplot(eps$viewCount)
+```
+
+Wah, ternyata dugaan saya salah. Variabel `viewCount` cukup tersebar merata.
+
+Oke, sekarang kita lihat `viewCount` per masing-masing video:
+
+```{r}
+eps$.id[51:77] = paste('items',c(51:77),sep='')
+id_dummy = eps$.id
+eps %>% ggplot(aes(x=factor(.id,level=id_dummy),y=viewCount)) + 
+  geom_col(fill='steelblue',color='black',alpha=.6) + theme_dark() + 
+  theme(axis.text.x = element_text(angle=90))
+```
+# To be continue
+
+Saya selesaikan setelah POK yah...

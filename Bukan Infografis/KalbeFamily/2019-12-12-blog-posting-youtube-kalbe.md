@@ -141,9 +141,10 @@ stat_channel
     ## [1] "77"
 
 Kita bisa melihat bahwa *Youtube channel* **KalbeFamily** berdiri sejak
-`2013-02-26`. Sampai saat ini, memiliki `77` buah video dan telah
-dilihat sebanyak `1.101.596` kali. *Channel* ini memiliki *subscriber*
-sebanyak `1.230`.
+`2013-02-26`. Sampai saat ini, memiliki `77` buah video dan
+*channel*-nya sendiri telah dilihat sebanyak `1.101.596` kali (bukan
+*view video* yah). *Channel* ini memiliki *subscriber* sebanyak `1.230`
+orang.
 
 > **Dengan angka-angka seperti di atas, kira-kira untuk kategori
 > *Youtube channel* sebuah perusahaan, sudah termasuk tinggi, menengah,
@@ -181,6 +182,60 @@ buktikan:
 
 ![](2019-12-12-blog-posting-youtube-kalbe_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
-### Bersambung…
+## `eps`
 
-Saya selesaikan after FINDx yah…
+Ada informasi apa saja di dataset `eps`? Yuk kita lihat bersama.
+
+``` r
+str(eps)
+```
+
+    ## 'data.frame':    77 obs. of  7 variables:
+    ##  $ id           : chr  "ZLBMXFLtnS8" "crTTAelzvT4" "Ufk2Kn2zy-8" "bnJEkzM585s" ...
+    ##  $ viewCount    : num  1 2 3 4 5 6 7 8 9 10 ...
+    ##  $ likeCount    : num  1 1 2 3 3 2 4 2 5 6 ...
+    ##  $ dislikeCount : num  1 1 1 2 3 1 3 2 4 3 ...
+    ##  $ favoriteCount: num  1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ commentCount : num  1 1 2 1 2 1 1 1 1 1 ...
+    ##  $ .id          : chr  "items1" "items2" "items3" "items4" ...
+
+*Nah*, yang ini baru seru kan?
+
+> Atau saya doang yang bilang ini seru… *hehehe*
+
+Mari kita mulai *brute force* analisanya. Terserah saya mau *diapain*
+aja yah.
+
+### *viewCount*
+
+Berapa banyak sih yang *ngeliat* video di channel ini?
+
+``` r
+sum(eps$viewCount)
+```
+
+    ## [1] 2854
+
+Total ada `2.854` *viewers* dari `77` video. Dengan rata-rata *viewers*
+per episode sebesar:
+
+``` r
+round(mean(eps$viewCount),2)
+```
+
+    ## [1] 37.06
+
+Satu angka yang lumayan menurut saya, `37` *viewers* per video. Tapi
+dengan karakteristik *channel* yang frekuensi *upload* videonya
+jarang-jarang, maka kita liat dulu sebaran
+datanya.
+
+``` r
+boxplot(eps$viewCount)
+```
+
+![](2019-12-12-blog-posting-youtube-kalbe_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+
+# To be continue
+
+Saya selesaikan setelah POK yah…
