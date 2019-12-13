@@ -13,18 +13,35 @@ _Nah_, penasaran gak sih dengan data di _Youtube Channel_-nya __Kalbe__?
 
 Tadinya saya mencari _Youtube Channel_ dari __Diabetasol__, tapi ternyata isinya hanya segelintir video saja. Oleh karena itu, saya mengambil data dari _Youtube Channel_-nya [KalbeFamily](https://www.youtube.com/user/KalbeFamily).
 
-```{r,warning=FALSE,message=FALSE}
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
 #load the data
 library(dplyr)
 library(tidyr)
 library(tidytext)
 library(ggplot2)
 library(ggpubr)
-load("/cloud/project/Bukan Infografis/KalbeFamily/kalbe all data.rda")
 ```
 
 Yuk kita mulai penelusuran dan investigasi dari _Youtube Channel_-nya __KalbeFamily__.
 
-# __bersambung__
+# Load the data
 
-Saya kerjain setelah FINDX yah.
+Bagi _rekans_ yang mau ikutan ngoprek datanya, bisa diambil sendiri di github saya berikut ini yah. Bentuknya dalam format `.rda`, yakni __R files__ karena berisi lebih dari satu _datasets_.
+
+```{r}
+load("/cloud/project/Bukan Infografis/KalbeFamily/kalbe all data.rda")
+ls()
+```
+
+Ada lima _datasets_ pada _file_ tersebut, yakni:
+
+1. `channel`: merupakan __Youtube id__ dari channel _KalbeFamily_. _Hayo, sekarang saya tanya, gimana caranya saya dapetin Youtube id user lain?_
+2. `stat_channel`: berisi informasi dan statistik mengenai channel _KalbeFamily_.
+3. `all_videos`: berisi informasi mengenai seluruh video yang ada di channel _KalbeFamily_.
+4. `eps`: berisi statistik semua video yang ada di channel _KalbeFamily_. Apa saja isinya? Contohnya bisa dilihat di [_posting_ saya terdahulu]((https://ikanx101.github.io/blog/blog-posting-sunyi/)).
+5. `komen`: berisi seluruh data komentar _viewers_ di masing-masing video yang ada di channel _KalbeFamily_.
+
+
+### Bersambung...
+
+Saya selesaikan after FINDx yah...
