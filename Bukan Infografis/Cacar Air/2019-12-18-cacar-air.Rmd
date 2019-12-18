@@ -1,0 +1,72 @@
+---
+title: "Saya Terkena Cacar Air"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+> __Iya, saya kena cacar air...__
+
+Cerita bermula saat saya sedang pulang dari Bandung pasca [kuliah umum di Telkom University lalu](https://ikanx101.github.io/blog/kuliah-umum-tel-u/). Nyonya menelepon dari rumah, mengabarkan bahwa si sulung diduga terkena cacar air karena ciri fisiknya terlihat dengan jelas. Selain itu, memang ada kabar bahwa di sekolahnya sedang mewabah virus cacar air.
+
+Mendapatkan kabar tersebut, saya hanya berharap agar penyakitnya tidak memburuk dan menular ke si kecil.
+
+Esoknya kami periksakan si sulung ke dokter anak dan ternyata memang ia terkena cacar air. _Alhamdulillah_, anaknya mah gak ada demam sama sekali dan tetap ceria.
+
+Dalam mmasa pengobatan dan pemulihan, ia tetap mengikuti ujian akhir semester walau dipisahkan waktu dan ruang ujiannya.
+
+Singkat cerita, si sulunng sudah sembuh dan kami akan mengambil rapot di semester satu ini. Sepulangnya dari sana, si kecil berkkata kepada saya:
+
+> __Papa, ini tangannya ada apa?__
+
+Saya lihat ada satu _blister_ yang besar di lengan kiri saya. 
+
+Oh iya, ambil rapot itu hari sabtu pasca Findx
+
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+library(reshape2)
+library(ggplot2)
+
+tasks <- c("Si Ahnaf kena cacar", 
+           "Pengobatan dan pemulihan Ahnaf", 
+           "Pusing + meriang",
+           "FINDx",
+           "Muncul blister yang pertama",
+           "Demam",
+           "Itchy feeling")
+dfr <- data.frame(
+  name        = factor(tasks, levels = tasks),
+  start.date  = as.Date(c("2019-11-28", 
+                          "2019-11-29",
+                          "2019-12-11",
+                          "2019-12-13",
+                          "2019-12-14",
+                          "2019-12-14",
+                          "2019-12-16")),
+  end.date    = as.Date(c("2019-11-29", 
+                          "2019-12-09",
+                          "2019-12-15",
+                          "2019-12-14",
+                          "2019-12-15",
+                          "2019-12-16",
+                          "2019-12-18")),
+  fase = c("Ahnaf","Ahnaf","Saya","Saya","Saya","Saya",
+           "Saya")
+  )
+
+mdfr <- melt(dfr, measure.vars = c("start.date", "end.date"))
+
+ggplot(mdfr, aes(value, name, color=fase)) + 
+  geom_line(size = 6, alpha=.6) +
+  xlab(NULL) + 
+  ylab(NULL) +
+  theme_minimal() +
+  labs(title="My Chickenpox Story",
+       caption="ikanx101.github.io") +
+  theme(plot.title = element_text(size=20,
+                                  face="bold.italic"),
+        plot.caption = element_text(face="italic"),
+        color="Keterangan")
+```
