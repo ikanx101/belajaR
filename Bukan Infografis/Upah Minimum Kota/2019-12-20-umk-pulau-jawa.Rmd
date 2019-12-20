@@ -1,0 +1,71 @@
+---
+title: "Upah Minimum Kota di Pulau Jawa"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+setwd("/cloud/project/Bukan Infografis/Upah Minimum Kota")
+library(rvest)
+library(dplyr)
+library(ggplot2)
+library(ggpubr)
+library(tidyr)
+library(tidytext)
+```
+
+Sebagai seorang orang yang berkecimpung di dunia _recruitment_ dan _HR_, nyonya malam ini mengajak diskusi terkait dengan data hasil survey mengenai __Indonesia Salary Benchmark__ yang dilakukan oleh lembaga bernama _Michael Page_.
+
+> _Seharusnya gaji kamu itu segini lho..._ Katanya sambil menunjuk ke hasil surveynya.
+
+> _Oh begitu yah?_ Jawab saya sambil tersenyum.
+
+Persoalan mengenai gaji memang tiada habisnya. Dari level yang tinggi sampai yang paling bawah. Terlebih lagi saat kita membahas masalah __Upah Minimum Provinsi atau Kota__ yang ada di Pulau Jawa. Masing-masing provinsi dan kota memiliki cara perhitungan masing-masing sehingga besarannya juga berbeda.
+
+Ada yang masih menjadi polemik, ada yang tenang-tenang saja dan minim pemberitaan.
+
+Penasaran dengan besaran UMK tersebut, saya coba _Googling_ sana-sini untuk mendapatkan datanya.
+
+> _Kalau nemu dalam bentuk tabel, enak banget nih scrap-nya_ Pikir saya.
+
+Tapi setelah mencari-cari kok tidak ketemu yah.
+
+Akhirnya saya putuskan untuk mengambil datanya dari teks di [halaman berita ini](https://www.kompas.com/tren/read/2019/11/22/191520565/disahkan-berikut-rincian-ump-dan-umk-2020-di-dki-jakarta-jawa-barat-jawa?page=all).
+
+## Scrap data
+
+Saya mulai dengan scrap data menggunakan `library(rvest)` di __R__. Tapi sayang sekali, formatnya masih _unstructured_ sebagai berikut:
+
+```{r,echo=FALSE}
+url = 'https://www.kompas.com/tren/read/2019/11/22/191520565/disahkan-berikut-rincian-ump-dan-umk-2020-di-dki-jakarta-jawa-barat-jawa?page=all'
+
+data = read_html(url) %>% html_nodes('.read__content li') %>% html_text()
+data[101] = "DKI Jakarta Rp 4.267.349"
+head(data,15)
+```
+
+## Data carpentry
+
+Bentuk data itu harus saya ubah dulu agar bisa dianalisa lebih lanjut. Sebenarnya caranya simpel yah, jika diperhatikan baik - baik, saya bisa melakukan `separate` dengan memanfaatkan pola adanya tanda __Rp__ di setiap baris data.
+
+Setelah itu, saya akan tambahkan informasi mengenai nama provinsi sebagai variabel. Sehingga didapatkan data sebagai berikut:
+
+```{r,echo=FALSE}
+data = data.frame(isi=data,id=c(1:length(data)))
+data=
+  data %>%
+  mutate(isi = gsub('\\.','',isi),
+         isi = gsub('\\:','',isi)) %>%
+  separate(isi,into=c('kota_kab','umk'),sep='Rp') %>%
+  mutate(provinsi = 'a') %>%
+  select(provinsi,kota_kab,umk)
+data$provinsi[1:27] = 'Jawa Barat'
+data$provinsi[28:62] = 'Jawa Tengah'
+data$provinsi[63:100] = 'Jawa Timur'
+data$provinsi[101] = 'DKI Jakarta'
+head(data,15)
+```
+
