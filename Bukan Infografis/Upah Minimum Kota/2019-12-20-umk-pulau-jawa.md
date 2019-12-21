@@ -1,28 +1,6 @@
 Upah Minimum Kota di Pulau Jawa
 ================
 
-    ## Loading required package: xml2
-
-    ## 
-    ## Attaching package: 'dplyr'
-
-    ## The following objects are masked from 'package:stats':
-    ## 
-    ##     filter, lag
-
-    ## The following objects are masked from 'package:base':
-    ## 
-    ##     intersect, setdiff, setequal, union
-
-    ## Loading required package: magrittr
-
-    ## 
-    ## Attaching package: 'tidyr'
-
-    ## The following object is masked from 'package:magrittr':
-    ## 
-    ##     extract
-
 Sebagai seorang orang yang berkecimpung di dunia *recruitment* dan *HR*,
 nyonya malam ini mengajak diskusi terkait dengan data hasil survey
 mengenai **Indonesia Salary Benchmark** yang dilakukan oleh lembaga
@@ -84,35 +62,46 @@ setiap baris data.
 Setelah itu, saya akan tambahkan informasi mengenai nama provinsi
 sebagai variabel. Sehingga didapatkan data sebagai berikut:
 
+    ##      provinsi      tipe                 kota_kab     umk
+    ## 1  Jawa Barat Kabupaten      Kabupaten Karawang  4594324
+    ## 2  Jawa Barat      Kota             Kota Bekasi  4589708
+    ## 3  Jawa Barat Kabupaten        Kabupaten Bekasi  4498961
+    ## 4  Jawa Barat      Kota              Kota Depok  4202105
+    ## 5  Jawa Barat      Kota              Kota Bogor  4169806
+    ## 6  Jawa Barat Kabupaten         Kabupaten Bogor  4083670
+    ## 7  Jawa Barat Kabupaten    Kabupaten Purwakarta  4039067
+    ## 8  Jawa Barat      Kota            Kota Bandung  3623778
+    ## 9  Jawa Barat Kabupaten Kabupaten Bandung Barat  3145427
+    ## 10 Jawa Barat Kabupaten      Kabupaten Sumedang  3139275
+    ## 11 Jawa Barat Kabupaten       Kabupaten Bandung  3139275
+    ## 12 Jawa Barat      Kota             Kota Cimahi  3139274
+    ## 13 Jawa Barat Kabupaten      Kabupaten Sukabumi  3028531
+    ## 14 Jawa Barat Kabupaten        Kabupaten Subang  2965468
+    ## 15 Jawa Barat Kabupaten       Kabupaten Cianjur  2534798
+
+## Mulai oprek-oprek
+
+Nah, berhubung datanya sudah rapih, mari kita lihat satu-persatu yah.
+
+### Kota vs Kabupaten
+
+Banyak orang (termasuk saya) tidak bisa membedakan apa itu kota dan
+kabupaten. Apakah kota selalu lebih maju dibanding kabupaten? Untuk
+urusan upah minimum ini, mari kita lihat perbandingan kota dan kabupaten
+di Jawa Barat, Jawa Tengah, dan Jawa Timur.
+
 ``` r
-data = data.frame(isi=data,id=c(1:length(data)))
-data=
-  data %>%
-  mutate(isi = gsub('\\.','',isi),
-         isi = gsub('\\:','',isi)) %>%
-  separate(isi,into=c('kota_kab','umk'),sep='Rp') %>%
-  mutate(provinsi = 'a') %>%
-  select(provinsi,kota_kab,umk)
-data$provinsi[1:27] = 'Jawa Barat'
-data$provinsi[28:62] = 'Jawa Tengah'
-data$provinsi[63:100] = 'Jawa Timur'
-data$provinsi[101] = 'DKI Jakarta'
-head(data,15)
+data %>% filter(tipe!='DKI') %>% group_by(tipe) %>%
+  summarise(rata=mean(umk),stdev=sd(umk)) %>%
+  ggplot(aes(x=tipe,y=rata)) + geom_col(color='steelblue',fill='white',alpha=.4) +
+  geom_errorbar(aes(ymin=rata-stdev, ymax=rata+stdev), width=.2,color='darkgreen') +
+  theme_pubclean() +
+  labs(title = 'Upah Minimum Kota vs Kabupaten 2020',
+       subtitle = 'Jawa Barat, Jawa Tengah, dan Jawa Timur',
+       caption = 'ikanx.github.io') +
+  theme(axis.text.y = element_blank(),
+        axis.title = element_blank(),
+        plot.title = element_text(size=25,face='bold.italic'))
 ```
 
-    ##      provinsi                 kota_kab      umk
-    ## 1  Jawa Barat      Kabupaten Karawang   4594324
-    ## 2  Jawa Barat             Kota Bekasi   4589708
-    ## 3  Jawa Barat        Kabupaten Bekasi   4498961
-    ## 4  Jawa Barat              Kota Depok   4202105
-    ## 5  Jawa Barat              Kota Bogor   4169806
-    ## 6  Jawa Barat         Kabupaten Bogor   4083670
-    ## 7  Jawa Barat    Kabupaten Purwakarta   4039067
-    ## 8  Jawa Barat            Kota Bandung   3623778
-    ## 9  Jawa Barat Kabupaten Bandung Barat   3145427
-    ## 10 Jawa Barat      Kabupaten Sumedang   3139275
-    ## 11 Jawa Barat       Kabupaten Bandung   3139275
-    ## 12 Jawa Barat             Kota Cimahi   3139274
-    ## 13 Jawa Barat      Kabupaten Sukabumi   3028531
-    ## 14 Jawa Barat        Kabupaten Subang   2965468
-    ## 15 Jawa Barat       Kabupaten Cianjur   2534798
+![](2019-12-20-umk-pulau-jawa_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->

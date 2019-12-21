@@ -60,12 +60,40 @@ data=
   mutate(isi = gsub('\\.','',isi),
          isi = gsub('\\:','',isi)) %>%
   separate(isi,into=c('kota_kab','umk'),sep='Rp') %>%
-  mutate(provinsi = 'a') %>%
-  select(provinsi,kota_kab,umk)
+  mutate(umk = gsub(' ','',umk),
+         provinsi = 'a', tipe='b') %>%
+  select(provinsi,tipe,kota_kab,umk)
 data$provinsi[1:27] = 'Jawa Barat'
 data$provinsi[28:62] = 'Jawa Tengah'
 data$provinsi[63:100] = 'Jawa Timur'
 data$provinsi[101] = 'DKI Jakarta'
+data$tipe = ifelse(grepl('kota',data$kota_kab,ignore.case = T),'Kota','Kabupaten')
+data$tipe[101] = 'DKI'
+data$umk = as.numeric(data$umk)
 head(data,15)
 ```
+
+## Mulai oprek-oprek
+
+Nah, berhubung datanya sudah rapih, mari kita lihat satu-persatu yah.
+
+### Kota vs Kabupaten
+
+Banyak orang (termasuk saya) tidak bisa membedakan apa itu kota dan kabupaten. Apakah kota selalu lebih maju dibanding kabupaten? Untuk urusan upah minimum ini, mari kita lihat perbandingan kota dan kabupaten di Jawa Barat, Jawa Tengah, dan Jawa Timur.
+
+```{r}
+data %>% filter(tipe!='DKI') %>% group_by(tipe) %>%
+  summarise(rata=mean(umk),stdev=sd(umk)) %>%
+  ggplot(aes(x=tipe,y=rata)) + geom_col(color='steelblue',fill='white',alpha=.4) +
+  geom_errorbar(aes(ymin=rata-stdev, ymax=rata+stdev), width=.2,color='darkgreen') +
+  theme_pubclean() +
+  labs(title = 'Upah Minimum Kota vs Kabupaten 2020',
+       subtitle = 'Jawa Barat, Jawa Tengah, dan Jawa Timur',
+       caption = 'ikanx.github.io') +
+  theme(axis.text.y = element_blank(),
+        axis.title = element_blank(),
+        plot.title = element_text(size=25,face='bold.italic'))
+```
+
+
 
