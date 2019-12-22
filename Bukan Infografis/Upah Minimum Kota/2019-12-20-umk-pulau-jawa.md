@@ -11,10 +11,12 @@ bernama *Michael Page*.
 
 > *Oh begitu yah?* Jawab saya sambil tersenyum.
 
-Persoalan mengenai gaji memang tiada habisnya. Dari level yang tinggi
-sampai yang paling bawah. Terlebih lagi saat kita membahas masalah
-**Upah Minimum Provinsi atau Kota** yang ada di Pulau Jawa.
-Masing-masing provinsi dan kota memiliki cara perhitungan masing-masing
+Pembahasan mengenai gaji memang tiada habisnya.
+
+Berbicara soal gaji, ada satu topik yang biasanya selalu menjadi buah
+bibir di akhir tahun. Yaitu mengenai upah minimum kota / kabupaten /
+provinsi (saya singkat menjadi **UMK** yah). Di Pulau Jawa,
+masing-masing provinsi dan kota memiliki cara perhitungan masing-masing
 sehingga besarannya juga berbeda.
 
 Ada yang masih menjadi polemik, ada yang tenang-tenang saja dan minim
@@ -30,6 +32,11 @@ Tapi setelah mencari-cari kok tidak ketemu yah.
 Akhirnya saya putuskan untuk mengambil datanya dari teks di [halaman
 berita
 ini](https://www.kompas.com/tren/read/2019/11/22/191520565/disahkan-berikut-rincian-ump-dan-umk-2020-di-dki-jakarta-jawa-barat-jawa?page=all).
+
+Di *website* tersebut, hanya disebutkan **UMK** dari provinsi DKI
+Jakarta, Jawa Barat, Jawa Tengah, dan Jawa Timur. Seagai informasi, DKI
+Jakarta hanya memiliki satu nilai `umk` yakni sebesar: Rp 4.267.349,
+maka saya hanya akan membahas data di provinsi lainnya yah.
 
 ## Scrap data
 
@@ -90,13 +97,6 @@ kabupaten. Apakah kota selalu lebih maju dibanding kabupaten? Untuk
 urusan upah minimum ini, mari kita lihat perbandingan kota dan kabupaten
 di Jawa Barat, Jawa Tengah, dan Jawa Timur.
 
-``` r
-data %>% filter(tipe!='DKI') %>% group_by(tipe) %>%
-  summarise(mean_umk=mean(umk),
-            std_umk=sd(umk),
-            n=n())
-```
-
     ## # A tibble: 2 x 4
     ##   tipe      mean_umk std_umk     n
     ##   <chr>        <dbl>   <dbl> <int>
@@ -145,3 +145,90 @@ Kita akan bandingkan nilai **p-value** tersebut dengan alpha=0.05.
 
 Kita bisa menyimpulkan bahwa ada perbedaan nilai rata-rata `umk` di kota
 dan kabupaten pada data ini.
+
+### Provinsi vs Provinsi
+
+Mari kita coba cek, apakah ada perbedaan nilai `umk` di ketiga provinsi
+ini? Kita hitung nilai rata-rata dan standar deviasinya yah:
+
+    ## # A tibble: 3 x 4
+    ##   provinsi    mean_umk std_umk     n
+    ##   <chr>          <dbl>   <dbl> <int>
+    ## 1 Jawa Barat  2963496. 949951.    27
+    ## 2 Jawa Tengah 1980785. 199966.    35
+    ## 3 Jawa Timur  2447814. 760704.    38
+
+![](2019-12-20-umk-pulau-jawa_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
+Kalau kita lihat sekilas, sepertinya ketiga provinsi tersebut tidak
+memiliki rata-rata `umk` yang sama.
+
+> Mari kita konfirmasi dugaan tersebut dengan pengujian statistik.
+
+Berhubung saya tidak ingin menggunakan **Annova** (*statistika
+parametrik*), saya akan menggunakan metode *statistika non parametrik*
+pengganti **Annova**, yakni: **Kruskal Wallis test**.
+
+Seperti biasa, kita akan bangun hipotesis berikut ini:
+
+1.  H0: `umk` di semua provinsi tidak berbeda signifikan.
+2.  H1: terdapat perbedaan `umk` yang signifikan di antara ketiganya
+    (minimal satu provinsi berbeda).
+
+Kita dapatkan hasil sebagai berikut:
+
+    ## 
+    ##  Kruskal-Wallis rank sum test
+    ## 
+    ## data:  umk by provinsi
+    ## Kruskal-Wallis chi-squared = 25.968, df = 2, p-value = 2.296e-06
+
+Dari hasil uji di atas, kita akan melihat berapa nilai **p-value** yang
+didapatkan, yakni:
+
+    ## [1] 2.296457e-06
+
+Kita akan bandingkan nilai **p-value** tersebut dengan alpha=0.05.
+
+> Karena **p-value** lebih kecil dari alpha, maka H0 ditolak.
+
+Kita bisa menyimpulkan bahwa ada perbedaan nilai rata-rata `umk` di tiga
+provinsi ini.
+
+-----
+
+#### Provinsi mana yang memiliki `umk` lebih besar?
+
+Lalu, apa bisa kita tentukan siapa yang memiliki rata-rata `umk`
+terbesar? Secara visual kita bisa melihatnya sendiri dari grafik di
+atas. Tapi jika ingin lebih pasti. Kita bisa gunakan uji statistik
+bernama **multiple pairwise comparison using wilcox test**.
+
+    ## 
+    ##  Pairwise comparisons using Wilcoxon rank sum test 
+    ## 
+    ## data:  my_data$umk and my_data$provinsi 
+    ## 
+    ##             Jawa Barat Jawa Tengah
+    ## Jawa Tengah 7.8e-06    -          
+    ## Jawa Timur  0.04195    0.00048    
+    ## 
+    ## P value adjustment method: BH
+
+Jika kita perhatikan tabel di atas. Nilai **p-value** yang didapatkan
+semuanya lebih kecil daripada nilai alpha=0.05.
+
+> Kita bisa simpulkan bahwa rata-rata `umk` di Jawa Barat \> Jawa Timur
+> \> Jawa Tengah.
+
+### Kota vs Kabupaten per Provinsi
+
+Nah, di bagian terakhir ini. Saya ingin membuat visualisasi jika analisa
+pertama (kota vs kabupaten) dilakukan untuk setiap provinsi.
+
+Bagaimana
+hasilnya?
+
+![](2019-12-20-umk-pulau-jawa_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+
+# Any comments?

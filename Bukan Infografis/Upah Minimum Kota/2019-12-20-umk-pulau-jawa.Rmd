@@ -23,7 +23,9 @@ Sebagai seorang orang yang berkecimpung di dunia _recruitment_ dan _HR_, nyonya 
 
 > _Oh begitu yah?_ Jawab saya sambil tersenyum.
 
-Persoalan mengenai gaji memang tiada habisnya. Dari level yang tinggi sampai yang paling bawah. Terlebih lagi saat kita membahas masalah __Upah Minimum Provinsi atau Kota__ yang ada di Pulau Jawa. Masing-masing provinsi dan kota memiliki cara perhitungan masing-masing sehingga besarannya juga berbeda.
+Pembahasan mengenai gaji memang tiada habisnya. 
+
+Berbicara soal gaji, ada satu topik yang biasanya selalu menjadi buah bibir di akhir tahun. Yaitu mengenai upah minimum kota / kabupaten / provinsi (saya singkat menjadi __UMK__ yah). Di Pulau Jawa, masing-masing provinsi dan kota memiliki cara perhitungan masing-masing sehingga besarannya juga berbeda.
 
 Ada yang masih menjadi polemik, ada yang tenang-tenang saja dan minim pemberitaan.
 
@@ -35,6 +37,8 @@ Tapi setelah mencari-cari kok tidak ketemu yah.
 
 Akhirnya saya putuskan untuk mengambil datanya dari teks di [halaman berita ini](https://www.kompas.com/tren/read/2019/11/22/191520565/disahkan-berikut-rincian-ump-dan-umk-2020-di-dki-jakarta-jawa-barat-jawa?page=all).
 
+Di _website_ tersebut, hanya disebutkan __UMK__ dari provinsi DKI Jakarta, Jawa Barat, Jawa Tengah, dan Jawa Timur. Seagai informasi, DKI Jakarta hanya memiliki satu nilai `umk` yakni sebesar: Rp 4.267.349, maka saya hanya akan membahas data di provinsi lainnya yah.
+
 ## Scrap data
 
 Saya mulai dengan scrap data menggunakan `library(rvest)` di __R__. Tapi sayang sekali, formatnya masih _unstructured_ sebagai berikut:
@@ -43,7 +47,6 @@ Saya mulai dengan scrap data menggunakan `library(rvest)` di __R__. Tapi sayang 
 url = 'https://www.kompas.com/tren/read/2019/11/22/191520565/disahkan-berikut-rincian-ump-dan-umk-2020-di-dki-jakarta-jawa-barat-jawa?page=all'
 
 data = read_html(url) %>% html_nodes('.read__content li') %>% html_text()
-data[101] = "DKI Jakarta Rp 4.267.349"
 head(data,15)
 ```
 
@@ -66,9 +69,7 @@ data=
 data$provinsi[1:27] = 'Jawa Barat'
 data$provinsi[28:62] = 'Jawa Tengah'
 data$provinsi[63:100] = 'Jawa Timur'
-data$provinsi[101] = 'DKI Jakarta'
 data$tipe = ifelse(grepl('kota',data$kota_kab,ignore.case = T),'Kota','Kabupaten')
-data$tipe[101] = 'DKI'
 data$umk = as.numeric(data$umk)
 head(data,15)
 ```
@@ -81,26 +82,26 @@ Nah, berhubung datanya sudah rapih, mari kita lihat satu-persatu yah.
 
 Banyak orang (termasuk saya) tidak bisa membedakan apa itu kota dan kabupaten. Apakah kota selalu lebih maju dibanding kabupaten? Untuk urusan upah minimum ini, mari kita lihat perbandingan kota dan kabupaten di Jawa Barat, Jawa Tengah, dan Jawa Timur.
 
-```{r}
-data %>% filter(tipe!='DKI') %>% group_by(tipe) %>%
+```{r,echo=FALSE}
+data %>% group_by(tipe) %>%
   summarise(mean_umk=mean(umk),
             std_umk=sd(umk),
             n=n())
 ```
 
 ```{r,echo=FALSE}
-data %>% filter(tipe!='DKI') %>% group_by(tipe) %>%
+data %>% group_by(tipe) %>%
   summarise(rata=mean(umk),stdev=sd(umk)) %>%
   ggplot(aes(x=tipe,y=rata)) + geom_col(color='steelblue',fill='white',alpha=.4) +
   geom_errorbar(aes(ymin=rata-stdev, ymax=rata+stdev), width=.2,color='darkgreen') +
   geom_label(aes(label=paste(round(rata/1000000,1),'juta'))) +
   theme_pubclean() +
-  labs(title = 'Upah Minimum Kota vs Kabupaten 2020',
-       subtitle = 'Jawa Barat, Jawa Tengah, dan Jawa Timur',
+  labs(title = 'Rata-Rata Upah Minimum Kota vs Kabupaten 2020',
+       subtitle = 'Provinsi Jawa Barat, Jawa Tengah, dan Jawa Timur',
        caption = 'ikanx.github.io') +
   theme(axis.text.y = element_blank(),
         axis.title = element_blank(),
-        plot.title = element_text(size=25,face='bold.italic'))
+        plot.title = element_text(size=18,face='bold.italic'))
 ```
 
 Dari informasi dan grafik di atas, kita bisa menyimpulkan sementara bahwa upah minimum di kota lebih tinggi dibandingkan kabupaten. Apakah perbedaan ini signifikan? Untuk mengeceknya, kita akan lakukan uji t (_t test_).
@@ -119,7 +120,7 @@ Untuk menyelesaikannya, saya akan membuat hipotesis berikut:
 Mari kita uji hipotesis tersebùt dengan __Wilcoxon test__.
 
 ```{r,echo=FALSE}
-my_data = data %>% filter(tipe!='DKI')
+my_data = data
 stat_uji = wilcox.test(umk ~ tipe, 
                        data = my_data,
                        exact = FALSE)
@@ -138,6 +139,96 @@ Kita akan bandingkan nilai __p-value__ tersebut dengan alpha=0.05.
 
 Kita bisa menyimpulkan bahwa ada perbedaan nilai rata-rata `umk` di kota dan kabupaten pada data ini.
 
-```{r}
+### Provinsi vs Provinsi
 
+Mari kita coba cek, apakah ada perbedaan nilai `umk` di ketiga provinsi ini? Kita hitung nilai rata-rata dan standar deviasinya yah:
+
+```{r,echo=FALSE}
+data %>% group_by(provinsi) %>%
+  summarise(mean_umk=mean(umk),
+            std_umk=sd(umk),
+            n=n())
 ```
+
+```{r,echo=FALSE}
+data %>% group_by(provinsi) %>%
+  summarise(rata=mean(umk),stdev=sd(umk)) %>%
+  ggplot(aes(x=provinsi,y=rata)) + geom_col(color='steelblue',fill='white',alpha=.4) +
+  geom_errorbar(aes(ymin=rata-stdev, ymax=rata+stdev), width=.2,color='darkgreen') +
+  geom_label(aes(label=paste(round(rata/1000000,1),'juta'))) +
+  theme_pubclean() +
+  labs(title = 'Rata-Rata Upah Minimum Kota / Kabupaten 2020',
+       subtitle = 'Provinsi Jawa Barat, Jawa Tengah, dan Jawa Timur',
+       caption = 'ikanx.github.io') +
+  theme(axis.text.y = element_blank(),
+        axis.title = element_blank(),
+        plot.title = element_text(size=18,face='bold.italic'))
+```
+
+Kalau kita lihat sekilas, sepertinya ketiga provinsi tersebut tidak memiliki rata-rata `umk` yang sama. 
+
+> Mari kita konfirmasi dugaan tersebut dengan pengujian statistik. 
+
+Berhubung saya tidak ingin menggunakan __Annova__ (_statistika parametrik_), saya akan menggunakan metode _statistika non parametrik_ pengganti __Annova__, yakni: __Kruskal Wallis test__.
+
+Seperti biasa, kita akan bangun hipotesis berikut ini:
+
+1. H0: `umk` di semua provinsi tidak berbeda signifikan.
+2. H1: terdapat perbedaan `umk` yang signifikan di antara ketiganya (minimal satu provinsi berbeda).
+
+Kita dapatkan hasil sebagai berikut:
+
+```{r,echo=FALSE}
+uji_stat.2 = kruskal.test(umk ~ provinsi, data = my_data)
+uji_stat.2
+```
+
+Dari hasil uji di atas, kita akan melihat berapa nilai __p-value__ yang didapatkan, yakni:
+
+```{r,echo=FALSE}
+uji_stat.2$p.value
+```
+
+Kita akan bandingkan nilai __p-value__ tersebut dengan alpha=0.05.
+
+> Karena __p-value__ lebih kecil dari alpha, maka H0 ditolak.
+
+Kita bisa menyimpulkan bahwa ada perbedaan nilai rata-rata `umk` di tiga provinsi ini.
+
+____
+
+#### Provinsi mana yang memiliki `umk` lebih besar?
+
+Lalu, apa bisa kita tentukan siapa yang memiliki rata-rata `umk` terbesar? Secara visual kita bisa melihatnya sendiri dari grafik di atas. Tapi jika ingin lebih pasti. Kita bisa gunakan uji statistik bernama __multiple pairwise comparison using wilcox test__.
+
+```{r,echo=FALSE,warning=FALSE}
+pairwise.wilcox.test(my_data$umk,my_data$provinsi,p.adjust.method = "BH")
+```
+
+Jika kita perhatikan tabel di atas. Nilai __p-value__ yang didapatkan semuanya lebih kecil daripada nilai alpha=0.05.
+
+> Kita bisa simpulkan bahwa rata-rata `umk` di Jawa Barat > Jawa Timur > Jawa Tengah.
+
+### Kota vs Kabupaten per Provinsi
+
+Nah, di bagian terakhir ini. Saya ingin membuat visualisasi jika analisa pertama (kota vs kabupaten) dilakukan untuk setiap provinsi.
+
+Bagaimana hasilnya?
+
+```{r,echo=FALSE}
+data %>% group_by(tipe,provinsi) %>%
+  summarise(rata=mean(umk),stdev=sd(umk)) %>%
+  ggplot(aes(x=tipe,y=rata)) + geom_col(color='steelblue',fill='white',alpha=.4) +
+  geom_errorbar(aes(ymin=rata-stdev, ymax=rata+stdev), width=.2,color='darkgreen') +
+  geom_label(aes(label=paste(round(rata/1000000,1),'juta'))) +
+  facet_wrap(~provinsi) +
+  theme_pubclean() +
+  labs(title = 'Rata-Rata Upah Minimum Kota / Kabupaten 2020',
+       subtitle = 'Provinsi Jawa Barat, Jawa Tengah, dan Jawa Timur',
+       caption = 'ikanx.github.io') +
+  theme(axis.text.y = element_blank(),
+        axis.title = element_blank(),
+        plot.title = element_text(size=18,face='bold.italic'))
+```
+
+# Any comments?
