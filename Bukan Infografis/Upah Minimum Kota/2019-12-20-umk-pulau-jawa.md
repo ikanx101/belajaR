@@ -92,16 +92,56 @@ di Jawa Barat, Jawa Tengah, dan Jawa Timur.
 
 ``` r
 data %>% filter(tipe!='DKI') %>% group_by(tipe) %>%
-  summarise(rata=mean(umk),stdev=sd(umk)) %>%
-  ggplot(aes(x=tipe,y=rata)) + geom_col(color='steelblue',fill='white',alpha=.4) +
-  geom_errorbar(aes(ymin=rata-stdev, ymax=rata+stdev), width=.2,color='darkgreen') +
-  theme_pubclean() +
-  labs(title = 'Upah Minimum Kota vs Kabupaten 2020',
-       subtitle = 'Jawa Barat, Jawa Tengah, dan Jawa Timur',
-       caption = 'ikanx.github.io') +
-  theme(axis.text.y = element_blank(),
-        axis.title = element_blank(),
-        plot.title = element_text(size=25,face='bold.italic'))
+  summarise(mean_umk=mean(umk),
+            std_umk=sd(umk),
+            n=n())
 ```
 
-![](2019-12-20-umk-pulau-jawa_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+    ## # A tibble: 2 x 4
+    ##   tipe      mean_umk std_umk     n
+    ##   <chr>        <dbl>   <dbl> <int>
+    ## 1 Kabupaten 2339478. 746316.    76
+    ## 2 Kota      2689935. 859071.    24
+
+![](2019-12-20-umk-pulau-jawa_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+
+Dari informasi dan grafik di atas, kita bisa menyimpulkan sementara
+bahwa upah minimum di kota lebih tinggi dibandingkan kabupaten. Apakah
+perbedaan ini signifikan? Untuk mengeceknya, kita akan lakukan uji t (*t
+test*).
+
+> Tapi ingat ya, bahwa *t test* itu digunakan pada statistika
+> parametrik\!
+
+Untuk data UMK ini, berhubung saya malas untuk mengecek normalitasnya,
+maka saya akan gunakan uji non parametrik pengganti *t test* yakni
+**Wilcoxon test (rank sum test)**.
+
+Sebagai informasi, statistika non parametrik adalah analisa statistika
+yang tidak memperdulikan distribusi dari suatu data yang akan diuji.
+
+Untuk menyelesaikannya, saya akan membuat hipotesis berikut:
+
+1.  H0: `umk` di kota dan kabupaten tidak berbeda signifikan.
+2.  H1: `umk` di kota dan kabupaten berbeda signifikan.
+
+Mari kita uji hipotesis tersebùt dengan **Wilcoxon test**.
+
+    ## 
+    ##  Wilcoxon rank sum test with continuity correction
+    ## 
+    ## data:  umk by tipe
+    ## W = 588, p-value = 0.008993
+    ## alternative hypothesis: true location shift is not equal to 0
+
+Dari hasil uji di atas, kita akan melihat berapa nilai **p-value** yang
+didapatkan, yakni:
+
+    ## [1] 0.008993401
+
+Kita akan bandingkan nilai **p-value** tersebut dengan alpha=0.05.
+
+> Karena **p-value** lebih kecil dari alpha, maka H0 ditolak.
+
+Kita bisa menyimpulkan bahwa ada perbedaan nilai rata-rata `umk` di kota
+dan kabupaten pada data ini.

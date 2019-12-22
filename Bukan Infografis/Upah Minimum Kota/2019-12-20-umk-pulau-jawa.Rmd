@@ -83,9 +83,17 @@ Banyak orang (termasuk saya) tidak bisa membedakan apa itu kota dan kabupaten. A
 
 ```{r}
 data %>% filter(tipe!='DKI') %>% group_by(tipe) %>%
+  summarise(mean_umk=mean(umk),
+            std_umk=sd(umk),
+            n=n())
+```
+
+```{r,echo=FALSE}
+data %>% filter(tipe!='DKI') %>% group_by(tipe) %>%
   summarise(rata=mean(umk),stdev=sd(umk)) %>%
   ggplot(aes(x=tipe,y=rata)) + geom_col(color='steelblue',fill='white',alpha=.4) +
   geom_errorbar(aes(ymin=rata-stdev, ymax=rata+stdev), width=.2,color='darkgreen') +
+  geom_label(aes(label=paste(round(rata/1000000,1),'juta'))) +
   theme_pubclean() +
   labs(title = 'Upah Minimum Kota vs Kabupaten 2020',
        subtitle = 'Jawa Barat, Jawa Tengah, dan Jawa Timur',
@@ -95,5 +103,41 @@ data %>% filter(tipe!='DKI') %>% group_by(tipe) %>%
         plot.title = element_text(size=25,face='bold.italic'))
 ```
 
+Dari informasi dan grafik di atas, kita bisa menyimpulkan sementara bahwa upah minimum di kota lebih tinggi dibandingkan kabupaten. Apakah perbedaan ini signifikan? Untuk mengeceknya, kita akan lakukan uji t (_t test_).
 
+> Tapi ingat ya, bahwa _t test_ itu digunakan pada statistika parametrik!
 
+Untuk data UMK ini, berhubung saya malas untuk mengecek normalitasnya, maka saya akan gunakan uji non parametrik pengganti _t test_ yakni __Wilcoxon test (rank sum test)__.
+
+Sebagai informasi, statistika non parametrik adalah analisa statistika yang tidak memperdulikan distribusi dari suatu data yang akan diuji.
+
+Untuk menyelesaikannya, saya akan membuat hipotesis berikut:
+
+1. H0: `umk` di kota dan kabupaten tidak berbeda signifikan.
+2. H1: `umk` di kota dan kabupaten berbeda signifikan.
+
+Mari kita uji hipotesis tersebùt dengan __Wilcoxon test__.
+
+```{r,echo=FALSE}
+my_data = data %>% filter(tipe!='DKI')
+stat_uji = wilcox.test(umk ~ tipe, 
+                       data = my_data,
+                       exact = FALSE)
+stat_uji
+```
+
+Dari hasil uji di atas, kita akan melihat berapa nilai __p-value__ yang didapatkan, yakni:
+
+```{r,echo=FALSE}
+stat_uji$p.value
+```
+
+Kita akan bandingkan nilai __p-value__ tersebut dengan alpha=0.05.
+
+> Karena __p-value__ lebih kecil dari alpha, maka H0 ditolak.
+
+Kita bisa menyimpulkan bahwa ada perbedaan nilai rata-rata `umk` di kota dan kabupaten pada data ini.
+
+```{r}
+
+```
