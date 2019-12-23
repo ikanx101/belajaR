@@ -105,16 +105,127 @@ new %>% ggplot(aes(x=factor(bulan),y=hits)) + geom_line(aes(group=tahun)) +
 
 ```
 
-Dugaan saya, ada peningkatan pencarian di dekat-dekat musim liburan lebaran.
+Dugaan saya, ada peningkatan pencarian di dekat-dekat musim liburan lebaran. 
+
+> Dengan menggunakan prinsip dekomposisi data _time series_, saya akan coba melihat _pattern underlying the data_.
 
 ```{r,echo=FALSE}
-new_ts = new %>% select(hits)
+new_ts = new$hits
 new_ts = ts(new_ts,start = c(2015,1),frequency=12)
+new_ts = stl(new_ts,s.window = 'periodic')
 plot(new_ts)
 ```
 
+Dilihat dari _trend_ pencarian, ternyata meningkat _over time_. Bagaimana dengan pola _seasonal_-nya? Mari kita _highlight_ bagian seasonal dari grafik di atas menjadi sebagai berikut:
+
+```{r,echo=FALSE}
+new_ts = new_ts$time.series
+new_ts = as.data.frame(new_ts)
+new_ts %>% mutate(bulan = c(1:12,1:12,1:12,1:12,1:12)) %>% 
+  ggplot(aes(x=factor(bulan),y=seasonal)) +
+  geom_line(aes(group=1),color='steelblue') +
+  theme_cleveland() +
+  labs(title = 'Pola Seasonal Pencarian Keywords',
+       subtitle = 'Google Trend Data: 23 Desember 2019',
+       caption = 'ikanx101.github.io',
+       x = 'Bulan ke-') +
+  theme(axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        plot.title = element_text(face='bold.italic',size=15))
+```
+
+> Ternyata ada pola kenaikan pencarian pada masa-masa liburan lebaran dan akhir tahun.
+
+____
+
+# `interest_by_region`
+
+Berikutnya kita akan membahas _dataset_ `interest_by_region`. Apa saja variabel yang ada di _dataset_ tersebut?
+
 ```{r}
 str(data$interest_by_region)
+```
+
+Ternyata _dataset_ ini berisi nama _region_ dan seberapa besar mereka mencari kedua _keywords_ __japek__ ini.
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+data$interest_by_region %>% group_by(location) %>% summarise(hit=sum(hits)) %>%
+  filter(!is.na(hit)) %>%
+  ggplot(aes(x=reorder(location,hit),y=hit)) + geom_col(color='steelblue',fill='white',alpha=.6) +
+  geom_label(aes(label=hit)) +
+  coord_flip() +
+  theme_cleveland() +
+  labs(title = 'Region Mana Saja yang Banyak Mencari Keywords Ini?',
+       subtitle = 'Google Trend Data: 23 Desember 2019',
+       caption = 'ikanx101.github.io') +
+  theme(axis.title = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        plot.title = element_text(face='bold.italic',size=13))
+```
+
+Ternyata tidak warganet yang mencari _keywords_ ini tidak hanya berasal dari _region_ Jawa Barat dan DKI Jakarta saja. Tapi cukup menyebar di Indonesia.
+
+____
+
+# `interest_by_city`
+
+Berikutnya kita akan membahas _dataset_ `interest_by_city`. Apa saja variabel yang ada di _dataset_ tersebut?
+
+```{r}
 str(data$interest_by_city)
+```
+
+Ternyata _dataset_ ini berisi nama _city_ dan seberapa besar mereka mencari kedua _keywords_ __japek__ ini. 
+
+> Mirip dengan _dataset_ sebelumnya yah.
+
+```{r,echo=FALSE}
+data$interest_by_city %>% mutate(hits = as.numeric(hits)) %>% filter(!is.na(hits)) %>%
+  group_by(location) %>% summarise(hit=sum(hits)) %>%
+  ggplot(aes(x=reorder(location,hit),y=hit)) + geom_col(color='steelblue',fill='white',alpha=.6) +
+  geom_label(aes(label=hit)) +
+  coord_flip() +
+  theme_cleveland() +
+  labs(title = 'Kota Mana Saja yang Banyak Mencari Keywords Ini?',
+       subtitle = 'Google Trend Data: 23 Desember 2019',
+       caption = 'ikanx101.github.io') +
+  theme(axis.title = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        plot.title = element_text(face='bold.italic',size=13))
+```
+
+> Ternyata warganet yang paling banyak mencari berasal dari Bekasi.
+
+____
+
+# `related_queries`
+
+Nah, pada _dataset_ terakhir, kita lihat ada variabel apa saja yah:
+
+```{r}
 str(data$related_queries)
 ```
+
+Kita akan lakukan _simple text analysis_ dari data _related_query_ ini yah.
+
+## Wordcloud
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+text = data$related_queries$value
+dummy = data.frame(id=c(1:length(text)),text)
+dummy$text = as.character(dummy$text)
+sensor = c('2','tol','jakarta','cikampek','japek','2019','di','jln','ini','jalan')
+wc = 
+  dummy %>% unnest_tokens('words',text) %>% filter(!words %in% sensor) %>%
+  count(words,sort=T) 
+wc
+
+#library(wordcloud2)
+#wordcloud2(wc,shape = 'star',size=1)
+```
+![alt text](enter url di sini "japek")
+
+Ada yang bisa disimpulkan dari data _related queries_ ini?

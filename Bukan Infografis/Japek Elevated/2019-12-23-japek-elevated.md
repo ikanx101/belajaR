@@ -37,7 +37,7 @@ Apa saja sih isi dari *dataset* ini?
 
     ## 'data.frame':    520 obs. of  7 variables:
     ##  $ date    : POSIXct, format: "2014-12-28" "2015-01-04" ...
-    ##  $ hits    : int  3 2 3 2 3 4 6 2 3 3 ...
+    ##  $ hits    : int  4 2 3 3 3 4 4 1 2 3 ...
     ##  $ geo     : chr  "ID" "ID" "ID" "ID" ...
     ##  $ time    : chr  "today+5-y" "today+5-y" "today+5-y" "today+5-y" ...
     ##  $ keyword : chr  "tol jakarta cikampek" "tol jakarta cikampek" "tol jakarta cikampek" "tol jakarta cikampek" ...
@@ -73,20 +73,56 @@ gimana:
 Dugaan saya, ada peningkatan pencarian di dekat-dekat musim liburan
 lebaran.
 
-    ## Adding missing grouping variables: `bulan`
+> Dengan menggunakan prinsip dekomposisi data *time series*, saya akan
+> coba melihat *pattern underlying the
+data*.
 
 ![](2019-12-23-japek-elevated_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+Dilihat dari *trend* pencarian, ternyata meningkat *over time*.
+Bagaimana dengan pola *seasonal*-nya? Mari kita *highlight* bagian
+seasonal dari grafik di atas menjadi sebagai
+berikut:
+
+![](2019-12-23-japek-elevated_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+> Ternyata ada pola kenaikan pencarian pada masa-masa liburan lebaran
+> dan akhir tahun.
+
+-----
+
+# `interest_by_region`
+
+Berikutnya kita akan membahas *dataset* `interest_by_region`. Apa saja
+variabel yang ada di *dataset* tersebut?
 
 ``` r
 str(data$interest_by_region)
 ```
 
     ## 'data.frame':    68 obs. of  5 variables:
-    ##  $ location: chr  "West Java" "Banten" "Special Capital Region of Jakarta" "Lampung" ...
-    ##  $ hits    : int  100 51 43 14 12 9 5 4 4 2 ...
+    ##  $ location: chr  "West Java" "Banten" "Special Capital Region of Jakarta" "Central Java" ...
+    ##  $ hits    : int  100 52 44 12 11 9 4 4 4 2 ...
     ##  $ keyword : chr  "tol jakarta cikampek" "tol jakarta cikampek" "tol jakarta cikampek" "tol jakarta cikampek" ...
     ##  $ geo     : chr  "ID" "ID" "ID" "ID" ...
     ##  $ gprop   : chr  "web" "web" "web" "web" ...
+
+Ternyata *dataset* ini berisi nama *region* dan seberapa besar mereka
+mencari kedua *keywords* **japek**
+ini.
+
+![](2019-12-23-japek-elevated_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
+Ternyata tidak warganet yang mencari *keywords* ini tidak hanya berasal
+dari *region* Jawa Barat dan DKI Jakarta saja. Tapi cukup menyebar di
+Indonesia.
+
+-----
+
+# `interest_by_city`
+
+Berikutnya kita akan membahas *dataset* `interest_by_city`. Apa saja
+variabel yang ada di *dataset* tersebut?
 
 ``` r
 str(data$interest_by_city)
@@ -94,19 +130,37 @@ str(data$interest_by_city)
 
     ## 'data.frame':    14 obs. of  5 variables:
     ##  $ location: chr  "Cikampek" "East Telukjambe" "Karawang" "Bekasi" ...
-    ##  $ hits    : chr  "100" "61" "55" "41" ...
+    ##  $ hits    : chr  "100" "56" "51" "37" ...
     ##  $ keyword : chr  "tol jakarta cikampek" "tol jakarta cikampek" "tol jakarta cikampek" "tol jakarta cikampek" ...
     ##  $ geo     : chr  "ID" "ID" "ID" "ID" ...
     ##  $ gprop   : chr  "web" "web" "web" "web" ...
+
+Ternyata *dataset* ini berisi nama *city* dan seberapa besar mereka
+mencari kedua *keywords* **japek** ini.
+
+> Mirip dengan *dataset* sebelumnya
+yah.
+
+    ## Warning: NAs introduced by coercion
+
+![](2019-12-23-japek-elevated_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+
+> Ternyata warganet yang paling banyak mencari berasal dari Bekasi.
+
+-----
+
+# `related_queries`
+
+Nah, pada *dataset* terakhir, kita lihat ada variabel apa saja yah:
 
 ``` r
 str(data$related_queries)
 ```
 
-    ## 'data.frame':    80 obs. of  6 variables:
-    ##  $ subject        : chr  "100" "97" "93" "85" ...
+    ## 'data.frame':    77 obs. of  6 variables:
+    ##  $ subject        : chr  "100" "97" "96" "84" ...
     ##  $ related_queries: chr  "top" "top" "top" "top" ...
-    ##  $ value          : chr  "jalan tol cikampek jakarta" "jalan tol cikampek" "jalan tol" "info tol jakarta cikampek" ...
+    ##  $ value          : chr  "jalan tol cikampek jakarta" "jalan tol" "jalan tol cikampek" "info tol jakarta cikampek" ...
     ##  $ geo            : chr  "ID" "ID" "ID" "ID" ...
     ##  $ keyword        : chr  "tol jakarta cikampek" "tol jakarta cikampek" "tol jakarta cikampek" "tol jakarta cikampek" ...
     ##  $ category       : int  0 0 0 0 0 0 0 0 0 0 ...
@@ -118,3 +172,27 @@ str(data$related_queries)
     ##   ..$ v.names: chr "value"
     ##   ..$ idvar  : chr "id"
     ##   ..$ timevar: chr "related_queries"
+
+Kita akan lakukan *simple text analysis* dari data *related\_query* ini
+yah.
+
+## Wordcloud
+
+    ## # A tibble: 31 x 2
+    ##    words        n
+    ##    <chr>    <int>
+    ##  1 selatan     10
+    ##  2 layang       8
+    ##  3 elevated     7
+    ##  4 ganjil       7
+    ##  5 genap        7
+    ##  6 info         7
+    ##  7 hari         6
+    ##  8 tarif        6
+    ##  9 macet        3
+    ## 10 area         2
+    ## # … with 21 more rows
+
+![alt text](enter%20url%20di%20sini "japek")
+
+Ada yang bisa disimpulkan dari data *related queries* ini?
