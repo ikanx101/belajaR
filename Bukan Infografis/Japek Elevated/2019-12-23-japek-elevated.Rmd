@@ -1,0 +1,120 @@
+---
+title: "Melihat Antusiasme Warganet Mengenai Tol Japek Elevated"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+library(gtrendsR)
+library(ggplot2)
+library(ggpubr)
+library(dplyr)
+library(tidytext)
+library(tidyr)
+
+topik = c('tol jakarta cikampek','japek')
+data = gtrends(topik,geo = 'ID') 
+```
+Beberapa waktu yang lalu, Pak Presiden Jokowi [meresmikan tol layang Jakarta Cikampek elevated](https://www.liputan6.com/bisnis/read/4132366/jokowi-resmikan-tol-layang-jakarta-cikampek-siang-ini). Pembangunan jalan layang yang berhasil membuat kemacetan parah selama ini akhirnya selesai juga. 
+
+Menarik bagi saya untuk melihat antusiasme warganet terhadap jalan layang ini.
+
+Kali ini, saya tidak akan mengambil data dari __twitter__ atau sosial media lainnya. Saya akan mencari _keywords_ apa yang ditelusuri warganet di Google terkait dengan topik ini.
+
+Untuk itu, saya akan menggunakan `library(gtrendsR)` di __R__. Topik yang akan saya cari adalah semua topik yang berkaitan dengan dua _keywords_ utama, yakni:
+
+1. `tol jakarta cikampek`
+2. `japek`
+
+Tak butuh waktu satu detik, saya sudah mendapatkan hasilnya pencarian saya. Ada empat _dataset_ yang saya terima, yakni:
+
+1. `interest_over_time`
+2. `interest_by_region`
+3. `interest_by_city`
+4. `related_queries`
+
+Seperti biasa, mari kita bedah satu-persatu:
+
+# `interest_over_time`
+
+Apa saja sih isi dari _dataset_ ini?
+
+```{r,echo=FALSE}
+str(data$interest_over_time)
+```
+
+Inti dari _dataset_ ini adalah _trend_ pencarian dua _keywords_ ini perwaktu. Dengan mudahnya saya bisa membuat _lineplot_ dari _dataset_ ini sbb:
+
+```{r,echo=FALSE}
+data$interest_over_time %>% mutate(date = as.Date(date)) %>%
+  ggplot(aes(x=date,y=hits,color=keyword)) + geom_line() + theme_pubclean() +
+  labs(color = 'Keywords',
+       title = 'Tren Pencarian Keywords',
+       subtitle = 'Google Trend Data: 23 Desember 2019',
+       caption = 'ikanx101.github.io') +
+  theme(axis.title = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        legend.position = 'bottom',
+        plot.title = element_text(face='bold.italic',size=15))
+```
+
+Sepertinya penggunaan singkatan __japek__ baru nge- _hype_ akhir-akhir ini yah. 
+
+Coba kalau saya rapikan kembali datanya. Saya akan gabungkan pencarian kedua _keywords_ ini lalu akan saya jadikan dalam level bulanan. Saya penasaran, apakah ada pola _seasonal_ dari pencarian ini.
+
+> Siapa tahu pencarian mengenai jalan tol ini meningkat __hanya__ di saat-saat tertentu saja. Misalkan: pada saat liburan lebaran atau natal.
+
+```{r,echo=FALSE}
+new = 
+  data$interest_over_time %>% mutate(date = as.Date(date),
+                                   bulan = lubridate::month(date),
+                                   tahun = lubridate:: year(date)) %>%
+  filter(tahun !=  2014) %>%
+  group_by(bulan,tahun) %>% summarise(hits = sum(hits)) %>%
+  arrange(tahun,bulan) %>%
+  mutate(waktu=paste(bulan,tahun,sep='-'))
+  
+new$waktu = factor(new$waktu,levels = new$waktu)
+new %>% ggplot(aes(x=factor(waktu),y=hits,group=1)) + geom_line(color='steelblue') +
+  theme_cleveland() + theme(axis.text.x = element_text(angle=90)) +
+  labs(title = 'Tren Pencarian Keywords',
+       subtitle = 'Google Trend Data: 23 Desember 2019',
+       caption = 'ikanx101.github.io') +
+  theme(axis.title = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        plot.title = element_text(face='bold.italic',size=15))
+```
+
+Gimana? Sudah terlihat ada pola _seasonal_-nya? Oke, kalau saya ubah ke bentuk grafik berikut ini gimana:
+
+```{r,echo=FALSE}
+new %>% ggplot(aes(x=factor(bulan),y=hits)) + geom_line(aes(group=tahun)) +
+  theme_cleveland() +
+  labs(title = 'Tren Pencarian Keywords per Tahun',
+       subtitle = 'Google Trend Data: 23 Desember 2019',
+       caption = 'ikanx101.github.io') +
+  theme(axis.title = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        plot.title = element_text(face='bold.italic',size=15))
+
+```
+
+Dugaan saya, ada peningkatan pencarian di dekat-dekat musim liburan lebaran.
+
+```{r,echo=FALSE}
+new_ts = new %>% select(hits)
+new_ts = ts(new_ts,start = c(2015,1),frequency=12)
+plot(new_ts)
+```
+
+```{r}
+str(data$interest_by_region)
+str(data$interest_by_city)
+str(data$related_queries)
+```
