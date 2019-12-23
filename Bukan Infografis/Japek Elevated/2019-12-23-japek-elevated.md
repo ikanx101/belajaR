@@ -178,21 +178,8 @@ yah.
 
 ## Wordcloud
 
-    ## # A tibble: 31 x 2
-    ##    words        n
-    ##    <chr>    <int>
-    ##  1 selatan     10
-    ##  2 layang       8
-    ##  3 elevated     7
-    ##  4 ganjil       7
-    ##  5 genap        7
-    ##  6 info         7
-    ##  7 hari         6
-    ##  8 tarif        6
-    ##  9 macet        3
-    ## 10 area         2
-    ## # … with 21 more rows
-
-![alt text](enter%20url%20di%20sini "japek")
+![alt
+text](https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Japek%20Elevated/wordcloud%20japek.png
+"japek")
 
 Ada yang bisa disimpulkan dari data *related queries* ini?

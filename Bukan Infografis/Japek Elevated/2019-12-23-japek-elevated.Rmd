@@ -221,11 +221,10 @@ sensor = c('2','tol','jakarta','cikampek','japek','2019','di','jln','ini','jalan
 wc = 
   dummy %>% unnest_tokens('words',text) %>% filter(!words %in% sensor) %>%
   count(words,sort=T) 
-wc
 
 #library(wordcloud2)
 #wordcloud2(wc,shape = 'star',size=1)
 ```
-![alt text](enter url di sini "japek")
+![alt text](https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Japek%20Elevated/wordcloud%20japek.png "japek")
 
 Ada yang bisa disimpulkan dari data _related queries_ ini?
