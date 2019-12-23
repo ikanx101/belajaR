@@ -7,6 +7,10 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+> Sebelumnya mohon maaf bahwa tulisan ini baru saya selesaikan sekarang. Lebih dari seminggu sejak data _Youtube channel_ __KalbeFamily__ ini saya _scrap_. Berhubung saya terkena [cacar](https://ikanx101.github.io/blog/cacar-air/) dan setelah itu harus menyelesaikan tugas kantor dulu, maka tulisan ini terbengkalai. _Hehe_
+
+____
+
 Sudah lihat tulisan saya sebelumnya tentang [data yang diambil dari Youtube](https://ikanx101.github.io/blog/blog-posting-sunyi/)?
 
 _Nah_, penasaran gak sih dengan data di _Youtube Channel_-nya __Kalbe__?
@@ -63,6 +67,8 @@ Kita bisa melihat bahwa _Youtube channel_ __KalbeFamily__ berdiri sejak `2013-02
 
 > __Dengan angka-angka seperti di atas, kira-kira untuk kategori _Youtube channel_ sebuah perusahaan, sudah termasuk tinggi, menengah, atau rendah?__. Silakan komen yah.
 
+____
+
 ## `all_videos`
 
 Ada informasi apa saja di dataset `all_videos`? Yuk kita lihat bersama.
@@ -111,6 +117,7 @@ all_videos %>% arrange(tahun,bulan) %>%
         plot.caption = element_text(face='italic'))
 ```
 
+___
 
 ## `eps`
 
@@ -179,6 +186,73 @@ eps %>% ggplot(aes(x=factor(episode,level=episode_dummy),y=viewCount)) +
        subtitle = 'Ada beberapa video yang memiliki `viewCount` yang sangat tinggi')
 ```
 
-# To be continue
+Mari kita lihat beberapa video yang memiliki `viewCount` tinggi. Apa saja sih?
 
-Saya selesaikan asap yah...
+### Video `viewCount` Tertinggi
+
+Kita akan cek video pertama yang memiliki `viewCount` terbanyak, yakni: 
+
+```{r,echo=FALSE}
+epi.1 = eps %>% filter(viewCount == max(viewCount)) %>% select(id)
+epi.1 = epi.1$id
+
+eps %>% filter(viewCount == max(viewCount)) %>% select(-id,-episode)
+
+all_videos %>% filter(contentDetails.videoId %in% epi.1) %>% select(episode,contentDetails.videoPublishedAt)
+
+```
+
+Video tersebut adalah sebuah video yang pertama kali tayang di tanggal 19 Desember 2016. Di- _like_ oleh 7 orang _viewers_ tanpa ada komentar sama sekali. 
+
+>Jika kita lihat videonya di [link berikut ini](https://www.youtube.com/watch?v=b-Ndj4ilz0s), ternyata tema dari video itu adalah __hari ibu__. _So_, wajar yah bahwa video itu punya `viewCount` yang tinggi.
+
+### Video `viewCount` Tertinggi Kedua
+
+Kita akan cek video selanjutnya yang memiliki `viewCount` terbanyak kedua, yakni: 
+
+```{r,echo=FALSE}
+epi.2 = eps %>% arrange(desc(viewCount)) %>% select(id)
+epi.2 = epi.2$id[2]
+
+eps %>% filter(id == epi.2) %>% select(-id,-episode)
+
+all_videos %>% filter(contentDetails.videoId %in% epi.2) %>% select(episode,contentDetails.videoPublishedAt)
+```
+Ada hal menarik pada [video ini](https://www.youtube.com/watch?v=BzYgSo2ekAA), video yang bertemakan mengenai kehamilan ini di- _like_ oleh 77 _viewers_ tapi di- _dislike_ oleh 48 _viewers_.
+
+> _Apa yang salah dari video ini?_ Pikir saya. Kalau kalian tahu, _plis let me know_ yah.
+
+### Video `viewCount` Tertinggi Ketiga
+
+Kita akan cek video selanjutnya yang memiliki `viewCount` terbanyak ketiga, yakni: 
+
+```{r,echo=FALSE}
+epi.2 = eps %>% arrange(desc(viewCount)) %>% select(id)
+epi.2 = epi.2$id[3]
+
+eps %>% filter(id == epi.2) %>% select(-id,-episode)
+
+all_videos %>% filter(contentDetails.videoId %in% epi.2) %>% select(episode,contentDetails.videoPublishedAt)
+```
+
+Ada hal menarik pada [video ini](https://www.youtube.com/watch?v=HR5YkChg80k), video yang bertemakan mengenai _KALBE Family Rewards Card_ ini di- _like_ oleh 205 _viewers_ tapi di- _dislike_ oleh 43 _viewers_.
+
+Kalau kita lihat kolom komentar, kira-kira apa yang bisa kita simpulkan dari video ini? 
+
+> Menurut saya, kita bisa mengambil pelajaran dari video ini. Apa itu? Plis komen yah.
+
+___
+
+## `komen`
+
+Nah, _dataset_ ini berisi komentar-komentar dari _viewers_ di semua video yang ada di _Youtube channel_ __KalbeFamily__.
+
+Ternyata ada 49 komen. Saat saya baca sekilas, sepertinya seru kalau dibuatkan _sentiment analysis_-nya. _Gak percaya?_
+
+Nih, baca sendiri deh komentar-komentarnya:
+
+```{r,echo=FALSE}
+komen %>% select(authorDisplayName,textDisplay) %>% head(49)
+```
+
+> Udah dulu ah, kalau ada yang mau datanya, tinggal lihat aja skrip coding di atas yah. Sudah ada kok cara ngambilnya.
