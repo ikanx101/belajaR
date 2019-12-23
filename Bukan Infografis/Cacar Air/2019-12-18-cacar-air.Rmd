@@ -48,9 +48,9 @@ Dugaan saya:
 1. Saya tidak divaksin atau jarak waktu antara vaksin dengan inkubasi sudah terlalu lama sehingga imunitasnya berkurang.
 2. Saya telat mengetahui masa inkubasi sehingga telat mengobati penyakitnya. Virus sudah kadung bereplikasi dan menyebar dalam tubuh.
 
-Semoga bisa cepet sembuh dan _recovery_ yah. Mohon doanya.
+## Update:
 
-## Aamiin
+Hari ini, 23 Desember 2019, saya sudah merasa lebih baik. _Blister_ dan _rash_ sudah mulai mengering dan tampaknya sudah tidak ada _blister_ baru. Namun untuk menjaga agar virus ini tidak akan menyebar jauh lagi, saya baru akan masuk ke kantor pada 26 Desember 2019 nanti.
 
 ```{r,echo=FALSE,warning=FALSE,message=FALSE}
 library(reshape2)
@@ -60,9 +60,12 @@ tasks <- c("Si Ahnaf kena cacar",
            "Pengobatan dan pemulihan Ahnaf", 
            "Pusing + meriang",
            "FINDx",
-           "Muncul blister yang pertama",
+           "Muncul blisters",
+           "Pengobatan",
            "Demam",
-           "Itchy feeling")
+           "Itchy feeling",
+           "Pemulihan"
+           )
 dfr <- data.frame(
   name        = factor(tasks, levels = tasks),
   start.date  = as.Date(c("2019-11-28", 
@@ -71,16 +74,20 @@ dfr <- data.frame(
                           "2019-12-13",
                           "2019-12-14",
                           "2019-12-14",
-                          "2019-12-16")),
+                          "2019-12-14",
+                          "2019-12-16",
+                          "2019-12-18")),
   end.date    = as.Date(c("2019-11-29", 
                           "2019-12-09",
                           "2019-12-15",
                           "2019-12-14",
-                          "2019-12-15",
+                          "2019-12-19",
+                          "2019-12-18",
                           "2019-12-16",
-                          "2019-12-18")),
-  Ket = c("Ahnaf","Ahnaf","Saya","Saya","Saya","Saya",
-           "Saya")
+                          "2019-12-18",
+                          "2019-12-25")),
+  Ket = c("Ahnaf","Ahnaf","Saya","Saya","Saya","Saya","Saya",
+           "Saya","Saya")
   )
 
 mdfr <- melt(dfr, measure.vars = c("start.date", "end.date"))
@@ -90,7 +97,7 @@ ggplot(mdfr, aes(value, name, color=Ket)) +
   xlab(NULL) + 
   ylab(NULL) +
   theme_minimal() +
-  labs(title="My Chickenpox Story",
+  labs(title="My Chickenpox Story: Updated!",
        caption="ikanx101.github.io") +
   theme(plot.title = element_text(size=20,
                                   face="bold.italic"),
