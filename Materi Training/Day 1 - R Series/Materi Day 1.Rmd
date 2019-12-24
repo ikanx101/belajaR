@@ -78,10 +78,30 @@ Adapun kekurangan dari R antara lain:
 
 * _Point and Click GUI_, interaksi utama dengan __R__ bersifat __CLI__ (_Command Line Interface_), walaupun saat ini telah dikembangkan _library_ yang memungkinkan kita berinteraksi dengan __R__ menggunakan __GUI__ (_Graphical User Interface_) sederhana menggunakan `library(R-Commander)` yang memiliki fungsi yang terbatas.
 
-# sampai sini yah
+## 1.4 R vs R Studio
+
+Pada dasarnya, _software_ __R__ bisa di-_download_ dan di-_install_ langsung dari situs [CRAN](https://cran.r-project.org/bin/windows/base/). _Software_ __R__ ini bersifat __CLI__.
+
+> Bayangkan Anda membuka aplikasi __notepad__. Putih dan bersih kan? 
+
+Seperti itulah _software_ __R__.
+
+Bagi Kamu yang kaget dan tidak terbiasa melihat tampilan yang _intimidating_ seperti itu, Kamu bisa meng-_install software_ __R Studio__. Sebuah _software_ yang bisa membuat __R__ terlihat lebih _user friendly_. __R Studio__ bisa di-_download_ [di sini](https://rstudio.com/products/rstudio/download/).
+
+Kelebihan R Studio antara lain:
+
+1. _Free_, kita bisa memilih versi gratis dari __R Studio__ tanpa ada pengurangan fitur dasar dari __R__.
+2. _R Studio Cloud_, tersedia layanan _cloud_ sehingga bisa diakses dan digunakan menggunakan _browser_ di _gadget_ manapun. Layanan _cloud_ ini bisa diakses [di sini](https://rstudio.cloud) dan dikoneksikan ke akun __github__ Kamu.
+3. _Shiny Apps_, kita bisa membuat _apps_ berbasis _web_ dari __R__. _Apps_ ini bisa dijadikan _dashboard_ atau mesin kalkulasi otomatis. Tergantung seberapa jauh Kamu membuat _coding_ algoritmanya.
+4. _R Markdown_, ini fitur yang paling saya sukai. Bahkan untuk menulis _web_ ini, saya menggunakan _R Markdown_. Output files -nya beragam, mulai dari `docx`, `pptx`, `pdf`, `html`, `md`, dll. Bahkan kita bisa membuat [_e-book_](https://bookdown.org/) dengan memanfaatkan `library(bookdown)`.
+
 ___
 
 # Referensi
 
 1. [Metode Numerik Menggunakan R Untuk TeknikLingkungan](https://bookdown.org/moh_rosidi2610/Metode_Numerik/), Mohammad Rosidi: R bookdown.
 2. [Cara Install R di Android](https://passingthroughresearcher.wordpress.com/2019/07/30/install-r-3-5-2-di-android/), Ikang Fadhli personal blog.
+3. [Install R base for Windows](https://cran.r-project.org/bin/windows/base/).
+4. [Install R Studio](https://rstudio.com/products/rstudio/download/).
+5. [R Studio Cloud](https://rstudio.cloud/).
+6. [Bookdown, e-book from R Markdown](https://bookdown.org/).

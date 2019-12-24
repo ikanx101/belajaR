@@ -115,7 +115,39 @@ Adapun kekurangan dari R antara lain:
     menggunakan `library(R-Commander)` yang memiliki fungsi yang
     terbatas.
 
-# sampai sini yah
+## 1.4 R vs R Studio
+
+Pada dasarnya, *software* **R** bisa di-*download* dan di-*install*
+langsung dari situs
+[CRAN](https://cran.r-project.org/bin/windows/base/). *Software* **R**
+ini bersifat **CLI**.
+
+> Bayangkan Anda membuka aplikasi **notepad**. Putih dan bersih kan?
+
+Seperti itulah *software* **R**.
+
+Bagi Kamu yang kaget dan tidak terbiasa melihat tampilan yang
+*intimidating* seperti itu, Kamu bisa meng-*install software* **R
+Studio**. Sebuah *software* yang bisa membuat **R** terlihat lebih *user
+friendly*. **R Studio** bisa di-*download* [di
+sini](https://rstudio.com/products/rstudio/download/).
+
+Kelebihan R Studio antara lain:
+
+1.  *Free*, kita bisa memilih versi gratis dari **R Studio** tanpa ada
+    pengurangan fitur dasar dari **R**.
+2.  *R Studio Cloud*, tersedia layanan *cloud* sehingga bisa diakses dan
+    digunakan menggunakan *browser* di *gadget* manapun. Layanan *cloud*
+    ini bisa diakses [di sini](https://rstudio.cloud) dan dikoneksikan
+    ke akun **github** Kamu.
+3.  *Shiny Apps*, kita bisa membuat *apps* berbasis *web* dari **R**.
+    *Apps* ini bisa dijadikan *dashboard* atau mesin kalkulasi otomatis.
+    Tergantung seberapa jauh Kamu membuat *coding* algoritmanya.
+4.  *R Markdown*, ini fitur yang paling saya sukai. Bahkan untuk menulis
+    *web* ini, saya menggunakan *R Markdown*. Output files -nya beragam,
+    mulai dari `docx`, `pptx`, `pdf`, `html`, `md`, dll. Bahkan kita
+    bisa membuat [*e-book*](https://bookdown.org/) dengan memanfaatkan
+    `library(bookdown)`.
 
 -----
 
@@ -127,3 +159,8 @@ Adapun kekurangan dari R antara lain:
 2.  [Cara Install R di
     Android](https://passingthroughresearcher.wordpress.com/2019/07/30/install-r-3-5-2-di-android/),
     Ikang Fadhli personal blog.
+3.  [Install R base for
+    Windows](https://cran.r-project.org/bin/windows/base/).
+4.  [Install R Studio](https://rstudio.com/products/rstudio/download/).
+5.  [R Studio Cloud](https://rstudio.cloud/).
+6.  [Bookdown, e-book from R Markdown](https://bookdown.org/).
