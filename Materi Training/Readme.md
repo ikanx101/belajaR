@@ -20,6 +20,10 @@ __find me at:__
 
 https://passingthroughresearcher.wordpress.com/
 
+ATAU
+
+https://ikanx101.github.io/
+
 IG: mr.ikanx
 
-Telegram: ikanx.bot__
+Telegram: ikanx.bot
