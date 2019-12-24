@@ -128,9 +128,12 @@ Seperti itulah *software* **R**.
 
 Bagi Kamu yang kaget dan tidak terbiasa melihat tampilan yang
 *intimidating* seperti itu, Kamu bisa meng-*install software* **R
-Studio**. Sebuah *software* yang bisa membuat **R** terlihat lebih *user
-friendly*. **R Studio** bisa di-*download* [di
+Studio**. Sebuah *software* GUI yang bisa membuat **R** terlihat lebih
+*user friendly*. **R Studio** bisa di-*download* [di
 sini](https://rstudio.com/products/rstudio/download/).
+
+> Tapi tolong diperhatikan bahwa **R Studio** hanya tambahan tampilan
+> dari **R** standar. Jadi Kamu tetap harus meng- *install* **R** yah\!
 
 Kelebihan R Studio antara lain:
 
@@ -139,7 +142,10 @@ Kelebihan R Studio antara lain:
 2.  *R Studio Cloud*, tersedia layanan *cloud* sehingga bisa diakses dan
     digunakan menggunakan *browser* di *gadget* manapun. Layanan *cloud*
     ini bisa diakses [di sini](https://rstudio.cloud) dan dikoneksikan
-    ke akun **github** Kamu.
+    ke akun **github** Kamu. Kira-kira seperti ini tampilannya jika
+    dibuka di *Chrome for Android*: ![alt
+    text](https://passingthroughresearcher.files.wordpress.com/2019/11/screenshot_20191113-045720_chrome8061063824617160210.jpg
+    "chart")
 3.  *Shiny Apps*, kita bisa membuat *apps* berbasis *web* dari **R**.
     *Apps* ini bisa dijadikan *dashboard* atau mesin kalkulasi otomatis.
     Tergantung seberapa jauh Kamu membuat *coding* algoritmanya.
@@ -148,6 +154,222 @@ Kelebihan R Studio antara lain:
     mulai dari `docx`, `pptx`, `pdf`, `html`, `md`, dll. Bahkan kita
     bisa membuat [*e-book*](https://bookdown.org/) dengan memanfaatkan
     `library(bookdown)`.
+
+Jadi, setelah membaca bagian ini pastikan Kamu sudah meng- *install*
+**R** dan **R Studio** yah.
+
+> Jangan sampai terbalik urutan instalasinya.
+
+## 1.5 Mengenal operator dasar
+
+Beberapa operator dasar di **R** antara lain:
+
+1.  `=` atau `<-`, digunakan untuk melakukan pendefinisian suatu objek.
+    Contoh:
+
+<!-- end list -->
+
+``` r
+a = 10
+b <- 3
+a + b
+```
+
+    ## [1] 13
+
+2.  `' '` atau `" "`, digunakan untuk menandai tipe variabel berupa
+    `character`. Lalu apa beda penggunaan `' '` dengan `" "`? `" "`
+    digunakan saat `'` dibutuhkan dalam suatu `character`. Contoh:
+
+<!-- end list -->
+
+``` r
+a = 'saya hendak pergi ke pasar'
+b = "i don't want to buy it"
+a
+```
+
+    ## [1] "saya hendak pergi ke pasar"
+
+``` r
+b
+```
+
+    ## [1] "i don't want to buy it"
+
+3.  `==`, `<`, `>`, `<=`, atau `>=`, digunakan untuk mengecek apakah dua
+    variabel itu memiliki kesamaan atau tidak. *Output* dari operator
+    ini adalah `logic` (*TRUE or FALSE*). Contoh:
+
+<!-- end list -->
+
+``` r
+a = 5
+b = 3
+a == b
+```
+
+    ## [1] FALSE
+
+``` r
+a > b
+```
+
+    ## [1] TRUE
+
+4.  `;` atau *<enter>*, digunakan untuk memisahkan baris kode pada skrip
+    algoritma. Contoh:
+
+<!-- end list -->
+
+``` r
+a = 5;b = 3;a*b
+```
+
+    ## [1] 15
+
+## 1.6 Working Directory
+
+Apa itu *working directory*?
+
+> *Working directory* adalah *folder path default* untuk **R** melakukan
+> *import* dan *export* data.
+
+Untuk mengetahui di mana *working directory* kita, bisa digunakan
+perintah:
+
+``` r
+getwd()
+```
+
+    ## [1] "/cloud/project/Materi Training/Day 1 - R Series"
+
+Secara *default*, **R** menggunakan `C:\\My Documents` sebagai *working
+directory*.
+
+### 1.6.1 Bagaimana mengubah *working directory*?
+
+*Working directory* bisa diubah sesuai kemauan kita memanfaatkan
+perintah `setwd()`, tanda dalam kurung diisi dengan *folder path* yang
+diinginkan.
+
+``` r
+setwd('/cloud/project/Materi Training/Day 1 - R Series')
+```
+
+### 1.6.2 Apa keuntungan mengubah-ubah *working directory*?
+
+Perubahan *working directory* akan sangat berguna saat kita ingin
+memgambil data dari *folder path* tertentu dan menyimpan hasil analisa
+kita ke *folder path* yang berbeda.
+
+## 1.7 Mengenal *packages* atau *library*
+
+`packages` atau `library` adalah sekumpulan fungsi yang telah dibuat dan
+dibakukan untuk kemudian disertakan di halaman *web* CRAN atau github.
+`library` bisa kita *install* dan gunakan dengan mudah.
+
+Seperti yang sudah saya infokan di bagian pendahuluan. Banyak orang atau
+komunitas yang mengembangkan berbagai macam `library` sehingga
+memudahkan kita untuk menyelesaikan masalah di data kita. Kita tidak
+perlu lagi membuat algoritma dari nol. Cukup memanfaatkan `library` yang
+tepat saja.
+
+Beberapa contoh `library` yang sering saya gunakan:
+
+1.  `dplyr`: *data carpentry* menggunakan *tidy principle*.
+2.  `ggplot2`: *data visualization*.
+3.  `rvest`: *web scraping*.
+4.  `tidytext`: *text analysis*.
+5.  `reshape2`: *data manipulation*.
+6.  `readxl` atau `openxlsx`: *export* dan *import* *excel files*.
+7.  `officer`: membuat *Ms. Office files* seperti *excel*, *docx*, dan
+    *powerpoint*.
+8.  `expss`: **SPSS** di **R**.
+
+### 1.7.1 Instalasi *Packages*
+
+`library` di **R** bisa di-*install* dengan mudah dengan menggunakan
+perintah `install.packages('nama packages')`. Tanda dalam kurung diisi
+`character` nama `library`. Bisa menggunakan `" "` atau `' '`.
+
+Proses instalasi `library` ini membutuhkan koneksi internet karena **R**
+akan otomatis terhubung ke dalam situs *web* **CRAN**. Setelah proses
+instalasi selesai, maka koneksi internet tidak diperlukan lagi (kecuali
+untuk melakukan *web scraping*).
+
+Contoh:
+
+`install.packages('readxl')`
+
+`install.packages("rvest")`
+
+### 1.7.2 Mengaktifkan *Packages*
+
+`library` yang sudah di-*install* bisa diaktifkan dengan menggunakan
+perintah `library(nama packages)` tanpa menggunakan tanda `" "` atau `'
+'`.
+
+Pengaktifan `library` cukup dilakukan sekali saja di awal pengerjaan
+*project* (tidak perlu dilakukan berulang kali). Contoh:
+
+``` r
+library(dplyr)
+```
+
+    ## 
+    ## Attaching package: 'dplyr'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
+
+### 1.7.3 Serba-Serbi Tentang *Packages*
+
+Untuk beberapa `library` ada kemungkinan (kecil) ditemukan kasus saat
+mereka tidak kompatibel. Akibatnya beberapa fungsi perintah di `library`
+tersebut akan menjadi kacau.
+
+Misalnya pada saat kita memanggil `library(tidyverse)` dan
+`library(plyr)`, maka perintah `filter()` yang dimiliki `tidyverse` akan
+tidak berjalan dengan baik.
+
+Ada beberapa solusi yang bisa kita lakukan:
+
+1.  Selalu mengaktifkan `library` sesuai dengan urutannya. Biasanya
+    setiap kali kita mengaktifkan `library` akan muncul *warnings*
+    mengenai kompatibilitas `library` tersebut dengan `library` lain.
+2.  Menonaktikan `library` yang sudah tidak perlu digunakan dengan
+    perintah:
+
+`detach("package:tidytext", unload = TRUE)`
+
+3.  Memanggil `library` tanpa harus mengaktifkannya. Kita bisa
+    melakukannya dengan menggunakan tanda `nama packages::`. Contoh:
+
+`reshape2::melt(data)`
+
+### 1.7.4 *Help*
+
+Setiap `library` yang telah di-*install* dan aktif disertai dengan fitur
+*help* yang berfungsi sebagai informasi kepada *user*. Jika kita ingin
+mengetahui bagaimana isi dari perintah suatu fungsi, kita bisa gunakan
+perintah `help(nama fungsi)` atau `?nama fungsi`. *Help* akan muncul
+pada tab *help* di **R Studio**. Contoh:
+
+``` r
+help(sum)
+```
+
+atau
+
+``` r
+?sum
+```
 
 -----
 
@@ -164,3 +386,5 @@ Kelebihan R Studio antara lain:
 4.  [Install R Studio](https://rstudio.com/products/rstudio/download/).
 5.  [R Studio Cloud](https://rstudio.cloud/).
 6.  [Bookdown, e-book from R Markdown](https://bookdown.org/).
+7.  [Menggunakan R Studio Cloud di Android
+    browser](https://passingthroughresearcher.wordpress.com/2019/11/13/oleh-oleh-pelatihan-hari-kedua-r-studio-cloud/).

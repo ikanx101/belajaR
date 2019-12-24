@@ -86,22 +86,165 @@ Pada dasarnya, _software_ __R__ bisa di-_download_ dan di-_install_ langsung dar
 
 Seperti itulah _software_ __R__.
 
-Bagi Kamu yang kaget dan tidak terbiasa melihat tampilan yang _intimidating_ seperti itu, Kamu bisa meng-_install software_ __R Studio__. Sebuah _software_ yang bisa membuat __R__ terlihat lebih _user friendly_. __R Studio__ bisa di-_download_ [di sini](https://rstudio.com/products/rstudio/download/).
+Bagi Kamu yang kaget dan tidak terbiasa melihat tampilan yang _intimidating_ seperti itu, Kamu bisa meng-_install software_ __R Studio__. Sebuah _software_ GUI yang bisa membuat __R__ terlihat lebih _user friendly_. __R Studio__ bisa di-_download_ [di sini](https://rstudio.com/products/rstudio/download/). 
+
+> Tapi tolong diperhatikan bahwa __R Studio__ hanya tambahan tampilan dari __R__ standar. Jadi Kamu tetap harus meng- _install_ __R__ yah!
 
 Kelebihan R Studio antara lain:
 
 1. _Free_, kita bisa memilih versi gratis dari __R Studio__ tanpa ada pengurangan fitur dasar dari __R__.
-2. _R Studio Cloud_, tersedia layanan _cloud_ sehingga bisa diakses dan digunakan menggunakan _browser_ di _gadget_ manapun. Layanan _cloud_ ini bisa diakses [di sini](https://rstudio.cloud) dan dikoneksikan ke akun __github__ Kamu.
+2. _R Studio Cloud_, tersedia layanan _cloud_ sehingga bisa diakses dan digunakan menggunakan _browser_ di _gadget_ manapun. Layanan _cloud_ ini bisa diakses [di sini](https://rstudio.cloud) dan dikoneksikan ke akun __github__ Kamu. Kira-kira seperti ini tampilannya jika dibuka di _Chrome for Android_:
+![alt text](https://passingthroughresearcher.files.wordpress.com/2019/11/screenshot_20191113-045720_chrome8061063824617160210.jpg "chart")
 3. _Shiny Apps_, kita bisa membuat _apps_ berbasis _web_ dari __R__. _Apps_ ini bisa dijadikan _dashboard_ atau mesin kalkulasi otomatis. Tergantung seberapa jauh Kamu membuat _coding_ algoritmanya.
 4. _R Markdown_, ini fitur yang paling saya sukai. Bahkan untuk menulis _web_ ini, saya menggunakan _R Markdown_. Output files -nya beragam, mulai dari `docx`, `pptx`, `pdf`, `html`, `md`, dll. Bahkan kita bisa membuat [_e-book_](https://bookdown.org/) dengan memanfaatkan `library(bookdown)`.
+
+Jadi, setelah membaca bagian ini pastikan Kamu sudah meng- _install_ __R__ dan __R Studio__ yah. 
+
+> Jangan sampai terbalik urutan instalasinya.
+
+## 1.5 Mengenal operator dasar
+
+Beberapa operator dasar di __R__ antara lain:
+
+1. `=` atau `<-`, digunakan untuk melakukan pendefinisian suatu objek. Contoh:
+```{r}
+a = 10
+b <- 3
+a + b
+```
+2. `' '` atau `" "`, digunakan untuk menandai tipe variabel berupa `character`. Lalu apa beda penggunaan `' '` dengan `" "`? `" "` digunakan saat `'` dibutuhkan dalam suatu `character`. Contoh:
+```{r}
+a = 'saya hendak pergi ke pasar'
+b = "i don't want to buy it"
+a
+b
+```
+
+3. `==`, `<`, `>`, `<=`, atau `>=`, digunakan untuk mengecek apakah dua variabel itu memiliki kesamaan atau tidak. _Output_ dari operator ini adalah `logic` (_TRUE or FALSE_). Contoh:
+```{r}
+a = 5
+b = 3
+a == b
+a > b
+```
+
+4. `;` atau _<enter>_, digunakan untuk memisahkan baris kode pada skrip algoritma. Contoh:
+```{r}
+a = 5;b = 3;a*b
+```
+
+## 1.6 Working Directory
+
+Apa itu _working directory_?
+
+> _Working directory_ adalah _folder path default_ untuk __R__ melakukan _import_ dan _export_ data.
+
+Untuk mengetahui di mana _working directory_ kita, bisa digunakan perintah:
+
+```{r}
+getwd()
+```
+
+Secara _default_, __R__ menggunakan `C:\\My Documents` sebagai _working directory_.
+
+### 1.6.1 Bagaimana mengubah _working directory_?
+
+_Working directory_ bisa diubah sesuai kemauan kita memanfaatkan perintah `setwd()`, tanda dalam kurung diisi dengan _folder path_ yang diinginkan.
+
+```{r}
+setwd('/cloud/project/Materi Training/Day 1 - R Series')
+```
+
+### 1.6.2 Apa keuntungan mengubah-ubah _working directory_?
+
+Perubahan _working directory_ akan sangat berguna saat kita ingin memgambil data dari _folder path_ tertentu dan menyimpan hasil analisa kita ke _folder path_ yang berbeda.
+
+## 1.7 Mengenal _packages_ atau _library_
+
+`packages` atau `library` adalah sekumpulan fungsi yang telah dibuat dan dibakukan untuk kemudian disertakan di halaman _web_ CRAN atau github. `library` bisa kita _install_ dan gunakan dengan mudah.
+
+Seperti yang sudah saya infokan di bagian pendahuluan. Banyak orang atau komunitas yang mengembangkan berbagai macam `library` sehingga memudahkan kita untuk menyelesaikan masalah di data kita. Kita tidak perlu lagi membuat algoritma dari nol. Cukup memanfaatkan `library` yang tepat saja.
+
+Beberapa contoh `library` yang sering saya gunakan:
+
+1. `dplyr`: _data carpentry_ menggunakan _tidy principle_.
+2. `ggplot2`: _data visualization_.
+3. `rvest`: _web scraping_.
+4. `tidytext`: _text analysis_.
+5. `reshape2`: _data manipulation_.
+6. `readxl` atau `openxlsx`: _export_ dan _import_ _excel files_.
+7. `officer`: membuat _Ms. Office files_ seperti _excel_, _docx_, dan _powerpoint_.
+8. `expss`: __SPSS__ di __R__.
+
+### 1.7.1 Instalasi _Packages_
+
+`library` di __R__ bisa di-_install_ dengan mudah dengan menggunakan perintah `install.packages('nama packages')`. Tanda dalam kurung diisi `character` nama `library`. Bisa menggunakan `" "` atau `' '`. 
+
+Proses instalasi `library` ini membutuhkan koneksi internet karena __R__ akan otomatis terhubung ke dalam situs _web_ __CRAN__. Setelah proses instalasi selesai, maka koneksi internet tidak diperlukan lagi (kecuali untuk melakukan _web scraping_). 
+
+Contoh:
+
+`install.packages('readxl')`
+
+`install.packages("rvest")`
+
+### 1.7.2 Mengaktifkan _Packages_
+
+`library` yang sudah di-_install_ bisa diaktifkan dengan menggunakan perintah `library(nama packages)` tanpa menggunakan tanda `" "` atau `' '`.
+
+Pengaktifan `library` cukup dilakukan sekali saja di awal pengerjaan _project_ (tidak perlu dilakukan berulang kali). Contoh:
+
+```{r}
+library(dplyr)
+```
+
+### 1.7.3 Serba-Serbi Tentang _Packages_
+
+Untuk beberapa `library` ada kemungkinan (kecil) ditemukan kasus saat mereka tidak kompatibel. Akibatnya beberapa fungsi perintah di `library` tersebut akan menjadi kacau.
+
+Misalnya pada saat kita memanggil `library(tidyverse)` dan `library(plyr)`, maka perintah `filter()` yang dimiliki `tidyverse` akan tidak berjalan dengan baik. 
+
+Ada beberapa solusi yang bisa kita lakukan:
+
+1. Selalu mengaktifkan `library` sesuai dengan urutannya. Biasanya setiap kali kita mengaktifkan `library` akan muncul _warnings_ mengenai kompatibilitas `library` tersebut dengan `library` lain.
+2. Menonaktikan `library` yang sudah tidak perlu digunakan dengan perintah:
+
+`detach("package:tidytext", unload = TRUE)`
+
+3. Memanggil `library` tanpa harus mengaktifkannya. Kita bisa melakukannya dengan menggunakan tanda `nama packages::`. Contoh:
+
+`reshape2::melt(data)`
+
+### 1.7.4 _Help_
+
+Setiap `library` yang telah di-_install_ dan aktif disertai dengan fitur _help_ yang berfungsi sebagai informasi kepada _user_. Jika kita ingin mengetahui bagaimana isi dari perintah suatu fungsi, kita bisa gunakan perintah `help(nama fungsi)` atau `?nama fungsi`. _Help_ akan muncul pada tab _help_ di __R Studio__. Contoh:
+
+```{r}
+help(sum)
+```
+
+atau
+
+```{r}
+?sum
+```
+
+# 2. Bekerja dengan R
+
+## 2.1 Mengenal data
+
+Sebelum memulai segalanya, mari saya ingatkan mengenai tipe data yang ada di statistika yah. Berikut pembagian data berdasarkan tipenya:
+
+
 
 ___
 
 # Referensi
 
-1. [Metode Numerik Menggunakan R Untuk TeknikLingkungan](https://bookdown.org/moh_rosidi2610/Metode_Numerik/), Mohammad Rosidi: R bookdown.
+1. [Metode Numerik Menggunakan R Untuk Teknik Lingkungan](https://bookdown.org/moh_rosidi2610/Metode_Numerik/), Mohammad Rosidi: R bookdown.
 2. [Cara Install R di Android](https://passingthroughresearcher.wordpress.com/2019/07/30/install-r-3-5-2-di-android/), Ikang Fadhli personal blog.
 3. [Install R base for Windows](https://cran.r-project.org/bin/windows/base/).
 4. [Install R Studio](https://rstudio.com/products/rstudio/download/).
 5. [R Studio Cloud](https://rstudio.cloud/).
 6. [Bookdown, e-book from R Markdown](https://bookdown.org/).
+7. [Menggunakan R Studio Cloud di Android browser](https://passingthroughresearcher.wordpress.com/2019/11/13/oleh-oleh-pelatihan-hari-kedua-r-studio-cloud/).
