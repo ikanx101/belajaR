@@ -1,5 +1,5 @@
 ---
-title: "Training Day 1: R-Series"
+title: "Training R-Series: Day 1"
 output: github_document
 ---
 
@@ -13,6 +13,21 @@ rm(list=ls())
 ```
 
 ![alt text](https://bookdown.org/moh_rosidi2610/Metode_Numerik/images/r-icon.png "logo")
+
+# Untuk apa saya belajar __R__?
+
+Di era digitalisasi ini, disadari atau tidak data tersebar di mana-mana. Data juga dihasilkan dengan _volume_ yang besar dalam waktu singkat. 
+
+> _Analoginya seperti ada sungai yang memiliki arus yang deras dan kencang._
+
+Seperti itulah kondisi saat ini.
+
+_Tools_ analisa data klasik seperti __Ms. Excel__ dan __SPSS__ sudah tidak mampu lagi melakukan analisa _big data_ yang seringkali berbentuk _unstructured data_.
+
+__R__ tidak sendirian, ada juga _software_ lain bernama __Python__. Keduanya digunakan untuk membuat algoritma _artificial intelligence_ (bahasa keren dari _machine learning_. Bahasa kerennya dari _computational science_).
+
+> _So_, daripada ngomong _ngalor-ngidul_ tentang _artificial intelligence_ padahal _gak_ tahu barangnya seperti apa, mending belajar __R__ bareng biar _gak_ gagal paham.
+
 
 # 1. Pendahuluan
 
@@ -38,6 +53,7 @@ statistika dan analisa numerik juga sangat lengkap dan terus bertambah
 setiap saat.
 
 Materi _training_ ini saya kumpulkan dari berbagai sumber dan saya _customize_ sesuai dengan kebutuhan __Nutrifood__ berdasarkan pengalaman saya bergelut dengan data (dari mulai data pabrik hingga _finance_). Semoga menjadi manfaat bagi _Nutrifooders_ semua.
+
 
 ## 1.1 Sejarah
 
@@ -229,13 +245,51 @@ atau
 ?sum
 ```
 
-# 2. Bekerja dengan R
+### 1.7.5 _Example_
 
-## 2.1 Mengenal data
+Selain _help_, kita bisa melihat contoh pemakaian dari suatu fungsi di __R__ dengan menggunakan perintah `example()`. Contoh:
 
-Sebelum memulai segalanya, mari saya ingatkan mengenai tipe data yang ada di statistika yah. Berikut pembagian data berdasarkan tipenya:
+```{r}
+example(sum)
+```
+
+# 2. Mulai Bekerja dengan __R__
+
+## 2.1 Mengenal Data
+
+Sebelum memulai bekerja dengan __R__, ada baiknya saya jelaskan dan ingatkan kembali beberapa hal penting terkait data. Dengan demikian, kita bisa memilih jenis analisa statistika apa yang tepat untuk tipe-tipe data yang berbeda.
+
+### 2.1.1 Tipe Data (statistika)
+
+Secara statistika, berikut adalah pembagian data berdasarkan tipenya:
+
+![alt text](https://raw.githubusercontent.com/ikanx101/belajaR/master/Materi%20Training/Day%201%20-%20R%20Series/tipe%20data.png "tipe")
+
+1. Data kualitatif: adalah data yang tidak bisa dilakukan operasi aritmatika (penjumlahan, pengurangan, pembagian, dan perkalian). Data seperti ini, kita akan sebut sebagai __data kategorik__. __Nominal__; Representasi dari sesuatu. Contoh: `gender`, `1` saya tulis sebagai `pria` dan `2` saya tulis sebagai `wanita`. __Ordinal__; Urutan dari data menjadi penting. Contoh: skala _likert_ 1 - 6.
+2. Data kuantitatif: adalah data yang bisa dilakukan operasi aritmatika (penjumlahan, pengurangan, pembagian, dan perkalian). Data seperti ini, kita akan sebut sebagai __data numerik__. __Diskrit__; bilangan bulat (_integer_). __Kontinu__; bilangan _real_ (mengandung koma).
+
+### 2.1.2 Tipe Data di __R__
+
+Di __R__ ada beberapa tipe data yang sering digunakan. Secara hierarki, bisa diurutkan sebagai berikut:
+
+`character > numeric > integer > logical`
+
+Oke, saya coba jelaskan satu persatu yah:
+
+1. `character`: merupakan tipe data berupa karakter atau `string`. Semua data bisa dilihat sebagai `character`. Oleh karena itu, secara hierarki tipe data ini ditempatkan di urutan paling atas. Namun, data tipe ini tidak bisa dilakukan operasi aritmatika _yah_.
+2. `numeric`: merupakan tipe data angka berupa bilangan _real_. Kalau saya boleh bilang, tipe data ini mirip dengan data numerik di poin __2.1.1__.
+3. `integer`: merupakan tipe data angka berupa bilangan bulat. Sekilas mirip dengan tipe data diskrit di poin __2.1.1__. Namun di beberapa kondisi, tipe data ini bisa dijadikan data __kategorik__ sehingga kita bisa sebut tipenya menjadi `factor`.
+4. `logical`: merupakan tipe data _boolean_. Hanya berisi `TRUE` atau `FALSE`. Tipe data ini sangat berguna saat kita melakukan _if conditional_, _looping_, atau membuat _regex_ (_reguler expression_).
 
 
+### 2.1.3 Struktur Data di __R__
+
+Ada beberapa bentuk struktur data di __R__, yakni: 
+
+1. _Single value_; satu objek yang berisi satu _value_ saja.
+2. _Vector_; kumpulan dari beberapa _single value(s)_ yang menjadi satu objek. Bayangkan sebagai satu buah kolom di _file Ms. Excel_.
+3. _Data frame_ atau _tibble_; merupakan kumpulan dari beberapa _vectors_ yang memiliki ukuran sama. Bayangkan sebagai satu tabel di _Ms. Excel_ yang banyaknya baris di setiap kolom sama.
+4. _List_; merupakan bentuk struktur data yang sangat kompleks. Berisi _multiple data_ dengan struktur bermacam-macam.
 
 ___
 
@@ -248,3 +302,4 @@ ___
 5. [R Studio Cloud](https://rstudio.cloud/).
 6. [Bookdown, e-book from R Markdown](https://bookdown.org/).
 7. [Menggunakan R Studio Cloud di Android browser](https://passingthroughresearcher.wordpress.com/2019/11/13/oleh-oleh-pelatihan-hari-kedua-r-studio-cloud/).
+8. [NOMNOML: How to make diagram in R](https://cran.r-project.org/web/packages/nomnoml/index.html).

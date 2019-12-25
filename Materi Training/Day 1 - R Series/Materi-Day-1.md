@@ -1,9 +1,32 @@
-Training Day 1: R-Series
+Training R-Series: Day 1
 ================
 
 ![alt
 text](https://bookdown.org/moh_rosidi2610/Metode_Numerik/images/r-icon.png
 "logo")
+
+# Untuk apa saya belajar **R**?
+
+Di era digitalisasi ini, disadari atau tidak data tersebar di mana-mana.
+Data juga dihasilkan dengan *volume* yang besar dalam waktu singkat.
+
+> *Analoginya seperti ada sungai yang memiliki arus yang deras dan
+> kencang.*
+
+Seperti itulah kondisi saat ini.
+
+*Tools* analisa data klasik seperti **Ms. Excel** dan **SPSS** sudah
+tidak mampu lagi melakukan analisa *big data* yang seringkali berbentuk
+*unstructured data*.
+
+**R** tidak sendirian, ada juga *software* lain bernama **Python**.
+Keduanya digunakan untuk membuat algoritma *artificial intelligence*
+(bahasa keren dari *machine learning*. Bahasa kerennya dari
+*computational science*).
+
+> *So*, daripada ngomong *ngalor-ngidul* tentang *artificial
+> intelligence* padahal *gak* tahu barangnya seperti apa, mending
+> belajar **R** bareng biar *gak* gagal paham.
 
 # 1\. Pendahuluan
 
@@ -371,12 +394,109 @@ atau
 ?sum
 ```
 
+### 1.7.5 *Example*
+
+Selain *help*, kita bisa melihat contoh pemakaian dari suatu fungsi di
+**R** dengan menggunakan perintah `example()`. Contoh:
+
+``` r
+example(sum)
+```
+
+    ## 
+    ## sum> ## Pass a vector to sum, and it will add the elements together.
+    ## sum> sum(1:5)
+    ## [1] 15
+    ## 
+    ## sum> ## Pass several numbers to sum, and it also adds the elements.
+    ## sum> sum(1, 2, 3, 4, 5)
+    ## [1] 15
+    ## 
+    ## sum> ## In fact, you can pass vectors into several arguments, and everything gets added.
+    ## sum> sum(1:2, 3:5)
+    ## [1] 15
+    ## 
+    ## sum> ## If there are missing values, the sum is unknown, i.e., also missing, ....
+    ## sum> sum(1:5, NA)
+    ## [1] NA
+    ## 
+    ## sum> ## ... unless  we exclude missing values explicitly:
+    ## sum> sum(1:5, NA, na.rm = TRUE)
+    ## [1] 15
+
+# 2\. Mulai Bekerja dengan **R**
+
+## 2.1 Mengenal Data
+
+Sebelum memulai bekerja dengan **R**, ada baiknya saya jelaskan dan
+ingatkan kembali beberapa hal penting terkait data. Dengan demikian,
+kita bisa memilih jenis analisa statistika apa yang tepat untuk
+tipe-tipe data yang berbeda.
+
+### 2.1.1 Tipe Data (statistika)
+
+Secara statistika, berikut adalah pembagian data berdasarkan tipenya:
+
+![alt
+text](https://raw.githubusercontent.com/ikanx101/belajaR/master/Materi%20Training/Day%201%20-%20R%20Series/tipe%20data.png
+"tipe")
+
+1.  Data kualitatif: adalah data yang tidak bisa dilakukan operasi
+    aritmatika (penjumlahan, pengurangan, pembagian, dan perkalian).
+    Data seperti ini, kita akan sebut sebagai **data kategorik**.
+    **Nominal**; Representasi dari sesuatu. Contoh: `gender`, `1` saya
+    tulis sebagai `pria` dan `2` saya tulis sebagai `wanita`.
+    **Ordinal**; Urutan dari data menjadi penting. Contoh: skala
+    *likert* 1 - 6.
+2.  Data kuantitatif: adalah data yang bisa dilakukan operasi aritmatika
+    (penjumlahan, pengurangan, pembagian, dan perkalian). Data seperti
+    ini, kita akan sebut sebagai **data numerik**. **Diskrit**; bilangan
+    bulat (*integer*). **Kontinu**; bilangan *real* (mengandung koma).
+
+### 2.1.2 Tipe Data di **R**
+
+Di **R** ada beberapa tipe data yang sering digunakan. Secara hierarki,
+bisa diurutkan sebagai berikut:
+
+`character > numeric > integer > logical`
+
+Oke, saya coba jelaskan satu persatu yah:
+
+1.  `character`: merupakan tipe data berupa karakter atau `string`.
+    Semua data bisa dilihat sebagai `character`. Oleh karena itu, secara
+    hierarki tipe data ini ditempatkan di urutan paling atas. Namun,
+    data tipe ini tidak bisa dilakukan operasi aritmatika *yah*.
+2.  `numeric`: merupakan tipe data angka berupa bilangan *real*. Kalau
+    saya boleh bilang, tipe data ini mirip dengan data numerik di poin
+    **2.1.1**.
+3.  `integer`: merupakan tipe data angka berupa bilangan bulat. Sekilas
+    mirip dengan tipe data diskrit di poin **2.1.1**. Namun di beberapa
+    kondisi, tipe data ini bisa dijadikan data **kategorik** sehingga
+    kita bisa sebut tipenya menjadi `factor`.
+4.  `logical`: merupakan tipe data *boolean*. Hanya berisi `TRUE` atau
+    `FALSE`. Tipe data ini sangat berguna saat kita melakukan *if
+    conditional*, *looping*, atau membuat *regex* (*reguler
+    expression*).
+
+### 2.1.3 Struktur Data di **R**
+
+Ada beberapa bentuk struktur data di **R**, yakni:
+
+1.  *Single value*; satu objek yang berisi satu *value* saja.
+2.  *Vector*; kumpulan dari beberapa *single value(s)* yang menjadi satu
+    objek. Bayangkan sebagai satu buah kolom di *file Ms. Excel*.
+3.  *Data frame* atau *tibble*; merupakan kumpulan dari beberapa
+    *vectors* yang memiliki ukuran sama. Bayangkan sebagai satu tabel di
+    *Ms. Excel* yang banyaknya baris di setiap kolom sama.
+4.  *List*; merupakan bentuk struktur data yang sangat kompleks. Berisi
+    *multiple data* dengan struktur bermacam-macam.
+
 -----
 
 # Referensi
 
-1.  [Metode Numerik Menggunakan R Untuk
-    TeknikLingkungan](https://bookdown.org/moh_rosidi2610/Metode_Numerik/),
+1.  [Metode Numerik Menggunakan R Untuk Teknik
+    Lingkungan](https://bookdown.org/moh_rosidi2610/Metode_Numerik/),
     Mohammad Rosidi: R bookdown.
 2.  [Cara Install R di
     Android](https://passingthroughresearcher.wordpress.com/2019/07/30/install-r-3-5-2-di-android/),
@@ -388,3 +508,5 @@ atau
 6.  [Bookdown, e-book from R Markdown](https://bookdown.org/).
 7.  [Menggunakan R Studio Cloud di Android
     browser](https://passingthroughresearcher.wordpress.com/2019/11/13/oleh-oleh-pelatihan-hari-kedua-r-studio-cloud/).
+8.  [NOMNOML: How to make diagram in
+    R](https://cran.r-project.org/web/packages/nomnoml/index.html).
