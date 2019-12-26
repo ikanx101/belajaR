@@ -1,0 +1,138 @@
+---
+title: "Menguji Keacakan dari Wheel of Fortune"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r,echo=FALSE}
+setwd("/cloud/project/Bukan Infografis/FindX Wheel of Fortune")
+rm(list=ls())
+```
+
+# ITB, Bandung, 2005.
+
+Pada saat perkuliahan __Statistika Matematika__ di tingkat II, kami dibagi menjadi beberapa kelompok kecil untuk mengerjakan tugas membuat simulasi __Monte Carlo__.
+
+Tugasnya selesai dengan baik tapi saya masih tidak mengerti apa faedah dari simulasi tersebut.
+
+____
+
+# Tel-U, Bandung, November 2019.
+
+Saat mengikuti pelatihan _big data analytics_ di Universitas Telkom, salah satu dosen menjelaskan kembali mengenai simulasi _Monte Carlo_. Kali ini saya paham apa faedah dari simulasi ini.
+
+Simulasi ini juga bisa untuk menyelesaikan permasalahan mengenai peluang mikroba yg sempat [saya tulis dulu](https://passingthroughresearcher.wordpress.com/2019/08/09/mencari-peluang-kegagalan-dari-data-yang-tak-pernah-gagal/).
+
+____
+
+# Rawabali, Jakarta, Desember 2019
+
+Setelah saya menyelesaikan sesi __FINDX__ kemarin, ada pengundian _door prize_ penonton. Dua orang penonton yang beruntung akan mendapatkan hadiah berupa _tumbler_ dan _powerbank_.
+
+![alt text](https://d1h3r4b5gluug.cloudfront.net/wp-content/uploads/2018/05/GAM18_WHEEL_OF_FORTUNE_stock_options-HR-03.jpg "chart")
+
+Pengundian dilakukan menggunakan _digital wheel of fortune_. Jadi semua penonton yang datang di sesi tersebut akan mendaftarkan namanya secara online. Dari sekian nama tersebut akan diacak untuk mendapatkan pemenangnya.
+
+Dua orang pertama yang muncul ternyata berasal dari divisi HR. 
+
+> Kebetulan yang _mencurigakan_ ini. _heeee_
+
+Ketika saya iseng bertanya kepada panitia dan MC saat itu mengenai _randomness_ dari pengundian itu. Ternyata _wheel of fortune_ yang digunakan adalah dari _online free tools_.
+
+____
+
+## Bagaimana cara mengecek keacakan dari _games_ tersebut?
+
+Dengan memanfaatkan prinsip dari simulasi __Monte Carlo__ kita bisa melihat apakah _wheel of fortune_ tersebut beneran _random_ atau tidak. 
+
+Bagaimana caranya?
+
+Oke, misalkan kita punya sebuah _wheel of fortune_ berisi lima nama orang yang akan diacak. Nama orang yang pertama kali muncul otomatis menjadi pemenang _door prize_-nya.
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+library(dplyr)
+library(randomNames)
+nama = randomNames(5,gender='male')
+data = data.frame(id=c(1:5),nama=nama)
+```
+
+```{r}
+data
+```
+
+Secara logika, kita bisa hitung bahwa peluang masing-masing nama orang muncul adalah `1/5` atau `20%`. Nilai peluang tersebut akan saya sebut _exact value_ karena berasal dari perhitungan logika matematis.
+
+_Nah_, prinsip simulasi _Monte Carlo_ adalah dengan melakukan _random number generating_ dalam _number of trial_ yang sangat banyak. 
+
+Untuk kasus _wheel of fortune_ ini, kita bisa lakukan _trial_ atau pengundian beberapa kali (sebanyak-banyaknya). Hasil dari pengundian ini kita rekap dan nanti kita hitung berapa kali masing-masing nama orang keluar.
+
+Jika proses _wheel of fortune_ itu murni acak, maka diharapkan nanti hasil _simulation value_ akan sama dengan _exact value_.
+
+> Masih belum ada gambaran?
+
+Berikut gambarannya:
+
+____
+
+## Simulasi jika pengundian dilakukan 10 kali.
+
+Berikut adalah simulasi jika dari lima nama orang tersebut saya undi sebanyak 10 kali.
+
+```{r}
+n = 10
+undi = data.frame(pengundian_ke = c(1:n),
+                  pemenang = sample(nama,n,replace=T))
+undi
+undi %>% group_by(pemenang) %>% summarise(freq_menang = n(),
+                                          peluang_menang = round(freq_menang/n*100,2))
+```
+
+Ternyata kita dapatkan, untuk trial = 10 kali, peluang masing-masing nama orang menjadi pemenang masih tidak sama.
+
+___
+
+## Simulasi jika pengundian dilakukan 1000 kali.
+
+Berikut adalah simulasi jika dari lima nama orang tersebut saya undi sebanyak 1000 kali.
+
+```{r,echo = FALSE}
+n = 1000
+undi = data.frame(pengundian_ke = c(1:n),
+                  pemenang = sample(nama,n,replace=T))
+undi %>% group_by(pemenang) %>% summarise(freq_menang = n(),
+                                          peluang_menang = round(freq_menang/n*100,2))
+```
+
+Ternyata kita dapatkan, untuk trial = 1000 kali, peluang masing-masing nama orang menjadi pemenang sudah mulai sama (mendekati `20%`).
+
+___
+
+## Simulasi jika pengundian dilakukan 10.100.000 kali.
+
+Berikut adalah simulasi jika dari lima nama orang tersebut saya undi sebanyak 10.100.000 kali.
+
+```{r,echo = FALSE}
+undi = data.frame(pemenang = nama, 
+                  freq_menang = c(2022668,2017691,2018745,2021521,2019375),
+                  peluang_menang = c(20.03,19.98,19.99,20.02,19.99))
+undi
+```
+
+Ternyata kita dapatkan, untuk trial = 10.100.000 kali, peluang masing-masing nama orang menjadi pemenang sudah semakin sama dan mirip.
+
+___
+
+## Simulasi berikutnya.
+
+Jika kita ulang terus simulasi ini hingga banyak sekali, maka peluang masing-masing nama orang muncul menjadi pemenang akan konvergen ke `20%`.
+
+> Oleh karena itu kita bisa simpulkan bahwa _wheel of fortune_ tersebut mengundi dengan acak.
+
+___
+
+# Kembali ke Kasus Kita.
+
+_Nah_, sekarang utk membuktikan bahwa _wheel of fortune_ yang digunakan pas sesi __FINDX__ itu acak atau tidak, ada yang mau jadi _volunteer_ untuk melakukan simulasi ini?
