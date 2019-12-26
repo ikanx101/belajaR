@@ -26,7 +26,7 @@ Keduanya digunakan untuk membuat algoritma *artificial intelligence*
 
 > *So*, daripada ngomong *ngalor-ngidul* tentang *artificial
 > intelligence* padahal *gak* tahu barangnya seperti apa, mending
-> belajar **R** bareng biar *gak* gagal paham.
+> belajar **R** bareng biar *gak* gagal paham. *Heeee*
 
 # 1\. Pendahuluan
 

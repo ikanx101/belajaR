@@ -26,7 +26,7 @@ _Tools_ analisa data klasik seperti __Ms. Excel__ dan __SPSS__ sudah tidak mampu
 
 __R__ tidak sendirian, ada juga _software_ lain bernama __Python__. Keduanya digunakan untuk membuat algoritma _artificial intelligence_ (bahasa keren dari _machine learning_. Bahasa kerennya dari _computational science_).
 
-> _So_, daripada ngomong _ngalor-ngidul_ tentang _artificial intelligence_ padahal _gak_ tahu barangnya seperti apa, mending belajar __R__ bareng biar _gak_ gagal paham.
+> _So_, daripada ngomong _ngalor-ngidul_ tentang _artificial intelligence_ padahal _gak_ tahu barangnya seperti apa, mending belajar __R__ bareng biar _gak_ gagal paham. _Heeee_
 
 
 # 1. Pendahuluan
