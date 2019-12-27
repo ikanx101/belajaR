@@ -60,6 +60,12 @@ hotel = c('Royal Ambarukmo Hotel',
           'The Alana Yogyakarta Hotel & Convention Center',
           'Bluebell Residence Sumarekon Bekasi')
 wisata
+load("destinasi.rda")
+library(leaflet)
+leaflet() %>% addTiles() %>%
+  addCircles(lat = destinasi$lat,
+             lng = destinasi$long,
+             radius = 50)
 ```
 
 
