@@ -71,3 +71,14 @@ load("destinasi.rda")
 
 Untuk mencari rutenya, saya akan menggunakan algoritma _Travelling Salesperson Problem_ (__TSP__). Oleh karena itu, saya memerlukan _distance matrix_. Untuk mendapatkannya, saya akan menggunakan `library(ggmap)` di __R__ yang bisa menghitung jarak _real_ berdasarkan _Google Maps_.
 
+```{r,echo=FALSE}
+load('matrix jarak.rda')
+distances = as.matrix(jarak) / 1000
+colnames(distances) = destinasi$id
+rownames(distances) = destinasi$id
+distances
+```
+
+## Menghitung Jarak Terpendek dengan _TSP_
+
+Sekarang kita akan hitung jarak terpendek dari _matrix_ tersebut dengan algoritma __TSP__. Didapatkan metode yang berhasil mendapatkan rute yang paling pendek adalah `arbitrary_insertion+two_opt` dengan jarak total sebagai berikut:
