@@ -1,0 +1,65 @@
+---
+title: "Family Trip To Jogjakarta"
+output: github_document
+---
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+setwd("/cloud/project/Bukan Infografis/Family Trip Jogja")
+rm(list=ls())
+library(dplyr)
+library(tidyr)
+library(leaflet)
+library(ggplot2)
+```
+# 2017
+
+Di pertengahan 2017, saya dan nyonya berencana untuk melakukan _family trip_ pertama yang __jauh__. Mengajak serta Si Sulung yang kala itu masih TK dan Si Bungsu yang baru 2 tahun. 
+
+> Sejauh apa? Hanya ke Jogjakarta.
+
+Tiket pesawat sudah dibeli, Garuda Indonesia (pp). _Voucher_ hotel sudah sudah ada. Tinggal menunggu berangkat saja.
+
+_Qodarullah_, 2 hari sebelum berangkat Si Bungsu demam. Tidak ingin mengambil resiko, akhirnya perjalanan tersebut kami batalkan. _Alhamdulillah_ semua tiket dan _voucher_ bisa di-_refund_ walau ada potongan sana-sini.
+
+# 2019
+
+Pada __Harbolnas__ 12.12 kemarin, nyonya melihat ada diskon pembelian _voucher_ hotel di aplikasi __Traveloka__. Seketika saja, kami putuskan untuk kembali menyelesaikan apa yang dulu pernah mau dilaksanakan: _family trip to Jogjakarta_. Bedanya, kali ini kami akan melakukannya melalui perjalanan darat. _InsyaAllah_ saya akan menyetir dari rumah ke Jogjakarta. _Trip_-nya sendiri akan dilakukan pasca liburan tahun baru.
+
+> Jadi saat orang-orang baru selesai liburan tahun baru dan mulai beraktivitas normal, kami baru liburan. _Hehehehe_
+
+Seperti perjalanan kemarin ke Malaysia, nyonya segera membuat _trip itinerary_ di sana. Beberapa tempat sudah masuk ke dalam daftar kunjung kami.
+
+Nah, sebagai suami yang baik, saya akan mencoba membantu nyonya untuk mengurutkan tempat mana yang harus dikunjungi terlebih dahulu. Prinsipnya menggunakan __algoritma TSP__ seperti yang pernah saya [_post_ beberapa waktu lalu](https://passingthroughresearcher.wordpress.com/2019/11/18/menentukan-rute-jalan-jalan-paling-optimal-dengan-tsp/).
+
+___
+
+# Membuat Rute Jalan-Jalan yang Optimal
+
+Berhubung nanti saya yang akan menyetir ke sana-sini, maka penting bagi saya untuk menemukan rute yang paling optimal, yakni jarak terpendek agar kaki gak keriting _nginjek-nginjek_ kopling (berhubung si Magma Grey belum tiba di rumah, maka si Putih yang akan jalan).
+
+Selain itu, _trip_ ini juga harus banyak mengunjungi destinasi wisata. Berhubung _trip_ kali ini tidak bisa lama-lama karena Si Sulung sudah masuk sekolah (walaupun pada akhirnya dia bolos di hari-hari pertama masuk semester dua ini).
+
+Berikut adalah beberapa destinasi wisata yang ingin dikunjungi:
+
+```{r,echo=FALSE}
+wisata = c('Nasi Jamblang Ibu Nur Cirebon',
+           'Jejamuran Resto',
+           'HeHa Sky View',
+           'Sate Klathak Pak Pong',
+           'Pantai Kukup',
+           'Ayam Goreng Tojoyo Jalan Mayjend Sutoyo',
+           'Museum Ullen Sentalu',
+           'Gunung Merapi',
+           'Keraton Jogjakarta',
+           'Taman Pintar Jogjakarta',
+           'Jalan Malioboro',
+           'Pasar Beringharjo',
+           'Bakmi Mbah Gito')
+
+hotel = c('Royal Ambarukmo Hotel',
+          'The Alana Yogyakarta Hotel & Convention Center',
+          'Bluebell Residence Sumarekon Bekasi')
+wisata
+```
+
+
