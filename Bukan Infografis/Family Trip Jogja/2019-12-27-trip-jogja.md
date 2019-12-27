@@ -53,6 +53,9 @@ Berhubung *trip* kali ini tidak bisa lama-lama karena Si Sulung sudah
 masuk sekolah (walaupun pada akhirnya dia bolos di hari-hari pertama
 masuk semester dua ini).
 
+Oh iya, setelah berangkat malam dari rumah, kami berencana untuk
+menikmati sarapan Nasi Jamblang di Cirebon.
+
 Berikut adalah beberapa destinasi wisata yang ingin dikunjungi:
 
     ##  [1] "Nasi Jamblang Ibu Nur Cirebon"          
@@ -68,3 +71,5 @@ Berikut adalah beberapa destinasi wisata yang ingin dikunjungi:
     ## [11] "Jalan Malioboro"                        
     ## [12] "Pasar Beringharjo"                      
     ## [13] "Bakmi Mbah Gito"
+
+![peta](https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Family%20Trip%20Jogja/Peta%20Awal.png)
