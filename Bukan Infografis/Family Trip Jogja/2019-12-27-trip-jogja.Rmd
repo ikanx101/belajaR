@@ -39,6 +39,8 @@ Berhubung nanti saya yang akan menyetir ke sana-sini, maka penting bagi saya unt
 
 Selain itu, _trip_ ini juga harus banyak mengunjungi destinasi wisata. Berhubung _trip_ kali ini tidak bisa lama-lama karena Si Sulung sudah masuk sekolah (walaupun pada akhirnya dia bolos di hari-hari pertama masuk semester dua ini).
 
+Oh iya, setelah berangkat malam dari rumah, kami berencana untuk menikmati sarapan Nasi Jamblang di Cirebon.
+
 Berikut adalah beberapa destinasi wisata yang ingin dikunjungi:
 
 ```{r,echo=FALSE}
@@ -61,11 +63,8 @@ hotel = c('Royal Ambarukmo Hotel',
           'Bluebell Residence Sumarekon Bekasi')
 wisata
 load("destinasi.rda")
-library(leaflet)
-leaflet() %>% addTiles() %>%
-  addCircles(lat = destinasi$lat,
-             lng = destinasi$long,
-             radius = 50)
 ```
+
+![peta]()
 
 
