@@ -35,7 +35,7 @@ ___
 
 # Membuat Rute Jalan-Jalan yang Optimal
 
-Berhubung nanti saya yang akan menyetir ke sana-sini, maka penting bagi saya untuk menemukan rute yang paling optimal, yakni jarak terpendek agar kaki gak keriting _nginjek-nginjek_ kopling (berhubung si Magma Grey belum tiba di rumah, maka si Putih yang akan jalan).
+Berhubung nanti saya yang akan menyetir ke sana-sini, maka penting bagi saya untuk menemukan rute yang paling optimal, yakni jarak terpendek agar kaki gak keriting _nginjek-nginjek_ kopling (berhubung si __Magma Grey__ belum tiba di rumah, maka si __Putih__ yang akan jalan).
 
 Selain itu, _trip_ ini juga harus banyak mengunjungi destinasi wisata. Berhubung _trip_ kali ini tidak bisa lama-lama karena Si Sulung sudah masuk sekolah (walaupun pada akhirnya dia bolos di hari-hari pertama masuk semester dua ini).
 
@@ -67,6 +67,8 @@ load("destinasi.rda")
 
 ![peta](https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Family%20Trip%20Jogja/Peta%20Awal.png)
 
+Dari lokasi-lokasi tersebut saya akan mencari titik __long-lat__-nya. Gunanya apa? Untuk mencari _distance matrix_.
+
 ## Mencari _Distance Matrix_
 
 Untuk mencari rutenya, saya akan menggunakan algoritma _Travelling Salesperson Problem_ (__TSP__). Oleh karena itu, saya memerlukan _distance matrix_. Untuk mendapatkannya, saya akan menggunakan `library(ggmap)` di __R__ yang bisa menghitung jarak _real_ berdasarkan _Google Maps_.
@@ -78,6 +80,10 @@ colnames(distances) = destinasi$id
 rownames(distances) = destinasi$id
 distances
 ```
+
+Distance matrix yang didapatkan tentunya tidak akan simetris. Karena jarak antara titik A ke B bisa jadi tidak sama dengan jarak antara titik B ke A. Kenapa? 
+
+> Misalkan ada aturan jalan satu arah, dsb.
 
 ## Menghitung Jarak Terpendek dengan _TSP_
 
