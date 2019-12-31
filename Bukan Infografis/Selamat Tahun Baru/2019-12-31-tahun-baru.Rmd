@@ -1,0 +1,39 @@
+---
+title: "Selamat Tahun Baru"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r,warning=FALSE,message=FALSE,echo=FALSE}
+rm(list=ls())
+setwd("/cloud/project/Bukan Infografis/Selamat Tahun Baru")
+library(gtrendsR)
+library(dplyr)
+library(tidytext)
+library(tidyr)
+library(ggplot2)
+library(ggthemes)
+library(ggrepel)
+```
+
+Tak terasa sekian jam lagi kita akan berganti tahun. Yuk kita lihat apa yang _netizen_ cari di __Google__ terkait _keyword_ __tahun baru__.
+
+```{r}
+data = gtrends('tahun baru',geo = 'ID')
+data = data.frame(data$related_queries)
+
+data = data.frame(id = c(1:length(data$value)),text = data$value)
+
+sensor = c('tahun','baru')
+
+wc = data %>% 
+      mutate(text = as.character(text),
+             text = tolower(text)) %>%
+      unnest_tokens('words',text) %>%
+      filter(!words %in% sensor) %>%
+      count(words,sort=T)
+save(wc,file='utk wordcloud.rda')
+```

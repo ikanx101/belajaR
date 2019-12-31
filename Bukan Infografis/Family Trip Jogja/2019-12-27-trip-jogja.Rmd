@@ -87,4 +87,30 @@ Distance matrix yang didapatkan tentunya tidak akan simetris. Karena jarak antar
 
 ## Menghitung Jarak Terpendek dengan _TSP_
 
-Sekarang kita akan hitung jarak terpendek dari _matrix_ tersebut dengan algoritma __TSP__. Didapatkan metode yang berhasil mendapatkan rute yang paling pendek adalah `arbitrary_insertion+two_opt` dengan jarak total sebagai berikut:
+Sekarang kita akan hitung jarak terpendek dari _matrix_ tersebut dengan algoritma __TSP__. Didapatkan metode yang berhasil mendapatkan rute yang paling pendek adalah `arbitrary_insertion+two_opt` dengan jarak total sebesar `1.234,958` km
+
+```{r,echo=FALSE}
+load('hasil TSP.rda')
+tour
+```
+
+Berikut adalah urutan perjalanan yang harus kami tempuh:
+
+![peta 2](https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Family%20Trip%20Jogja/hasil%20tsp%201.png)
+
+```{r,echo=FALSE}
+addresses %>% select(alamat,lat,long)
+```
+
+____
+
+## Fine Tuning the Algoritm
+
+Oke, sekarang kami sudah punya urutan paling optimal yang melewati semua titik destinasi termasuk rumah dan hotel yang akan diinapi. Tapi, urutan ini masih belum realistis. Kenapa?
+
+1. Kami akan menginap di dua hotel yang berbeda. Pada malam pertama dan kedua, kami akan menginap di Royal Ambarukmo. Sedangkan di malam terakhir kami akan menginap di Hotel Alana.
+2. Kami berencana untuk membagi destinasi menjadi 3 hari dan di hari terakhir hanya pulang saja.
+
+Oleh karena itu, algoritma __TSP__ harus dimodifikasi. Sebetulnya bukan algoritmanya yang harus dimodifikasi, tapi matrix jaraknya saja.
+
+
