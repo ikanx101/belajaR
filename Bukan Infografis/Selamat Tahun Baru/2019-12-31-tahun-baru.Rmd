@@ -22,12 +22,13 @@ library(ggrepel)
 Tak terasa sekian jam lagi kita akan berganti tahun. Yuk kita lihat apa yang _netizen_ cari di __Google__ terkait _keyword_ __tahun baru__.
 
 ```{r}
-data = gtrends('tahun baru',geo = 'ID')
+topik = c('tahun baru','new year','pergantian tahun')
+data = gtrends(topik,geo = 'ID')
 data = data.frame(data$related_queries)
 
 data = data.frame(id = c(1:length(data$value)),text = data$value)
 
-sensor = c('tahun','baru')
+sensor = c('tahun','baru','new','year','pergantian')
 
 wc = data %>% 
       mutate(text = as.character(text),
