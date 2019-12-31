@@ -21,7 +21,7 @@ library(ggrepel)
 
 Tak terasa sekian jam lagi kita akan berganti tahun. Yuk kita lihat apa yang _netizen_ cari di __Google__ terkait _keyword_ __tahun baru__.
 
-```{r}
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
 topik = c('tahun baru','new year','pergantian tahun')
 data = gtrends(topik,geo = 'ID')
 data = data.frame(data$related_queries)
@@ -38,3 +38,7 @@ wc = data %>%
       count(words,sort=T)
 save(wc,file='utk wordcloud.rda')
 ```
+
+![chart](https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Selamat%20Tahun%20Baru/Wordcloud%20Tahun%20Baru.png)
+
+# _Happy new year_ gengs...
