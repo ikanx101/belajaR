@@ -291,6 +291,33 @@ Ada beberapa bentuk struktur data di __R__, yakni:
 3. _Data frame_ atau _tibble_; merupakan kumpulan dari beberapa _vectors_ yang memiliki ukuran sama. Bayangkan sebagai satu tabel di _Ms. Excel_ yang banyaknya baris di setiap kolom sama.
 4. _List_; merupakan bentuk struktur data yang sangat kompleks. Berisi _multiple data_ dengan struktur bermacam-macam.
 
+### 2.1.4 Apa gunanya kita mengetahui jenis dan struktur data di __R__?
+
+Beberapa algoritma yang tersedia di _library_ mengharuskan kita memiliki _input_ yang ter-standar, baik dari segi jenis dan strukturnya.
+
+Dengan mengetahui jenis dan struktur data, kita bisa lebih mudah bekerja dengan algoritma yang ada di _library_.
+
+Contoh:
+
+Algoritma analisa _simple linear regression_ (`lm()`) memerlukan input berupa `data.frame()` dengan masing-masing _variables_ yang ada di dalamnya berjenis _numeric_.
+
+
+____
+
+# 3. Memulai dengan __R__
+
+Oke, kita akan memulai bekerja dengan __R__, dimulai dari fungsi-fungsi awal sebagai berikut:
+
+## 3.1 Fungsi Awal
+
+### 3.1.1 Operasi aritmatika
+
+
+
+### 3.1.1 Pendefinisian _object_
+
+Setiap data yang akan kita masukkan ke dalam memori __R__, akan saya sebut sebagai _object_. Setiap _object_ yang ingin dimasukkan ke dalam memori perlu didefinisikan terlebih dahulu menggunakan perintah
+
 ___
 
 # Referensi
