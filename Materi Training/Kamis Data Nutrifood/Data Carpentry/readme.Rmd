@@ -1,0 +1,169 @@
+---
+title: "Data Carpentry: Bebersih Data Carmudi"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Pendahuluan
+
+Salah satu keunggulan __R__ dibandingkan dengan _analytics tools_ lainnya adalah kemampuannya untuk memanipulasi data. __Manipulasi__ dalam artian positif, yakni _preprocessing data_ atau _data carpentry_.
+
+Di dunia ini, tanpa kita sadari data tersebar sangat banyak. Namun tidak semuanya berbentuk _structured data_. Sebagian besar sebenarnya masuk ke dalam _unstructured data_ atau _semi structured data_.
+
+Sekarang kita akan mencoba untuk mengolah _unstructured data_ menjadi informasi atau _insight_.
+
+# _Libraries_ yang Digunakan
+
+Berikut adalah beberapa _libraries_ yang digunakan dalam _training_ kali ini:
+
+1. `rvest`: _web scraping_.
+2. `dplyr`: _data carpentry_.
+3. `tidytext`: _text data carpentry_.
+4. `tidyr`: _data carpentry_ (_advance_).
+5. `ggplot2`: visualisasi data.
+
+```{r,warning=FALSE,message=FALSE}
+library(dplyr)
+library(rvest)
+library(tidytext)
+library(tidyr)
+library(ggplot2)
+```
+
+# Data yang Digunakan
+
+Kita akan _scrap_ data situs [carmudi](https://www.carmudi.co.id/cars/saloon/condition:all/) tentang _listing_ mobil sedan bekas.
+
+Kalau kita lihat situsnya, ada 71 _pages_. Kita akan _scrap_ semua informasinya.
+
+## Langkah pertama
+
+Kita akan _define_ semua _urls_ dari carmudi lalu kita buat fungsi _web scrap_-nya.
+
+```{r,warning=FALSE,message=FALSE}
+#link dari carmudi
+url = paste('https://www.carmudi.co.id/cars/saloon/condition:all/?page=',
+            c(1:71),
+            sep='')
+
+#Bikin fungsi scrap carmudi
+scrap = function(url){
+  data = 
+    read_html(url) %>% {
+      tibble(
+        nama = html_nodes(.,'.title-blue') %>% html_text(),
+        harga = html_nodes(.,'.price a') %>% html_text(),
+        lokasi = html_nodes(.,'.catalog-listing-item-location span') %>%
+          html_text()
+      )
+    }
+  return(data)
+}
+```
+
+## Langkah kedua
+
+Saya _scrap_ datanya dari _link_ pertama hingga selesai. Saya masih senang menggunakan _looping_ dibandingkan menggunakan fungsi `lapply()`. Sepertinya lebih _firm_ saja menurut saya.
+
+```{r}
+#kita mulai scrap datanya
+i = 1
+sedan.data = scrap(url[i])
+
+for(i in 2:length(url)){
+  temp = scrap(url[i])
+  sedan.data = rbind(sedan.data,temp)
+}
+str(sedan.data)
+head(sedan.data,15)
+```
+
+## Hasil scrap data
+
+Didapatkan ada `2104` baris data mobil sedan bekas yang di- _listing_ di __carmudi__.
+
+Kalau kita lihat sekilas, data tersebut seolah-olah _structured_. Namun kalau diperhatikan secara seksama, sebenarnya data tersebut _semi-structured_. 
+Variabel `harga` berupa _character_ karena tulisan juta. Sedangkan variabel `nama` masih campur aduk adanya tahun produksi dan varian mobil.
+
+_So_, kita memiliki dua masalah, yakni:
+
+1. Bagaimana mengubah `harga` menjadi numerik agar bisa dianalisa?
+2. Bagaimana mengekstrak `tahun` dari variabel `nama`.
+3. Mungkinkah bagi kita menganalisa per `brand`?
+
+## Proses Data _Carpentry_
+
+### Membereskan variabel `harga`
+
+Kita mulai dari membereskan variabel yang paling gampang, yakni `harga`.
+
+```{r}
+sedan.data = sedan.data %>% separate(harga,into=c('angka','unit'),sep=' ')
+
+unique(sedan.data$unit)
+
+sedan.data = 
+sedan.data %>% mutate(angka = as.numeric(angka),
+                      unit = ifelse(unit == 'Juta',1000000,1000000000),
+                      unit = as.numeric(unit),
+                      harga = angka*unit,
+                      angka = NULL,
+                      unit = NULL)
+
+head(sedan.data,15)
+```
+
+_Done!!!_ Selesai.
+
+### Membereskan variabel `nama` dan mengekstrak `tahun`
+
+Oke, sekarang kita akan membereskan variabel `nama`. Sebelum melakukannya, saya akan menghapuskan tanda `\n` dan menambahkan variabel `id` untuk memudahkan proses ekstrak `tahun` nantinya.
+
+```{r}
+sedan.data = 
+  sedan.data %>% 
+  mutate(nama = gsub('\\\n','',nama),
+         id = c(1:length(nama))) 
+head(sedan.data,15)
+```
+
+Nah, sekarang untuk mengekstrak `tahun` saya akan gunakan metode yang sama untuk membuat _word cloud_ atau _word counting_. Pandang variabel `nama` sebagai satu kalimat utuh yang kemudian akan dipisah-pisah per kata. Setiap angka yang muncul akan kita jadikan variabel `tahun`.
+
+```{r}
+new = 
+  sedan.data %>% select(id,nama) %>%
+  unnest_tokens('words',nama) %>% 
+  mutate(words = as.numeric(words)) %>%
+  filter(!is.na(words),words>1900,words<2021)
+
+sedan.data = merge(sedan.data,new)
+colnames(sedan.data)[5] = 'tahun'
+head(sedan.data,15)
+```
+_Done!!!_ Selesai.
+
+# _Error Bar_ Plot untuk harga mobil
+
+_Nah_, saya sudah mendapatkan data yang saya butuhkan. Sekarang saya akan membuat _error bar_.
+
+```{r,echo=FALSE,message=FALSE}
+library(ggpubr)
+
+sedan.data %>% group_by(tahun) %>% summarise(rata = mean(harga),stdev = sd(harga),n = n()) %>%
+  mutate(stdev = ifelse(is.na(stdev),0,stdev)) %>%
+  ggplot(aes(x = as.factor(tahun), y = rata)) + 
+  geom_col(color='steelblue',fill='white',alpha=.4) +
+  geom_errorbar(aes(ymin=rata-stdev, ymax=rata+stdev), width=.2,color='darkgreen') +
+  labs(title = 'Harga Mobil Sedan Bekas',
+       subtitle = 'source: situs Carmudi Indonesia',
+       caption = 'Visualised using R\ni k A n x',
+       y = 'Harga(dalam juta rupiah)') +
+  theme_pubr() +
+  theme(axis.title.x = element_blank(),
+        plot.title = element_text(size=18,face='bold.italic'),
+        axis.text.x = element_text(angle=90,size=8),
+        axis.text.y = element_blank())
+```
