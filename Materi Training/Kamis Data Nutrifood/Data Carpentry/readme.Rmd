@@ -13,7 +13,7 @@ Salah satu keunggulan __R__ dibandingkan dengan _analytics tools_ lainnya adalah
 
 Di dunia ini, tanpa kita sadari data tersebar sangat banyak. Namun tidak semuanya berbentuk _structured data_. Sebagian besar sebenarnya masuk ke dalam _unstructured data_ atau _semi structured data_.
 
-Sekarang kita akan mencoba untuk mengolah _unstructured data_ menjadi informasi atau _insight_.
+Seringkali kita enggan berhadapan dengan _unstructured data_ atau _semi structured data_. Nah, kali ini kita akan mencoba untuk mengolah _unstructured data_ menjadi informasi atau _insight(s)_.
 
 # _Libraries_ yang Digunakan
 
@@ -43,6 +43,8 @@ Kalau kita lihat situsnya, ada 71 _pages_. Kita akan _scrap_ semua informasinya.
 
 Kita akan _define_ semua _urls_ dari carmudi lalu kita buat fungsi _web scrap_-nya.
 
+> Oh iya, tentang _web scraping_ akan saya bahas di _training_ atau tulisan terpisah yah. Kali ini rekan-rekan terima jadi aja fungsinya seperti ini.
+
 ```{r,warning=FALSE,message=FALSE}
 #link dari carmudi
 url = paste('https://www.carmudi.co.id/cars/saloon/condition:all/?page=',
@@ -66,7 +68,7 @@ scrap = function(url){
 
 ## Langkah kedua
 
-Saya _scrap_ datanya dari _link_ pertama hingga selesai. Saya masih senang menggunakan _looping_ dibandingkan menggunakan fungsi `lapply()`. Sepertinya lebih _firm_ saja menurut saya.
+Saya _scrap_ datanya dari _url_ pertama hingga selesai. Saya masih senang menggunakan _looping_ dibandingkan menggunakan fungsi `lapply()`. Sepertinya lebih _firm_ saja menurut saya.
 
 ```{r}
 #kita mulai scrap datanya
@@ -81,6 +83,10 @@ str(sedan.data)
 head(sedan.data,15)
 ```
 
+```{r, include=FALSE}
+openxlsx::write.xlsx(sedan.data,'hasil scrap sedan bekas.xlsx')
+```
+
 ## Hasil scrap data
 
 Didapatkan ada `2104` baris data mobil sedan bekas yang di- _listing_ di __carmudi__.
@@ -88,7 +94,7 @@ Didapatkan ada `2104` baris data mobil sedan bekas yang di- _listing_ di __carmu
 Kalau kita lihat sekilas, data tersebut seolah-olah _structured_. Namun kalau diperhatikan secara seksama, sebenarnya data tersebut _semi-structured_. 
 Variabel `harga` berupa _character_ karena tulisan juta. Sedangkan variabel `nama` masih campur aduk adanya tahun produksi dan varian mobil.
 
-_So_, kita memiliki dua masalah, yakni:
+_So_, kita memiliki tiga masalah, yakni:
 
 1. Bagaimana mengubah `harga` menjadi numerik agar bisa dianalisa?
 2. Bagaimana mengekstrak `tahun` dari variabel `nama`.
@@ -145,16 +151,57 @@ head(sedan.data,15)
 ```
 _Done!!!_ Selesai.
 
+### Mengekstrak _Brand_ Mobil
+
+Nah, pekerjaan yang paling menantang adalah mengambil dan mengekstrak `brand` dari variabel `nama`.
+
+Ada yang punya ide bagaimana caranya?
+
+Hasil yang diinginkan seperti ini:
+
+```{r,include=FALSE}
+new = 
+  sedan.data %>% select(id,nama) %>%
+  unnest_tokens('words',nama) %>% 
+  count(words,sort=T)
+
+brand = c('toyota','honda','mercedes','bmw','suzuki',
+          'mitsubishi','hyundai','mazda','nissan',
+          'audi','chevrolet','hyundai','peugeot',
+          'lexus','ford','jaguar','proton',
+          'daihatsu','volkswagen','bentley',
+          'chrysler','timor','maserati','subaru','kia',
+          'opel','volvo','porsche','geely','fiat')
+
+marker = 
+  sedan.data %>% select(id,nama) %>%
+  unnest_tokens('words',nama) %>% 
+  filter(words %in% brand)
+
+sedan.data = merge(sedan.data,marker,all=T)
+
+# cek yang belum ada brand nya
+sedan.data %>% filter(is.na(words))
+
+openxlsx::write.xlsx(sedan.data,'Hasil Data Carpentry Sedan Bekas.xlsx')
+```
+
+```{r,echo=FALSE}
+head(sedan.data,15)
+```
+
+_____
+
 # _Error Bar_ Plot untuk harga mobil
 
-_Nah_, saya sudah mendapatkan data yang saya butuhkan. Sekarang saya akan membuat _error bar_.
+_Nah_, saya sudah mendapatkan data yang saya butuhkan. Sekarang saya akan membuat analisa harga per brand menggunakan _error bar_.
 
 ```{r,echo=FALSE,message=FALSE}
 library(ggpubr)
 
-sedan.data %>% group_by(tahun) %>% summarise(rata = mean(harga),stdev = sd(harga),n = n()) %>%
+sedan.data %>% group_by(words) %>% summarise(rata = mean(harga),stdev = sd(harga),n = n()) %>%
   mutate(stdev = ifelse(is.na(stdev),0,stdev)) %>%
-  ggplot(aes(x = as.factor(tahun), y = rata)) + 
+  ggplot(aes(x = reorder(words,-rata), y = rata)) + 
   geom_col(color='steelblue',fill='white',alpha=.4) +
   geom_errorbar(aes(ymin=rata-stdev, ymax=rata+stdev), width=.2,color='darkgreen') +
   labs(title = 'Harga Mobil Sedan Bekas',
