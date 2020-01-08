@@ -326,3 +326,20 @@ Hasil yang diinginkan seperti
 akan membuat analisa harga per brand menggunakan *error bar*.
 
 ![](readme_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+
+-----
+
+# *Catatan Penting*
+
+> Algoritma adalah formalisasi dari alur proses berpikir. *So* apa yang
+> saya tulis di sini bukanlah satu-satunya solusi untuk membersihkan
+> data yah\!
+
+-----
+
+# Referensi:
+
+1.  [Analisa harga di
+    mobil 88.](https://passingthroughresearcher.wordpress.com/2019/10/23/webscrap-mobil-bekas-di-mobil88/).
+2.  [Mencari harga Terios
+    bekas.](https://ikanx101.github.io/blog/blog-post-terios/)

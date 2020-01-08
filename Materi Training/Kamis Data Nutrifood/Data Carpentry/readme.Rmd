@@ -214,3 +214,16 @@ sedan.data %>% group_by(words) %>% summarise(rata = mean(harga),stdev = sd(harga
         axis.text.x = element_text(angle=90,size=8),
         axis.text.y = element_blank())
 ```
+
+_____
+
+# _Catatan Penting_
+
+> Algoritma adalah formalisasi dari alur proses berpikir. _So_ apa yang saya tulis di sini bukanlah satu-satunya solusi untuk membersihkan data yah!
+
+____
+
+# Referensi:
+
+1. [Analisa harga di mobil 88.](https://passingthroughresearcher.wordpress.com/2019/10/23/webscrap-mobil-bekas-di-mobil88/).
+2. [Mencari harga Terios bekas.](https://ikanx101.github.io/blog/blog-post-terios/)
