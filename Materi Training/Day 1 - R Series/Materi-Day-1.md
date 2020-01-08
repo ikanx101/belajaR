@@ -491,6 +491,59 @@ Ada beberapa bentuk struktur data di **R**, yakni:
 4.  *List*; merupakan bentuk struktur data yang sangat kompleks. Berisi
     *multiple data* dengan struktur bermacam-macam.
 
+### 2.1.4 Apa gunanya kita mengetahui jenis dan struktur data di **R**?
+
+Beberapa algoritma yang tersedia di *library* mengharuskan kita memiliki
+*input* yang ter-standar, baik dari segi jenis dan strukturnya.
+
+Dengan mengetahui jenis dan struktur data, kita bisa lebih mudah bekerja
+dengan algoritma yang ada di *library*.
+
+Contoh:
+
+Algoritma analisa *simple linear regression* (`lm()`) memerlukan input
+berupa `data.frame()` dengan masing-masing *variables* yang ada di
+dalamnya berjenis *numeric*.
+
+-----
+
+# 3\. Memulai dengan **R**
+
+Oke, kita akan memulai bekerja dengan **R**, dimulai dari fungsi-fungsi
+awal sebagai berikut:
+
+## 3.1 Fungsi Awal
+
+### 3.1.1 Pendefinisian *object*
+
+Setiap data yang akan kita masukkan ke dalam memori **R**, akan saya
+sebut sebagai *object*. Setiap *object* yang ingin dimasukkan ke dalam
+memori perlu didefinisikan terlebih dahulu menggunakan perintah `=` atau
+`<-`.
+
+Contoh:
+
+``` r
+a = 6
+b <- 8
+
+a
+```
+
+    ## [1] 6
+
+``` r
+b
+```
+
+    ## [1] 8
+
+### 3.1.2 Operasi Aritmatika
+
+Setiap *object* yang sudah masuk ke dalam memori **R** sudah bisa
+dilakukan analisa atau dilakukan operasi aritmatika: `+`, `-`, `/`, dan
+`*`.
+
 -----
 
 # Referensi

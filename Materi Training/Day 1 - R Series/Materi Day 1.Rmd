@@ -310,13 +310,24 @@ Oke, kita akan memulai bekerja dengan __R__, dimulai dari fungsi-fungsi awal seb
 
 ## 3.1 Fungsi Awal
 
-### 3.1.1 Operasi aritmatika
-
-
-
 ### 3.1.1 Pendefinisian _object_
 
-Setiap data yang akan kita masukkan ke dalam memori __R__, akan saya sebut sebagai _object_. Setiap _object_ yang ingin dimasukkan ke dalam memori perlu didefinisikan terlebih dahulu menggunakan perintah
+Setiap data yang akan kita masukkan ke dalam memori __R__, akan saya sebut sebagai _object_. Setiap _object_ yang ingin dimasukkan ke dalam memori perlu didefinisikan terlebih dahulu menggunakan perintah `=` atau `<-`.
+
+Contoh:
+
+```{r}
+a = 6
+b <- 8
+
+a
+b
+```
+
+### 3.1.2 Operasi Aritmatika
+
+Setiap _object_ yang sudah masuk ke dalam memori __R__ sudah bisa dilakukan analisa atau dilakukan operasi aritmatika: `+`, `-`, `/`, dan `*`.
+
 
 ___
 
