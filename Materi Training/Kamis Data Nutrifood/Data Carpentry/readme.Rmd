@@ -9,11 +9,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Pendahuluan
 
-Salah satu keunggulan __R__ dibandingkan dengan _analytics tools_ lainnya adalah kemampuannya untuk memanipulasi data. __Manipulasi__ dalam artian positif, yakni _preprocessing data_ atau _data carpentry_.
+Salah satu keunggulan __R__ dibandingkan dengan _analytics tools_ lainnya adalah kemampuannya untuk memanipulasi data. __Manipulasi__ dalam artian positif, yakni _preprocessing data_ atau _data carpentry_ atau _bebersih_ data.
 
 Di dunia ini, tanpa kita sadari data tersebar sangat banyak. Namun tidak semuanya berbentuk _structured data_. Sebagian besar sebenarnya masuk ke dalam _unstructured data_ atau _semi structured data_.
 
-Seringkali kita enggan berhadapan dengan _unstructured data_ atau _semi structured data_. Nah, kali ini kita akan mencoba untuk mengolah _unstructured data_ menjadi informasi atau _insight(s)_.
+Seringkali kita enggan berhadapan dengan _unstructured data_ atau _semi structured data_. Jujur, sayapun dulu _males banget_ kalau nemu data yang bentuknya _kayak_ gini. Nah, kali ini kita akan mencoba untuk mengolah _unstructured data_ menjadi informasi atau _insight(s)_.
 
 # _Libraries_ yang Digunakan
 
@@ -35,15 +35,19 @@ library(ggplot2)
 
 # Data yang Digunakan
 
-Kita akan _scrap_ data situs [carmudi](https://www.carmudi.co.id/cars/saloon/condition:all/) tentang _listing_ mobil sedan bekas.
+Kita akan mengambil data dari situs [carmudi](https://www.carmudi.co.id/cars/saloon/condition:all/) tentang _listing_ mobil sedan bekas. Mengambil data dari _websites_ disebut dengan _web scraping_.
 
-Kalau kita lihat situsnya, ada 71 _pages_. Kita akan _scrap_ semua informasinya.
+Kalau kita lihat situsnya, sampai saat ini ada 71 buah _pages_. Kita akan _scrap_ semua informasinya.
+
+_____
+
+# _Web Scrap_ Situs Carmudi
+
+Oh iya, detail tentang _web scraping_ akan saya bahas di _training_ atau tulisan terpisah yah. Kali ini rekan-rekan terima jadi aja fungsinya seperti ini.
 
 ## Langkah pertama
 
 Kita akan _define_ semua _urls_ dari carmudi lalu kita buat fungsi _web scrap_-nya.
-
-> Oh iya, tentang _web scraping_ akan saya bahas di _training_ atau tulisan terpisah yah. Kali ini rekan-rekan terima jadi aja fungsinya seperti ini.
 
 ```{r,warning=FALSE,message=FALSE}
 #link dari carmudi
@@ -87,7 +91,9 @@ head(sedan.data,15)
 openxlsx::write.xlsx(sedan.data,'hasil scrap sedan bekas.xlsx')
 ```
 
-## Hasil scrap data
+____
+
+# Hasil scrap data
 
 Didapatkan ada `2104` baris data mobil sedan bekas yang di- _listing_ di __carmudi__.
 
@@ -144,12 +150,48 @@ new =
   unnest_tokens('words',nama) %>% 
   mutate(words = as.numeric(words)) %>%
   filter(!is.na(words),words>1900,words<2021)
+head(new,15)
+```
 
+Sekarang kita akan cek terlebih dahulu, apakah benar satu `id` menghasilkan satu `tahun`.
+
+```{r}
+# kita akan cek apakah ada dua `tahun` per id
+masalah = new %>% group_by(id) %>% summarise(freq=n()) %>% filter(freq>1)
+masalah
+```
+
+Ternyata didapatkan ada 13 baris data yang menghasilkan dua `tahun`. Coba kita lihat datanya:
+
+```{r}
+sedan.data %>% filter(id %in% masalah$id)
+```
+
+> Untuk kasus data bermasalah seperti ini, kita akan buat simpel yah. Kita akan ambil 4 karakter paling kiri ATAU mengambil `tahun` termuda dari dataset `new`.
+
+Saya akan pilih cara mengambil tahun termuda dari datasetnya.
+
+Diawali dengan memisahkan data bermasalah dengan data yang aman. Lalu setelah itu digabungkan kembali.
+
+```{r}
+new_aman = new %>% filter(!id %in% masalah$id)
+
+masalah = new %>% filter(id %in% masalah$id)
+
+new_masalah = masalah %>% group_by(id) %>% filter(words == min(words)) %>% ungroup()
+
+new = rbind(new_aman,new_masalah)
+```
+
+Sekarang kita akan `merge` data `tahun` ke dataset `sedan.data`.
+
+```{r}
 sedan.data = merge(sedan.data,new)
 colnames(sedan.data)[5] = 'tahun'
 head(sedan.data,15)
 ```
-_Done!!!_ Selesai.
+
+Mungkin ada yang sadar, bahwa sekarang banyaknya baris data tinggal `2103`. Kenapa? Ada yang bisa jawab? _Heeeee_.
 
 ### Mengekstrak _Brand_ Mobil
 
@@ -179,6 +221,8 @@ marker =
   filter(words %in% brand)
 
 sedan.data = merge(sedan.data,marker,all=T)
+
+sedan.data = distinct(sedan.data)
 
 # cek yang belum ada brand nya
 sedan.data %>% filter(is.na(words))
@@ -225,5 +269,6 @@ ____
 
 # Referensi:
 
-1. [Analisa harga di mobil 88.](https://passingthroughresearcher.wordpress.com/2019/10/23/webscrap-mobil-bekas-di-mobil88/).
+1. [Analisa harga di mobil 88.](https://passingthroughresearcher.wordpress.com/2019/10/23/webscrap-mobil-bekas-di-mobil88/)
 2. [Mencari harga Terios bekas.](https://ikanx101.github.io/blog/blog-post-terios/)
+3. [Data mentah dan setelah _data carpentry_.](https://github.com/ikanx101/belajaR/tree/master/Materi%20Training/Kamis%20Data%20Nutrifood/Data%20Carpentry)
