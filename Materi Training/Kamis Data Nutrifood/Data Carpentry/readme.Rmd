@@ -95,7 +95,7 @@ ____
 
 # Hasil scrap data
 
-Didapatkan ada `2104` baris data mobil sedan bekas yang di- _listing_ di __carmudi__.
+Didapatkan ada `2081` baris data mobil sedan bekas yang di- _listing_ di __carmudi__.
 
 Kalau kita lihat sekilas, data tersebut seolah-olah _structured_. Namun kalau diperhatikan secara seksama, sebenarnya data tersebut _semi-structured_. 
 Variabel `harga` berupa _character_ karena tulisan juta. Sedangkan variabel `nama` masih campur aduk adanya tahun produksi dan varian mobil.
@@ -167,23 +167,15 @@ Ternyata didapatkan ada 13 baris data yang menghasilkan dua `tahun`. Coba kita l
 sedan.data %>% filter(id %in% masalah$id)
 ```
 
-> Untuk kasus data bermasalah seperti ini, kita akan buat simpel yah. Kita akan ambil 4 karakter paling kiri ATAU mengambil `tahun` termuda dari dataset `new`.
+> Untuk kasus seperti ini, kita akan buat simpel yah. Kita akan ambil `tahun` terlama dari dataset `new`.
 
-Saya akan pilih cara mengambil tahun termuda dari datasetnya.
-
-Diawali dengan memisahkan data bermasalah dengan data yang aman. Lalu setelah itu digabungkan kembali.
+_Gimana_ caranya?
 
 ```{r}
-new_aman = new %>% filter(!id %in% masalah$id)
-
-masalah = new %>% filter(id %in% masalah$id)
-
-new_masalah = masalah %>% group_by(id) %>% filter(words == min(words)) %>% ungroup()
-
-new = rbind(new_aman,new_masalah)
+new = new %>% group_by(id) %>% filter(words == min(words)) %>% ungroup()
 ```
 
-Sekarang kita akan `merge` data `tahun` ke dataset `sedan.data`.
+Sekarang kita akan `merge` dataset `new` ke dataset `sedan.data`.
 
 ```{r}
 sedan.data = merge(sedan.data,new)
@@ -191,7 +183,7 @@ colnames(sedan.data)[5] = 'tahun'
 head(sedan.data,15)
 ```
 
-Mungkin ada yang sadar, bahwa sekarang banyaknya baris data tinggal `2103`. Kenapa? Ada yang bisa jawab? _Heeeee_.
+Mungkin ada yang sadar, bahwa sekarang banyaknya baris data tinggal `2080`. Kenapa? Ada yang bisa jawab? _Heeeee_.
 
 ### Mengekstrak _Brand_ Mobil
 
@@ -201,7 +193,7 @@ Ada yang punya ide bagaimana caranya?
 
 Hasil yang diinginkan seperti ini:
 
-```{r,include=FALSE}
+```{r,warning=FALSE}
 new = 
   sedan.data %>% select(id,nama) %>%
   unnest_tokens('words',nama) %>% 
