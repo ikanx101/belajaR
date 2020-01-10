@@ -53,8 +53,10 @@ setiap saat.
 
 Materi *training* ini saya kumpulkan dari berbagai sumber dan saya
 *customize* sesuai dengan kebutuhan **Nutrifood** berdasarkan pengalaman
-saya bergelut dengan data (dari mulai data pabrik hingga *finance*).
-Semoga menjadi manfaat bagi *Nutrifooders* semua.
+selama ini berkutat dengan data yang ada (dari mulai data pabrik hingga
+*finance*). Semoga menjadi manfaat bagi *Nutrifooders* semua. Terima
+kasih kepada **Lenny Wibisana** dan **Teguh Prasetia** yang telah ikut
+berkontribusi pada penyusunan materi ini.
 
 ## 1.1 Sejarah
 
@@ -538,11 +540,140 @@ b
 
     ## [1] 8
 
-### 3.1.2 Operasi Aritmatika
+### 3.1.2 Operasi Aritmatika dan Matematika
 
 Setiap *object* yang sudah masuk ke dalam memori **R** sudah bisa
 dilakukan analisa atau dilakukan operasi aritmatika: `+`, `-`, `/`, dan
-`*`.
+`*` ATAU diberikan fungsi matematika seperti **trigonometri**,
+**logaritmik**, dan lain-lain.
+
+Pada *section* `3.1.1` kita telah mendefinisikan *objects* `a` dan `b`,
+maka kita bisa lakukan perintah sebagai berikut:
+
+``` r
+a + b
+```
+
+    ## [1] 14
+
+``` r
+a / b
+```
+
+    ## [1] 0.75
+
+``` r
+c = a * b
+c
+```
+
+    ## [1] 48
+
+``` r
+sin(c)
+```
+
+    ## [1] -0.7682547
+
+``` r
+log(a+b/c)
+```
+
+    ## [1] 1.819158
+
+### 3.1.3 Operasi Relasi dan *Logical* (*Boolean*)
+
+Pada *section* **1.5** poin 3, kita telah mengetahui operator relasi
+seperti `==`, `>`, `<`, `<=`, `>=`, dan `!=`. Hasil dari operator relasi
+ini adalah *logical value* (**TRUE** atau **FALSE**).
+
+*Logical value* yang dihasilkan memiliki sifat sebagai berikut:
+
+1.  `TRUE`, berarti **benar**. Bisa disingkat menjadi `T`. Tidak bisa
+    ditulis dalam huruf kecil (harus kapital).
+2.  `FALSE`, berarti **salah**. Bisa disingkat menjadi `F`. Tidak bisa
+    ditulis dalam huruf kecil (harus kapital).
+
+*Operator logical* yang biasa digunakan di **R** antara lain:
+
+1.  `&`: **AND**
+2.  `|`: **OR**
+3.  `!`: **NOT**
+
+Contoh:
+
+``` r
+pernyataan_1 = T
+pernyataan_2 = F
+
+!pernyataan_1
+```
+
+    ## [1] FALSE
+
+``` r
+pernyataan_1 & pernyataan_2
+```
+
+    ## [1] FALSE
+
+``` r
+pernyataan_1 | pernyataan_2
+```
+
+    ## [1] TRUE
+
+### 3.1.4 *If Conditional*
+
+Mungkin teman-teman bertanya-tanya:
+
+> Apa sih gunanya *logical value* dan *logical operator*?
+
+*Logical value* merupakan unsur utama saat kita hendak membuat fungsi
+*conditional* dan *looping*. Masih ingat fungsi di **Ms. Excel** untuk
+membuat *conditional*? *Nah*, mirip pengerjaannya di **R**.
+
+Setidaknya ada tiga fungsi *conditional* di **R**, yakni:
+
+1.  `ifelse()`: bawaan dari *package* `base`.
+2.  `if_else()`: fungsi dari *package* `dplyr` (perlu di- *install* dulu
+    *package*-nya).
+3.  `case_when()`: fungsi dari *package* `dplyr` (perlu di- *install*
+    dulu *package*-nya).
+
+Apa perbedaan ketiganya?
+
+`ifelse()` dengan `if_else()` berdasarkan pengalaman saya tidak ada
+perbedaannya. Selama ini saya cukup memilih salah satu saja.
+
+Sedangkan `case_when()` digunakan bersamaan dengan *pipe* `%>%` pada
+saat *tidying data*. Berguna saat kita hendak mem- *vector*-kan
+*conditional*.
+
+> Masih bingung?
+
+Saya akan bahas fungsi `ifelse()` dulu *yah*. Pembahasan mengenai
+`case_when()` akan saya jelaskan pada *section* khusus mengenai
+`tidyverse`.
+
+Contoh paling mudah untuk *conditional* seperti ini:
+
+``` r
+a = 10
+b = 10 + sin(pi/3)
+
+ifelse(a < b, 'hari ini cerah','hari ini mendung')
+```
+
+    ## [1] "hari ini cerah"
+
+``` r
+ifelse(a == b, 'sama-sama','tidak bersama')
+```
+
+    ## [1] "tidak bersama"
+
+### 3.1.5 *Looping*
 
 -----
 
