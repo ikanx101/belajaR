@@ -1,0 +1,68 @@
+---
+title: "Frequent Collaborators with Special Directors"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+rm(list=ls())
+setwd("/cloud/project/Bukan Infografis/Frequent Collaborators")
+```
+
+Percaya atau tidak, dalam bekerja biasanya kita memilih rekan kerja yang memang kita nyaman bekerja dengannya. Sama saat para sutradara terbaik dunia dalam membuat film, ternyata ada beberapa aktor atau aktris yang menjadi __langganan__ mereka untuk bekerja sama.
+
+Terinspirasi dari [__Six Degree of Kevin Bacon__](https://en.m.wikipedia.org/wiki/Six_Degrees_of_Kevin_Bacon), saya iseng akan membuat aktor atau aktris siapa yang memiliki koneksi kerjasama banyak dengan sutradara-sutradara tersebut.
+
+Datanya akan saya scrap dari _frequent collaborators list_ yang ada di situs __imdb__. _List_ tersebut dibuat oleh para _user_-nya yang budiman.
+
+Oh iya, definisi sutradara terbaik berdasarkan hasil _googling_ saya pribadi _yah_. Jadi kalau ada sutradara favorit kalian _gak_ masuk, _plis jangan baper_.
+
+
+```{r,warning=FALSE,message=FALSE}
+library(rvest)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(ggpubr)
+
+# frequent collaborator
+
+sutradara = c('Christopher Nolan',
+             'Steven Spielberg',
+             'Quentin Tarantino',
+             'Martin Scorcese',
+             'James Cameron',
+             'Tim Burton',
+             'Woody Allen',
+             'Guillermo del Toro',
+             'David Fincher')
+link = c('https://www.imdb.com/list/ls025424824/',
+         'https://www.imdb.com/list/ls025576884/',
+         'https://www.imdb.com/list/ls062132042/',
+         'https://www.imdb.com/list/ls069712546/',
+         'https://www.imdb.com/list/ls025557041/',
+         'https://www.imdb.com/list/ls025557713/',
+         'https://www.imdb.com/list/ls062798057/',
+         'https://www.imdb.com/list/ls027677705/',
+         'https://www.imdb.com/list/ls025555822/')
+
+scrap = function(director,urls){
+  data = 
+    read_html(urls) %>% {
+    tibble(
+      nama = director,
+      collab = html_nodes(.,'.lister-item-header a') %>% html_text()
+    )
+  }
+  return(data)
+}
+
+data_1 = scrap(sutradara[1],link[1])
+
+for(i in 2:length(sutradara)){
+  temp = scrap(sutradara[i],link[i])
+  data_1 = rbind(data_1,temp)
+}
+
+data_1
+```
