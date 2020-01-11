@@ -253,6 +253,8 @@ Selain _help_, kita bisa melihat contoh pemakaian dari suatu fungsi di __R__ den
 example(sum)
 ```
 
+______
+
 # 2. Mulai Bekerja dengan __R__
 
 ## 2.1 Mengenal Data
@@ -400,8 +402,28 @@ ifelse(a < b, 'hari ini cerah','hari ini mendung')
 ifelse(a == b, 'sama-sama','tidak bersama')
 ```
 
-### 3.1.5 _Looping_
+## 3.2 Bekerja dengan data
 
+Pada _section_ `2.1.2` telah dijelaskan beberapa struktur data di __R__, sekarang kita akan melihat bagaimana bentuk _real_-nya di __R__.
+
+Untuk data berbentuk `list`, akan saya jelaskan sekalian bersamaan dengan materi `tidyverse` _yah_.
+
+### 3.2.1 Single Object
+### 3.2.2 Vector
+### 3.2.3 Tibble atau Data Frame
+
+## 3.3 Beberapa Fungsi yang Berguna
+paste
+print
+str
+summary
+class
+View
+
+
+## 3.3 _Some useful function_
+### 3.3.1 _Looping_
+### 3.3.2 _Regex_
 
 ___
 

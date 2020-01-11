@@ -5,7 +5,7 @@ rm(list=ls())
 setwd("/cloud/project/Bukan Infografis/Urunan Eka")
 
 # kita ambil datanya yah
-data = read.csv('OHAMMADR2186_1729801.CSV',skip=4)
+data = read.csv('OHAMMADR2186_234921627.CSV',skip=4)
 saldo_awal = 13495.26
 
 library(dplyr)
@@ -18,7 +18,8 @@ colnames(data) = janitor::make_clean_names(colnames(data))
 data = data %>% filter(!is.na(saldo)) %>%
   mutate(tanggal = case_when(tanggal=="'08/01"~'8 Jan',
                              tanggal=="'09/01"~'9 Jan',
-                             tanggal=="'PEND "~'10 Jan'))
+                             tanggal=="'10/01"~'10 Jan',
+                             tanggal=="'PEND "~'11 Jan'))
 
 # kita buat chart pertama
 chart_1 = 
@@ -27,9 +28,9 @@ chart_1 =
   ggplot(aes(x=id,y=saldo,color=tanggal)) + geom_line() +
   geom_text_repel(aes(label = paste(round(saldo/1000000,2),'juta',sep=' ')),size=3) +
   theme_minimal() +
-  labs(title='Laporan Penambahan Saldo Urunan',
+  labs(title='Laporan Saldo Urunan',
        subtitle='SMAN 1 Bekasi - 2004',
-       caption='last update: 10 Jan 2020 11:30',
+       caption='last update: 11 Jan 2020 18:12',
        color='Tanggal:') +
   theme(axis.title = element_blank(),
         axis.ticks = element_blank(),
@@ -41,7 +42,7 @@ chart_1 =
 chart_2 = 
   data %>% select(tanggal,jumlah) %>% group_by(tanggal) %>%
   summarise(jumlah = sum(jumlah)) %>% 
-  mutate(tanggal=factor(tanggal,levels = c('8 Jan','9 Jan','10 Jan'))) %>%
+  mutate(tanggal=factor(tanggal,levels = c('8 Jan','9 Jan','10 Jan','11 Jan'))) %>%
   ggplot(aes(x=tanggal,y=jumlah)) + geom_col(color='steelblue',fill='white') +
   theme_minimal() +
   labs(title = 'Penambahan Saldo Harian') +
@@ -55,10 +56,10 @@ chart_2 =
 chart_3 = 
   data %>% select(tanggal,jumlah) %>% group_by(tanggal) %>%
   summarise(jumlah = n()) %>% 
-  mutate(tanggal=factor(tanggal,levels = c('8 Jan','9 Jan','10 Jan'))) %>%
+  mutate(tanggal=factor(tanggal,levels = c('8 Jan','9 Jan','10 Jan','11 Jan'))) %>%
   ggplot(aes(x=tanggal,y=jumlah)) + geom_col(color='steelblue',fill='white') +
   theme_minimal() +
-  labs(title = 'Transaksi Masuk') +
+  labs(title = '#Transaksi Masuk') +
   geom_label(aes(label = paste(jumlah,'trx',sep=' ')),size=4) +
   theme(axis.title = element_blank(),
         axis.text.y = element_blank(),
