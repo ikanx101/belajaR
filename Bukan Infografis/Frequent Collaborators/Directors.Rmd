@@ -1,5 +1,5 @@
 ---
-title: "Frequent Collaborators with Special Directors"
+title: "Frequent Collaborators In Movies"
 output: github_document
 ---
 
@@ -13,56 +13,155 @@ Percaya atau tidak, dalam bekerja biasanya kita memilih rekan kerja yang memang 
 
 Terinspirasi dari [__Six Degree of Kevin Bacon__](https://en.m.wikipedia.org/wiki/Six_Degrees_of_Kevin_Bacon), saya iseng akan membuat aktor atau aktris siapa yang memiliki koneksi kerjasama banyak dengan sutradara-sutradara tersebut.
 
-Datanya akan saya scrap dari _frequent collaborators list_ yang ada di situs __imdb__. _List_ tersebut dibuat oleh para _user_-nya yang budiman.
+Datanya akan saya scrap dari informasi detail yang tersedia di __Wikipedia__ yah.
 
-Oh iya, definisi sutradara terbaik berdasarkan hasil _googling_ saya pribadi _yah_. Jadi kalau ada sutradara favorit kalian _gak_ masuk, _plis jangan baper_.
+Contohnya, pada film [Spider-Man: Far From Home](https://en.wikipedia.org/wiki/Spider-Man:_Far_From_Home), data hasil _scrap_-nya seperti ini:
 
 
-```{r,warning=FALSE,message=FALSE}
+```{r,include=FALSE}
+rm(list=ls())
+
 library(rvest)
 library(dplyr)
-library(tidyr)
 library(ggplot2)
 library(ggpubr)
+library(ggraph)
+library(igraph)
+```
 
-# frequent collaborator
+```{r,echo=FALSE}
 
-sutradara = c('Christopher Nolan',
-             'Steven Spielberg',
-             'Quentin Tarantino',
-             'Martin Scorcese',
-             'James Cameron',
-             'Tim Burton',
-             'Woody Allen',
-             'Guillermo del Toro',
-             'David Fincher')
-link = c('https://www.imdb.com/list/ls025424824/',
-         'https://www.imdb.com/list/ls025576884/',
-         'https://www.imdb.com/list/ls062132042/',
-         'https://www.imdb.com/list/ls069712546/',
-         'https://www.imdb.com/list/ls025557041/',
-         'https://www.imdb.com/list/ls025557713/',
-         'https://www.imdb.com/list/ls062798057/',
-         'https://www.imdb.com/list/ls027677705/',
-         'https://www.imdb.com/list/ls025555822/')
+url = 'https://en.wikipedia.org/wiki/Spider-Man:_Far_From_Home'
 
-scrap = function(director,urls){
-  data = 
-    read_html(urls) %>% {
-    tibble(
-      nama = director,
-      collab = html_nodes(.,'.lister-item-header a') %>% html_text()
-    )
-  }
+scrap = function(url){
+  data = read_html(url) %>% html_nodes(xpath = '//*[contains(concat( " ", @class, " " ), concat( " ", "vevent", " " ))]') %>%
+    html_table(fill=T)
+  data = data[[1]]
+  judul = colnames(data)[1]
+  colnames(data) = c('id','ket')
+  
+  sutradara = data %>% 
+    filter(grepl('direct',id,ignore.case = T)) %>% 
+    select(ket)
+  sutradara = sutradara[1,]
+  
+  aktors = data %>% 
+    filter(grepl('star',id,ignore.case = T)) %>% 
+    select(ket)
+  aktors = aktors[1,]
+  aktors = strsplit(aktors,'\n')
+  aktors = unlist(aktors)
+  data = data.frame(judul,sutradara,aktors)
   return(data)
 }
 
-data_1 = scrap(sutradara[1],link[1])
+data = scrap(url)
+data
+```
 
-for(i in 2:length(sutradara)){
-  temp = scrap(sutradara[i],link[i])
-  data_1 = rbind(data_1,temp)
+Nah, kita akan _scrap_ data 10 film dengan _highest grossing_ dari tahun 2000 - 2019. Kita dapatkan data sebagai berikut:
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+urls = c('https://en.wikipedia.org/wiki/Avengers:_Endgame',
+         'https://en.wikipedia.org/wiki/The_Lion_King_(2019_film)',
+         'https://en.wikipedia.org/wiki/Frozen_II',
+         'https://en.wikipedia.org/wiki/Captain_Marvel_(film)',
+         'https://en.wikipedia.org/wiki/Toy_Story_4',
+         'https://en.wikipedia.org/wiki/Joker_(2019_film)',
+         'https://en.wikipedia.org/wiki/Aladdin_(2019_film)',
+         'https://en.wikipedia.org/wiki/Star_Wars:_The_Rise_of_Skywalker',
+         'https://en.wikipedia.org/wiki/Hobbs_%26_Shaw',
+         'https://en.wikipedia.org/wiki/Avengers:_Infinity_War',
+         'https://en.wikipedia.org/wiki/Black_Panther_(film)',
+         'https://en.wikipedia.org/wiki/Jurassic_World:_Fallen_Kingdom',
+         'https://en.wikipedia.org/wiki/Incredibles_2',
+         'https://en.wikipedia.org/wiki/Aquaman_(film)',
+         'https://en.wikipedia.org/wiki/Bohemian_Rhapsody_(film)',
+         'https://en.wikipedia.org/wiki/Venom_(2018_film)',
+         'https://en.wikipedia.org/wiki/Mission:_Impossible_%E2%80%93_Fallout',
+         'https://en.wikipedia.org/wiki/Deadpool_2',
+         'https://en.wikipedia.org/wiki/Fantastic_Beasts:_The_Crimes_of_Grindelwald',
+         'https://en.wikipedia.org/wiki/Star_Wars:_The_Last_Jedi',
+         'https://en.wikipedia.org/wiki/Beauty_and_the_Beast_(2017_film)',
+         'https://en.wikipedia.org/wiki/The_Fate_of_the_Furious',
+         'https://en.wikipedia.org/wiki/Despicable_Me_3',
+         'https://en.wikipedia.org/wiki/Jumanji:_Welcome_to_the_Jungle',
+         'https://en.wikipedia.org/wiki/Spider-Man:_Homecoming',
+         'https://en.wikipedia.org/wiki/Wolf_Warrior_2',
+         'https://en.wikipedia.org/wiki/Guardians_of_the_Galaxy_Vol._2',
+         'https://en.wikipedia.org/wiki/Thor:_Ragnarok',
+         'https://en.wikipedia.org/wiki/Wonder_Woman_(2017_film)',
+         'https://en.wikipedia.org/wiki/Captain_America:_Civil_War',
+         'https://en.wikipedia.org/wiki/Rogue_One',
+         'https://en.wikipedia.org/wiki/Finding_Dory',
+         'https://en.wikipedia.org/wiki/Zootopia',
+         'https://en.wikipedia.org/wiki/The_Jungle_Book_(2016_film)',
+         'https://en.wikipedia.org/wiki/The_Secret_Life_of_Pets',
+         'https://en.wikipedia.org/wiki/Batman_v_Superman:_Dawn_of_Justice',
+         'https://en.wikipedia.org/wiki/Fantastic_Beasts_and_Where_to_Find_Them_(film)',
+         'https://en.wikipedia.org/wiki/Deadpool_(film)',
+         'https://en.wikipedia.org/wiki/Suicide_Squad_(film)',
+         'https://en.wikipedia.org/wiki/Star_Wars:_The_Force_Awakens',
+         'https://en.wikipedia.org/wiki/Jurassic_World',
+         'https://en.wikipedia.org/wiki/Furious_7',
+         'https://en.wikipedia.org/wiki/Avengers:_Age_of_Ultron',
+         'https://en.wikipedia.org/wiki/Minions_(film)',
+         'https://en.wikipedia.org/wiki/Spectre_(2015_film)',
+         'https://en.wikipedia.org/wiki/Inside_Out_(2015_film)',
+         'https://en.wikipedia.org/wiki/Mission:_Impossible_%E2%80%93_Rogue_Nation',
+         'https://en.wikipedia.org/wiki/The_Hunger_Games:_Mockingjay_%E2%80%93_Part_2',
+         'https://en.wikipedia.org/wiki/The_Martian_(film)',
+         'https://en.wikipedia.org/wiki/Transformers:_Age_of_Extinction',
+         'https://en.wikipedia.org/wiki/The_Hobbit:_The_Battle_of_the_Five_Armies',
+         'https://en.wikipedia.org/wiki/Guardians_of_the_Galaxy_(film)',
+         'https://en.wikipedia.org/wiki/Maleficent_(film)',
+         'https://en.wikipedia.org/wiki/The_Hunger_Games:_Mockingjay_%E2%80%93_Part_1',
+         'https://en.wikipedia.org/wiki/X-Men:_Days_of_Future_Past',
+         'https://en.wikipedia.org/wiki/Captain_America:_The_Winter_Soldier',
+         'https://en.wikipedia.org/wiki/Dawn_of_the_Planet_of_the_Apes',
+         'https://en.wikipedia.org/wiki/The_Amazing_Spider-Man_2',
+         'https://en.wikipedia.org/wiki/Interstellar_(film)',
+         'https://en.wikipedia.org/wiki/Frozen_(2013_film)',
+         'https://en.wikipedia.org/wiki/Iron_Man_3',
+         'https://en.wikipedia.org/wiki/Despicable_Me_2',
+         'https://en.wikipedia.org/wiki/The_Hobbit:_The_Desolation_of_Smaug',
+         'https://en.wikipedia.org/wiki/The_Hunger_Games:_Catching_Fire',
+         'https://en.wikipedia.org/wiki/Fast_%26_Furious_6',
+         'https://en.wikipedia.org/wiki/Monsters_University',
+         'https://en.wikipedia.org/wiki/Gravity_(2013_film)',
+         'https://en.wikipedia.org/wiki/Man_of_Steel_(film)',
+         'https://en.wikipedia.org/wiki/Thor:_The_Dark_World',
+         'https://en.wikipedia.org/wiki/The_Avengers_(2012_film)',
+         'https://en.wikipedia.org/wiki/Skyfall',
+         'https://en.wikipedia.org/wiki/The_Dark_Knight_Rises',
+         'https://en.wikipedia.org/wiki/The_Hobbit:_An_Unexpected_Journey',
+         'https://en.wikipedia.org/wiki/Ice_Age:_Continental_Drift',
+         'https://en.wikipedia.org/wiki/The_Twilight_Saga:_Breaking_Dawn_%E2%80%93_Part_2',
+         'https://en.wikipedia.org/wiki/The_Amazing_Spider-Man_(2012_film)',
+         'https://en.wikipedia.org/wiki/Madagascar_3:_Europe%27s_Most_Wanted',
+         'https://en.wikipedia.org/wiki/The_Hunger_Games_(film)',
+         'https://en.wikipedia.org/wiki/Men_in_Black_3',
+         'https://en.wikipedia.org/wiki/Harry_Potter_and_the_Deathly_Hallows_%E2%80%93_Part_2',
+         'https://en.wikipedia.org/wiki/Transformers:_Dark_of_the_Moon',
+         'https://en.wikipedia.org/wiki/Pirates_of_the_Caribbean:_On_Stranger_Tides',
+         'https://en.wikipedia.org/wiki/The_Twilight_Saga:_Breaking_Dawn_%E2%80%93_Part_1',
+         'https://en.wikipedia.org/wiki/Mission:_Impossible_%E2%80%93_Ghost_Protocol',
+         'https://en.wikipedia.org/wiki/Kung_Fu_Panda_2',
+         'https://en.wikipedia.org/wiki/Fast_Five',
+         'https://en.wikipedia.org/wiki/The_Hangover_Part_II',
+         'https://en.wikipedia.org/wiki/The_Smurfs_(film)',
+         'https://en.wikipedia.org/wiki/Cars_2')
+
+for(i in 1:length(urls)){
+  temp = scrap(urls[i])
+  data = rbind(data,temp)
 }
 
-data_1
+str(data)
+```
+
+Berapa banyak film yang saya dapatkan?
+
+```{r,warning=FALSE,message=FALSE}
+length(unique(data$judul))
 ```

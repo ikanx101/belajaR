@@ -1,4 +1,4 @@
-Frequent Collaborators with Special Directors
+Frequent Collaborators In Movies
 ================
 
 Percaya atau tidak, dalam bekerja biasanya kita memilih rekan kerja yang
@@ -11,74 +11,58 @@ Bacon**](https://en.m.wikipedia.org/wiki/Six_Degrees_of_Kevin_Bacon),
 saya iseng akan membuat aktor atau aktris siapa yang memiliki koneksi
 kerjasama banyak dengan sutradara-sutradara tersebut.
 
-Datanya akan saya scrap dari *frequent collaborators list* yang ada di
-situs **imdb**. *List* tersebut dibuat oleh para *user*-nya yang
-budiman.
+Datanya akan saya scrap dari informasi detail yang tersedia di
+**Wikipedia** yah.
 
-Oh iya, definisi sutradara terbaik berdasarkan hasil *googling* saya
-pribadi *yah*. Jadi kalau ada sutradara favorit kalian *gak* masuk,
-*plis jangan baper*.
+Contohnya, pada film [Spider-Man: Far From
+Home](https://en.wikipedia.org/wiki/Spider-Man:_Far_From_Home), data
+hasil *scrap*-nya seperti ini:
+
+    ##                        judul sutradara            aktors
+    ## 1  Spider-Man: Far From Home Jon Watts       Tom Holland
+    ## 2  Spider-Man: Far From Home Jon Watts Samuel L. Jackson
+    ## 3  Spider-Man: Far From Home Jon Watts           Zendaya
+    ## 4  Spider-Man: Far From Home Jon Watts    Cobie Smulders
+    ## 5  Spider-Man: Far From Home Jon Watts       Jon Favreau
+    ## 6  Spider-Man: Far From Home Jon Watts      J. B. Smoove
+    ## 7  Spider-Man: Far From Home Jon Watts     Jacob Batalon
+    ## 8  Spider-Man: Far From Home Jon Watts      Martin Starr
+    ## 9  Spider-Man: Far From Home Jon Watts      Marisa Tomei
+    ## 10 Spider-Man: Far From Home Jon Watts   Jake Gyllenhaal
+
+Nah, kita akan *scrap* data 10 film dengan *highest grossing* dari tahun
+2000 - 2019. Kita dapatkan data sebagai berikut:
 
 ``` r
-library(rvest)
-library(dplyr)
-library(tidyr)
-library(ggplot2)
-library(ggpubr)
+urls = c('https://en.wikipedia.org/wiki/Avengers:_Endgame',
+         'https://en.wikipedia.org/wiki/The_Lion_King_(2019_film)',
+         'https://en.wikipedia.org/wiki/Frozen_II',
+         'https://en.wikipedia.org/wiki/Captain_Marvel_(film)',
+         'https://en.wikipedia.org/wiki/Toy_Story_4',
+         'https://en.wikipedia.org/wiki/Joker_(2019_film)',
+         'https://en.wikipedia.org/wiki/Aladdin_(2019_film)',
+         'https://en.wikipedia.org/wiki/Star_Wars:_The_Rise_of_Skywalker',
+         'https://en.wikipedia.org/wiki/Hobbs_%26_Shaw',
+         'https://en.wikipedia.org/wiki/Avengers:_Infinity_War',
+         'https://en.wikipedia.org/wiki/Black_Panther_(film)',
+         'https://en.wikipedia.org/wiki/Jurassic_World:_Fallen_Kingdom',
+         'https://en.wikipedia.org/wiki/Incredibles_2',
+         'https://en.wikipedia.org/wiki/Aquaman_(film)',
+         'https://en.wikipedia.org/wiki/Bohemian_Rhapsody_(film)',
+         'https://en.wikipedia.org/wiki/Venom_(2018_film)',
+         'https://en.wikipedia.org/wiki/Mission:_Impossible_%E2%80%93_Fallout',
+         'https://en.wikipedia.org/wiki/Deadpool_2',
+         'https://en.wikipedia.org/wiki/Fantastic_Beasts:_The_Crimes_of_Grindelwald')
 
-# frequent collaborator
-
-sutradara = c('Christopher Nolan',
-             'Steven Spielberg',
-             'Quentin Tarantino',
-             'Martin Scorcese',
-             'James Cameron',
-             'Tim Burton',
-             'Woody Allen',
-             'Guillermo del Toro',
-             'David Fincher')
-link = c('https://www.imdb.com/list/ls025424824/',
-         'https://www.imdb.com/list/ls025576884/',
-         'https://www.imdb.com/list/ls062132042/',
-         'https://www.imdb.com/list/ls069712546/',
-         'https://www.imdb.com/list/ls025557041/',
-         'https://www.imdb.com/list/ls025557713/',
-         'https://www.imdb.com/list/ls062798057/',
-         'https://www.imdb.com/list/ls027677705/',
-         'https://www.imdb.com/list/ls025555822/')
-
-scrap = function(director,urls){
-  data = 
-    read_html(urls) %>% {
-    tibble(
-      nama = director,
-      collab = html_nodes(.,'.lister-item-header a') %>% html_text()
-    )
-  }
-  return(data)
+for(i in 1:length(urls)){
+  temp = scrap(urls[i])
+  data = rbind(data,temp)
 }
 
-data_1 = scrap(sutradara[1],link[1])
-
-for(i in 2:length(sutradara)){
-  temp = scrap(sutradara[i],link[i])
-  data_1 = rbind(data_1,temp)
-}
-
-data_1
+str(data)
 ```
 
-    ## # A tibble: 161 x 2
-    ##    nama              collab                   
-    ##    <chr>             <chr>                    
-    ##  1 Christopher Nolan " Michael Caine\n"       
-    ##  2 Christopher Nolan " Christian Bale\n"      
-    ##  3 Christopher Nolan " Mark Boone Junior\n"   
-    ##  4 Christopher Nolan " Tom Hardy\n"           
-    ##  5 Christopher Nolan " Joseph Gordon-Levitt\n"
-    ##  6 Christopher Nolan " Cillian Murphy\n"      
-    ##  7 Christopher Nolan " Marion Cotillard\n"    
-    ##  8 Christopher Nolan " Liam Neeson\n"         
-    ##  9 Christopher Nolan " Gary Oldman\n"         
-    ## 10 Christopher Nolan " Morgan Freeman\n"      
-    ## # … with 151 more rows
+    ## 'data.frame':    185 obs. of  3 variables:
+    ##  $ judul    : Factor w/ 20 levels "Spider-Man: Far From Home",..: 1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ sutradara: Factor w/ 18 levels "Jon Watts","Anthony RussoJoe Russo",..: 1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ aktors   : Factor w/ 164 levels "Cobie Smulders",..: 9 8 10 1 5 2 3 7 6 4 ...

@@ -1,0 +1,65 @@
+---
+title: "Download Youtube Videos using R"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r,include=FALSE}
+setwd("/cloud/project/Bukan Infografis/Download Youtube")
+rm(list=ls())
+```
+
+Alhamdulillah si _Magma Grey_ sudah datang. Sesuatu yang sangat seru adalah _head unit_ __JVC__ bawaannya bisa dipakai untuk menonton _Youtube_. Jadi sangat menguntungkan kalau lagi bawa bocah-bocah. 
+
+Biar gak _cranky_ di jalan, saya bisa menyetelkan acara _Youtube_ favorit para bocah itu.
+
+Tapi ternyata koneksi __XL__ saya lemot kalau dipakai untuk menonton _Youtube_ di jalan. Jadi, salah satu solusi terbaik yang bisa saya lakukan adalah dengan mendownload video _Youtube_ ke dalam format `.mp4` untuk kemudian diputar menggunakan _flashdisk_ di _head unit_.
+
+____
+
+# Bagaimana caranya?
+
+Cara paling mudah adalah menggunakan situs seperti [ssyoutube.com](www.ssyoutube.com) lalu biarkan konversi bekerja. Setelah proses konversi selesai, kita bisa men- _download_ video tersebut.
+
+Untuk menyelesaikan proses ini, butuh waktu hingga satu menit pervideo.
+
+___
+
+# Apakah memungkinkan jika proses ini dibuat otomatis?
+
+Itu pertanyaan saya dari dulu. Apakah bisa __R__ digunakan untuk men- _download_ video dari _Youtube_?
+
+> __Ternyata bisa!__
+
+Jadi kita membutuhkan tiga bahan, yakni:
+
+1. __R__, untuk _running automation download algorithm_.
+2. _Google Chrome_ atau _browser_ lainnya, untuk _download_ video.
+3. Koneksi internet.
+
+Gimana skrip algoritmanya?
+
+```{r}
+donlot = function(url){
+  url = gsub("https://www.youtube.com/watch?v=",
+             "https://clipmega.com/watch?v=",
+             url,fixed = T)
+  tes = read_html(url) %>% html_nodes('a') %>% html_attr('href')
+  browseURL(tes[6])
+}
+```
+
+Untuk men- _download_-nya, kita butuh _link_ dari video yang akan di- _download_.
+
+Contoh:
+
+`link = https://www.youtube.com/watch?v=eEhrkjDPqhU`
+
+Lalu tinggal di- _run_ saja _function_-nya:
+
+`donlot(link)`
+
+Bisa juga untuk _multiple links_, tinggal dibikin _vector_ saja ya. Lalu bisa dibuat _looping_ atau `apply()`.
