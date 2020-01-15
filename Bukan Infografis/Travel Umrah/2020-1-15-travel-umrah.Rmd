@@ -35,8 +35,7 @@ for(i in 2:length(url)){
   temp = scrap(url[i])
   data = rbind(data,temp)
 }
-
-write.csv(data,'data scrap pertama.csv')
+data$Opsi = NULL
 openxlsx::write.xlsx(data,'data scrap pertama.xlsx')
 ```
 
@@ -50,8 +49,72 @@ Setelah kasus penipuan ibadah umrah _First Travel_ kemarin, saya jadi lebih berh
 
 Ternyata, ada _lho_ suatu wadah perhimpunan penyelenggara umrah dan haji khusus yang disingkat menjadi [HIMPUH](https://himpuh.or.id/). Di situsnya kita bisa mencari dan menemukan informasi perusahaan mana saja yang menjadi anggota dari HIMPUH.
 
-Saya akan _scrap_ data dari situs tersebut dan akan membuat visualisasi sederhana dari data itu yah.
+Saya akan _scrap_ data dari situs tersebut.
 
 ## Proses _web scraping_
 
-Data akan saya _scrap_ dari _page_ [daftar anggota](https://himpuh.or.id/daftar-anggota?page=1). Total ada 13 _pages_ dan semuanya akan saya _scrap_. Hasilnya saya bisa diunduh di sini. 
+Data akan saya _scrap_ dari _page_ [daftar anggota](https://himpuh.or.id/daftar-anggota?page=1). Total ada 13 _pages_ dan semuanya akan saya _scrap_. Hasilnya saya bisa diunduh di [sini](https://github.com/ikanx101/belajaR/blob/master/Bukan%20Infografis/Travel%20Umrah/data%20scrap%20pertama.xlsx?raw=true). 
+
+Per 15 Januari 2020 pukul 11 AM, saya dapatkan ada `305` perusahaan travel umrah anggota HIMPUH.
+
+```{r}
+str(data)
+head(data,10)
+```
+
+Agar lebih lengkap lagi, saya juga akan _scrap_ informasi yang ada di detail _link_ pada data di atas.
+
+```{r,include=FALSE}
+
+for(i in 1:length(data$link)){
+  url = as.character(data$link[i])
+  line = read_html(url) %>% html_nodes('td') %>% html_text()
+  ganjil = seq(1,30,2)
+  genap = seq(2,30,2)
+
+  hasil = data.frame(v1 = line[ganjil],v2=line[genap])
+
+  # ambil registrasi
+  registrasi = hasil %>% filter(grepl('registrasi',v1,ignore.case = T)) %>%
+                mutate(v2 = gsub('\\\n','',v2)) %>% select(v2)
+  registrasi = registrasi$v2
+  data$no_registrasi[i] = registrasi
+  
+  # ambil sk haji
+  sk_haji = hasil %>% filter(grepl('sk haji',v1,ignore.case = T)) %>%
+                mutate(v2 = gsub('\\\n','',v2)) %>% select(v2)
+  sk_haji = sk_haji$v2
+  data$no_SK_haji[i] = sk_haji
+  
+  # ambil sk umrah
+  sk_umrah = hasil %>% filter(grepl('sk umrah',v1,ignore.case = T)) %>%
+                mutate(v2 = gsub('\\\n','',v2)) %>% select(v2)
+  sk_umrah = sk_umrah$v2
+  data$no_SK_umrah[i] = sk_umrah
+  
+  # ambil sk Website
+  Website = hasil %>% filter(grepl('Website',v1,ignore.case = T)) %>%
+                mutate(v2 = gsub('\\\n','',v2)) %>% select(v2)
+  Website = Website$v2
+  data$Website[i] = Website
+  
+  # ambil sk Telepon
+  Telepon = hasil %>% filter(grepl('Telepon',v1,ignore.case = T)) %>%
+                mutate(v2 = gsub('\\\n','',v2)) %>% select(v2)
+  Telepon = Telepon$v2
+  data$no_Telepon[i] = Telepon
+  
+  # ambil sk Email
+  Email = hasil %>% filter(grepl('Email',v1,ignore.case = T)) %>%
+                mutate(v2 = gsub('\\\n','',v2)) %>% select(v2)
+  Email = Email$v2
+  data$Email[i] = Email
+}
+
+openxlsx::write.xlsx(data,'final data.xlsx')
+
+str(data)
+head(data,10)
+```
+
+Datanya bisa diambil di sini.
