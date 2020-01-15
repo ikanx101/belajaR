@@ -1,0 +1,57 @@
+---
+title: "Mencari Informasi Travel Umrah"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE}
+setwd("/cloud/project/Bukan Infografis/Travel Umrah")
+rm(list=ls())
+library(rvest)
+library(dplyr)
+
+url = 'https://himpuh.or.id/daftar-anggota?page='
+url = paste(url,c(1:13),sep='')
+
+scrap = function(urls){
+  # ambil tabel awal
+  data = read_html(urls) %>% html_table(header = T)
+  data = data[[1]]
+  #ambil link
+  link = read_html(urls) %>% html_nodes('a') %>% html_attr('href')
+  link = data.frame(dummy = c(1:length(link)),link)
+  link = link %>% filter(grepl('daftar-anggota/detail',link,ignore.case = T))
+  # enrich tabel awal dengan link
+  data$link = link$link
+  return(data)
+}
+
+data = scrap(url[1])
+
+for(i in 2:length(url)){
+  temp = scrap(url[i])
+  data = rbind(data,temp)
+}
+
+write.csv(data,'data scrap pertama.csv')
+openxlsx::write.xlsx(data,'data scrap pertama.xlsx')
+```
+
+# _Bismillah..._
+
+Setelah kasus penipuan ibadah umrah _First Travel_ kemarin, saya jadi lebih berhati-hati dalam mencari dan memilih perusahaan travel umrah. Jangan sampai niat untuk beribadah disalahgunakan oleh oknum yang hanya mencari keuntungan duniawi.
+
+> Tapi perlu diingat, jadi atau tidaknya kita berangkat umrah atau haji adalah keputusan mutlak dari Allah. Kita hanya berikhtiar dengan mencari travel umrah dan menyiapkan dananya tapi yang menjadikan kita berangkat atau tidak itu adalah Allah yah.
+
+# Data Travel Umrah
+
+Ternyata, ada _lho_ suatu wadah perhimpunan penyelenggara umrah dan haji khusus yang disingkat menjadi [HIMPUH](https://himpuh.or.id/). Di situsnya kita bisa mencari dan menemukan informasi perusahaan mana saja yang menjadi anggota dari HIMPUH.
+
+Saya akan _scrap_ data dari situs tersebut dan akan membuat visualisasi sederhana dari data itu yah.
+
+## Proses _web scraping_
+
+Data akan saya _scrap_ dari _page_ [daftar anggota](https://himpuh.or.id/daftar-anggota?page=1). Total ada 13 _pages_ dan semuanya akan saya _scrap_. Hasilnya saya bisa diunduh di sini. 
