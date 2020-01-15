@@ -117,4 +117,8 @@ str(data)
 head(data,10)
 ```
 
-Datanya bisa diambil di sini.
+Datanya bisa diambil di [sini](https://github.com/ikanx101/belajaR/blob/master/Bukan%20Infografis/Travel%20Umrah/final%20data.xlsx?raw=true).
+
+# Selanjutnya apa?
+
+Ada yang mau buat visualisasinya?

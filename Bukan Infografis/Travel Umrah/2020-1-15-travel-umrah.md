@@ -20,8 +20,7 @@ khusus yang disingkat menjadi [HIMPUH](https://himpuh.or.id/). Di
 situsnya kita bisa mencari dan menemukan informasi perusahaan mana saja
 yang menjadi anggota dari HIMPUH.
 
-Saya akan *scrap* data dari situs tersebut dan akan membuat visualisasi
-sederhana dari data itu yah.
+Saya akan *scrap* data dari situs tersebut.
 
 ## Proses *web scraping*
 
@@ -81,3 +80,13 @@ head(data,10)
     ## 8            https://himpuh.or.id/daftar-anggota/detail/2/pt-al-amin-mulia-lestari
     ## 9             https://himpuh.or.id/daftar-anggota/detail/145/pt-al-amsor-mubarokah
     ## 10        https://himpuh.or.id/daftar-anggota/detail/191/pt-al-fatihah-tour-travel
+
+Agar lebih lengkap lagi, saya juga akan *scrap* informasi yang ada di
+detail *link* pada data di atas.
+
+Datanya bisa diambil di
+[sini](https://github.com/ikanx101/belajaR/blob/master/Bukan%20Infografis/Travel%20Umrah/final%20data.xlsx?raw=true).
+
+# Selanjutnya apa?
+
+Ada yang mau buat visualisasinya?
