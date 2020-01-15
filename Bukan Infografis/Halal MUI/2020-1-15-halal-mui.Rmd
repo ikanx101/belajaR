@@ -1,0 +1,112 @@
+---
+title: "Lembaga Sertifikasi Halal di Dunia"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r,include=FALSE}
+library(rvest)
+library(dplyr)
+library(ggplot2)
+library(ggpubr)
+library(ggthemes)
+setwd("/cloud/project/Bukan Infografis/Halal MUI")
+
+rm(list=ls())
+
+url = 'http://www.halalmui.org/mui14/main/page/list-of-halal-certification-bodies'
+
+data = read_html(url) %>% html_table(header = T,fill = T)
+data = data[[1]]
+data = data[-1,]
+colnames(data)[4:6] = c('Slaughtering',
+                        'Raw Material',
+                        'Flavor')
+colnames(data) = janitor::make_clean_names(colnames(data))
+
+data = data %>% mutate(slaughtering = gsub('v',1,slaughtering),
+                       raw_material = gsub('v',1,raw_material),
+                       flavor = gsub('v',1,flavor))
+
+data$country = c('Singapore','Malaysia','Brunei Darussalam','Japan',
+                 'Japan','Taiwan','India','India','Hongkong','Thailand',
+                 'Philippines','Vietnam','Sri Lanka','Japan','Australia',
+                 'Australia ','Australia','Australia','Australia','Australia',
+                 'Australia','New Zealand','New Zealand','New Zealand','Belgium',
+                 'Poland','Germany','Spain','Italy','Netherland','England',
+                 'England','Netherland','Switzerland','Turkey','Turkey','Ireland',
+                 'USA','USA','USA','USA','USA','Brazil',
+                 'Brazil','South Africa')
+```
+
+Sebagai negara dengan penduduk mayoritas muslim terbesar di dunia, sudah sewajarnya setiap produk makanan dan minuman yang beredar di masyarakat mendapatkan jaminan label __halal__.
+
+Walaupun ada beberapa dari kita yang berpendapat bahwa label __non halal__ lebih penting untuk diterapkan di Indonesia.
+
+> Alih-alih memberikan label halal di setiap produk makanan dan minuman di pasaran, tapi memberikan label __non halal__ agar muslim bisa _notice_ mana yang baik untuk mereka dan mana yang tidak.
+
+Salah satu badan yang bisa melakukan dan memberikan sertifikasi halal di Indonesia adalah [LPPOM MUI](http://www.halalmui.org/mui14/).
+
+Salah satu pertanyaan yang sering ditanyakan beberapa orang adalah:
+
+> Jika ada produk makanan atau minuman impor dari negara lain, apakah harus disertifikasi halal oleh LPPOM MUI juga? Atau gimana?
+
+Ternyata jika kita cari di situs MUI [lebih jauh](http://www.halalmui.org/mui14/main/page/list-of-halal-certification-bodies), barang yang diimpor dari luar negeri dan sudah disertifikasi di negara awalnya (bisa jadi) tidak perlu disertifikasi ulang. Cukup melengkapi dokumen sertifikasi halal dari badan sertifikasi yang ada di negaranya.
+
+Ada `45` [badan sertifikasi luar negeri](http://www.halalmui.org/mui14/main/page/list-of-halal-certification-bodies) yang diakui oleh LPPOM MUI. Masing-masing badan memiliki kemampuan untuk melakukan sertifikasi halal kepada:
+
+1. __Cattle slaughtering__, terkait kehalalan terhadap proses penyembelihan hewan ternak.
+2. __Raw material__, terkait kehalalan _raw material_ dari suatu produk.
+3. __Flavor__, terkait dengan kehalalan dari zat perasa.
+
+
+```{r,echo=FALSE}
+data %>% select(no,slaughtering,raw_material,flavor) %>% 
+  reshape2::melt(id.vars = 'no') %>% 
+  mutate(value = as.numeric(value)) %>%
+  group_by(variable) %>% 
+  filter(!is.na(value)) %>%
+  summarise(persen = round(sum(value)/45*100,2)) %>%
+  ggplot(aes(x=reorder(variable,-persen),y=persen)) + 
+  geom_col(color='steelblue',fill='lightblue',alpha=.5) +
+  theme_calc() +
+  geom_label(aes(label = paste(persen,'%',sep='')),size=3) +
+  labs(title = 'Persentase Badan Sertifikasi Halal Luar Negeri yang\nMampu Melakukan Sertifikasi Halal Terhadap:',
+       subtitle = 'base: 45 Badan Sertifikasi Halal Luar Negeri yang Diakui Oleh LPPOM MUI',
+       caption = 'sumber: LPPOM MUI\nScraped and Visualised Using R\n@mr.ikanx') +
+  theme(axis.title = element_blank(),
+        plot.title = element_text(size=17))
+```
+
+___
+
+## Apakah ada badan sertifikasi halal yang mampu melakukan sertifikasi atas ketiga kategori di atas?
+
+Salah satu cara termudah untuk menjawab pertanyaan di atas adalah menggunakan prinsip _set analysis_: __Analisa Himpunan__.
+
+Visualisasi paling sederhana adalah menggunakan __diagram venn__.
+
+> Alih-alih membuat __diagram venn__, saya akan membuat __upset diagram__ untuk menjawab pertanyaan ini.
+
+Apa itu __upset diagram__? Diagram ini untuk beberapa kasus lebih mudah dipahami dan lebih _powerful_ dibandingkan _diagram venn_. 
+
+Bagaimana bentuknya?
+
+_Cekidot yah_:
+
+```{r,echo=FALSE}
+library(UpSetR)
+new_data = data %>% select(slaughtering,raw_material,flavor) %>%
+  mutate(slaughtering = as.numeric(slaughtering),
+         raw_material = as.numeric(raw_material),
+         flavor = as.numeric(flavor))
+new_data[is.na(new_data)] <- 0
+
+upset(new_data,
+  nsets = 10, number.angles = 30, point.size = 3.5, line.size = 2,
+  mainbar.y.label = "Kategori Sertifikasi Halal", 
+  sets.x.label = "45 Badan Sertifikasi Halal\nLuar Negeri\nyang Diakui Oleh LPPOM MUI")
+```
