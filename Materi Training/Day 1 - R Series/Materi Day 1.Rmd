@@ -52,6 +52,12 @@ Sehingga *package* atau *library* yang disediakan untuk analisis
 statistika dan analisa numerik juga sangat lengkap dan terus bertambah
 setiap saat.
 
+Bagaimana dengan __Python__?
+
+> Sejatinya Python digunakan untuk membangun aplikasi. Namun, belakangan ini ternayta Pyhton disadari bisa untuk melakukan pengolahan data.
+
+Berbeda dengan __R__ yang memang dibangun untuk kebutuhan _data science_, __Python__ membutuhkan _libraries_ setiap kali melakukan pengolahan data.
+
 Materi _training_ ini saya kumpulkan dari berbagai sumber dan saya _customize_ sesuai dengan kebutuhan __Nutrifood__ berdasarkan pengalaman selama ini berkutat dengan data yang ada (dari mulai data pabrik hingga _finance_). Semoga menjadi manfaat bagi _Nutrifooders_ semua. Terima kasih kepada __Lenny Wibisana__ dan __Teguh Prasetia__ yang telah ikut berkontribusi pada penyusunan materi ini. 
 
 
@@ -77,7 +83,7 @@ x == y
 2. Segala sesuatu yang ada pada program __R__ akan diangap sebagai objek. konsep objek ini sama dengan bahasa pemrograman berbasis objek yang lain seperti _Java_, _C++_, _Python_, dll. Perbedaannya adalah bahasa __R__ relatif lebih sederhana dibandingkan bahasa pemrograman berbasis objek yang lain.
 3. _Interpreted language_ atau _script_. Bahasa __R__ memungkinkan pengguna untuk melakukan kerja pada __R__ tanpa perlu melakukan _compile_ menjadi _executionable_ file (.exe).
 4. Mendukung proses _loop_, _decision making_, dan menyediakan berbagai jenis operator (aritmatika, logika, dll).
-5. Mendukung _export_ dan _import_ berbagai _format file_, seperti: `.txt`, `.xlsx`, `.csv`, `.json`, dll.
+5. Mendukung _export_ dan _import_ berbagai _format file_, seperti: `.txt`, `.xlsx`, `.csv`, `.json`, `sql`, dll.
 6. Mudah ditingkatkan melalui penambahan fungsi atau _library_. Penambahan ini dapat dilakukan secara _online_ melalui __CRAN__ atau melalui sumber seperti __github__.
 7. Menyedikan berbagai fungsi untuk keperluan visualisasi data. Visualisasi data pada __R__ dapat menggunakan _library_ bawaan atau lainnya seperti `ggplot2`, `ggvis`, `plotly`, dll.
 
@@ -116,7 +122,7 @@ Kelebihan R Studio antara lain:
 
 Jadi, setelah membaca bagian ini pastikan Kamu sudah meng- _install_ __R__ dan __R Studio__ yah. 
 
-> Jangan sampai terbalik urutan instalasinya.
+> Jangan sampai terbalik urutan instalasinya!
 
 ## 1.5 Mengenal operator dasar
 
@@ -267,8 +273,12 @@ Secara statistika, berikut adalah pembagian data berdasarkan tipenya:
 
 ![alt text](https://raw.githubusercontent.com/ikanx101/belajaR/master/Materi%20Training/Day%201%20-%20R%20Series/tipe%20data.png "tipe")
 
-1. Data kualitatif: adalah data yang tidak bisa dilakukan operasi aritmatika (penjumlahan, pengurangan, pembagian, dan perkalian). Data seperti ini, kita akan sebut sebagai __data kategorik__. __Nominal__; Representasi dari sesuatu. Contoh: `gender`, `1` saya tulis sebagai `pria` dan `2` saya tulis sebagai `wanita`. __Ordinal__; Urutan dari data menjadi penting. Contoh: skala _likert_ 1 - 6.
-2. Data kuantitatif: adalah data yang bisa dilakukan operasi aritmatika (penjumlahan, pengurangan, pembagian, dan perkalian). Data seperti ini, kita akan sebut sebagai __data numerik__. __Diskrit__; bilangan bulat (_integer_). __Kontinu__; bilangan _real_ (mengandung koma).
+1. Data kualitatif: adalah data yang tidak bisa dilakukan operasi aritmatika (penjumlahan, pengurangan, pembagian, dan perkalian). Data seperti ini, kita akan sebut sebagai __data kategorik__. 
+  * __Nominal__; Representasi dari sesuatu. Contoh: `gender`, `1` saya tulis sebagai `pria` dan `2` saya tulis sebagai `wanita`. 
+  * __Ordinal__; Urutan dari data menjadi penting. Contoh: skala _likert_ 1 - 6.
+2. Data kuantitatif: adalah data yang bisa dilakukan operasi aritmatika (penjumlahan, pengurangan, pembagian, dan perkalian). Data seperti ini, kita akan sebut sebagai __data numerik__. 
+  * __Diskrit__; bilangan bulat (_integer_). 
+  * __Kontinu__; bilangan _real_ (mengandung koma).
 
 ### 2.1.2 Tipe Data di __R__
 
@@ -301,8 +311,22 @@ Dengan mengetahui jenis dan struktur data, kita bisa lebih mudah bekerja dengan 
 
 Contoh:
 
-Algoritma analisa _simple linear regression_ (`lm()`) memerlukan input berupa `data.frame()` dengan masing-masing _variables_ yang ada di dalamnya berjenis _numeric_.
+> Algoritma analisa _simple linear regression_ (`lm()`) memerlukan input berupa `data.frame()` dengan masing-masing _variables_ yang ada di dalamnya berjenis _numeric_.
 
+
+## 2.2 Tata Cara Memberikan Nama _Object_ atau Variabel
+
+Setiap _object_ atau variabel di __R__ bisa diberikan nama sesuai dengan keinginan kita. Tidak ada aturan baku dalam memberikan nama. 
+
+> Tapi, dengan memberikan nama yang __tepat__ kita bisa bekerja dengan ebih cepat dan efisien.
+
+Berikut adalah tata cara pemberian nama yang akan membuat pekerjaan kita lebih efisien:
+
+1. Seragamkan kapital atau non kapital dari nama variabel kita. Jika menggunakan _lowercase_, maka harus konsisten di setiap data yang ada di _environment_ __R__. 
+2. Hindari penggunaan spasi " ". Jika memang tidak bisa dihindari, gunakan tanda "." atau "_". 
+  * Contoh: variabel `tinggi badan` akan lebih baik ditulis dalam bentuk `tinggi.badan` atau `tinggi_badan`.
+
+Jika sudah terlanjur memiliki nama variabel yang tidak seragam atau mengandung spasi (biasanya terjadi saat kita meng- _import_ data dari sumber lain seperti: _excel_), kita bisa merapikannya dengan otomatis dengan memanfaatkan `library(janitor)` fungsi `make_clean_names()`.
 
 ____
 
@@ -408,9 +432,108 @@ Pada _section_ `2.1.2` telah dijelaskan beberapa struktur data di __R__, sekaran
 
 Untuk data berbentuk `list`, akan saya jelaskan sekalian bersamaan dengan materi `tidyverse` _yah_.
 
-### 3.2.1 Single Object
-### 3.2.2 Vector
+### 3.2.1 Single Value
+
+Contoh:
+
+```{r}
+a = 100
+x = 50
+z = 'Indonesia'
+```
+
+### 3.2.2 _Vector_
+
+_Vector_ didefinisikan dengan menggunakan perintah `c()`.
+
+Contoh:
+
+```{r}
+tinggi_badan = c(164,149,180,184,153,90,139,199,186,158,197)
+tinggi_badan
+```
+
+#### 3.2.2.1 Elemen _Vector_
+
+Ada yang sadar _gak_ dengan tanda `[1]` setiap kali kita _running_ suatu skrip di __R__.
+
+Apa _sih_ artinya?
+
+Itu adalah tanda posisi pertama dari _vector_. Tanda `[]` digunakan untuk memanggil isi _vector_ di posisi tertentu. Istilah kerennya adalah _subset_ dari suatu _vector_.
+
+Contoh:
+
+```{r}
+tinggi_badan[1]
+tinggi_badan[7]
+tinggi_badan[10]
+tinggi_badan[3:5]
+tinggi_badan[c(1,7,10)]
+tinggi_badan[-c(1,7,10)] #pengeculian
+```
+
+#### 3.2.2.2 Operasi Aritmatika Pada _Vector_
+
+_Vector_ yang berupa numerik bisa dilakukan operasi aritmatik.
+
+Contoh:
+
+```{r}
+status = (tinggi_badan - 100)/50
+status
+```
+
+#### 3.2.2.3 Fungsi Pada _Vector_
+
+_Vector_ berupa numerik juga bisa dikenakan fungsi perhitungan seperti:
+
+```{r}
+max(tinggi_badan) # memperoleh nilai maksimum x
+min(tinggi_badan) # memperoleh nilai minimum x
+range(tinggi_badan) # memperoleh range vektor x
+length(tinggi_badan) # memperoleh jumlah vektor x
+sum(tinggi_badan) # memperoleh total penjumlahan vektor x
+mean(tinggi_badan) # memperoleh nilai mean vektor x
+sd(tinggi_badan) # standar deviasi vektor x
+var(tinggi_badan) # varian vektor x
+sort(tinggi_badan) # mengurutkan elemen vektor x dari yang terbesar
+```
+
+#### 3.2.2.4 Fungsi Spesial Pada _Vector_
+
+Ada satu fungsi khusus yang sering saya pakai, yakni: `summary()`.
+
+```{r}
+summary(tinggi_badan)
+```
+
+#### 3.2.2.5 _Generating Sequences_
+
+_Sequences_ atau deret bisa kita bangun menggunakan __R__ dengan dua cara:
+
+1. Menggunakan `:`.
+2. Menggunakan fungsi `seq()`.
+
+Contoh:
+
+```{r}
+nomor_1 = c(1:10)
+nomor_1
+
+nomor_2 = seq(1,10,0.4) # generating sequence dari 1 hingga 10 dengan jeda 0.4
+nomor_2
+```
+
+> Apa sih gunanya deret?
+
+Percayalah, suatu saat nanti deret bisa digunakan untuk membantu perhitungan atau analisa kita. Seolah-olah berperan sebagai __katalis__ pada reaksi kimia.
+
+
+
+
 ### 3.2.3 Tibble atau Data Frame
+
+### 3.2.4 _Missing values_ `NA`
 
 ## 3.3 Beberapa Fungsi yang Berguna
 paste

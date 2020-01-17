@@ -51,6 +51,15 @@ Sehingga *package* atau *library* yang disediakan untuk analisis
 statistika dan analisa numerik juga sangat lengkap dan terus bertambah
 setiap saat.
 
+Bagaimana dengan **Python**?
+
+> Sejatinya Python digunakan untuk membangun aplikasi. Namun, belakangan
+> ini ternayta Pyhton disadari bisa untuk melakukan pengolahan data.
+
+Berbeda dengan **R** yang memang dibangun untuk kebutuhan *data
+science*, **Python** membutuhkan *libraries* setiap kali melakukan
+pengolahan data.
+
 Materi *training* ini saya kumpulkan dari berbagai sumber dan saya
 *customize* sesuai dengan kebutuhan **Nutrifood** berdasarkan pengalaman
 selama ini berkutat dengan data yang ada (dari mulai data pabrik hingga
@@ -106,7 +115,7 @@ x == y
 4.  Mendukung proses *loop*, *decision making*, dan menyediakan berbagai
     jenis operator (aritmatika, logika, dll).
 5.  Mendukung *export* dan *import* berbagai *format file*, seperti:
-    `.txt`, `.xlsx`, `.csv`, `.json`, dll.
+    `.txt`, `.xlsx`, `.csv`, `.json`, `sql`, dll.
 6.  Mudah ditingkatkan melalui penambahan fungsi atau *library*.
     Penambahan ini dapat dilakukan secara *online* melalui **CRAN** atau
     melalui sumber seperti **github**.
@@ -183,7 +192,7 @@ Kelebihan R Studio antara lain:
 Jadi, setelah membaca bagian ini pastikan Kamu sudah meng- *install*
 **R** dan **R Studio** yah.
 
-> Jangan sampai terbalik urutan instalasinya.
+> Jangan sampai terbalik urutan instalasinya\!
 
 ## 1.5 Mengenal operator dasar
 
@@ -426,6 +435,8 @@ example(sum)
     ## sum> sum(1:5, NA, na.rm = TRUE)
     ## [1] 15
 
+-----
+
 # 2\. Mulai Bekerja dengan **R**
 
 ## 2.1 Mengenal Data
@@ -446,14 +457,24 @@ text](https://raw.githubusercontent.com/ikanx101/belajaR/master/Materi%20Trainin
 1.  Data kualitatif: adalah data yang tidak bisa dilakukan operasi
     aritmatika (penjumlahan, pengurangan, pembagian, dan perkalian).
     Data seperti ini, kita akan sebut sebagai **data kategorik**.
-    **Nominal**; Representasi dari sesuatu. Contoh: `gender`, `1` saya
+
+<!-- end list -->
+
+  - **Nominal**; Representasi dari sesuatu. Contoh: `gender`, `1` saya
     tulis sebagai `pria` dan `2` saya tulis sebagai `wanita`.
-    **Ordinal**; Urutan dari data menjadi penting. Contoh: skala
+  - **Ordinal**; Urutan dari data menjadi penting. Contoh: skala
     *likert* 1 - 6.
+
+<!-- end list -->
+
 2.  Data kuantitatif: adalah data yang bisa dilakukan operasi aritmatika
     (penjumlahan, pengurangan, pembagian, dan perkalian). Data seperti
-    ini, kita akan sebut sebagai **data numerik**. **Diskrit**; bilangan
-    bulat (*integer*). **Kontinu**; bilangan *real* (mengandung koma).
+    ini, kita akan sebut sebagai **data numerik**.
+
+<!-- end list -->
+
+  - **Diskrit**; bilangan bulat (*integer*).
+  - **Kontinu**; bilangan *real* (mengandung koma).
 
 ### 2.1.2 Tipe Data di **R**
 
@@ -503,9 +524,36 @@ dengan algoritma yang ada di *library*.
 
 Contoh:
 
-Algoritma analisa *simple linear regression* (`lm()`) memerlukan input
-berupa `data.frame()` dengan masing-masing *variables* yang ada di
-dalamnya berjenis *numeric*.
+> Algoritma analisa *simple linear regression* (`lm()`) memerlukan input
+> berupa `data.frame()` dengan masing-masing *variables* yang ada di
+> dalamnya berjenis *numeric*.
+
+## 2.2 Tata Cara Memberikan Nama *Object* atau Variabel
+
+Setiap *object* atau variabel di **R** bisa diberikan nama sesuai dengan
+keinginan kita. Tidak ada aturan baku dalam memberikan nama.
+
+> Tapi, dengan memberikan nama yang **tepat** kita bisa bekerja dengan
+> ebih cepat dan efisien.
+
+Berikut adalah tata cara pemberian nama yang akan membuat pekerjaan kita
+lebih efisien:
+
+1.  Seragamkan kapital atau non kapital dari nama variabel kita. Jika
+    menggunakan *lowercase*, maka harus konsisten di setiap data yang
+    ada di *environment* **R**.
+2.  Hindari penggunaan spasi " “. Jika memang tidak bisa dihindari,
+    gunakan tanda”." atau "\_".
+
+<!-- end list -->
+
+  - Contoh: variabel `tinggi badan` akan lebih baik ditulis dalam bentuk
+    `tinggi.badan` atau `tinggi_badan`.
+
+Jika sudah terlanjur memiliki nama variabel yang tidak seragam atau
+mengandung spasi (biasanya terjadi saat kita meng- *import* data dari
+sumber lain seperti: *excel*), kita bisa merapikannya dengan otomatis
+dengan memanfaatkan `library(janitor)` fungsi `make_clean_names()`.
 
 -----
 
@@ -673,7 +721,212 @@ ifelse(a == b, 'sama-sama','tidak bersama')
 
     ## [1] "tidak bersama"
 
-### 3.1.5 *Looping*
+## 3.2 Bekerja dengan data
+
+Pada *section* `2.1.2` telah dijelaskan beberapa struktur data di **R**,
+sekarang kita akan melihat bagaimana bentuk *real*-nya di **R**.
+
+Untuk data berbentuk `list`, akan saya jelaskan sekalian bersamaan
+dengan materi `tidyverse` *yah*.
+
+### 3.2.1 Single Value
+
+Contoh:
+
+``` r
+a = 100
+x = 50
+z = 'Indonesia'
+```
+
+### 3.2.2 *Vector*
+
+*Vector* didefinisikan dengan menggunakan perintah `c()`.
+
+Contoh:
+
+``` r
+tinggi_badan = c(164,149,180,184,153,90,139,199,186,158,197)
+tinggi_badan
+```
+
+    ##  [1] 164 149 180 184 153  90 139 199 186 158 197
+
+#### 3.2.2.1 Elemen *Vector*
+
+Ada yang sadar *gak* dengan tanda `[1]` setiap kali kita *running* suatu
+skrip di **R**.
+
+Apa *sih* artinya?
+
+Itu adalah tanda posisi pertama dari *vector*. Tanda `[]` digunakan
+untuk memanggil isi *vector* di posisi tertentu. Istilah kerennya adalah
+*subset* dari suatu *vector*.
+
+Contoh:
+
+``` r
+tinggi_badan[1]
+```
+
+    ## [1] 164
+
+``` r
+tinggi_badan[7]
+```
+
+    ## [1] 139
+
+``` r
+tinggi_badan[10]
+```
+
+    ## [1] 158
+
+``` r
+tinggi_badan[3:5]
+```
+
+    ## [1] 180 184 153
+
+``` r
+tinggi_badan[c(1,7,10)]
+```
+
+    ## [1] 164 139 158
+
+``` r
+tinggi_badan[-c(1,7,10)] #pengeculian
+```
+
+    ## [1] 149 180 184 153  90 199 186 197
+
+#### 3.2.2.2 Operasi Aritmatika Pada *Vector*
+
+*Vector* yang berupa numerik bisa dilakukan operasi aritmatik.
+
+Contoh:
+
+``` r
+status = (tinggi_badan - 100)/50
+status
+```
+
+    ##  [1]  1.28  0.98  1.60  1.68  1.06 -0.20  0.78  1.98  1.72  1.16  1.94
+
+#### 3.2.2.3 Fungsi Pada *Vector*
+
+*Vector* berupa numerik juga bisa dikenakan fungsi perhitungan seperti:
+
+``` r
+max(tinggi_badan) # memperoleh nilai maksimum x
+```
+
+    ## [1] 199
+
+``` r
+min(tinggi_badan) # memperoleh nilai minimum x
+```
+
+    ## [1] 90
+
+``` r
+range(tinggi_badan) # memperoleh range vektor x
+```
+
+    ## [1]  90 199
+
+``` r
+length(tinggi_badan) # memperoleh jumlah vektor x
+```
+
+    ## [1] 11
+
+``` r
+sum(tinggi_badan) # memperoleh total penjumlahan vektor x
+```
+
+    ## [1] 1799
+
+``` r
+mean(tinggi_badan) # memperoleh nilai mean vektor x
+```
+
+    ## [1] 163.5455
+
+``` r
+sd(tinggi_badan) # standar deviasi vektor x
+```
+
+    ## [1] 31.5194
+
+``` r
+var(tinggi_badan) # varian vektor x
+```
+
+    ## [1] 993.4727
+
+``` r
+sort(tinggi_badan) # mengurutkan elemen vektor x dari yang terbesar
+```
+
+    ##  [1]  90 139 149 153 158 164 180 184 186 197 199
+
+#### 3.2.2.4 Fungsi Spesial Pada *Vector*
+
+Ada satu fungsi khusus yang sering saya pakai, yakni: `summary()`.
+
+``` r
+summary(tinggi_badan)
+```
+
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    ##    90.0   151.0   164.0   163.5   185.0   199.0
+
+#### 3.2.2.5 *Generating Sequences*
+
+*Sequences* atau deret bisa kita bangun menggunakan **R** dengan dua
+cara:
+
+1.  Menggunakan `:`.
+2.  Menggunakan fungsi `seq()`.
+
+Contoh:
+
+``` r
+nomor_1 = c(1:10)
+nomor_1
+```
+
+    ##  [1]  1  2  3  4  5  6  7  8  9 10
+
+``` r
+nomor_2 = seq(1,10,0.4) # generating sequence dari 1 hingga 10 dengan jeda 0.4
+nomor_2
+```
+
+    ##  [1] 1.0 1.4 1.8 2.2 2.6 3.0 3.4 3.8 4.2 4.6 5.0 5.4 5.8 6.2 6.6 7.0 7.4
+    ## [18] 7.8 8.2 8.6 9.0 9.4 9.8
+
+> Apa sih gunanya deret?
+
+Percayalah, suatu saat nanti deret bisa digunakan untuk membantu
+perhitungan atau analisa kita. Seolah-olah berperan sebagai **katalis**
+pada reaksi kimia.
+
+### 3.2.3 Tibble atau Data Frame
+
+### 3.2.4 *Missing values* `NA`
+
+## 3.3 Beberapa Fungsi yang Berguna
+
+paste print str summary class View
+
+## 3.3 *Some useful function*
+
+### 3.3.1 *Looping*
+
+### 3.3.2 *Regex*
 
 -----
 
