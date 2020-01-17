@@ -1,0 +1,17 @@
+---
+title: "Untitled"
+output: github_document
+---
+
+
+```{r,include=FALSE}
+setwd("/cloud/project/Bukan Infografis/Migran PBB")
+rm(list=ls())
+library(readxl)
+library(dplyr)
+library(ggplot2)
+library(ggthemes)
+library(ggpubr)
+
+
+```
