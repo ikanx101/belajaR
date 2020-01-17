@@ -529,7 +529,22 @@ nomor_2
 Percayalah, suatu saat nanti deret bisa digunakan untuk membantu perhitungan atau analisa kita. Seolah-olah berperan sebagai __katalis__ pada reaksi kimia.
 
 
+#### 3.2.2.6 _Random sampling_ dari suatu _vector_
 
+Ada suatu masa saat kita membutuhkan untuk mengambil sampel (mengambil subset) dari suatu _vector_ secara acak. Kita bisa menggunakan fungsi `sample()`.
+
+Contoh:
+
+Kita memiliki data variabel `nama_orang` berisi 20 nama orang. Kita hanya ingin memilih 3 nama orang saja secara acak. Bagaimana caranya?
+
+```{r}
+nama_orang = randomNames::randomNames(20)
+nama_orang
+
+sample(nama_orang,3,replace = F)
+```
+
+`replace = F` digunakan saat kita tidak ingin ada pemilihan yang berulang. Sedangkan `replace = T` digunakan saat diperbolehkan hasil pemilihan berulang. Coba _run_ sendiri _yah_.
 
 ### 3.2.3 Tibble atau Data Frame
 
