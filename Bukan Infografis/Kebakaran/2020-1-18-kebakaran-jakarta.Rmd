@@ -1,0 +1,37 @@
+---
+title: "Data Kebakaran di Jakarta Tahun 2018"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r,include=FALSE}
+setwd("/cloud/project/Bukan Infografis/Kebakaran")
+rm(list=ls())
+data = read.csv('http://data.jakarta.go.id/dataset/0cb0984f-03a8-43b4-b481-7c55b24e947e/resource/7d595666-39bd-4803-aecc-801ac60014a9/download/REKAPITULASI-KEJADIAN-KEBAKARAN-TAHUN-2018.csv')
+
+library(dplyr)
+library(ggplot2)
+library(ggthemes)
+library(ggpubr)
+```
+
+Ceritanya Senin ini, 20 Januari 2020 dalam rangka memperingati bulan K3, saya dan beberapa rekan di area kerja yang bertugas sebagai petugas peran K3 __Nutrifood__ harus memberikan materi mengenai kebakaran dan banjir kepada semua rekan kerja di lantai kami.
+
+Seharusnya ada tujuh orang petugas peran di lantai saya. Tapi karena satu dan lain hal, hanya ada dua atau tiga orang saja yang siap menyampaikan materi tersebut. Saya termasuk orang yang izin _gak_ ngantor hari ini.
+
+Sebagai petugas damkar di kantor, awalnya saya mendapatkan tugas untuk menyampaikan materi seputar kebakaran. Untuk menebus dosa absen, saya coba berkontribusi dengan menulis tulisan ini. 
+
+> _Tau gak sih apa penyebab kebakaran?_
+
+Jawabannya: __API__.
+
+Tapi _tau gak sih_ apa yang menyebabkan api?
+
+Secara teori, api itu dibangun oleh beberapa unsur, yakni:
+
+
+
+Semua unsur itu harus menyatu agar bisa menghasilkan api. _So_, secara teori, saat kita menghilangkan salah satu dari ketiga unsur itu, maka api bisa dikendalikan atau dipadamkan.
