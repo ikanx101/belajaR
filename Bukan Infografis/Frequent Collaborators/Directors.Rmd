@@ -9,7 +9,9 @@ rm(list=ls())
 setwd("/cloud/project/Bukan Infografis/Frequent Collaborators")
 ```
 
-Percaya atau tidak, dalam bekerja biasanya kita memilih rekan kerja yang memang kita nyaman bekerja dengannya. Sama saat para sutradara terbaik dunia dalam membuat film, ternyata ada beberapa aktor atau aktris yang menjadi __langganan__ mereka untuk bekerja sama.
+Percaya atau tidak, dalam bekerja biasanya kita memilih rekan kerja yang memang kita nyaman bekerja dengannya. Hal ini berlaku untuk semua bidang pekerjaan. 
+
+Sama saat para sutradara terbaik dunia dalam membuat film, ternyata ada beberapa aktor atau aktris yang menjadi __langganan__ mereka untuk bekerja sama.
 
 Terinspirasi dari [__Six Degree of Kevin Bacon__](https://en.m.wikipedia.org/wiki/Six_Degrees_of_Kevin_Bacon), saya iseng akan membuat aktor atau aktris siapa yang memiliki koneksi kerjasama banyak dengan sutradara-sutradara tersebut.
 
@@ -20,7 +22,7 @@ Contohnya, pada film [Spider-Man: Far From Home](https://en.wikipedia.org/wiki/S
 
 ```{r,include=FALSE}
 rm(list=ls())
-
+setwd("/cloud/project/Bukan Infografis/Frequent Collaborators")
 library(rvest)
 library(dplyr)
 library(ggplot2)
@@ -34,7 +36,8 @@ library(igraph)
 url = 'https://en.wikipedia.org/wiki/Spider-Man:_Far_From_Home'
 
 scrap = function(url){
-  data = read_html(url) %>% html_nodes(xpath = '//*[contains(concat( " ", @class, " " ), concat( " ", "vevent", " " ))]') %>%
+  data = read_html(url) %>% 
+    html_nodes(xpath = '//*[contains(concat( " ", @class, " " ), concat( " ", "vevent", " " ))]') %>%
     html_table(fill=T)
   data = data[[1]]
   judul = colnames(data)[1]
@@ -150,18 +153,153 @@ urls = c('https://en.wikipedia.org/wiki/Avengers:_Endgame',
          'https://en.wikipedia.org/wiki/Fast_Five',
          'https://en.wikipedia.org/wiki/The_Hangover_Part_II',
          'https://en.wikipedia.org/wiki/The_Smurfs_(film)',
-         'https://en.wikipedia.org/wiki/Cars_2')
+         'https://en.wikipedia.org/wiki/Cars_2',
+         'https://en.wikipedia.org/wiki/Toy_Story_3',
+         'https://en.wikipedia.org/wiki/Alice_in_Wonderland_(2010_film)',
+         'https://en.wikipedia.org/wiki/Harry_Potter_and_the_Deathly_Hallows_-_Part_1',
+         'https://en.wikipedia.org/wiki/Inception',
+         'https://en.wikipedia.org/wiki/Shrek_Forever_After',
+         'https://en.wikipedia.org/wiki/The_Twilight_Saga:_Eclipse',
+         'https://en.wikipedia.org/wiki/Iron_Man_2',
+         'https://en.wikipedia.org/wiki/Tangled',
+         'https://en.wikipedia.org/wiki/Despicable_Me',
+         'https://en.wikipedia.org/wiki/How_to_Train_Your_Dragon_(film)',
+         'https://en.wikipedia.org/wiki/Avatar_(2009_film)',
+         'https://en.wikipedia.org/wiki/Harry_Potter_and_the_Half-Blood_Prince_(film)',
+         'https://en.wikipedia.org/wiki/Ice_Age:_Dawn_of_the_Dinosaurs',
+         'https://en.wikipedia.org/wiki/Transformers:_Revenge_of_the_Fallen',
+         'https://en.wikipedia.org/wiki/2012_(film)',
+         'https://en.wikipedia.org/wiki/Up_(2009_film)',
+         'https://en.wikipedia.org/wiki/The_Twilight_Saga:_New_Moon',
+         'https://en.wikipedia.org/wiki/Sherlock_Holmes_(2009_film)',
+         'https://en.wikipedia.org/wiki/Angels_%26_Demons_(film)',
+         'https://en.wikipedia.org/wiki/The_Hangover',
+         'https://en.wikipedia.org/wiki/The_Dark_Knight_(film)',
+         'https://en.wikipedia.org/wiki/Indiana_Jones_and_the_Kingdom_of_the_Crystal_Skull',
+         'https://en.wikipedia.org/wiki/Kung_Fu_Panda',
+         'https://en.wikipedia.org/wiki/Hancock_(film)',
+         'https://en.wikipedia.org/wiki/Mamma_Mia!_(film)',
+         'https://en.wikipedia.org/wiki/Madagascar:_Escape_2_Africa',
+         'https://en.wikipedia.org/wiki/Quantum_of_Solace',
+         'https://en.wikipedia.org/wiki/Iron_Man_(2008_film)',
+         'https://en.wikipedia.org/wiki/WALL-E',
+         'https://en.wikipedia.org/wiki/The_Chronicles_of_Narnia:_Prince_Caspian',
+         'https://en.wikipedia.org/wiki/Pirates_of_the_Caribbean:_At_World%27s_End',
+         'https://en.wikipedia.org/wiki/Harry_Potter_and_the_Order_of_the_Phoenix_(film)',
+         'https://en.wikipedia.org/wiki/Spider-Man_3',
+         'https://en.wikipedia.org/wiki/Shrek_the_Third',
+         'https://en.wikipedia.org/wiki/Transformers_(film)',
+         'https://en.wikipedia.org/wiki/Ratatouille_(film)',
+         'https://en.wikipedia.org/wiki/I_Am_Legend_(film)',
+         'https://en.wikipedia.org/wiki/The_Simpsons_Movie',
+         'https://en.wikipedia.org/wiki/National_Treasure:_Book_of_Secrets',
+         'https://en.wikipedia.org/wiki/300_(film)',
+         'https://en.wikipedia.org/wiki/Pirates_of_the_Caribbean:_Dead_Man%27s_Chest',
+         'https://en.wikipedia.org/wiki/The_Da_Vinci_Code_(film)',
+         'https://en.wikipedia.org/wiki/Ice_Age:_The_Meltdown',
+         'https://en.wikipedia.org/wiki/Casino_Royale_(2006_film)',
+         'https://en.wikipedia.org/wiki/Night_at_the_Museum',
+         'https://en.wikipedia.org/wiki/Cars_(film)',
+         'https://en.wikipedia.org/wiki/X-Men:_The_Last_Stand',
+         'https://en.wikipedia.org/wiki/Mission:_Impossible_III',
+         'https://en.wikipedia.org/wiki/Superman_Returns',
+         'https://en.wikipedia.org/wiki/Happy_Feet',
+         'https://en.wikipedia.org/wiki/Harry_Potter_and_the_Goblet_of_Fire_(film)',
+         'https://en.wikipedia.org/wiki/Star_Wars:_Episode_III_%E2%80%93_Revenge_of_the_Sith',
+         'https://en.wikipedia.org/wiki/The_Chronicles_of_Narnia:_The_Lion,_the_Witch_and_the_Wardrobe',
+         'https://en.wikipedia.org/wiki/War_of_the_Worlds_(2005_film)',
+         'https://en.wikipedia.org/wiki/King_Kong_(2005_film)',
+         'https://en.wikipedia.org/wiki/Madagascar_(2005_film)',
+         'https://en.wikipedia.org/wiki/Mr._%26_Mrs._Smith_(2005_film)',
+         'https://en.wikipedia.org/wiki/Charlie_and_the_Chocolate_Factory_(film)',
+         'https://en.wikipedia.org/wiki/Batman_Begins',
+         'https://en.wikipedia.org/wiki/Hitch_(film)',
+         'https://en.wikipedia.org/wiki/Shrek_2',
+         'https://en.wikipedia.org/wiki/Harry_Potter_and_the_Prisoner_of_Azkaban_(film)',
+         'https://en.wikipedia.org/wiki/Spider-Man_2',
+         'https://en.wikipedia.org/wiki/The_Incredibles',
+         'https://en.wikipedia.org/wiki/The_Passion_of_the_Christ',
+         'https://en.wikipedia.org/wiki/The_Day_After_Tomorrow',
+         'https://en.wikipedia.org/wiki/Meet_the_Fockers',
+         'https://en.wikipedia.org/wiki/Troy_(film)',
+         'https://en.wikipedia.org/wiki/Shark_Tale',
+         'https://en.wikipedia.org/wiki/Ocean%27s_Twelve',
+         'https://en.wikipedia.org/wiki/The_Lord_of_the_Rings:_The_Return_of_the_King',
+         'https://en.wikipedia.org/wiki/Finding_Nemo',
+         'https://en.wikipedia.org/wiki/The_Matrix_Reloaded',
+         'https://en.wikipedia.org/wiki/Pirates_of_the_Caribbean:_The_Curse_of_the_Black_Pearl',
+         'https://en.wikipedia.org/wiki/Bruce_Almighty',
+         'https://en.wikipedia.org/wiki/The_Last_Samurai',
+         'https://en.wikipedia.org/wiki/Terminator_3:_Rise_of_the_Machines',
+         'https://en.wikipedia.org/wiki/The_Matrix_Revolutions',
+         'https://en.wikipedia.org/wiki/X2_(film)',
+         'https://en.wikipedia.org/wiki/Bad_Boys_II',
+         'https://en.wikipedia.org/wiki/The_Lord_of_the_Rings:_The_Two_Towers',
+         'https://en.wikipedia.org/wiki/Harry_Potter_and_the_Chamber_of_Secrets_(film)',
+         'https://en.wikipedia.org/wiki/Spider-Man_(2002_film)',
+         'https://en.wikipedia.org/wiki/Star_Wars:_Episode_II_%E2%80%93_Attack_of_the_Clones',
+         'https://en.wikipedia.org/wiki/Men_in_Black_II',
+         'https://en.wikipedia.org/wiki/Die_Another_Day',
+         'https://en.wikipedia.org/wiki/Signs_(film)',
+         'https://en.wikipedia.org/wiki/Ice_Age_(2002_film)',
+         'https://en.wikipedia.org/wiki/My_Big_Fat_Greek_Wedding',
+         'https://en.wikipedia.org/wiki/Minority_Report_(film)',
+         'https://en.wikipedia.org/wiki/Harry_Potter_and_the_Philosopher%27s_Stone_(film)',
+         'https://en.wikipedia.org/wiki/The_Lord_of_the_Rings:_The_Fellowship_of_the_Ring',
+         'https://en.wikipedia.org/wiki/Monsters,_Inc.',
+         'https://en.wikipedia.org/wiki/Shrek',
+         'https://en.wikipedia.org/wiki/Ocean%27s_Eleven',
+         'https://en.wikipedia.org/wiki/Pearl_Harbor_(film)',
+         'https://en.wikipedia.org/wiki/The_Mummy_Returns',
+         'https://en.wikipedia.org/wiki/Jurassic_Park_III',
+         'https://en.wikipedia.org/wiki/Planet_of_the_Apes_(2001_film)',
+         'https://en.wikipedia.org/wiki/Hannibal_(2001_film)',
+         'https://en.wikipedia.org/wiki/Mission:_Impossible_2',
+         'https://en.wikipedia.org/wiki/Gladiator_(2000_film)',
+         'https://en.wikipedia.org/wiki/Cast_Away',
+         'https://en.wikipedia.org/wiki/What_Women_Want',
+         'https://en.wikipedia.org/wiki/Dinosaur_(film)',
+         'https://en.wikipedia.org/wiki/How_the_Grinch_Stole_Christmas_(2000_film)',
+         'https://en.wikipedia.org/wiki/Meet_the_Parents',
+         'https://en.wikipedia.org/wiki/The_Perfect_Storm_(film)',
+         'https://en.wikipedia.org/wiki/X-Men_(film)',
+         'https://en.wikipedia.org/wiki/What_Lies_Beneath')
 
 for(i in 1:length(urls)){
   temp = scrap(urls[i])
   data = rbind(data,temp)
 }
 
+data = data %>% mutate(judul = as.character(judul),
+                       sutradara = as.character(sutradara),
+                       sutradara = gsub('[a]','',sutradara,fixed=T),
+                       aktors = as.character(aktors))
+
 str(data)
 ```
 
 Berapa banyak film yang saya dapatkan?
 
-```{r,warning=FALSE,message=FALSE}
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
 length(unique(data$judul))
 ```
+
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+final = data.frame(from = data$sutradara,
+                   to = data$aktors)
+final = distinct(final)
+
+final = 
+final %>% mutate(panjang = stringr::str_length(to)) %>%
+  filter(panjang < 25)
+
+graph_from_data_frame(final) %>%
+  ggraph(layout = 'fr') +
+  geom_edge_link(color='darkred',alpha=.4) +
+  geom_node_point(size=2,color='steelblue') +
+  geom_node_text(aes(label=name),size=2,alpha=.3) +
+  theme_void()
+ggsave('cobian.png',width = 8, height = 7,dpi=700)
+```
+
