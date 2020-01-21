@@ -292,7 +292,7 @@ final = distinct(final)
 
 final = 
 final %>% mutate(panjang = stringr::str_length(to)) %>%
-  filter(panjang < 25)
+  filter(panjang < 25) %>% select(from,to)
 
 graph_from_data_frame(final) %>%
   ggraph(layout = 'fr') +
@@ -303,3 +303,35 @@ graph_from_data_frame(final) %>%
 ggsave('cobian.png',width = 8, height = 7,dpi=700)
 ```
 
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+library(dils)
+
+final$id=1
+tes = AdjacencyFromEdgelist(final)
+hasil = tes$adjacency
+colnames(hasil) = tes$nodelist
+rownames(hasil) = tes$nodelist
+
+library(sna)
+close = sna::closeness(hasil)
+between = sna::betweenness(hasil)
+degree = sna::degree(hasil)
+
+analisa.hasil = data.frame(nama=tes$nodelist,
+                           close,
+                           between,
+                           degree)
+
+analisa.hasil %>% filter(degree > 10) %>% arrange(desc(degree))
+
+g = graph.adjacency(hasil,weighted = T, mode='undirected')
+g = simplify(g)
+
+set.seed(3952)
+layout1 = layout.fruchterman.reingold(g)
+png('between.png',width = 1024,height = 768,units = 'px');plot(g, layout=layout1,edge.curved=0.1,vertex.label.cex=0.5,vertex.size=between/2);dev.off()
+
+
+fc = fastgreedy.community(as.undirected(g))
+analisa.hasil$member = membership(fc)
+```
