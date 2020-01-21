@@ -9,13 +9,11 @@ rm(list=ls())
 setwd("/cloud/project/Bukan Infografis/Frequent Collaborators")
 ```
 
-Percaya atau tidak, dalam bekerja biasanya kita memilih rekan kerja yang memang kita nyaman bekerja dengannya. Hal ini berlaku untuk semua bidang pekerjaan. 
-
-Sama saat para sutradara terbaik dunia dalam membuat film, ternyata ada beberapa aktor atau aktris yang menjadi __langganan__ mereka untuk bekerja sama.
+Percaya atau tidak, dalam bekerja biasanya kita memilih rekan kerja yang memang kita nyaman bekerja dengannya. Hal ini berlaku untuk semua bidang pekerjaan. Sama halnya saat para sutradara terbaik dunia dalam membuat film, ternyata ada beberapa aktor atau aktris yang menjadi __langganan__ mereka untuk bekerja sama.
 
 Terinspirasi dari [__Six Degree of Kevin Bacon__](https://en.m.wikipedia.org/wiki/Six_Degrees_of_Kevin_Bacon), saya iseng akan membuat aktor atau aktris siapa yang memiliki koneksi kerjasama banyak dengan sutradara-sutradara tersebut.
 
-Datanya akan saya scrap dari informasi detail yang tersedia di __Wikipedia__ yah.
+Saya akan mengambil data detail dari __Wikipedia__ terkait 10 film dengan _highest grossing_ dari tahun 2000 - 2019.
 
 Contohnya, pada film [Spider-Man: Far From Home](https://en.wikipedia.org/wiki/Spider-Man:_Far_From_Home), data hasil _scrap_-nya seperti ini:
 
@@ -62,7 +60,7 @@ data = scrap(url)
 data
 ```
 
-Nah, kita akan _scrap_ data 10 film dengan _highest grossing_ dari tahun 2000 - 2019. Kita dapatkan data sebagai berikut:
+
 
 ```{r,echo=FALSE,warning=FALSE,message=FALSE}
 urls = c('https://en.wikipedia.org/wiki/Avengers:_Endgame',
@@ -284,6 +282,7 @@ Berapa banyak film yang saya dapatkan?
 length(unique(data$judul))
 ```
 
+Kalau kita buat _network diagram_-nya, kita dapatkan bentuk seperti [ini](https://github.com/ikanx101/belajaR/raw/master/Bukan%20Infografis/Frequent%20Collaborators/cobian.png):
 
 ```{r,echo=FALSE,warning=FALSE,message=FALSE}
 final = data.frame(from = data$sutradara,
@@ -300,7 +299,7 @@ graph_from_data_frame(final) %>%
   geom_node_point(size=2,color='steelblue') +
   geom_node_text(aes(label=name),size=2,alpha=.3) +
   theme_void()
-ggsave('cobian.png',width = 8, height = 7,dpi=700)
+ggsave('cobian.png',width = 12, height = 8,dpi=700)
 ```
 
 ```{r,echo=FALSE,warning=FALSE,message=FALSE}
