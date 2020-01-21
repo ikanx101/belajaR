@@ -32,13 +32,6 @@ data %>% filter(grepl('far from',judul,ignore.case = T))
 ```
 
 
-
-```{r,echo=FALSE,warning=FALSE,message=FALSE}
-
-
-str(data)
-```
-
 Berapa banyak film yang saya dapatkan?
 
 ```{r,echo=FALSE,warning=FALSE,message=FALSE}
@@ -65,6 +58,12 @@ graph_from_data_frame(final) %>%
 ggsave('cobian.png',width = 12, height = 8,dpi=700)
 ```
 
+Rumit _gak sih ngeliat_-nya?
+
+_Oke_, sekarang kita lihat siapa yang menjadi _center of the diagram_ yah.
+
+Kalau kita menghitung [betweenness dan degree](https://passingthroughresearcher.wordpress.com/2019/11/15/social-network-analysis-meramu-tim-interviewer-terkompak-di-market-research/), didapatkan:
+
 ```{r,echo=FALSE,warning=FALSE,message=FALSE}
 library(dils)
 
@@ -75,25 +74,27 @@ colnames(hasil) = tes$nodelist
 rownames(hasil) = tes$nodelist
 
 library(sna)
-close = sna::closeness(hasil)
 between = sna::betweenness(hasil)
 degree = sna::degree(hasil)
 
 analisa.hasil = data.frame(nama=tes$nodelist,
-                           close,
                            between,
                            degree)
 
-analisa.hasil %>% filter(degree > 10) %>% arrange(desc(degree))
+analisa.hasil %>% filter(degree > 10) %>% arrange(desc(degree)) %>% head(10)
 
-g = graph.adjacency(hasil,weighted = T, mode='undirected')
-g = simplify(g)
+#g = graph.adjacency(hasil,weighted = T, mode='undirected')
+#g = simplify(g)
 
-set.seed(3952)
-layout1 = layout.fruchterman.reingold(g)
-png('between.png',width = 1024,height = 768,units = 'px');plot(g, layout=layout1,edge.curved=0.1,vertex.label.cex=0.5,vertex.size=between/2);dev.off()
+#set.seed(3952)
+#layout1 = layout.fruchterman.reingold(g)
+#png('between.png',width = 1024,height = 768,units = 'px');plot(g, layout=layout1,edge.curved=0.1,vertex.label.cex=0.5,vertex.size=between/2);dev.off()
 
 
-fc = fastgreedy.community(as.undirected(g))
-analisa.hasil$member = membership(fc)
+#fc = fastgreedy.community(as.undirected(g))
+#analisa.hasil$member = membership(fc)
 ```
+
+Ini bentuk dari grafiknya:
+
+![between](https://github.com/ikanx101/belajaR/raw/master/Bukan%20Infografis/Frequent%20Collaborators/between.png)
