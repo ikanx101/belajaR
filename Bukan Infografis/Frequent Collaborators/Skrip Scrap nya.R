@@ -245,4 +245,41 @@ data = data %>% mutate(judul = as.character(judul),
                        sutradara = gsub('[a]','',sutradara,fixed=T),
                        aktors = as.character(aktors))
 
-save(data,file='hasil.rda')
+final = data.frame(from = data$sutradara,
+                   to = data$aktors)
+final = distinct(final)
+
+final = 
+  final %>% mutate(panjang = stringr::str_length(to)) %>%
+  filter(panjang < 25) %>% select(from,to)
+
+
+library(dils)
+
+final$id=1
+tes = AdjacencyFromEdgelist(final)
+hasil = tes$adjacency
+colnames(hasil) = tes$nodelist
+rownames(hasil) = tes$nodelist
+
+library(sna)
+between = sna::betweenness(hasil)
+degree = sna::degree(hasil)
+
+analisa.hasil = data.frame(nama=tes$nodelist,
+                           between,
+                           degree)
+
+g = graph.adjacency(hasil,weighted = T, mode='undirected')
+g = simplify(g)
+
+set.seed(3952)
+layout1 = layout.fruchterman.reingold(g)
+png('between.png',width = 1024,height = 768,units = 'px');plot(g, layout=layout1,edge.curved=0.1,vertex.label.cex=0.5,vertex.size=between/2);dev.off()
+
+
+fc = fastgreedy.community(as.undirected(g))
+analisa.hasil$member = membership(fc)
+
+
+save(data,final,analisa.hasil,file='hasil.rda')

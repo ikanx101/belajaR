@@ -1,0 +1,53 @@
+---
+title: "Monte Carlo Simulation: Same Ages Puzzle"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r,include=FALSE}
+setwd("/cloud/project/Bukan Infografis/puzzles/Puzzle Umur")
+rm(list=ls())
+library(dplyr)
+library(ggplot2)
+library(ggthemes)
+library(ggpubr)
+load('age puzzle.rda')
+```
+
+_Posting_ ini melanjuti _posting_ saya sebelumnya mengenai [simulasi Monte Carlo](https://ikanx101.github.io/blog/wheel-fortune/). Ternyata __faedah__ dari simulasi ini banyak juga _yah_. Salah satunya adalah untuk menyelesaikan _puzzle_ statistik. _hehe_
+
+Sekarang saya punya _puzzle_ berjudul _Same Ages Puzzle_. 
+
+Konon katanya:
+
+> Dalam setiap kelompok `n` orang, pasti ada minimal sepasang orang yang memiliki tanggal lahir yang sama.
+
+Tanggal di sini maksudnya hanya tanggal dan bulannya saja yang sama. Sedangkan tahun kelahiran kita abaikan.
+
+Sekarang pertanyaannya:
+
+1. Bisakah kita buktikan pernyataan tersebut?
+2. Apakah ada `n` tertentu di mana pernyataan tersebut tidak berlaku?
+3. Pada nilai `n` berapa pernyataan tersebut selalu benar?
+
+Sekarang, coba rekan-rekan pikirkan cara untuk menjawab ketiga pertanyaan di atas yah.
+
+Saya coba bantu untuk kasih kunci jawabannya tapi _thinking process_-nya coba dicari yah.
+
+```{r,echo=FALSE}
+data_new %>% ggplot(aes(x=group_number,y=prob*100)) +
+  geom_point(aes(alpha = prob)) +
+  geom_line(group=1,color = 'red',size=1.25,alpha=.3) +
+  theme_bw() +
+  labs(x = 'Banyaknya orang dalam suatu kelompok',
+       y = 'Peluang',
+       title = 'Berapa peluang ada minimal sepasang orang yang memiliki tanggal\nlahir yang sama?',
+       subtitle = 'Solved by Monte Carlo Simulation',
+       caption = 'Visualised using R\n@mr.ikanx') +
+  theme(plot.subtitle = element_text(size=10),
+        plot.caption = element_text(size=10,face='bold.italic'),
+        legend.position = 'none')
+```

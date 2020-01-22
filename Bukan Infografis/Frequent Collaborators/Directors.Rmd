@@ -41,14 +41,6 @@ length(unique(data$judul))
 Kalau kita buat _network diagram_-nya, kita dapatkan bentuk seperti [ini](https://github.com/ikanx101/belajaR/raw/master/Bukan%20Infografis/Frequent%20Collaborators/cobian.png):
 
 ```{r,echo=FALSE,warning=FALSE,message=FALSE}
-final = data.frame(from = data$sutradara,
-                   to = data$aktors)
-final = distinct(final)
-
-final = 
-final %>% mutate(panjang = stringr::str_length(to)) %>%
-  filter(panjang < 25) %>% select(from,to)
-
 graph_from_data_frame(final) %>%
   ggraph(layout = 'fr') +
   geom_edge_link(color='darkred',alpha=.4) +
@@ -65,34 +57,7 @@ _Oke_, sekarang kita lihat siapa yang menjadi _center of the diagram_ yah.
 Kalau kita menghitung [betweenness dan degree](https://passingthroughresearcher.wordpress.com/2019/11/15/social-network-analysis-meramu-tim-interviewer-terkompak-di-market-research/), didapatkan:
 
 ```{r,echo=FALSE,warning=FALSE,message=FALSE}
-library(dils)
-
-final$id=1
-tes = AdjacencyFromEdgelist(final)
-hasil = tes$adjacency
-colnames(hasil) = tes$nodelist
-rownames(hasil) = tes$nodelist
-
-library(sna)
-between = sna::betweenness(hasil)
-degree = sna::degree(hasil)
-
-analisa.hasil = data.frame(nama=tes$nodelist,
-                           between,
-                           degree)
-
 analisa.hasil %>% filter(degree > 10) %>% arrange(desc(degree)) %>% head(10)
-
-#g = graph.adjacency(hasil,weighted = T, mode='undirected')
-#g = simplify(g)
-
-#set.seed(3952)
-#layout1 = layout.fruchterman.reingold(g)
-#png('between.png',width = 1024,height = 768,units = 'px');plot(g, layout=layout1,edge.curved=0.1,vertex.label.cex=0.5,vertex.size=between/2);dev.off()
-
-
-#fc = fastgreedy.community(as.undirected(g))
-#analisa.hasil$member = membership(fc)
 ```
 
 Ini bentuk dari grafiknya:
