@@ -1,0 +1,129 @@
+---
+title: "Another Math Puzzle: Elevator Problem"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+rm(list=ls())
+setwd("/cloud/project/Bukan Infografis/puzzles/Puzzle Lift")
+```
+
+_Gengs_, apakah sudah menemukan cara untuk menyelesaikan [_puzzle_ saya sebelumnya](https://ikanx101.github.io/blog/puzzle-usia/)?
+
+_Nah_, kali ini saya akan memberikan _puzzle_ matematika selanjutnya. Apa itu? Saya berikan judul __Elevator Problem__.
+
+Begini ceritanya:
+
+> Di suatu lift hotel berlantai 15, masuklah tiga orang ke dalam lift tersebut.
+
+Pertanyaannya:
+
+__Berapa peluang tiga lantai yang berurutan dipilih oleh para pengguna lift?__
+
+Misal:
+
+* Orang pertama memilih lantai 5
+* Orang kedua memilih lantai 7
+* Orang ketiga memilih lantai 6
+
+Lantai yang dipilih: `5, 6, 7` disebut __berurutan__. Jadi mana dulu yang dipilih tidak masalah asal ketiga lantai tersebut berurutan secara angka.
+
+____
+
+## Bagaimana menjawab _puzzle_ ini?
+
+_Instead of using paperwork_ dan menghitung peluangnya, saya akan menggunakan cara lain. Sama seperti cara saya menyelesaikan [_puzzle_ sebelumnya](https://ikanx101.github.io/blog/puzzle-usia/): simulasi __Monte Carlo__.
+
+```{r,echo=FALSE}
+# bikin fungsi pertama
+monte1 = function(){
+  push = sample(c(1:15),3,replace=T)
+  push = sort(push)
+  beda = diff(push) == 1
+  hot = ifelse(beda[1]==T & beda[2]==T,1,0)
+  return(hot)
+  }
+
+# bikin fungsi kedua
+prob_hit = function(n){
+  hasil = replicate(n,monte1())
+  prob = sum(hasil)/n
+  return(prob)
+  }
+```
+
+Mungkin ada yang bertanya, apa sih simulasi __Monte Carlo__? Secara simpel, simulasi ini menggunakan prinsip __rules of large random number__.
+
+Salah satu faedahnya adalah untuk mengecek keacakan dari satu [pengundian hadiah](https://ikanx101.github.io/blog/wheel-fortune/).
+
+### Bagaimana melakukan simulasinya?
+
+1. Percobaan pertama:
+  * Misal, saya akan _generate_ 3 _random number_ dari angka 1-15. Hal ini saya lakukan hanya beberapa kali. Misalkan 5 kali saja.
+  * Setiap kejadian __sukses__ akan saya catat. Misalkan, dari 5 kali _generating random number_, ada 1 kali yang memenuhi kondisi 3 lantai berurut. Artinya, peluang munculnya adalah `1/5`.
+2. Percobaan seterusnya:
+  * Saya akan mengulangi proses pertama tapi dengan sebanyak-banyaknya pengulangan. Misalkan, saya akan _generate_ sebanyak 1 juta kali. Peluang terjadinya 3 lantai berurutan adalah berapa kali kondisi tersebut muncul dibagi 1 juta.
+  
+Diharapkan, semakin banyam pengulangan, hasilnya semakin konvergen ke nilai eksak hasil _paperwork_ manual.
+
+Ilustrasi simulasi jika _generating random numbers_ dilakukan satu hingga seratus kali:
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+library(dplyr)
+library(ggplot2)
+library(ggthemes)
+library(ggpubr)
+# kali ini gak pakai looping yah
+# pake sapply agar vector to vector
+data = data.frame(n = c(1:100))
+data$prob = sapply(data$n,prob_hit)
+
+data %>% ggplot(aes(x=n,y=prob)) + 
+  geom_line(group=1,color='darkblue',alpha=.4) +
+  labs(title = 'Peluang Tiga Lantai Berurutan Dipilih',
+       subtitle = 'Simulasi MonteCarlo',
+       caption = 'Simulated and Visualized\nUsing R\n@mr.ikanx',
+       x = 'Banyaknya Pengulangan',
+       y = 'Peluang') +
+  annotate('text',x=50,y=.1,
+           label=paste('Peluangnya',
+                       round(mean(data$prob),4),
+                       sep='=')) +
+  geom_smooth(color='darkred',alpha=.8,method='loess')
+```
+
+Jika dihitung hingga seratus kali pengulangan, didapat peluang tiga lantai dipilih sebesar:
+
+```{r,echo=FALSE}
+round(mean(data$prob),4)
+```
+
+Semakin banyak pengulangan, maka akan semakin akurat hasilnya.
+
+Mari kita lakukan hingga seribu kali pengulangan:
+
+```{r,echo=FALSE}
+data = data.frame(n = c(1:1000))
+data$prob = sapply(data$n,prob_hit)
+
+data %>% ggplot(aes(x=n,y=prob)) +
+  geom_line(group=1,color='darkblue',alpha=.4) +
+  labs(title = 'Peluang Tiga Lantai Berurutan Dipilih',
+       subtitle = 'Simulasi MonteCarlo',
+       x = 'Banyaknya Pengulangan',
+       y = 'Peluang') +
+  annotate('text',x=500,y=.1,
+           label=paste('Peluangnya',
+                       round(mean(data$prob),4),sep='=')) +
+  geom_smooth(color='darkred',alpha=.8,method='loess')
+
+```
+
+Peluangnya menjadi: 
+
+```{r,echo=FALSE}
+round(mean(data$prob),4)
+```
+
+_So, any question_?
