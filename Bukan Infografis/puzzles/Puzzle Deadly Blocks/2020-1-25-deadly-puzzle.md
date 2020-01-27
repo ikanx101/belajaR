@@ -57,16 +57,69 @@ Bagaimana caranya? Dengan simulasi **Monte Carlo** kembali.
 
 Berikut adalah contoh saat saya melempar dadu satu putaran:
 
-    ##    lempar_dadu posisi_bidak
-    ## 1            1            1
-    ## 2            3            4
-    ## 3            3            7
-    ## 4            5           12
-    ## 5            2           14
-    ## 6            3           17
-    ## 7            3           20
-    ## 8            3           23
-    ## 9            6           29
-    ## 10           1           30
+    ##   lempar_dadu posisi_bidak
+    ## 1           5            5
+    ## 2           6           11
+    ## 3           4           15
+    ## 4           2           17
+    ## 5           1           18
+    ## 6           6           24
+    ## 7           3           27
 
 Bagaimana jika saya melempar dadu 5 putaran?
+
+    ## [1] "Putaran ke: 1"
+    ##   lempar_dadu posisi_bidak
+    ## 1           5            5
+    ## 2           6           11
+    ## 3           6           17
+    ## 4           1           18
+    ## 5           6           24
+    ## 6           6           30
+    ## [1] "Putaran ke: 2"
+    ##    lempar_dadu posisi_bidak
+    ## 1            5            5
+    ## 2            1            6
+    ## 3            3            9
+    ## 4            1           10
+    ## 5            2           12
+    ## 6            1           13
+    ## 7            2           15
+    ## 8            2           17
+    ## 9            5           22
+    ## 10           2           24
+    ## 11           3           27
+    ## [1] "Putaran ke: 3"
+    ##   lempar_dadu posisi_bidak
+    ## 1           2            2
+    ## 2           3            5
+    ## 3           2            7
+    ## 4           4           11
+    ## 5           5           16
+    ## 6           4           20
+    ## 7           4           24
+    ## 8           3           27
+    ## [1] "Putaran ke: 4"
+    ##    lempar_dadu posisi_bidak
+    ## 1            1            1
+    ## 2            2            3
+    ## 3            6            9
+    ## 4            2           11
+    ## 5            1           12
+    ## 6            3           15
+    ## 7            4           19
+    ## 8            3           22
+    ## 9            4           26
+    ## 10           2           28
+    ## [1] "Putaran ke: 5"
+    ##    lempar_dadu posisi_bidak
+    ## 1            6            6
+    ## 2            3            9
+    ## 3            3           12
+    ## 4            2           14
+    ## 5            1           15
+    ## 6            1           16
+    ## 7            2           18
+    ## 8            4           22
+    ## 9            2           24
+    ## 10           4           28

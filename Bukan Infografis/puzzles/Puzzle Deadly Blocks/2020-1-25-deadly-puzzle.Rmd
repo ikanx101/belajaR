@@ -53,32 +53,48 @@ ___
 
 Bagaimana caranya? Dengan simulasi __Monte Carlo__ kembali.
 
-Berikut adalah contoh saat saya melempar dadu satu putaran:
+Berikut adalah contoh saat saya melempar dadu satu kali putaran:
 
 ```{r,echo = FALSE}
-lempar_dadu = sample(6,11,replace = TRUE)
+lempar_dadu = sample(6,15,replace = TRUE)
 posisi_bidak = cumsum(lempar_dadu)
 data = data.frame(lempar_dadu,
                   posisi_bidak,
-                  under_30 = posisi_bidak<=30) %>% 
+                  under_30 = posisi_bidak<=32) %>% 
   filter(under_30==T)
 posisi_bidak = data$posisi_bidak
 data %>% mutate(under_30=NULL)
 ```
 
-Bagaimana jika saya melempar dadu 5 putaran?
+_____
+
+Bagaimana jika saya melempar dadu lima kali putaran?
 
 ```{r,echo = FALSE}
 rm(list=ls())
 
 for(i in 1: 5){
-  lempar_dadu = sample(6,11,replace = TRUE)
+  lempar_dadu = sample(6,15,replace = TRUE)
   posisi_bidak = cumsum(lempar_dadu)
   data = data.frame(lempar_dadu,
                     posisi_bidak,
-                    under_30 = posisi_bidak<=30) %>% 
+                    under_30 = posisi_bidak<=32) %>% 
   filter(under_30==T)
   posisi_bidak = data$posisi_bidak
-  data %>% mutate(under_30=NULL)
+  print(paste('Putaran ke:',i,sep=' '))
+  print(data %>% mutate(under_30=NULL))
 }
+```
+
+_____
+
+Bagaimana jika saya melempar dadu jutaan kali putaran? Lalu setiap angka yang keluar akan saya hitung berapa peluang muncul angka tersebut dari jutaan kali putaran itu.
+
+```{r,echo=FALSE}
+rm(list=ls())
+load('hasil run.rda')
+
+data %>% filter(posisi_bidak<=30) %>% ggplot(aes(x=posisi_bidak,y=freq)) %>% 
+
+data %>% group_by(posisi_bidak) %>% summarise(freq = n()/100000) %>% arrange(desc(freq)) %>% head(5)
 ```
