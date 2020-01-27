@@ -88,13 +88,25 @@ for(i in 1: 5){
 
 _____
 
-Bagaimana jika saya melempar dadu jutaan kali putaran? Lalu setiap angka yang keluar akan saya hitung berapa peluang muncul angka tersebut dari jutaan kali putaran itu.
+> Bagaimana jika saya melempar dadu jutaan kali putaran? Lalu setiap angka yang keluar akan saya hitung berapa peluang muncul angka tersebut dari jutaan kali putaran itu.
 
 ```{r,echo=FALSE}
 rm(list=ls())
 load('hasil run.rda')
 
-data %>% filter(posisi_bidak<=30) %>% ggplot(aes(x=posisi_bidak,y=freq)) %>% 
-
-data %>% group_by(posisi_bidak) %>% summarise(freq = n()/100000) %>% arrange(desc(freq)) %>% head(5)
+data %>% group_by(posisi_bidak) %>% summarise(peluang = n()/100000) %>%
+  filter(posisi_bidak<=30) %>% ungroup() %>% 
+  mutate(posisi_bidak = factor(posisi_bidak,levels = posisi_bidak)) %>%
+  ggplot(aes(x=posisi_bidak,y=peluang)) + 
+  geom_point(color='steelblue') +
+  geom_line(group=1,size=1.5,color='darkred',alpha=.5) +
+  theme_light() +
+  labs(x = 'Posisi Bidak',
+       y = 'Peluang',
+       title = 'Dimana saya harus menaruh tiga koin?',
+       subtitle = 'Solved using Monte Carlo Simulation',
+       caption = 'Simulated and Visualized\nUsing R\n@mr.ikanx') +
+  theme(plot.title = element_text(size=20))
 ```
+
+Sudah ada bayangan, mau taruh koin di kotak mana saja?
