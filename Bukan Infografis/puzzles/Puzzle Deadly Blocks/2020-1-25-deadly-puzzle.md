@@ -45,3 +45,28 @@ Bagaimana cara bermainnya:
 ## Pertanyaannya:
 
 > Di kotak nomor berapa saja saya harus menaruh koin?
+
+-----
+
+## Ada yang punya ide bagaimana cara menjawabnya?
+
+> Kita akan mencari **tiga angka** yang memiliki peluang paling tinggi
+> keluar dengan kondisi seperti di atas.
+
+Bagaimana caranya? Dengan simulasi **Monte Carlo** kembali.
+
+Berikut adalah contoh saat saya melempar dadu satu putaran:
+
+    ##    lempar_dadu posisi_bidak
+    ## 1            1            1
+    ## 2            3            4
+    ## 3            3            7
+    ## 4            5           12
+    ## 5            2           14
+    ## 6            3           17
+    ## 7            3           20
+    ## 8            3           23
+    ## 9            6           29
+    ## 10           1           30
+
+Bagaimana jika saya melempar dadu 5 putaran?

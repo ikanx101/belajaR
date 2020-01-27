@@ -44,3 +44,41 @@ ____
 ## Pertanyaannya:
 
 > Di kotak nomor berapa saja saya harus menaruh koin?
+
+___
+
+## Ada yang punya ide bagaimana cara menjawabnya?
+
+> Kita akan mencari __tiga angka__ yang memiliki peluang paling tinggi keluar dengan kondisi seperti di atas.
+
+Bagaimana caranya? Dengan simulasi __Monte Carlo__ kembali.
+
+Berikut adalah contoh saat saya melempar dadu satu putaran:
+
+```{r,echo = FALSE}
+lempar_dadu = sample(6,11,replace = TRUE)
+posisi_bidak = cumsum(lempar_dadu)
+data = data.frame(lempar_dadu,
+                  posisi_bidak,
+                  under_30 = posisi_bidak<=30) %>% 
+  filter(under_30==T)
+posisi_bidak = data$posisi_bidak
+data %>% mutate(under_30=NULL)
+```
+
+Bagaimana jika saya melempar dadu 5 putaran?
+
+```{r,echo = FALSE}
+rm(list=ls())
+
+for(i in 1: 5){
+  lempar_dadu = sample(6,11,replace = TRUE)
+  posisi_bidak = cumsum(lempar_dadu)
+  data = data.frame(lempar_dadu,
+                    posisi_bidak,
+                    under_30 = posisi_bidak<=30) %>% 
+  filter(under_30==T)
+  posisi_bidak = data$posisi_bidak
+  data %>% mutate(under_30=NULL)
+}
+```
