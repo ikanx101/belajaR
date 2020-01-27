@@ -26,7 +26,7 @@ ____
 Bagaimana cara bermainnya:
 
 * _Board_ berisi kotak bernomor dari satu hingga tiga puluh secara berurutan.
-  * Kota nol menjadi posisi awal saya.
+  * Kotak nol menjadi posisi awal saya.
 * Saya diberikan:
   * Tiga koin.
   * Satu dadu.

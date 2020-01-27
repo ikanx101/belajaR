@@ -20,7 +20,7 @@ Bagaimana cara bermainnya:
 
   - *Board* berisi kotak bernomor dari satu hingga tiga puluh secara
     berurutan.
-      - Kota nol menjadi posisi awal saya.
+      - Kotak nol menjadi posisi awal saya.
   - Saya diberikan:
       - Tiga koin.
       - Satu dadu.
@@ -57,76 +57,82 @@ Bagaimana caranya? Dengan simulasi **Monte Carlo** kembali.
 
 Berikut adalah contoh saat saya melempar dadu satu kali putaran:
 
-    ##   lempar_dadu posisi_bidak
-    ## 1           4            4
-    ## 2           4            8
-    ## 3           1            9
-    ## 4           2           11
-    ## 5           2           13
-    ## 6           6           19
-    ## 7           2           21
-    ## 8           6           27
-    ## 9           4           31
+    ##    lempar_dadu posisi_bidak
+    ## 1            2            2
+    ## 2            2            4
+    ## 3            4            8
+    ## 4            6           14
+    ## 5            1           15
+    ## 6            6           21
+    ## 7            3           24
+    ## 8            1           25
+    ## 9            3           28
+    ## 10           3           31
 
 -----
 
 Bagaimana jika saya melempar dadu lima kali putaran?
 
     ## [1] "Putaran ke: 1"
+    ##    lempar_dadu posisi_bidak
+    ## 1            6            6
+    ## 2            2            8
+    ## 3            1            9
+    ## 4            1           10
+    ## 5            6           16
+    ## 6            1           17
+    ## 7            6           23
+    ## 8            2           25
+    ## 9            3           28
+    ## 10           3           31
+    ## [1] "Putaran ke: 2"
+    ##    lempar_dadu posisi_bidak
+    ## 1            1            1
+    ## 2            1            2
+    ## 3            4            6
+    ## 4            1            7
+    ## 5            1            8
+    ## 6            4           12
+    ## 7            3           15
+    ## 8            3           18
+    ## 9            3           21
+    ## 10           4           25
+    ## 11           3           28
+    ## 12           4           32
+    ## [1] "Putaran ke: 3"
     ##   lempar_dadu posisi_bidak
     ## 1           1            1
-    ## 2           6            7
-    ## 3           2            9
-    ## 4           5           14
-    ## 5           4           18
-    ## 6           1           19
+    ## 2           1            2
+    ## 3           4            6
+    ## 4           5           11
+    ## 5           5           16
+    ## 6           3           19
     ## 7           6           25
-    ## 8           5           30
-    ## [1] "Putaran ke: 2"
-    ##   lempar_dadu posisi_bidak
-    ## 1           4            4
-    ## 2           2            6
-    ## 3           6           12
-    ## 4           5           17
-    ## 5           6           23
-    ## 6           2           25
-    ## 7           4           29
-    ## 8           1           30
-    ## [1] "Putaran ke: 3"
-    ##    lempar_dadu posisi_bidak
-    ## 1            5            5
-    ## 2            2            7
-    ## 3            1            8
-    ## 4            2           10
-    ## 5            2           12
-    ## 6            1           13
-    ## 7            1           14
-    ## 8            3           17
-    ## 9            6           23
-    ## 10           4           27
-    ## 11           1           28
-    ## 12           2           30
+    ## 8           2           27
+    ## 9           5           32
     ## [1] "Putaran ke: 4"
     ##   lempar_dadu posisi_bidak
-    ## 1           6            6
-    ## 2           6           12
-    ## 3           6           18
-    ## 4           5           23
-    ## 5           4           27
-    ## 6           3           30
-    ## 7           1           31
-    ## 8           1           32
-    ## [1] "Putaran ke: 5"
-    ##   lempar_dadu posisi_bidak
     ## 1           4            4
-    ## 2           6           10
-    ## 3           1           11
-    ## 4           6           17
-    ## 5           3           20
-    ## 6           3           23
-    ## 7           4           27
-    ## 8           1           28
-    ## 9           3           31
+    ## 2           4            8
+    ## 3           5           13
+    ## 4           3           16
+    ## 5           4           20
+    ## 6           4           24
+    ## 7           3           27
+    ## 8           5           32
+    ## [1] "Putaran ke: 5"
+    ##    lempar_dadu posisi_bidak
+    ## 1            2            2
+    ## 2            1            3
+    ## 3            5            8
+    ## 4            5           13
+    ## 5            6           19
+    ## 6            4           23
+    ## 7            3           26
+    ## 8            1           27
+    ## 9            1           28
+    ## 10           2           30
+    ## 11           2           32
 
 -----
 
