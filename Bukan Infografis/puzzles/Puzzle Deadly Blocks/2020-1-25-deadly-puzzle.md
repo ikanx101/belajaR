@@ -28,7 +28,7 @@ Bagaimana cara bermainnya:
   - Saya harus memilih dan menaruh tiga koin di tiga kotak berbeda.
       - Setelah menaruh koin, saya tidak diperbolehkan untuk
         mengubahnya.
-  - Lalu saya diharusnya melempar dadu.
+  - Lalu saya diharuskan melempar dadu.
       - Saya akan memindahkan bidak sesuai dengan angka yang keluar di
         dadu.
       - Proses ini terus berulang hingga selesai tiga puluh kotak

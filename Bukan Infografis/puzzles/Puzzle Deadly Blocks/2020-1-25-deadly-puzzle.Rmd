@@ -33,7 +33,7 @@ Bagaimana cara bermainnya:
   * Satu bidak.
 * Saya harus memilih dan menaruh tiga koin di tiga kotak berbeda. 
   * Setelah menaruh koin, saya tidak diperbolehkan untuk mengubahnya. 
-* Lalu saya diharusnya melempar dadu.
+* Lalu saya diharuskan melempar dadu.
   * Saya akan memindahkan bidak sesuai dengan angka yang keluar di dadu. 
   * Proses ini terus berulang hingga selesai tiga puluh kotak dilalui oleh bidak saya.
 * Seandainya dalam seluruh proses ini, bidak saya __tidak pernah sama sekali berhenti di kotak yang memiliki koin__, maka saya akan dieksekusi. 
