@@ -27,19 +27,20 @@ library(rvest)
 
 url = 'https://en.wikipedia.org/wiki/2019%E2%80%9320_Wuhan_coronavirus_outbreak'
 tes = read_html(url) %>% html_table(fill=T)
-data = tes[[5]] 
-data_lain = tes[[3]] 
+data = tes[[4]] 
+data_lain = tes[[5]] 
 
 # bebersih data pertama
-colnames(data) = c('negara','infected','death','ref')
+colnames(data) = c('negara','infected','death','ref','xx')
 data$ref = NULL
+data$xx = NULL
 data = data %>% 
   mutate(infected = gsub('\\,','',infected), 
          death = gsub('\\,','',death),
          infected = as.numeric(infected),
          death = as.numeric(death)) %>%
-  select(negara,death,infected) %>%
-  filter(negara != 'Total')
+  select(negara,death,infected)
+data = data[-19:-21,]
 
 # chart dari data pertama
 data %>% reshape2::melt(id.vars = 'negara') %>%

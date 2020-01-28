@@ -1,0 +1,104 @@
+---
+title: "Math Puzzle: HR Interview Overbooking"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+rm(list=ls())
+setwd("/cloud/project/Bukan Infografis/puzzles/HR Interview Overbooking")
+library(dplyr)
+library(ggplot2)
+library(ggpubr)
+```
+
+Apakah Kamu sudah selesai menyelesaikan [tiga puzzles di blog](https://ikanx101.github.io/tags/#monte-carlo) ini?
+
+Sekarang ada _puzzle_ ke empat. Terinspirasi dari _Airline Overbooking Problem_, saya modifikasi sedikit dengan memasukkan _local wisdom_ yah. _heee_
+
+____
+
+Jadi begini ceritanya:
+
+> Setiap hari, tim HR di suatu perusahaan memanggil __75 orang__ kandidat karyawan untuk dites. Kenapa 75 orang? Karena ruang aula dan peralatan yang ada di perusahaan itu hanya mampu menampung 75 orang kandidat. Berdasarkan data historikal, biasanya hanya __85%__ saja yang datang.
+
+Oleh karena itu, tim HR berinisiatif untuk memanggil lebih dari 75 orang sebagai _buffer_ agar ruangan aulanya bisa dipenuhi.
+
+Jika peserta yang datang kurang dari `75` orang, tim HR rugi Rp 50.000 per orang karena mubazir katering. __TAPI__, jika kandidat yang datang melebihi kapasitas ruang aula, tim HR harus menyewa peralatan tambahan kepada pihak luar sebesar Rp 100.000 per orang dan menambah Rp 50.000 per orang untuk katering.
+
+> Berapa banyaknya kandidat yang harus dipanggil oleh tim HR sehingga ruang aula penuh tanpa harus menyewa peralatan dari pihak luar dan tanpa ada _overbudget_ katering?
+
+_____
+
+## Jawaban _Logic_
+
+Simpelnya, jika kita memiliki kondisi:
+
+1. Dari `75` orang yang dipanggil hanya `85%` yang datang.
+2. Aula harus penuh tanpa _over capacity_.
+
+Maka kita tinggal menghitung `n` orang kandidat sedemikian sehingga akan datang `75` orang kandidat.
+
+```{r}
+n = 75 / (89/100)
+round(n,0)
+```
+
+Cukup `84` orang kandidat saja.
+
+Jawaban ini tanpa memperhitungkan kerugian yang ditimbulkan saat terjadi kekurangan atau kelebihan kandidat.
+
+____
+
+## Jawaban Simulasi
+
+Sekarang, kita akan lakukan simulasi __Monte Carlo__ untuk mendapatkan jawaban dan mencocokkannya dengan jawaban di atas.
+
+Untuk kasus ini, saya akan mencari keoptimalan di bagian `biaya` yang dikeluarkan HR. Logikanya sederhana:
+
+1. Jika kandidat yang datang `n < 75`, maka HR akan merugi sebesar `n * 50` ribu rupiah.
+2. Jika kandidat yang datang `n > 75`, maka HR akan merugi sebesar `n * (50+100)` ribu rupiah.
+3. 2. Jika kandidat yang datang `n = 75`, maka HR tidak mengeluarkan biaya apa-apa.
+
+_So_, apakah ada penambahan _buffer_ yang menghasilkan `biaya = 0`?
+
+```{r,echo=FALSE}
+rm(list=ls())
+kapasitas = 75
+peluang = .85
+biaya = 100 #dalam ribu
+katering = 50 #dalam ribu
+
+# buat fungsi untuk menghitung berapa banyak kandidat yang datang
+# dari 75 kandidat + buffer
+biaya_over = function(n){
+  tes = sample(c(T,F),kapasitas+n,replace = T,prob = c(peluang,1-peluang))
+  datang = sum(tes)
+  kelebihan = datang - kapasitas
+  kelebihan = ifelse(kelebihan<=0,abs(kelebihan),kelebihan)
+  biaya_hr = (kelebihan*biaya) + (kelebihan*katering)
+  return(biaya_hr)
+}
+
+buffer_max = 25
+
+simulasi = 100
+
+result = data.frame(buffer_n = NA,biaya_n = NA)
+
+buffer_min = 1
+
+for(i in 1:simulasi){
+  result[i,] = c(buffer_min,biaya_over(buffer_min))
+}
+
+k = simulasi+1
+for(buffer in 2:buffer_max){
+  for(i in 1:simulasi){
+  result[k,] = c(buffer,biaya_over(buffer))
+  k = k+1
+  }
+}
+
+result %>% ggplot(aes(x=as.factor(buffer_n),y=biaya_n)) + geom_boxplot()
+```
