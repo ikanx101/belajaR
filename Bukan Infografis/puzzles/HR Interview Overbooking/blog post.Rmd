@@ -14,19 +14,22 @@ library(ggpubr)
 
 Apakah Kamu sudah selesai menyelesaikan [tiga puzzles di blog](https://ikanx101.github.io/tags/#monte-carlo) ini?
 
-Sekarang ada _puzzle_ ke empat. Terinspirasi dari _Airline Overbooking Problem_, saya modifikasi sedikit dengan memasukkan _local wisdom_ yah. _heee_
+Sekarang ada _puzzle_ ke empat. Terinspirasi dari _Airline Overbooking Problem_, saya modifikasi sedikit dengan memasukan _local wisdom_ yah. _heee_
 
 ____
 
 Jadi begini ceritanya:
 
-> Setiap hari, tim HR di suatu perusahaan memanggil __75 orang__ kandidat karyawan untuk dites. Kenapa 75 orang? Karena ruang aula dan peralatan yang ada di perusahaan itu hanya mampu menampung 75 orang kandidat. Berdasarkan data historikal, biasanya hanya __85%__ saja yang datang.
+> Tim HR di suatu perusahaan menggunakan jasa biro psikologi untuk melakukan seleksi kandidat karyawan. Setiap minggunya, tim HR menelepon dan memanggil __75 orang__ kandidat karyawan untuk dites oleh biro tersebut. Kenapa 75 orang? Karena ruang aula dan peralatan yang ada di biro itu hanya mampu menampung 75 orang kandidat. Berdasarkan data historikal, biasanya hanya __85%__ saja yang datang.
 
-Oleh karena itu, tim HR berinisiatif untuk memanggil lebih dari 75 orang sebagai _buffer_ agar ruangan aulanya bisa dipenuhi.
+Oleh karena itu, tim HR berinisiatif untuk memanggil lebih dari 75 orang sebagai _buffer_ agar kuota dan ruangan aulanya bisa dipenuhi.
 
-Jika peserta yang datang kurang dari `75` orang, tim HR rugi Rp 50.000 per orang karena mubazir katering. __TAPI__, jika kandidat yang datang melebihi kapasitas ruang aula, tim HR harus menyewa peralatan tambahan kepada pihak luar sebesar Rp 100.000 per orang dan menambah Rp 50.000 per orang untuk katering.
+Kondisi yang dihadapi:
 
-> Berapa banyaknya kandidat yang harus dipanggil oleh tim HR sehingga ruang aula penuh tanpa harus menyewa peralatan dari pihak luar dan tanpa ada _overbudget_ katering?
+- Jika peserta yang datang kurang dari `75` orang, tim HR rugi Rp 100.000 per orang karena mubazir _man power_ dari biro dan katering kandidat. 
+- __TAPI__, jika kandidat yang datang melebihi kapasitas ruang aula, tim HR harus menyewa peralatan tambahan kepada pihak biro sebesar Rp 100.000 per orang dan menambah Rp 30.000 per orang untuk katering.
+
+> Berapa banyaknya kandidat yang harus dipanggil oleh tim HR sehingga ruang aula penuh tanpa harus menyewa peralatan dari pihak biro dan tanpa ada _overbudget_ katering?
 
 _____
 
@@ -56,18 +59,20 @@ Sekarang, kita akan lakukan simulasi __Monte Carlo__ untuk mendapatkan jawaban d
 
 Untuk kasus ini, saya akan mencari keoptimalan di bagian `biaya` yang dikeluarkan HR. Logikanya sederhana:
 
-1. Jika kandidat yang datang `n < 75`, maka HR akan merugi sebesar `n * 50` ribu rupiah.
-2. Jika kandidat yang datang `n > 75`, maka HR akan merugi sebesar `n * (50+100)` ribu rupiah.
-3. 2. Jika kandidat yang datang `n = 75`, maka HR tidak mengeluarkan biaya apa-apa.
+1. Jika kandidat yang datang `n < 75`, maka HR akan merugi sebesar `n*100` ribu rupiah.
+2. Jika kandidat yang datang `n > 75`, maka HR akan merugi sebesar `n*(100+30)` ribu rupiah.
+3. Jika kandidat yang datang `n = 75`, maka HR tidak mengeluarkan biaya apa-apa.
 
-_So_, apakah ada penambahan _buffer_ yang menghasilkan `biaya = 0`?
+_So_, apakah ada penambahan _buffer_ yang menghasilkan `biaya` yang paling kecil?
+
+Jadi _personally_, masalah ini berubah menjadi optimasi _instead of probabilistic problem_.
 
 ```{r,echo=FALSE}
 rm(list=ls())
 kapasitas = 75
 peluang = .85
 biaya = 100 #dalam ribu
-katering = 50 #dalam ribu
+katering = 30 #dalam ribu
 
 # buat fungsi untuk menghitung berapa banyak kandidat yang datang
 # dari 75 kandidat + buffer
@@ -100,5 +105,16 @@ for(buffer in 2:buffer_max){
   }
 }
 
-result %>% ggplot(aes(x=as.factor(buffer_n),y=biaya_n)) + geom_boxplot()
+result %>% ggplot(aes(x=as.factor(buffer_n),y=biaya_n)) + geom_boxplot() +
+  labs(title = 'Berapa biaya yang keluar saat buffer kandidat sebesar ... ?',
+       subtitle = 'Solved using Monte Carlo Simulation',
+       caption = 'Simulated and Visualized\nUsing R\n@mr.ikanx',
+       x = 'Banyaknya buffer',
+       y = 'Biaya yang muncul') +
+  theme(axis.text.y = element_blank(),
+        plot.title = element_text(face='bold'))
 ```
+
+> Dari simulasi di atas, ternyata kita bisa memanggil lebih dari `84` orang.
+
+_Menarique yah_.
