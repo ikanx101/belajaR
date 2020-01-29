@@ -1,0 +1,133 @@
+---
+title: "Coupon Collector"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+setwd("/cloud/project/Bukan Infografis/puzzles/Coupon Collector")
+rm(list=ls())
+library(dplyr)
+library(ggplot2)
+```
+
+Sudah membereskan [empat _puzzles_](https://ikanx101.github.io/tags/#monte-carlo) sebelumnya? Kini saya akan membahas suatu _puzzle_ yang sering kita lihat dan mungkin pernah kita alami di kehidupan sehari - hari.
+
+Judulnya: __Coupon collector's problem__.
+
+_____
+
+Begini ceritanya:
+
+> Suatu perusahaan minuman soda botolan membuat sayembara. Mereka menaruh __empat__ kupon dibalik tutup botolnya, yakni: A, B, C, dan D. Barangsiapa yang bisa mengumpulkan keempat kuponnya, akan diberikan hadiah uang sebesar 1.000 USD.
+
+Dengan asumsi setiap kupon terdistribusi merata di pasar, harus berapa banyak botol yang kita beli agar bisa mendapatkan 4 kupon tersebut?
+
+___
+
+## Bagaimana cara menjawabnya?
+
+Jika keempat kupon tersebut terdistribusi merata, artinya masing-masing kupon memiliki proporsi yang sama, yakni `1/4`.
+
+Mari kita lakukan kembali simulasi __Monte Carlo__ untuk mencari harus beraa botol yang dibeli sehingga keempat kupon tersebut terkumpul!
+
+Kali ini, saya akan lakukan iterasi hingga 9.000 kali yah.
+
+```{r}
+# Coupon collector's problem
+# Misal harus dapet tutup botol lengkap A-B-C-D
+# Equal probabilities
+
+tutup_botol = function(){
+  sample(c(1:4),1,replace = T)
+}
+
+beli_botol = function(){
+  punya = c()
+  while(length(unique(punya))<4){
+    punya = c(punya,tutup_botol())
+  }
+  length(punya)
+}
+
+iter = 9000 #mau berapa x iterasi?
+berapa_x_transaksi = replicate(iter,beli_botol())
+
+mean(berapa_x_transaksi)
+```
+
+Ternyata dibutuhkan rata-rata sekitar `8` buah botol agar kita bisa mendapatkan ke empat kupon tersebut. Rata-rata di sini adalah _expected value_ untuk mendapatkan empat kupon.
+
+Kalau saya buat grafik _cumulative probability_-nya, jadinya seperti ini:
+
+```{r,echo=FALSE}
+data.frame(id = c(1:length(berapa_x_transaksi)),berapa_x_transaksi) %>% 
+  group_by(berapa_x_transaksi) %>% summarise(freq = n(),
+                                             persen = freq/iter,
+                                             persen = round(persen*100,2)) %>%
+  ungroup() %>%
+  select(berapa_x_transaksi,persen) %>%
+  ggplot(aes(x = as.factor(berapa_x_transaksi),y = cumsum(persen))) + 
+  geom_line(group=1) +
+  labs(title = 'Berapa banyak botol yang harus dibeli agar ke empat kupon didapatkan?',
+       subtitle = 'Solved using Monte Carlo',
+       caption = 'Simulated and Visualized\nUsing R\n@mr.ikanx',
+       x = 'Banyak botol',
+       y = 'Cumulative Prob')
+```
+
+____
+
+_So_, kalau dipikir-pikir lagi, perusahaan ini berhasil membuat setiap konsumennya (setidaknya) membeli delapan buah botol sampai semua kupon itu berhasil didapatkan.
+
+Jika proporsi masing-masing kupon tidak sama, misal ada yang lebih kecil atau besar dibanding yang lain, maka bisa dipastikan _expected value_-nya akan berubah menjadi lebih besar.
+
+Contoh:
+
+Kupon __A__ lebih mudah ditemukan dibandingkan kupon B, C, dan D.
+
+- A ~ `76.9%`
+- B+C+D ~ `23%` (ketiganya proporsional)
+
+
+Maka didapatkan _expected value_ sebesar:
+
+```{r,echo=FALSE}
+# Coupon collector's problem
+# Misal harus dapet tutup botol lengkap A-B-C-D
+# Not Equal probabilities
+rm(list=ls())
+
+tutup_botol = function(){
+  sample(c(1,1,1,1,1,1,1,1,1,1:4),1,replace = T)
+}
+
+beli_botol = function(){
+  punya = c()
+  while(length(unique(punya))<4){
+    punya = c(punya,tutup_botol())
+  }
+  length(punya)
+}
+
+iter = 9000 #mau berapa x iterasi?
+berapa_x_transaksi = replicate(iter,beli_botol())
+
+mean(berapa_x_transaksi)
+
+data.frame(id = c(1:length(berapa_x_transaksi)),berapa_x_transaksi) %>% 
+  group_by(berapa_x_transaksi) %>% summarise(freq = n(),
+                                             persen = freq/iter,
+                                             persen = round(persen*100,2)) %>%
+  ungroup() %>%
+  select(berapa_x_transaksi,persen) %>%
+  ggplot(aes(x = as.factor(berapa_x_transaksi),y = cumsum(persen))) + 
+  geom_line(group=1) +
+  labs(title = 'Berapa banyak botol yang harus dibeli agar ke empat kupon didapatkan?\nUnequal Probabilities',
+       subtitle = 'Solved using Monte Carlo',
+       caption = 'Simulated and Visualized\nUsing R\n@mr.ikanx',
+       x = 'Banyak botol',
+       y = 'Cumulative Prob') +
+  theme(axis.text.x = element_text(angle=90,size=5))
+```
