@@ -1,0 +1,145 @@
+---
+title: "Biaya di Sekolah Baru si Sulung"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("/cloud/project/Bukan Infografis/puzzles/Sekolah Baru")
+rm(list=ls())
+``` 
+
+Ceritanya di tahun ajaran baru, InsyaAllah si Sulung akan pindah sekolah. Dari sekolah lamanya yang relatif dekat rumah ke sekolah baru yang relatif jauh dari rumah (tapi lebih dekat ke kantor saya).
+
+> _Bismillah_, pikir saya.
+
+Salah satu konsekuensi _real_ dari perubahan ini adalah pos biaya transportasi sekolah menjadi lebih besar. Seharusnya seperti itu.
+
+_____
+
+Kondisinya seperti ini:
+
+__Berangkat Sekolah__
+
+* Biasanya saya yang akan mengantar si Sulung.
+  * Moda transportasi yang digunakan biasanya adalah motor. Tapi ada kondisi di mana saya harus ke Bogor, sehingga nantinya saya harus mengantarkannya menggunakan mobil (agar saya bisa langsung berangkat). Kondisi ini sebenarnya cukup jarang. Hanya sekali dari 20 hari kerja. 
+  * Hitungan kasar saya, motor menghabiskan Rp3.000 - Rp8.000
+  * Sedangkan mobil, menghabiskan Rp10.000 - Rp20.000
+  
+__Pulang Sekolah__
+
+* Biasanya nyonya yang akan menjemput si sulung dengan mobil. Tapi jika mobil saya bawa, terpaksa nyonya akan menggunakan jasa Go-Car atau Grab-Car untuk menjemputnya.
+  * Hitungan dengan mobil, sekitar Rp15.000 - Rp25.000 (karena pp rumah - sekolah)
+  * Hitungan dengan taksi online, sekitar Rp35.000 - Rp50.000
+  
+____
+
+> Berdasarkan informasi di atas, bisakah saya hitung berapa perkiraan biaya bulanan untuk antar jemput si Sulung?
+
+Asumsi: sebulan adalah 20 hari kerja.
+
+____
+
+# Simulasi __Monte Carlo__ (lagi)
+
+Entah kenapa saya sedang senang-senangnya melakukan simulasi ini. Kemampuannya dalam memperkirakan semua kemungkinan yang mungkin keluar menjadi kekuatan utamanya.
+
+Oke, _gak_ usah lama-lama, kita mulai simulasinya sebagai berikut:
+
+```{r,include=FALSE,message=FALSE,warning=FALSE}
+library(dplyr)
+library(ggplot2)
+```
+
+## Bikin fungsi `biaya_bulanan`
+
+Saya mulai dengan membuat fungsi yang bisa menghitung berapa besar biaya bulanan dari kondisi-kondisi yang ada.
+
+```{r,message=FALSE,warning=FALSE}
+biaya_bulanan = function(){
+saya_antar = sample(c(T,F),
+                    20,
+                    replace = T,
+                    prob = c(19/20,1/20))
+biaya_pagi = ifelse(saya_antar == T,
+                    sample(c(3:8),1),
+                    sample(c(10:20),1))
+
+biaya_pagi = sum(biaya_pagi)
+
+
+biaya_sore = ifelse(saya_antar == T,
+                    sample(c(15:25),1),
+                    sample(c(35:50),1))
+
+biaya_sore = sum(biaya_sore)
+biaya_sebulan = biaya_pagi + biaya_sore
+return(biaya_sebulan)}
+```
+
+## Lakukan simulasi dengan iterasi yang banyak
+
+Sekarang kita lakukan prinsip __Monte Carlo__-nya:
+
+```{r}
+# bikin fungsi simulasi
+simulasi = function(iter){
+  k = 1
+  cost = c()
+  for(i in 2:iter){
+    temp = biaya_bulanan()
+    cost = c(cost,temp)
+  }
+  return(mean(cost))
+}
+
+# saya akan iterasi sebanyak 2500 kali
+result = data.frame(banyak_iterasi = c(3:2500))
+result$biaya = sapply(result$banyak_iterasi,
+                      simulasi)
+
+# 10 hasil iterasi teratas
+head(result,10)
+
+# 10 hasil iterasi terbawah
+tail(result,10)
+```
+
+_Expected value_ biaya transportasi bulanan si sulung adalah sebesar: (dalam ribu rupiah)
+
+```{r,echo=FALSE}
+# Expected result
+mean(result$biaya)
+result %>% ggplot(aes(x=as.factor(banyak_iterasi),
+                      y=biaya)) +
+  geom_point(size=.5,alpha=.4) +
+  theme_minimal() +
+  labs(title = 'Berapa Biaya Bulanan Transport si Sulung?',
+       subtitle = 'Solved using Monte Carlo',
+       caption ='Simulated and Visualized\nUsing R\n@mr.ikanx',
+       x = 'Banyak iterasi dilakukan',
+       y = 'Biaya dalam ribu rupiah') +
+  theme(axis.text.x = element_blank())
+```
+
+Jika kita lihat grafik di atas. semakin banyak saya melakukan iterasi, maka nilai hasil simulasinya akan konvergen ke satu nilai.
+
+Oke, saya akan melakukan _extra miles_ dengan melihat sebaran data biaya hasil simulasi.
+
+Jadi hanya mengambil sumbu Y dari grafik di atas lalu membuat histogramnya.
+
+```{r,echo=FALSE}
+result %>% ggplot(aes(x=biaya)) +
+  geom_histogram(binwidth = 1,
+                 color='grey',
+                 fill='steelblue',
+                 alpha=.4) +
+  theme_minimal() +
+  labs(x='Biaya Bulanan Transport si Sulung',
+       title='Sebaran Biaya Hasil Simulasi',
+       subtitle='Simulated using Monte Carlo',
+       caption='Simulated and Visualized\nUsing R\n@mr.ikanx') +
+  theme(axis.title.y = element_blank(),
+        axis.text.y = element_blank())
+```
+
