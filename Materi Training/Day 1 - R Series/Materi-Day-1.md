@@ -63,9 +63,7 @@ pengolahan data.
 Materi *training* ini saya kumpulkan dari berbagai sumber dan saya
 *customize* sesuai dengan kebutuhan **Nutrifood** berdasarkan pengalaman
 selama ini berkutat dengan data yang ada (dari mulai data pabrik hingga
-*finance*). Semoga menjadi manfaat bagi *Nutrifooders* semua. Terima
-kasih kepada **Lenny Wibisana** dan **Teguh Prasetia** yang telah ikut
-berkontribusi pada penyusunan materi ini.
+*finance*). Semoga menjadi manfaat bagi *Nutrifooders* semua.
 
 ## 1.1 Sejarah
 
@@ -901,6 +899,13 @@ nomor_1
     ##  [1]  1  2  3  4  5  6  7  8  9 10
 
 ``` r
+# perintah untuk menghitun gcumulative sum
+cumsum(nomor_1)
+```
+
+    ##  [1]  1  3  6 10 15 21 28 36 45 55
+
+``` r
 nomor_2 = seq(1,10,0.4) # generating sequence dari 1 hingga 10 dengan jeda 0.4
 nomor_2
 ```
@@ -930,40 +935,218 @@ nama_orang = randomNames::randomNames(20)
 nama_orang
 ```
 
-    ##  [1] "Gaitonde, Monica"              "Bauer, Matthew"               
-    ##  [3] "Eickmann, Audrey"              "al-Othman, Nabeel"            
-    ##  [5] "Saravanan, Makanaalohaonalani" "Nguyen, Joshua"               
-    ##  [7] "Coley, Brendon"                "Lucero, Sonnia"               
-    ##  [9] "Tso, Sabrina"                  "al-Farran, Nazeema"           
-    ## [11] "Mort, Jessica"                 "Carter, Infinity"             
-    ## [13] "Fair, Hannah"                  "Williams, Quayshawn"          
-    ## [15] "Matt, Matiyassa"               "Dixon, Cyenna"                
-    ## [17] "Stewart, Osue"                 "al-Ghazi, Saleel"             
-    ## [19] "Sisneros, Gloria"              "Anderson, Jaelyn"
+    ##  [1] "Klocker, Tiffine"        "el-Moghaddam, Lateefa"  
+    ##  [3] "Gonzalez, Sasha"         "Nguyen, Anthony"        
+    ##  [5] "Castro, Alejandro"       "Mcilhone O'Hara, Alvian"
+    ##  [7] "Hughes, Donisha"         "el-Saleem, Mu,Aawiya"   
+    ##  [9] "Dattore, David"          "Vue, Ash"               
+    ## [11] "Makaiwi, Riley"          "Greenlee, Jeffrey"      
+    ## [13] "al-Rehman, Naafoora"     "Robinson, Shaekia"      
+    ## [15] "el-Beshara,  Saalih"     "Sainbayar, Padua"       
+    ## [17] "Artichoker, Jacob"       "Arnold, Ashlee"         
+    ## [19] "el-Tawil, Habeeba"       "Ponce, Danielle"
 
 ``` r
 sample(nama_orang,3,replace = F)
 ```
 
-    ## [1] "Gaitonde, Monica" "Fair, Hannah"     "Anderson, Jaelyn"
+    ## [1] "Greenlee, Jeffrey" "Gonzalez, Sasha"   "el-Tawil, Habeeba"
 
 `replace = F` digunakan saat kita tidak ingin ada pemilihan yang
 berulang. Sedangkan `replace = T` digunakan saat diperbolehkan hasil
 pemilihan berulang. Coba *run* sendiri *yah*.
 
+Perintah `sample()` ini akan sangat berguna saat kita hendak menggunakan
+prinsip simulasi [**Monte
+Carlo**](https://ikanx101.github.io/tags/#monte-carlo).
+
+#### 3.2.2.7 *Repeat*
+
+Adakalanya kita hendak melakukan pengulangan yang simpel. *Instead of
+using looping*, kita bisa menggunakan perintah `rep()`.
+    Misalkan:
+
+``` r
+rep('belajar R',3)
+```
+
+    ## [1] "belajar R" "belajar R" "belajar R"
+
+``` r
+rep(c(4:8),10)
+```
+
+    ##  [1] 4 5 6 7 8 4 5 6 7 8 4 5 6 7 8 4 5 6 7 8 4 5 6 7 8 4 5 6 7 8 4 5 6 7 8
+    ## [36] 4 5 6 7 8 4 5 6 7 8 4 5 6 7 8
+
+``` r
+tinggi_badan = c(120,132,142,90)
+rep(mean(tinggi_badan),4)
+```
+
+    ## [1] 121 121 121 121
+
+Jadi perintah `rep()` tidak hanya bisa untuk mengulang suatu single
+variabel atau *vector* saja tapi bisa digunakan untuk mengulang suatu
+fungsi.
+
+Apa perbedaan dengan fungsi `repeat()`? Fungsi `repeat()` biasanya
+digunakan dalam *looping* dan baru akan berhenti saat diberikan perintah
+`break`.
+
 ### 3.2.3 Tibble atau Data Frame
+
+*Tibble* atau *data frame* adalah struktur data di **R** berupa tabel.
+Analogi sederhananya adalah mirip dengan tabel di **Ms. Excel** *files*.
+
+*Data frame* bisa dibentuk dari beberapa *vector* yang memiliki
+`length()` yang sama. Contohnya:
+
+``` r
+id = c(1:10)
+nama = randomNames::randomNames(10,gender = 0,which.names = 'first')
+tinggi_badan = sample(c(150:199),10,replace = F)
+
+absensi = data.frame(id,nama,tinggi_badan)
+absensi
+```
+
+    ##    id   nama tinggi_badan
+    ## 1   1 Ziyaad          165
+    ## 2   2  Marco          176
+    ## 3   3   Mark          185
+    ## 4   4 Tyrone          160
+    ## 5   5   Khoa          164
+    ## 6   6 Isaiah          192
+    ## 7   7 Joshua          169
+    ## 8   8  David          156
+    ## 9   9  Ramzi          155
+    ## 10 10  Corey          154
+
+Bentuk *data frame* kelak akan menjadi primadona dalam setiap analisa
+yang digunakan di **R**. Nanti saat kita belajar *data carpentry*
+menggunakan `tidyverse`, struktur *data frame* mudah dimanipulasi dengan
+*piping operator*: `%>%`.
 
 ### 3.2.4 *Missing values* `NA`
 
+*Missing values* adalah suatu nilai yang kosong pada suatu data. Kosong
+berarti tidak berisi data apapun. Bedakan dengan nilai `0` yah\!
+
+> `NA` tidak akan diikutsertakan dalam perhitungan sedangkan `0`
+> diikutsertakan.
+
+Di **R**, nilai `NA` pada data numerik akan membuat *error* setiap kali
+dihitung.
+
+Contoh:
+
+``` r
+data_1 = c(3,5,0,6,8,3)
+mean(data_1)
+```
+
+    ## [1] 4.166667
+
+``` r
+data_2 = c(3,5,NA,6,8,3)
+mean(data_2)
+```
+
+    ## [1] NA
+
+Bagaimana cara mengecek keberadaan `NA` di data kita?
+
+Kita bisa menggunakan fungsi `is.na()`. *Output* dari fungsi ini adalah
+*boolean variable* berupa `TRUE` atau `FALSE`.
+
+``` r
+# mengecek apakah ada NA di data_2
+is.na(data_2)
+```
+
+    ## [1] FALSE FALSE  TRUE FALSE FALSE FALSE
+
+``` r
+# membuat tabulasi dari is.na()
+table(is.na(data_2))
+```
+
+    ## 
+    ## FALSE  TRUE 
+    ##     5     1
+
+``` r
+# menghitung TRUE)
+sum(is.na(data_2))
+```
+
+    ## [1] 1
+
+``` r
+# mengecek apakah ada data yang TIDAK NA di data_2
+!is.na(data_2)
+```
+
+    ## [1]  TRUE  TRUE FALSE  TRUE  TRUE  TRUE
+
 ## 3.3 Beberapa Fungsi yang Berguna
 
-paste print str summary class View
+### 3.3.1 *Paste*
 
-## 3.3 *Some useful function*
+> Apakah kalian mengetahui fungsi bernama **CONCATENATE** di
+> **Ms. Excel**?
 
-### 3.3.1 *Looping*
+Fungsi `paste()` mirip penggunaannya dengan perintah **CONCATENATE**,
+yakni menggabungkan beberapa data menjadi satu.
 
-### 3.3.2 *Regex*
+Contoh:
+
+``` r
+nama_toko = paste('toko ke',c(1:10),sep='-')
+nama_toko
+```
+
+    ##  [1] "toko ke-1"  "toko ke-2"  "toko ke-3"  "toko ke-4"  "toko ke-5" 
+    ##  [6] "toko ke-6"  "toko ke-7"  "toko ke-8"  "toko ke-9"  "toko ke-10"
+
+``` r
+nama_toko = paste(nama_toko,rep(c('Bandung','Bekasi'),5))
+nama_toko
+```
+
+    ##  [1] "toko ke-1 Bandung" "toko ke-2 Bekasi"  "toko ke-3 Bandung"
+    ##  [4] "toko ke-4 Bekasi"  "toko ke-5 Bandung" "toko ke-6 Bekasi" 
+    ##  [7] "toko ke-7 Bandung" "toko ke-8 Bekasi"  "toko ke-9 Bandung"
+    ## [10] "toko ke-10 Bekasi"
+
+`sep =` berguna untuk mendefinisikan *separator* apa yang hendak
+digunakan. Secara *default*, *separator* yang digunakan adalah spasi.
+
+Coba kalian ganti sendiri bagian *separator*-nya.
+
+### 3.3.2 *Print*
+
+Fungsi `print()` digunakan untuk menampilkan data ke layar. Biasanya
+digunakan pada proses *looping* agar hasil iterasi dapat tampil ke
+layar.
+
+``` r
+print(nama_toko)
+```
+
+    ##  [1] "toko ke-1 Bandung" "toko ke-2 Bekasi"  "toko ke-3 Bandung"
+    ##  [4] "toko ke-4 Bekasi"  "toko ke-5 Bandung" "toko ke-6 Bekasi" 
+    ##  [7] "toko ke-7 Bandung" "toko ke-8 Bekasi"  "toko ke-9 Bandung"
+    ## [10] "toko ke-10 Bekasi"
+
+str summary class View Regex
+
+## 3.4 *Some useful function*
+
+### 3.4.1 *Looping*
+
+### 3.4.2 *Regex*
 
 -----
 
@@ -984,3 +1167,5 @@ paste print str summary class View
     browser](https://passingthroughresearcher.wordpress.com/2019/11/13/oleh-oleh-pelatihan-hari-kedua-r-studio-cloud/).
 8.  [NOMNOML: How to make diagram in
     R](https://cran.r-project.org/web/packages/nomnoml/index.html).
+9.  [Beberapa *puzzles* yang bisa diselesaikan dengan simulasi **Monte
+    Carlo**](https://ikanx101.github.io/tags/#monte-carlo).

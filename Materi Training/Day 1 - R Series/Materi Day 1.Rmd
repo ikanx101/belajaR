@@ -58,7 +58,7 @@ Bagaimana dengan __Python__?
 
 Berbeda dengan __R__ yang memang dibangun untuk kebutuhan _data science_, __Python__ membutuhkan _libraries_ setiap kali melakukan pengolahan data.
 
-Materi _training_ ini saya kumpulkan dari berbagai sumber dan saya _customize_ sesuai dengan kebutuhan __Nutrifood__ berdasarkan pengalaman selama ini berkutat dengan data yang ada (dari mulai data pabrik hingga _finance_). Semoga menjadi manfaat bagi _Nutrifooders_ semua. Terima kasih kepada __Lenny Wibisana__ dan __Teguh Prasetia__ yang telah ikut berkontribusi pada penyusunan materi ini. 
+Materi _training_ ini saya kumpulkan dari berbagai sumber dan saya _customize_ sesuai dengan kebutuhan __Nutrifood__ berdasarkan pengalaman selama ini berkutat dengan data yang ada (dari mulai data pabrik hingga _finance_). Semoga menjadi manfaat bagi _Nutrifooders_ semua. 
 
 
 ## 1.1 Sejarah
@@ -520,6 +520,9 @@ Contoh:
 nomor_1 = c(1:10)
 nomor_1
 
+# perintah untuk menghitun gcumulative sum
+cumsum(nomor_1)
+
 nomor_2 = seq(1,10,0.4) # generating sequence dari 1 hingga 10 dengan jeda 0.4
 nomor_2
 ```
@@ -546,22 +549,114 @@ sample(nama_orang,3,replace = F)
 
 `replace = F` digunakan saat kita tidak ingin ada pemilihan yang berulang. Sedangkan `replace = T` digunakan saat diperbolehkan hasil pemilihan berulang. Coba _run_ sendiri _yah_.
 
+Perintah `sample()` ini akan sangat berguna saat kita hendak menggunakan prinsip simulasi [__Monte Carlo__](https://ikanx101.github.io/tags/#monte-carlo).
+
+#### 3.2.2.7 _Repeat_ 
+
+Adakalanya kita hendak melakukan pengulangan yang simpel. _Instead of using looping_, kita bisa menggunakan perintah `rep()`. Misalkan:
+
+```{r}
+rep('belajar R',3)
+rep(c(4:8),10)
+
+tinggi_badan = c(120,132,142,90)
+rep(mean(tinggi_badan),4)
+```
+
+Jadi perintah `rep()` tidak hanya bisa untuk mengulang suatu single variabel atau _vector_ saja tapi bisa digunakan untuk mengulang suatu fungsi.
+
+Apa perbedaan dengan fungsi `repeat()`? Fungsi `repeat()` biasanya digunakan dalam _looping_ dan baru akan berhenti saat diberikan perintah `break`.
+
 ### 3.2.3 Tibble atau Data Frame
+
+_Tibble_ atau _data frame_ adalah struktur data di __R__ berupa tabel. Analogi sederhananya adalah mirip dengan tabel di __Ms. Excel__ _files_.
+
+_Data frame_ bisa dibentuk dari beberapa _vector_ yang memiliki `length()` yang sama. Contohnya:
+
+```{r}
+id = c(1:10)
+nama = randomNames::randomNames(10,gender = 0,which.names = 'first')
+tinggi_badan = sample(c(150:199),10,replace = F)
+
+absensi = data.frame(id,nama,tinggi_badan)
+absensi
+```
+
+Bentuk _data frame_ kelak akan menjadi primadona dalam setiap analisa yang digunakan di __R__. Nanti saat kita belajar _data carpentry_ menggunakan `tidyverse`, struktur _data frame_ mudah dimanipulasi dengan _piping operator_: `%>%`.
 
 ### 3.2.4 _Missing values_ `NA`
 
+_Missing values_ adalah suatu nilai yang kosong pada suatu data. Kosong berarti tidak berisi data apapun. Bedakan dengan nilai `0` yah!
+
+> `NA` tidak akan diikutsertakan dalam perhitungan sedangkan `0` diikutsertakan. 
+
+Di __R__, nilai `NA` pada data numerik akan membuat _error_ setiap kali dihitung.
+
+Contoh:
+
+```{r}
+data_1 = c(3,5,0,6,8,3)
+mean(data_1)
+
+data_2 = c(3,5,NA,6,8,3)
+mean(data_2)
+```
+
+Bagaimana cara mengecek keberadaan `NA` di data kita?
+
+Kita bisa menggunakan fungsi `is.na()`. _Output_ dari fungsi ini adalah _boolean variable_ berupa `TRUE` atau `FALSE`.
+
+```{r}
+# mengecek apakah ada NA di data_2
+is.na(data_2)
+# membuat tabulasi dari is.na()
+table(is.na(data_2))
+# menghitung TRUE)
+sum(is.na(data_2))
+
+# mengecek apakah ada data yang TIDAK NA di data_2
+!is.na(data_2)
+```
+
 ## 3.3 Beberapa Fungsi yang Berguna
-paste
-print
+
+### 3.3.1 _Paste_
+
+> Apakah kalian mengetahui fungsi bernama __CONCATENATE__ di __Ms. Excel__?
+
+Fungsi `paste()` mirip penggunaannya dengan perintah __CONCATENATE__, yakni menggabungkan beberapa data menjadi satu.
+
+Contoh:
+
+```{r}
+nama_toko = paste('toko ke',c(1:10),sep='-')
+nama_toko
+
+nama_toko = paste(nama_toko,rep(c('Bandung','Bekasi'),5))
+nama_toko
+```
+
+`sep = ` berguna untuk mendefinisikan _separator_ apa yang hendak digunakan. Secara _default_, _separator_ yang digunakan adalah spasi.
+
+Coba kalian ganti sendiri bagian _separator_-nya.
+
+### 3.3.2 _Print_
+
+Fungsi `print()` digunakan untuk menampilkan data ke layar. Biasanya digunakan pada proses _looping_ agar hasil iterasi dapat tampil ke layar.
+
+```{r}
+print(nama_toko)
+```
+
 str
 summary
 class
 View
+Regex
 
-
-## 3.3 _Some useful function_
-### 3.3.1 _Looping_
-### 3.3.2 _Regex_
+## 3.4 _Some useful function_
+### 3.4.1 _Looping_
+### 3.4.2 _Regex_
 
 ___
 
@@ -575,3 +670,4 @@ ___
 6. [Bookdown, e-book from R Markdown](https://bookdown.org/).
 7. [Menggunakan R Studio Cloud di Android browser](https://passingthroughresearcher.wordpress.com/2019/11/13/oleh-oleh-pelatihan-hari-kedua-r-studio-cloud/).
 8. [NOMNOML: How to make diagram in R](https://cran.r-project.org/web/packages/nomnoml/index.html).
+9. [Beberapa _puzzles_ yang bisa diselesaikan dengan simulasi __Monte Carlo__](https://ikanx101.github.io/tags/#monte-carlo).
