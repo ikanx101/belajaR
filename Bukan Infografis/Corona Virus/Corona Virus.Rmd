@@ -39,7 +39,7 @@ data = data %>%
          infected = as.numeric(infected),
          death = as.numeric(death)) %>%
   select(negara,death,infected)
-data = data[-19:-21,]
+data = data[-21:-22,]
 
 # chart dari data pertama
 data %>% reshape2::melt(id.vars = 'negara') %>%
