@@ -81,8 +81,7 @@ for(i in 2:length(url)){
 # social network graph
 library(igraph)
 library(ggraph)
-news = data.frame(id = 1:length(data$nama),
-                  from = data$nama,
+news = data.frame(from = data$nama,
                   to = data$bahan)
 
 graph_from_data_frame(news) %>%
