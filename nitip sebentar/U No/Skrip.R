@@ -35,7 +35,7 @@ cek(41)
 for(i in 2:length(all_tbls)){
   if(cek(i) == 3){
     data = rbind(data,all_tbls[[i]])
-  } else(rm(temp))
+  }
 }
 
 openxlsx::write.xlsx(data,'hasil coba-coba.xlsx')

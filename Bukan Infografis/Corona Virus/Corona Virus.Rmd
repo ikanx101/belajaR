@@ -26,8 +26,8 @@ library(rvest)
 
 url = 'https://en.wikipedia.org/wiki/2019%E2%80%9320_Wuhan_coronavirus_outbreak'
 tes = read_html(url) %>% html_table(fill=T)
-data = tes[[4]] 
-data_lain = tes[[5]] 
+data = tes[[5]] 
+data_lain = tes[[4]] 
 
 # bebersih data pertama
 colnames(data) = c('negara','infected','death','ref','xx')
@@ -39,7 +39,7 @@ data = data %>%
          infected = as.numeric(infected),
          death = as.numeric(death)) %>%
   select(negara,death,infected)
-data = data[-21:-22,]
+data = data[-29:-30,]
 
 # chart dari data pertama
 data %>% reshape2::melt(id.vars = 'negara') %>%
@@ -48,7 +48,7 @@ data %>% reshape2::melt(id.vars = 'negara') %>%
   geom_label(aes(label=value),size=2.5) +
   theme_minimal() +
   labs(title = 'Wuhan coronavirus outbreak by country',
-       subtitle = paste('Last update:',hari_ini,sep=' '),
+       subtitle = paste('Last update:',hari_ini,'UTC',sep=' '),
        fill = 'Keterangan',
        caption = 'Scraped and Visualized\nUsing R\n@mr.ikanx') +
   scale_fill_brewer(palette="Reds") +
@@ -58,17 +58,20 @@ data %>% reshape2::melt(id.vars = 'negara') %>%
         plot.title = element_text(face='bold',size=16))
 
 # bebersih data pertama
+library(tidyr)
+library(tidytext)
 colnames(data_lain) = c('tanggal','xx','xxx','infected','xxxx')
 data_lain %>% select(tanggal,infected) %>%
-  mutate(infected = gsub('\\,','',infected), 
-         infected = as.numeric(infected)) %>%
+  mutate(infected = gsub('\\,','',infected)) %>%
+  separate(infected,into = c('infected','hapus')) %>%
+  mutate(infected = as.numeric(infected)) %>%
   filter(!is.na(infected)) %>%
   ggplot(aes(x=tanggal,y=infected)) +
   geom_line(group=1,color = 'darkred') +
   geom_label(aes(label = infected),size=2.5) +
   theme_minimal() +
   labs(title = 'Infected people in Mainland China',
-       subtitle = paste('Last update:',hari_ini,sep=' '),
+       subtitle = paste('Last update:',hari_ini,'UTC',sep=' '),
        caption = 'Scraped and Visualized\nUsing R\n@mr.ikanx') +
   theme(axis.text.x = element_text(angle=90),
         axis.title = element_blank(),
