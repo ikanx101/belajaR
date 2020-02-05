@@ -1,0 +1,95 @@
+---
+title: "Untitled"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+rm(list=ls())
+setwd("/cloud/project/Bukan Infografis/Resep Koki")
+
+rm(list=ls())
+library(rvest)
+library(dplyr)
+library(tidyr)
+
+# ambil link dari website
+ambil_link = function(utama){
+  links = read_html(utama) %>% html_nodes('a') %>% html_attr('href')
+  dummy = 
+    data.frame(id = c(1:length(links)),
+               links) %>%
+    filter(grepl('/resep/',links,fixed = T))
+  url = as.character(dummy$links)
+  return(url)
+}
+
+# ambil data dari url
+scrap = function(url){
+  bahan = read_html(url) %>% 
+    html_nodes('.ingredient-action+ td') %>% 
+    html_text()
+  dummy = data.frame(id = c(1:length(bahan)),
+                     bahan) %>%
+    separate(bahan,into = c('xx','bahan','xxx'),sep = '\\\n')
+  bahan = as.character(dummy$bahan)
+  data = data.frame(nama = url,
+                    bahan) %>%
+    mutate(nama = gsub('https://resepkoki.id/resep/','',nama),
+           nama = gsub('\\-',' ',nama),
+           nama = gsub('\\/',' ',nama)) %>%
+    separate(bahan,into = c('bahan','dummy'),sep='\\,') %>%
+    select(nama,bahan) %>% 
+    mutate(bahan = tolower(bahan)) %>%
+    distinct()
+  return(data)
+}
+```
+
+
+```{r}
+# ambil semua link resep
+sites = paste('https://resepkoki.id/category/kue-roti/page/',
+              c(1:21),
+              '/',
+              sep = '')
+
+# mulai iterasi ke 1
+i = 1
+url = ambil_link(sites[i])
+
+# mulai lagi iterasi dari 2 sampai selesai
+for(i in 2:21){
+  temp = ambil_link(sites[i])
+  url = c(url,temp)
+}
+
+# jangan sampai ada yang dobel
+url = unique(url)
+
+
+# sekarang ambil data dari masing2 situsnya
+i = 1
+data = scrap(url[i])
+
+for(i in 2:length(url)){
+  temp = scrap(url[i])
+  data = rbind(data,temp)
+}
+
+# social network graph
+library(igraph)
+library(ggraph)
+news = data.frame(id = 1:length(data$nama),
+                  from = data$nama,
+                  to = data$bahan)
+
+graph_from_data_frame(news) %>%
+  ggraph(layout = 'fr') +
+  geom_edge_link(color='darkred',alpha=.4) +
+  geom_node_point(size=2,color='steelblue') +
+  geom_node_text(aes(label=name),size=2) +
+  theme_void()
+ggsave('resep.png',width = 8, height = 7,dpi=700)
+```
