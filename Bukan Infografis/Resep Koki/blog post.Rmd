@@ -84,11 +84,25 @@ library(ggraph)
 news = data.frame(from = data$nama,
                   to = data$bahan)
 
+# beberes air
+news = 
+news %>% mutate(to = as.character(to),
+                to = ifelse(grepl('santan',to),'santan',to),
+                to = ifelse(grepl('air',to),'air',to),
+                to = ifelse(grepl('terigu',to),'terigu',to),
+                to = ifelse(grepl('telur',to),'telur',to),
+                to = ifelse(grepl('gula merah',to),'gula merah',to),
+                to = ifelse(grepl('margarin',to),'margarin',to),
+                to = ifelse(grepl('dark cooking chocolate',to),'dark cooking chocolate',to),
+                to = ifelse(grepl('coklat',to),'coklat',to),
+                to = ifelse(grepl('gula',to),'gula',to),
+                to = ifelse(grepl('pewarna',to),'pewarna makanan',to)) 
+
 graph_from_data_frame(news) %>%
   ggraph(layout = 'fr') +
   geom_edge_link(color='darkred',alpha=.4) +
   geom_node_point(size=2,color='steelblue') +
   geom_node_text(aes(label=name),size=2) +
   theme_void()
-ggsave('resep.png',width = 8, height = 7,dpi=700)
+ggsave('resep.png',width = 10, height = 12,dpi=700)
 ```
