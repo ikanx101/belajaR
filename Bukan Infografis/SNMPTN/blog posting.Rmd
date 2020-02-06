@@ -1,0 +1,78 @@
+---
+title: "SNMPTN 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE,message=FALSE,warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("/cloud/project/Bukan Infografis/SNMPTN")
+
+rm(list=ls())
+
+library(dplyr)
+library(rvest)
+
+rm(list=ls())
+
+url = 'https://web.snmptn.ac.id/ptn'
+
+link = read_html(url) %>% html_nodes('.no+ td > a') %>% html_attr('href')
+
+url = paste('https://web.snmptn.ac.id',link,sep='')
+
+ambil_data = function(url){
+  univ = read_html(url) %>% html_node('.col-sm-7 h3') %>% html_text()
+  data = data.frame()
+  datest = read_html(url) %>% html_table(fill=T)
+  for(i in 1:length(datest)){
+    temp = datest[[i]]
+    if(length(temp) == 5){
+      data = rbind(data,temp)
+    }
+  }
+  data$univ = univ
+  return(data)
+}
+
+# iterasi 
+new_data = data.frame()
+for(i in 1:85){
+  temp_data = ambil_data(url[i])
+  new_data = rbind(new_data,temp_data)
+}
+```
+
+_Bismillah_,
+
+Ceritanya di tahun ini saya ingin meneruskan studi lanjut ke jenjang S2. Pilihan jatuh ke Magister Teknik Industri Universitas Indonesia. 
+
+> Kenapa ke Teknik Industri? Kenapa di UI?
+
+# Kenapa di UI?
+
+Sejujurnya, inginnya kembali ke ITB _sih_. Tapi berhubung saya _gak_ bisa dan mau mengambil _unpaid leave_ selama kuliah ini, makanya saya memilih universitas terbaik di Indonesia yang terdekat dengan Bekasi - Jakarta.
+
+# Kenapa Teknik Industri?
+
+Tadinya _sih_ mau balik lagi ke Matematika dan meneruskan studi terkait _data_ dan _computational science_. Tapi karena _gak_ mungkin di ITB, lalu ternyata magister TI di UI ada peminatan terkait _data_, maka saya pilihlah jurusan ini.
+
+Doakan agar saya bisa masuk ke sana yah... _Aamiin_
+
+____
+
+
+Cukup cerita tentang saya _yah_, sekarang kembali ke judul utama.
+
+Sembari saya mempersiapkan ujian masuk S2, di luar sana ribuan (mungkin jutaan) pelajar SMA sedang mempersiapkan diri untuk mengikuti Seleksi Nasional Masuk Perguruan Tinggi ([SNMPT](https://web.snmptn.ac.id/)). Dulu waktu zaman saya muda, namanya SPMB _yah_. _heeee_
+
+Ternyata sekarang universitas yang ikut ke SNMPTN semakin banyak. Jurusan pilihan studi juga semakin banyak. Sekarang kita lihat yah, jurusan studi apa saja yang memiliki daya tampung tinggi dan jurusan studi apa yang memiliki daya tampung rendah.
+
+
+```{r,warning=FALSE,message=FALSE,include=FALSE}
+library(ggplot2)
+library(ggpubr)
+
+colnames(new_data) = janitor::make_clean_names(colnames(new_data))
+
+new_data %>% group_by(program_studi) %>% summarise(total = sum(d_t)) %>% arrange(desc(total))
+```
