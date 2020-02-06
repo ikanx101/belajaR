@@ -16,7 +16,7 @@ Sebagai seorang yang setengah _scientist_, saya menyarankan Anda agar membaca in
 
 Sementara ini, jangan dipercaya dulu informasi dari sumber selain di atas.
 
-Berikut adalah grafik dari data yang dihimpun dari berbagai sumber. Saya akan update kondisinya setiap hari pukul `11 pagi WIB` atau `4 UTC`.
+Berikut adalah grafik dari data yang dihimpun dari berbagai sumber. Kondisi ini adalah yang paling _update_ per `6 Februari 2020` pukul `12 WIB`.
 
 ```{r,echo=FALSE,warning=FALSE,message=FALSE}
 library(dplyr)
@@ -30,22 +30,25 @@ data = tes[[5]]
 data_lain = tes[[4]] 
 
 # bebersih data pertama
-colnames(data) = c('negara','infected','death','ref','xx')
-data$ref = NULL
-data$xx = NULL
+colnames(data) = c('negara','infected','death','recovered','x','xx')
 data = data %>% 
+  select(negara,death,infected,recovered) %>%
   mutate(infected = gsub('\\,','',infected), 
          death = gsub('\\,','',death),
+         recovered = gsub('\\,','',recovered),
          infected = as.numeric(infected),
-         death = as.numeric(death)) %>%
-  select(negara,death,infected)
-data = data[-29:-30,]
+         death = as.numeric(death),
+         recovered = as.numeric(recovered))
+  
+data = data[-29:-31,]
 
 # chart dari data pertama
-data %>% reshape2::melt(id.vars = 'negara') %>%
+data %>% 
+  reshape2::melt(id.vars = 'negara') %>%
+  filter(variable != 'recovered') %>%
   ggplot(aes(x=reorder(negara,-value),y=value,fill=variable)) + 
   geom_bar(stat="identity",color="black",size=.1,position=position_dodge()) +
-  geom_label(aes(label=value),size=2.5) +
+  geom_label(aes(label=value),size=2) +
   theme_minimal() +
   labs(title = 'Wuhan coronavirus outbreak by country',
        subtitle = paste('Last update:',hari_ini,'UTC',sep=' '),
@@ -57,7 +60,25 @@ data %>% reshape2::melt(id.vars = 'negara') %>%
         axis.text.y = element_blank(),
         plot.title = element_text(face='bold',size=16))
 
-# bebersih data pertama
+# chart dari data pertama
+data %>% 
+  reshape2::melt(id.vars = 'negara') %>%
+  filter(variable != 'infected') %>%
+  ggplot(aes(x=reorder(negara,-value),y=value,fill=variable)) + 
+  geom_bar(stat="identity",color="black",size=.1,position=position_dodge()) +
+  geom_label(aes(label=value),size=2) +
+  theme_minimal() +
+  labs(title = 'Wuhan coronavirus outbreak by country',
+       subtitle = paste('Last update:',hari_ini,'UTC',sep=' '),
+       fill = 'Keterangan',
+       caption = 'Scraped and Visualized\nUsing R\n@mr.ikanx') +
+  scale_fill_brewer(palette="Reds") +
+  theme(axis.text.x = element_text(angle=90),
+        axis.title = element_blank(),
+        axis.text.y = element_blank(),
+        plot.title = element_text(face='bold',size=16))
+
+# bebersih data kedua
 library(tidyr)
 library(tidytext)
 colnames(data_lain) = c('tanggal','xx','xxx','infected','xxxx')

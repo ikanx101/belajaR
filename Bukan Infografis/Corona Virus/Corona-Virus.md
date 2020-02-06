@@ -15,8 +15,8 @@ membaca informasi seputar virus ini di situs yang *reliable* seperti
 Sementara ini, jangan dipercaya dulu informasi dari sumber selain di
 atas.
 
-Berikut adalah grafik dari data yang dihimpun dari berbagai sumber. Saya
-akan update kondisinya setiap hari pukul `11 pagi WIB` atau `4
-UTC`.
+Berikut adalah grafik dari data yang dihimpun dari berbagai sumber.
+Kondisi ini adalah yang paling *update* per `6 Februari 2020` pukul `12
+WIB`.
 
-![](Corona-Virus_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->![](Corona-Virus_files/figure-gfm/unnamed-chunk-1-2.png)<!-- -->
+![](Corona-Virus_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->![](Corona-Virus_files/figure-gfm/unnamed-chunk-1-2.png)<!-- -->![](Corona-Virus_files/figure-gfm/unnamed-chunk-1-3.png)<!-- -->

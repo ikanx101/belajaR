@@ -67,7 +67,7 @@ for(i in 2:21){
 
 # jangan sampai ada yang dobel
 url = unique(url)
-
+url = url[1:100]
 
 # sekarang ambil data dari masing2 situsnya
 i = 1
@@ -87,6 +87,7 @@ news = data.frame(from = data$nama,
 # beberes air
 news = 
 news %>% mutate(to = as.character(to),
+                to = ifelse(grepl('essen',to),'essence',to),
                 to = ifelse(grepl('santan',to),'santan',to),
                 to = ifelse(grepl('air',to),'air',to),
                 to = ifelse(grepl('terigu',to),'terigu',to),
@@ -107,14 +108,73 @@ news %>% mutate(to = as.character(to),
                 to = ifelse(grepl('kayu manis',to),'kayu manis',to),
                 to = ifelse(grepl('singkong',to),'singkong',to),
                 to = ifelse(grepl('pandan',to),'pandan',to),
-                to = ifelse(grepl('kacang hijau',to),'kacang hijau',to),
+                to = ifelse(grepl('kacang',to),'kacang (all)',to),
                 to = ifelse(grepl('jagung',to),'jagung',to),
                 to = ifelse(grepl('pisang',to),'pisang',to),
                 to = ifelse(grepl('vanilla',to),'vanilla',to),
                 to = ifelse(grepl('ubi',to),'ubi',to),
                 to = ifelse(grepl('cabai',to),'cabai',to),
                 to = ifelse(grepl('kopi',to),'kopi',to),
-                to = ifelse(grepl('coffee',to),'kopi',to)) 
+                to = ifelse(grepl('coffee',to),'kopi',to),
+                to = ifelse(grepl('vanila',to),'vanilla',to),
+                to = ifelse(grepl('buah',to),'buah (all)',to),
+                to = ifelse(grepl('kental',to),'SKM',to),
+                to = ifelse(grepl('susu',to),'susu',to),
+                to = ifelse(grepl('lemon',to),'buah (all)',to),
+                to = ifelse(grepl('apel',to),'buah (all)',to),
+                to = ifelse(grepl('manisan',to),'manisan',to),
+                to = ifelse(grepl('sprinkle',to),'sprinkles',to),
+                to = ifelse(grepl('tusuk',to),'tusuk',to),
+                to = ifelse(grepl('cherry',to),'cherry',to),
+                to = ifelse(grepl('daun bawang',to),'daun bawang',to),
+                to = ifelse(grepl('ayam',to),'ayam',to),
+                to = ifelse(grepl('bawang putih',to),'bawang putih',to),
+                to = ifelse(grepl('bawang merah',to),'bawang merah',to),
+                to = ifelse(grepl('bombay',to),'bawang bombay',to),
+                to = ifelse(grepl('madu',to),'madu',to),
+                to = ifelse(grepl('sirup',to),'sirup',to),
+                to = ifelse(grepl('cream',to),'cream',to),
+                to = ifelse(grepl('palm sugar',to),'gula merah',to),
+                to = ifelse(grepl('kecap',to),'kecap',to),
+                to = ifelse(grepl('skm',to),'SKM',to),
+                to = ifelse(grepl('almond',to),'almond',to),
+                to = ifelse(grepl('chip',to),'chocochips',to),
+                to = ifelse(grepl('springkle',to),'sprinkles',to),
+                to = ifelse(grepl('baking powder',to),'baking powder',to),
+                to = ifelse(grepl('baking soda',to),'baking soda',to),
+                to = ifelse(grepl('brown sugar',to),'gula merah',to),
+                to = ifelse(grepl('kiwi',to),'buah (all)',to),
+                to = ifelse(grepl('anggur',to),'buah (all)',to),
+                to = ifelse(grepl('selai',to),'selai',to),
+                to = ifelse(grepl('jeruk',to),'buah (all)',to),
+                to = ifelse(grepl('stroberi',to),'buah (all)',to),
+                to = ifelse(grepl('ragi',to),'ragi',to),
+                to = ifelse(grepl('minyak goreng',to),'minyak goreng',to),
+                to = ifelse(grepl('anggur',to),'buah (all)',to),
+                to = ifelse(grepl('tea',to),'teh',to),
+                to = ifelse(grepl('cabe',to),'cabai',to),
+                to = ifelse(grepl('vanili',to),'vanilla',to),
+                to = ifelse(grepl('vanilli',to),'vanilla',to),
+                to = ifelse(grepl('mayo',to),'mayonaise',to),
+                to = ifelse(grepl('oreo',to),'oreo',to),
+                to = ifelse(grepl('telor',to),'telur',to),
+                to = ifelse(grepl('agar',to),'agar-agar',to),
+                to = ifelse(grepl('nanas',to),'buah (all)',to),
+                to = ifelse(grepl('minyak',to),'minyak (all)',to),
+                to = ifelse(grepl('garam',to),'garam',to),
+                to = ifelse(grepl('fondan',to),'fondan',to),
+                to = ifelse(grepl('founda',to),'fondan',to),
+                to = ifelse(grepl('wijen',to),'wijen',to),
+                to = ifelse(grepl('cabe',to),'cabai',to),
+                to = ifelse(grepl('kentang',to),'kentang',to),
+                to = ifelse(grepl('kornet',to),'kornet',to),
+                to = ifelse(grepl('sagu',to),'sagu',to),
+                to = ifelse(grepl('daging',to),'daging',to),
+                to = ifelse(grepl('saus tomat',to),'saus tomat',to),
+                to = ifelse(grepl('saos tomat',to),'saus tomat',to),
+                to = ifelse(grepl('tomat',to),'tomat',to),
+                to = ifelse(grepl('selada',to),'selada',to),
+                to = ifelse(grepl('emulsi',to),'emulsi',to)) 
 
 graph_from_data_frame(news) %>%
   ggraph(layout = 'fr') +
@@ -122,5 +182,5 @@ graph_from_data_frame(news) %>%
   geom_node_point(size=2,color='steelblue') +
   geom_node_text(aes(label=name),size=2) +
   theme_void()
-ggsave('resep.png',width = 10, height = 12,dpi=700)
+ggsave('resep.png',width = 13, height = 10,dpi=700)
 ```
