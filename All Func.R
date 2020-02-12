@@ -420,19 +420,18 @@ ubahin.rasio.jadi.persen.donk=function(rasio){
 }
 
 #Send email outlook via RDCOM
-#library(RDCOMClient)
-#Outlook <- COMCreate("Outlook.Application")
-#kirim.email.nutrifood.donk = function(email.to,email.cc,email.bcc,subject,body){
-#Email = Outlook$CreateItem(0)
+library(RDCOMClient)
+Outlook <- COMCreate("Outlook.Application")
+kirim.email.nutrifood.donk = function(email.to,attacment,subject,body){
+Email = Outlook$CreateItem(0)
 # Set the recipient, subject, and body
-#Email[["to"]] = email.to
-#Email[["cc"]] = email.cc
-#Email[["bcc"]] = email.bcc
-#Email[["subject"]] = subject
-#Email[["body"]] = body
+Email[["to"]] = email.to
+Email[["subject"]] = subject
+Email[["body"]] = body
+Email[["attachments"]]$Add(attacment)
 # Send the message
-#Email$Send()
-#}
+Email$Send()
+}
 
 #hitung modus
 modus <- function(v) {
