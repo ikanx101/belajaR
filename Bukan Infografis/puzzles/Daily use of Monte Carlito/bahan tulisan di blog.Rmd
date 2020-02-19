@@ -1,0 +1,202 @@
+---
+title: "Kegunaan Monte Carlo Lagi (Daily Use)"
+output: github_document
+---
+
+```{r setup, include=FALSE,message=FALSE,warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+rm(list=ls())
+setwd("/cloud/project/Bukan Infografis/puzzles/Daily use of Monte Carlito")
+library(dplyr)
+library(ggplot2)
+```
+
+Ternyata saya sudah puasa _ngeblog_ beberapa minggu ini. Padahal _draft_ tulisan yang saya buat ada lumayan banyak. Tapi entah kenapa saya seperti belum menemukan momen yang pas _to publish those drafts_.
+
+Kalau mau lihat, bisa cek __github__ saya dan lihat masing-masing markdown yang tercipta selama 2 minggu belakangan.
+
+Nah, kali ini saya hendak membahas simulasi __Monte Carlo__ (lagi) untuk menghitung dan menyelesaikan masalah yang _receh_.
+
+Seberapa _receh_?
+
+_Receh_ banget lah.
+
+________
+
+# Masalah 1: Absensi Karyawan
+
+Suatu ketika, seorang manager suatu bagian tertentu di kantor mendapatkan email laporan dari bagian HR terkait absensi seorang anak buahnya yang agak bermasalah. Kira-kira, begini highlight emailnya:
+
+> Anak buah Anda bernama XYZ memiliki catatan keterlambatan yang tinggi. Ia biasa terlambat datang ke kantor rata-rata dua dari lima hari kerja.
+
+Sayangnya tidak ada keterangan data historikal pada hari apa saja si XYZ biasa terlambat.
+
+Berdasarkan informasi yang ada, si manager ingin menghitung berapa peluang si XYZ terlambat di hari __Senin DAN Jumat__ dalam seminggu.
+
+Bagaimana caranya?
+
+## Yuk kita selesaikan!
+
+Saya akan membuat beberapa baris algoritma untuk membuat simulasi ini yah. Mungkin bukan algoritma yang _tidy_, tapi saya akan buat yang sangat simpel sehingga mudah dimengerti.
+
+Pertama, kita buat dulu fungsi apakah karyawan tersebut datang telat atau tidak dalam suatu hari?
+
+```{r}
+telat = function(){
+  sample(c(T,F),1,prob = c(2/5,3/5))
+}
+telat()
+```
+
+Kedua, berbekal fungsi di atas, kita buat fungsi untuk menghitung berapa kali dia akan datang telat dalam 5 hari kerja.
+
+```{r}
+telat_seminggu = function(){
+  sample(c(T,F),5,replace = T,prob = c(2/5,3/5))
+}
+minggu_ini = telat_seminggu()
+minggu_ini # keterlambatan yang terjadi dalam seminggu ini
+sum(minggu_ini) # berapa kali telat dalam 5 hari kerja?
+```
+
+Ketiga, berbekal fungsi di atas, kita buat fungsi yang mengecek apakah karyawan tersebut terlambat di Senin dan Jumat.
+
+```{r}
+senin_jumat_telat = function(){
+  minggu = telat_seminggu()
+  senin = minggu[1]
+  jumat = minggu[5]
+  dummy = sum(senin+jumat)
+  ifelse(dummy == 2, 1, 0) # jika terjadi keterlambatan di Senin dan Jumat, akan diberi skor = 1
+}
+senin_jumat_telat()
+```
+
+Keempat, kita akan buat fungsi untuk melakukan simulasi berkali-kali lalu kita hitung peluangnya.
+
+```{r}
+simulasi = function(n){
+  hasil = 0
+  for(i in 1:n){
+    dummy = senin_jumat_telat()
+    hasil = hasil + dummy
+  }
+  return(hasil/n)
+}
+```
+
+Kelima, sekarang kita lakukan simulasinya yah.
+
+```{r}
+data = data.frame(langkah=c(1:2000))
+data$peluang_simulasi = sapply(data$langkah,simulasi)
+
+# hasil 10 simulasi pertama
+head(data,10)
+
+# hasil 10 simulasi terakhir
+tail(data,10)
+```
+
+### Jadi berapa peluang si karyawan itu datang telat di Senin DAN Jumat?
+
+```{r}
+mean(data$peluang_simulasi)
+```
+
+```{r,echo=FALSE}
+data %>% ggplot(aes(x=langkah,
+                    y = peluang_simulasi)) +
+  geom_line(aes(group=1)) +
+  geom_hline(yintercept = mean(data$peluang_simulasi),color = 'red') +
+  theme_minimal()+
+  labs(title = 'Berapa Peluangnya?',
+       subtitle = 'Berdasarkan Simulasi Monte Carlo',
+       caption = 'Simulated and Visualized\nusing R\n@mr.ikanx',
+       y = 'Probability') +
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank())
+```
+
+
+```{r,include=FALSE}
+rm(list=ls())
+```
+
+_______
+
+# Masalah 2: Mencari Responden Horang Kayah
+
+Suatu ketika saya diminta untuk melaksanakan survey di suatu kota. Salah satu kriteria responden yang dicari adalah memiliki sosial ekonomi status yang __tinggi__ alias __horang kayah__.
+
+> Berdasarkan data yang saya punya dari __AC Nielsen__, proporsi __horang kayah__ di kota tersebut ada sebesar `16%` dari populasi kota tersebut.
+
+Pertanyaannya:
+
+Jika pemilihan respondenn dilakukan secara _random_, berapa banyak orang responden yang harus saya temui sampai saya bisa mendapatkan `30` orang responden __horang kayah__ tersebut?
+
+## Bagaimana cara menjawabnya?
+
+### _Gak usah pake simulasi, ribet banget sih!_
+
+Oke, sekarang kita akan menghitungnya tanpa menggunakan simulasi. Bagaimana caranya? 
+
+> Tinggal dibagi saja `30` dengan `16%` yah!
+
+```{r}
+n = 30 / (16/100)
+n
+```
+
+Setidaknya saya membutuh sekitar `187` orang responden agar saya bisa mendapatkan `30` orang responden __horang kayah__.
+
+### Sekarang kita selesaikan dengan simulasi:
+
+> Kenapa sih harus diselesaikan dengan simulasi?
+
+Kadang simulasi dibutuhkan karena kita ingin mendapatkan jawaban berupa selang atau rentang karena kita berhadapan dengan masalah peluang di sini. Sedangkan jawaban `187.5` adalah jawaban eksak.
+
+Nanti hasil _expected value_ dari simulasi seharusnya mirip dengan jawaban eksak.
+
+Mari kita buat simulasinya _yah_.
+
+Fungsi pertama adalah melihat apakah kita mendapatkan responden yang tepat.
+
+```{r}
+tepat = function(){
+  sample(c(1,0),1,prob = c(16/100,84/100))
+}
+tepat()
+```
+
+Fungsi kedua adalah untuk melakukan _looping_ dengan `while()` agar didapatkan sampel 30 __horang kayah__.
+
+```{r}
+cari_n = function(){
+  n = 0
+  i = 0
+    while(n<30){
+      dummy = tepat()
+      n = n+dummy
+      i = i+1
+    }
+return(i)
+}
+```
+
+Sekarang, kita akan lakukan simulasinya berulang kali sehingga didapatkan hasil sebagai berikut:
+
+```{r}
+data = data.frame(id=c(1:2500))
+data$banyak_resp = 0
+
+for(i in 1:length(data$id)){
+  data$banyak_resp[i] = cari_n()
+}
+```
+
+Sekarang, _expected value_ dari simulasi ini adalah sebesar:
+
+```{r}
+mean(data$banyak_resp)
+```
