@@ -64,13 +64,13 @@ minggu_ini = telat_seminggu()
 minggu_ini # keterlambatan yang terjadi dalam seminggu ini
 ```
 
-    ## [1] FALSE  TRUE  TRUE FALSE FALSE
+    ## [1] FALSE FALSE FALSE FALSE FALSE
 
 ``` r
 sum(minggu_ini) # berapa kali telat dalam 5 hari kerja?
 ```
 
-    ## [1] 2
+    ## [1] 0
 
 Ketiga, berbekal fungsi di atas, kita buat fungsi yang mengecek apakah
 karyawan tersebut terlambat di Senin dan Jumat.
@@ -113,16 +113,16 @@ head(data,10)
 ```
 
     ##    langkah peluang_simulasi
-    ## 1        1        0.0000000
-    ## 2        2        0.5000000
-    ## 3        3        0.0000000
-    ## 4        4        0.5000000
-    ## 5        5        0.0000000
-    ## 6        6        0.1666667
-    ## 7        7        0.2857143
-    ## 8        8        0.1250000
-    ## 9        9        0.2222222
-    ## 10      10        0.2000000
+    ## 1        1             1.00
+    ## 2        2             0.00
+    ## 3        3             0.00
+    ## 4        4             0.25
+    ## 5        5             0.00
+    ## 6        6             0.00
+    ## 7        7             0.00
+    ## 8        8             0.50
+    ## 9        9             0.00
+    ## 10      10             0.20
 
 ``` r
 # hasil 10 simulasi terakhir
@@ -130,16 +130,16 @@ tail(data,10)
 ```
 
     ##      langkah peluang_simulasi
-    ## 1991    1991        0.1667504
-    ## 1992    1992        0.1435743
-    ## 1993    1993        0.1460110
-    ## 1994    1994        0.1599799
-    ## 1995    1995        0.1729323
-    ## 1996    1996        0.1513026
-    ## 1997    1997        0.1442163
-    ## 1998    1998        0.1561562
-    ## 1999    1999        0.1610805
-    ## 2000    2000        0.1455000
+    ## 1991    1991        0.1612255
+    ## 1992    1992        0.1661647
+    ## 1993    1993        0.1650778
+    ## 1994    1994        0.1489468
+    ## 1995    1995        0.1563910
+    ## 1996    1996        0.1437876
+    ## 1997    1997        0.1507261
+    ## 1998    1998        0.1496496
+    ## 1999    1999        0.1450725
+    ## 2000    2000        0.1675000
 
 ### Jadi berapa peluang si karyawan itu datang telat di Senin DAN Jumat?
 
@@ -147,7 +147,7 @@ tail(data,10)
 mean(data$peluang_simulasi)
 ```
 
-    ## [1] 0.1606792
+    ## [1] 0.1601322
 
 ![](bahan-tulisan-di-blog_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
@@ -160,12 +160,12 @@ satu kriteria responden yang dicari adalah memiliki sosial ekonomi
 status yang **tinggi** alias **horang kayah**.
 
 > Berdasarkan data yang saya punya dari **AC Nielsen**, proporsi
-> **horang kayah** di kota tersebut ada sebesar `16%` dari populasi kota
+> **horang kayah** di kota tersebut ada sebesar `13%` dari populasi kota
 > tersebut.
 
 Pertanyaannya:
 
-Jika pemilihan respondenn dilakukan secara *random*, berapa banyak orang
+Jika pemilihan responden dilakukan secara *random*, berapa banyak orang
 responden yang harus saya temui sampai saya bisa mendapatkan `30` orang
 responden **horang kayah** tersebut?
 
@@ -176,16 +176,16 @@ responden **horang kayah** tersebut?
 Oke, sekarang kita akan menghitungnya tanpa menggunakan simulasi.
 Bagaimana caranya?
 
-> Tinggal dibagi saja `30` dengan `16%` yah\!
+> Tinggal dibagi saja `30` dengan `13%` yah\!
 
 ``` r
-n = 30 / (16/100)
+n = 30 / (13/100)
 n
 ```
 
-    ## [1] 187.5
+    ## [1] 230.7692
 
-Setidaknya saya membutuh sekitar `187` orang responden agar saya bisa
+Setidaknya saya membutuh sekitar `230` orang responden agar saya bisa
 mendapatkan `30` orang responden **horang kayah**.
 
 ### Sekarang kita selesaikan dengan simulasi:
@@ -194,7 +194,7 @@ mendapatkan `30` orang responden **horang kayah**.
 
 Kadang simulasi dibutuhkan karena kita ingin mendapatkan jawaban berupa
 selang atau rentang karena kita berhadapan dengan masalah peluang di
-sini. Sedangkan jawaban `187.5` adalah jawaban eksak.
+sini. Sedangkan jawaban `230.7` adalah jawaban eksak.
 
 Nanti hasil *expected value* dari simulasi seharusnya mirip dengan
 jawaban eksak.
@@ -206,7 +206,7 @@ tepat.
 
 ``` r
 tepat = function(){
-  sample(c(1,0),1,prob = c(16/100,84/100))
+  sample(c(1,0),1,prob = c(13/100,87/100))
 }
 tepat()
 ```
@@ -241,10 +241,54 @@ for(i in 1:length(data$id)){
 }
 ```
 
-Sekarang, *expected value* dari simulasi ini adalah sebesar:
+Mari kita hitung *expected value* dari simulasi ini, yakni sebesar:
 
 ``` r
 mean(data$banyak_resp)
 ```
 
-    ## [1] 187.9764
+    ## [1] 230.526
+
+Kalau dibandingkan, hasil *expected value* dari simulasi dan perhitungan
+eksak memiliki hasil yang hampir sama.
+
+Nah, sekarang apa kelebihan simulasi? Kita bisa lihat selang
+perkiraannya sebagai berikut:
+
+``` r
+data %>% ggplot(aes(y = banyak_resp)) + geom_boxplot(notch=TRUE) +
+  theme_minimal() +
+  labs(subtitle = 'Boxplot Hasil Simulasi Monte Carlo',
+       title = 'Berapa banyak responden yang harus saya wawancara agar mendapatkan\nhorang kayah sebanyak 30 orang?',
+       caption = 'Simulated and Visualized\nusing R\n@mr.ikanx',
+       y = 'Banyak orang') +
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank())
+```
+
+![](bahan-tulisan-di-blog_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+
+Karena saya melakukan simulasi ini sekian ribu kali, maka dengan
+memanfaatkan *Central Limit Theorem*, saya mengasumsikan data ini
+berdistribusi normal.
+
+Masih ingat hubungan histogram dan boxplot dari distribusi normal
+berikut
+ini?
+
+![](https://www.kanat.net/THESIS_screenshots/other/Boxplot_vs_PDF_v6_200dpi_7x4_in.png
+"histogram")
+
+> Sehingga saya bisa menyimpulkan bahwa daerah antara `Q1` dan `Q3`
+> adalah selang perkiraan saya inginkan karena mengcover 50% dari data
+> yang mungkin muncul.
+
+``` r
+summary(data$banyak_resp)
+```
+
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    ##   121.0   203.0   229.0   230.5   256.0   367.0
+
+Jadi untuk mendapatkan horang kayah sebanyak 30 orang, saya perlu
+mewawancarai sekitar 203 - 256 orang.

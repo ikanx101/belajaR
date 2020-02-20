@@ -129,11 +129,11 @@ _______
 
 Suatu ketika saya diminta untuk melaksanakan survey di suatu kota. Salah satu kriteria responden yang dicari adalah memiliki sosial ekonomi status yang __tinggi__ alias __horang kayah__.
 
-> Berdasarkan data yang saya punya dari __AC Nielsen__, proporsi __horang kayah__ di kota tersebut ada sebesar `16%` dari populasi kota tersebut.
+> Berdasarkan data yang saya punya dari __AC Nielsen__, proporsi __horang kayah__ di kota tersebut ada sebesar `13%` dari populasi kota tersebut.
 
 Pertanyaannya:
 
-Jika pemilihan respondenn dilakukan secara _random_, berapa banyak orang responden yang harus saya temui sampai saya bisa mendapatkan `30` orang responden __horang kayah__ tersebut?
+Jika pemilihan responden dilakukan secara _random_, berapa banyak orang responden yang harus saya temui sampai saya bisa mendapatkan `30` orang responden __horang kayah__ tersebut?
 
 ## Bagaimana cara menjawabnya?
 
@@ -141,20 +141,20 @@ Jika pemilihan respondenn dilakukan secara _random_, berapa banyak orang respond
 
 Oke, sekarang kita akan menghitungnya tanpa menggunakan simulasi. Bagaimana caranya? 
 
-> Tinggal dibagi saja `30` dengan `16%` yah!
+> Tinggal dibagi saja `30` dengan `13%` yah!
 
 ```{r}
-n = 30 / (16/100)
+n = 30 / (13/100)
 n
 ```
 
-Setidaknya saya membutuh sekitar `187` orang responden agar saya bisa mendapatkan `30` orang responden __horang kayah__.
+Setidaknya saya membutuh sekitar `230` orang responden agar saya bisa mendapatkan `30` orang responden __horang kayah__.
 
 ### Sekarang kita selesaikan dengan simulasi:
 
 > Kenapa sih harus diselesaikan dengan simulasi?
 
-Kadang simulasi dibutuhkan karena kita ingin mendapatkan jawaban berupa selang atau rentang karena kita berhadapan dengan masalah peluang di sini. Sedangkan jawaban `187.5` adalah jawaban eksak.
+Kadang simulasi dibutuhkan karena kita ingin mendapatkan jawaban berupa selang atau rentang karena kita berhadapan dengan masalah peluang di sini. Sedangkan jawaban `230.7` adalah jawaban eksak.
 
 Nanti hasil _expected value_ dari simulasi seharusnya mirip dengan jawaban eksak.
 
@@ -164,7 +164,7 @@ Fungsi pertama adalah melihat apakah kita mendapatkan responden yang tepat.
 
 ```{r}
 tepat = function(){
-  sample(c(1,0),1,prob = c(16/100,84/100))
+  sample(c(1,0),1,prob = c(13/100,87/100))
 }
 tepat()
 ```
@@ -195,8 +195,38 @@ for(i in 1:length(data$id)){
 }
 ```
 
-Sekarang, _expected value_ dari simulasi ini adalah sebesar:
+Mari kita hitung _expected value_ dari simulasi ini, yakni sebesar:
 
 ```{r}
 mean(data$banyak_resp)
 ```
+
+Kalau dibandingkan, hasil _expected value_ dari simulasi dan perhitungan eksak memiliki hasil yang hampir sama.
+
+Nah, sekarang apa kelebihan simulasi? Kita bisa lihat selang perkiraannya sebagai berikut:
+
+```{r,echo=FALSE}
+data %>% ggplot(aes(y = banyak_resp)) + geom_boxplot(notch=TRUE) +
+  theme_minimal() +
+  labs(subtitle = 'Boxplot Hasil Simulasi Monte Carlo',
+       title = 'Berapa banyak responden yang harus saya wawancara agar mendapatkan\nhorang kayah sebanyak 30 orang?',
+       caption = 'Simulated and Visualized\nusing R\n@mr.ikanx',
+       y = 'Banyak orang') +
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank())
+```
+
+Karena saya melakukan simulasi ini sekian ribu kali, maka dengan memanfaatkan _Central Limit Theorem_, saya mengasumsikan data ini berdistribusi normal. 
+
+Masih ingat hubungan histogram dan boxplot dari distribusi normal berikut ini?
+
+![](https://www.kanat.net/THESIS_screenshots/other/Boxplot_vs_PDF_v6_200dpi_7x4_in.png 'histogram')
+
+
+> Sehingga saya bisa menyimpulkan bahwa daerah antara `Q1` dan `Q3` adalah selang perkiraan saya inginkan karena mengcover 50% dari data yang mungkin muncul.
+
+```{r}
+summary(data$banyak_resp)
+```
+
+Jadi untuk mendapatkan horang kayah sebanyak 30 orang, saya perlu mewawancarai sekitar 203 - 256 orang.
