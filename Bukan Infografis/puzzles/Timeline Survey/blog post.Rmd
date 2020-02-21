@@ -1,0 +1,27 @@
+---
+title: "Menghitung Timeline Fieldwork Survey"
+output: github_document
+---
+
+```{r setup, include=FALSE,warning=FALSE,message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("/cloud/project/Bukan Infografis/puzzles/Timeline Survey")
+rm(list=ls())
+library(dplyr)
+library(ggplot2)
+library(ggpubr)
+```
+
+Seperti yang saya sempat bahas di [tulisan sebelumnya](https://ikanx101.github.io/blog/monte-lagi/), kali ini saya akan mencoba menghitung _timeline_ dari suatu survey dengan memanfaatkan simulasi __Monte Carlo__. 
+
+> _Gimana sih maksudnya?_
+
+Oke, sekarang saya coba bahas __market research 101__ dulu yah terkait dengan _workflow_ menjalankan survey _market research_.
+
+# __Workflow Market Research__
+
+Berikut ini adalah proses yang _proper_ dalam menjalankan suatu survey:
+
+
+
+Saya pribadi
