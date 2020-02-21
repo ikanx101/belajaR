@@ -2,31 +2,42 @@ rm(list=ls())
 library(dplyr)
 library(ggplot2)
 
-proporsi = c(4.7/100,15.1/100,44.3/100,35.9/100)
-ses = c('U1','U2','M1','M2')
+proporsi = c(3.1/100,21.0/100,52.4/100,23.4/100)
+ses = c('A','B','C','D')
 
 orang = function(){
   sample(ses,1,prob = proporsi)
 }
+orang()
 
 siapa = function(){
   hitung = orang()
-  U1 = ifelse(hitung == 'U1',1,0)
-  U2 = ifelse(hitung == 'U2',1,0)
-  M1 = ifelse(hitung == 'M1',1,0)
-  M2 = ifelse(hitung == 'M2',1,0)
-  data = data.frame(U1,U2,M1,M2)
+  A = ifelse(hitung == 'A',1,0)
+  B = ifelse(hitung == 'B',1,0)
+  C = ifelse(hitung == 'C',1,0)
+  D = ifelse(hitung == 'D',1,0)
+  data = data.frame(A,B,C,D) # calon responden yang ditemui memiliki kelas ekonomi apa?
+  mau = sample(c(1,0),1,prob = c(.5,.5)) # apakah calon responden mau diwawancarai atau tidak?
+  data = data*mau # kelas ekonomi responden yang diwawancarai. Apakah ada atau tidak ada?
   return(data)
 }
+siapa()
 
-data_1 = siapa()
-
-while(sum(data_1$U1)<30){
-  data_fi = siapa()
-  data_1 = rbind(data_1,data_fi)
+berapa_calon_responden = function(){
+  data_1 = siapa()
+  i = 1
+  while(sum(data_1$A)<70 && data_1$B<100){ # kelas sosial ekonomi A harus minimal 70
+    data_fi = siapa()
+    data_1 = rbind(data_1,data_fi)
+    i = i + 1
+  }
+  return(i) # berapa banyak calon responden yang ditemui sampai terpenuhi banyak minimal responden
 }
-sum(data_1$U1)
-sum(data_1$U2)
-sum(data_1$M1)
-sum(data_1$M2)
-length(data_1$U1)
+
+berapa_calon_responden()
+
+hasil = data.frame(id = c(1:5))
+for(i in 1:length(hasil$id)){
+  hasil$banyak_calon_resp[i] = berapa_calon_responden()
+}
+head(hasil)
