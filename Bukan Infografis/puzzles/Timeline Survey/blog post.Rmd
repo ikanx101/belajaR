@@ -123,7 +123,8 @@ Kita akan membangun suatu fungsi menggunakan _looping_ menggunakan `while()` dan
 
 ```{r}
 # bikin fungsi ketiga
-berapa_calon_responden = function(){
+berapa_calon_responden = function(n){
+  n+100 #dummy aja biar bisa masuk ke sapply
   data_1 = siapa()
   i = 1
   while(sum(data_1$A)<70 && data_1$B<100){ # kelas sosial ekonomi A harus minimal 70
@@ -142,10 +143,7 @@ Nah, sekarang kita bikin deh simulasinya dalam `500`-an iterasi.
 ```{r}
 # simulasi dimulai dari mari
 hasil = data.frame(id = c(1:2)) # untuk keperluan blog ini, saya set di dua dulu. Data hasil simulasi 500 kali ada di github yah
-for(i in 1:length(hasil$id)){
-  hasil$banyak_calon_resp[i] = berapa_calon_responden()
-}
-head(hasil)
+hasil$banyak_calon_resp = sapply(hasil$id,berapa_calon_responden)
 ```
 
 Berapa _expected value_ banyaknya calon responden dari simulasi ini: __`r mean(hasil$banyak_calon_resp)`__.

@@ -1,7 +1,10 @@
 rm(list=ls())
+setwd('D:/Project_R')
 library(dplyr)
 library(ggplot2)
+library(ggpubr)
 
+# bikin fungsi pertama
 proporsi = c(3.1/100,21.0/100,52.4/100,23.4/100)
 ses = c('A','B','C','D')
 
@@ -10,6 +13,7 @@ orang = function(){
 }
 orang()
 
+# bikin fungsi kedua
 siapa = function(){
   hitung = orang()
   A = ifelse(hitung == 'A',1,0)
@@ -23,7 +27,9 @@ siapa = function(){
 }
 siapa()
 
-berapa_calon_responden = function(){
+# bikin fungsi ketiga
+berapa_calon_responden = function(n){
+  n+100
   data_1 = siapa()
   i = 1
   while(sum(data_1$A)<70 && data_1$B<100){ # kelas sosial ekonomi A harus minimal 70
@@ -34,10 +40,9 @@ berapa_calon_responden = function(){
   return(i) # berapa banyak calon responden yang ditemui sampai terpenuhi banyak minimal responden
 }
 
-berapa_calon_responden()
+berapa_calon_responden(1)
 
-hasil = data.frame(id = c(1:5))
-for(i in 1:length(hasil$id)){
-  hasil$banyak_calon_resp[i] = berapa_calon_responden()
-}
-head(hasil)
+# simulasi dimulai dari mari
+hasil = data.frame(id = c(1:500))
+hasil$banyak_calon_resp = sapply(hasil$id,berapa_calon_responden)
+hasil %>% write.csv('simulasi lama interview.csv')
