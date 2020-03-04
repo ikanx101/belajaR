@@ -63,7 +63,7 @@ ___
 
 Asumsi yang digunakan:
 
-1. Setiap orang yang hendak diwawancarai punya peluang `30 - 70` untuk mau diwawancarai sampai selesai.
+1. Setiap orang yang hendak diwawancarai punya peluang `50 - 50` untuk mau diwawancarai sampai selesai.
 2. Survey dilakukan secara _random_.
 
 ___
@@ -76,7 +76,7 @@ ___
 
 ___
 
-## Simulasi
+## Simulasi Responden
 
 Saya akan buat fungsi-fungsi simulasinya yah. Bisa jaid ini bukan fungsi yang paling _tidy_ tapi seharusnya mudah untuk dipahami _yah_.
 
@@ -136,21 +136,27 @@ berapa_calon_responden = function(n){
 }
 ```
 
-Contohnya, dalam sekali iterasi untuk memenuhi minimal responden, dibutuhkan calon responden sebanyak __`r berapa_calon_responden()`__.
+Contohnya, dalam sekali iterasi untuk memenuhi minimal responden, dibutuhkan calon responden sebanyak __`r berapa_calon_responden(1)`__.
 
 Nah, sekarang kita bikin deh simulasinya dalam `500`-an iterasi.
 
 ```{r}
 # simulasi dimulai dari mari
-hasil = data.frame(id = c(1:2)) # untuk keperluan blog ini, saya set di dua dulu. Data hasil simulasi 500 kali ada di github yah
+hasil = data.frame(id = c(1:2)) # untuk keperluan visual di blog ini, saya set di dua dulu
+# Data hasil simulasi 500 kali ada di github yah
+
 hasil$banyak_calon_resp = sapply(hasil$id,berapa_calon_responden)
 ```
 
 Berapa _expected value_ banyaknya calon responden dari simulasi ini: __`r mean(hasil$banyak_calon_resp)`__.
 
-___
+```{r,include=FALSE}
+hasil = read.csv('simulasi lama interview.csv')
+```
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
 hasil %>% ggplot(aes(x = banyak_calon_resp)) + 
-  geom_histogram(fill = 'darkred',color='steelblue',alpha=.1) +
+  geom_histogram(fill = 'darkred',color='steelblue',alpha=.5,size=1.25) +
   theme_pubclean() +
   labs(x = 'Berapa banyak calon responden',
        subtitle = 'Histogram Sebaran Data',
@@ -160,4 +166,58 @@ hasil %>% ggplot(aes(x = banyak_calon_resp)) +
         axis.title.y = element_blank(),
         axis.ticks = element_blank(),
         plot.title = element_text(face='bold'))
-___
+```
+
+Berikut adalah `summary` statistik dari hasil simulasinya:
+
+```{r,echo=FALSE}
+summary(hasil$banyak_calon_resp)
+```
+
+Sekarang kita sudah mendapatkan berapa banyak calon responden yang harus dicari agar target minimal banyaknya responden per kelas sosial ekonomi tercukupi.
+
+Jika kita bandingkan dengan populasi di kota tersebut, angka ini relatif masih mungkin untuk dilaksanakan riset. Perbandingannya sekitar `1:77` (_expected value_ dari simulasi : populasi).
+
+____
+
+## Simulasi Responden dan Interviewer
+
+Berdasarkan _function_ di atas, kita akan kembangkan simulasi untuk menghitung berapa waktu yang ditempuh para _interviewer_ untuk bisa mewawancarai semua calon responden tersebut. 
+
+```{r}
+# dalam sehari, berapa banyak responden yang bisa diwawancarai oleh lima orang interviewer
+interviewer = function(n){
+  n
+  int = 0
+  for(i in 1:5){
+    int = int + sample(c(4:9),1)
+  }
+  return(int)
+}
+
+# sekarang kita akan hitung butuh berapa hari yah
+berapa_hari = function(n_resp){
+  i = 0
+  while(n_resp>0){
+    n_resp = n_resp - interviewer(1)
+    i = i+1
+  }
+  return(i)
+}
+
+hasil$berapa_hari = sapply(hasil$banyak_calon_resp,berapa_hari)
+```
+
+```{r,include=FALSE}
+hasil %>% mutate(X=NULL) %>% write.csv('Hasil Simulasi FINAL.csv')
+```
+
+_Expected value_ untuk `berapa_hari` _interviewer_ bisa menyelesaikan wawancara ini adalah `r round(mean(hasil$berapa_hari),2)` hari alias `r round(mean(hasil$berapa_hari)/7,2)` minggu.
+
+Mari kita lihat `summary` statistik dari `berapa_hari` yang harus ditempuh:
+
+```{r,echo=FALSE}
+summary(hasil$berapa_hari)
+```
+
+File `csv` hasil simulasi bisa diunduh di sini
