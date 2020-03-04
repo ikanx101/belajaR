@@ -212,7 +212,7 @@ hasil$berapa_hari = sapply(hasil$banyak_calon_resp,berapa_hari)
 hasil %>% mutate(X=NULL) %>% write.csv('Hasil Simulasi FINAL.csv')
 ```
 
-_Expected value_ untuk `berapa_hari` _interviewer_ bisa menyelesaikan wawancara ini adalah `r round(mean(hasil$berapa_hari),2)` hari alias `r round(mean(hasil$berapa_hari)/7,2)` minggu.
+_Expected value_ untuk `berapa_hari` _interviewer_ bisa menyelesaikan wawancara ini adalah `r round(mean(hasil$berapa_hari),0)` hari alias `r round(mean(hasil$berapa_hari)/7,0)` minggu.
 
 Mari kita lihat `summary` statistik dari `berapa_hari` yang harus ditempuh:
 
@@ -220,4 +220,28 @@ Mari kita lihat `summary` statistik dari `berapa_hari` yang harus ditempuh:
 summary(hasil$berapa_hari)
 ```
 
-File `csv` hasil simulasi bisa diunduh di sini
+Berikut adalah sebaran `berapa_hari` hasil simulasi:
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+hasil %>% ggplot(aes(x = berapa_hari)) + 
+  geom_histogram(fill = 'darkgreen',color='darkred',alpha=.5,size=1.25) +
+  theme_pubclean() +
+  labs(x = 'Berapa lama interview',
+       subtitle = 'Histogram Sebaran Data',
+       title = 'Berapa lama interviewer harus bekerja menyelesaikan survey di kota ini?',
+       caption = 'Simulated and Visualized\nusing R\n@mr.ikanx') +
+  theme(axis.text.y = element_blank(),
+        axis.title.y = element_blank(),
+        axis.ticks = element_blank(),
+        plot.title = element_text(face='bold'))
+```
+
+## Kesimpulan:
+
+Dari simulasi di atas, kita bisa melaksanakan survey di kota tersebut walau waktu yang dibutuhkan relatif lebih lama.
+
+___
+
+__Notes:__
+
+File `csv` hasil simulasi bisa dilihat di [sini](https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/puzzles/Timeline%20Survey/Hasil%20Simulasi%20FINAL.csv).
