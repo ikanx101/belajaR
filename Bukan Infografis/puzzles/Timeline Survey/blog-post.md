@@ -84,7 +84,7 @@ untuk menghitung berapa lama *fieldwork* suatu survey bisa diselesaikan.
 
 Asumsi yang digunakan:
 
-1.  Setiap orang yang hendak diwawancarai punya peluang `50 - 50` untuk
+1.  Setiap orang yang hendak diwawancarai punya peluang `30 - 70` untuk
     mau diwawancarai sampai selesai.
 2.  Survey dilakukan secara *random*.
 
@@ -108,38 +108,8 @@ yang paling *tidy* tapi seharusnya mudah untuk dipahami *yah*.
 Pertama-tama, mari kita buat fungsi untuk menebak kelas ekonomi dari
 calon responden yang ditemui:
 
-``` r
-proporsi = c(3.1/100,21.0/100,52.4/100,23.4/100)
-ses = c('A','B','C','D')
-
-orang = function(){
-  sample(ses,1,prob = proporsi)
-}
-orang()
-```
-
-    ## [1] "C"
-
 Berikutnya kita kembangkan fungsi pertama dengan memasukkan asumsi
 pertama.
-
-``` r
-siapa = function(){
-  hitung = orang()
-  A = ifelse(hitung == 'A',1,0)
-  B = ifelse(hitung == 'B',1,0)
-  C = ifelse(hitung == 'C',1,0)
-  D = ifelse(hitung == 'D',1,0)
-  data = data.frame(A,B,C,D) # calon responden yang ditemui memiliki kelas ekonomi apa?
-  mau = sample(c(1,0),1,prob = c(.5,.5)) # apakah calon responden mau diwawancarai atau tidak?
-  data = data*mau # kelas ekonomi responden yang diwawancarai. Apakah ada atau tidak ada?
-  return(data)
-}
-siapa()
-```
-
-    ##   A B C D
-    ## 1 0 1 0 0
 
 Berikutnya kita akan mencari butuh berapa banyak calon responden yang
 dibutuhkan agar target responden saya terpenuhi.
@@ -151,27 +121,14 @@ terkecil di populasi. Maka dari itu, secara logika, jika kita mencari
 sebanyak-banyaknya calon responden secara *random* maka yang paling
 terakhir bisa *fulfill* adalah responden kelas A.
 
+> Nanti bisa dibuktikan yah logika ini.
+
 Kita akan membangun suatu fungsi menggunakan *looping* menggunakan
 `while()` dan menghitung berapa banyak calon responden yang dibutuhkan.
-
-``` r
-berapa_calon_responden = function(){
-  data_1 = siapa()
-  i = 1
-  while(sum(data_1$A)<70){ # kelas sosial ekonomi A harus minimal 70
-    data_fi = siapa()
-    data_1 = rbind(data_1,data_fi)
-    i = i + 1
-  }
-  return(i) # berapa banyak calon responden yang ditemui sampai terpenuhi banyak minimal responden
-}
-```
 
 Contohnya, dalam sekali iterasi untuk memenuhi minimal responden,
 dibutuhkan calon responden sebanyak:
 
-``` r
-berapa_calon_responden()
-```
+Nah, sekarang kita bikin deh simulasinya dalam `100`-an iterasi.
 
-    ## [1] 5300
+Berapa *expected value* banyaknya calon responden dari simulasi ini:

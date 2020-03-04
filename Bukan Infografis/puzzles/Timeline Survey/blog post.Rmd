@@ -1,7 +1,7 @@
----
+___
 title: "Menghitung Timeline Fieldwork Survey"
 output: github_document
----
+___
 
 ```{r setup, include=FALSE,warning=FALSE,message=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -83,6 +83,7 @@ Saya akan buat fungsi-fungsi simulasinya yah. Bisa jaid ini bukan fungsi yang pa
 Pertama-tama, mari kita buat fungsi untuk menebak kelas ekonomi dari calon responden yang ditemui:
 
 ```{r}
+# bikin fungsi pertama
 proporsi = c(3.1/100,21.0/100,52.4/100,23.4/100)
 ses = c('A','B','C','D')
 
@@ -95,6 +96,7 @@ orang()
 Berikutnya kita kembangkan fungsi pertama dengan memasukkan asumsi pertama.
 
 ```{r}
+# bikin fungsi kedua
 siapa = function(){
   hitung = orang()
   A = ifelse(hitung == 'A',1,0)
@@ -102,7 +104,7 @@ siapa = function(){
   C = ifelse(hitung == 'C',1,0)
   D = ifelse(hitung == 'D',1,0)
   data = data.frame(A,B,C,D) # calon responden yang ditemui memiliki kelas ekonomi apa?
-  mau = sample(c(1,0),1,prob = c(.3,.7)) # apakah calon responden mau diwawancarai atau tidak?
+  mau = sample(c(1,0),1,prob = c(.5,.5)) # apakah calon responden mau diwawancarai atau tidak?
   data = data*mau # kelas ekonomi responden yang diwawancarai. Apakah ada atau tidak ada?
   return(data)
 }
@@ -120,6 +122,7 @@ Jika dilihat, responden pada kelas sosial ekonomi A memiliki proporsi terkecil d
 Kita akan membangun suatu fungsi menggunakan _looping_ menggunakan `while()` dan menghitung berapa banyak calon responden yang dibutuhkan.
 
 ```{r}
+# bikin fungsi ketiga
 berapa_calon_responden = function(){
   data_1 = siapa()
   i = 1
@@ -132,29 +135,22 @@ berapa_calon_responden = function(){
 }
 ```
 
-Contohnya, dalam sekali iterasi untuk memenuhi minimal responden, dibutuhkan calon responden sebanyak:
+Contohnya, dalam sekali iterasi untuk memenuhi minimal responden, dibutuhkan calon responden sebanyak __`r berapa_calon_responden()`__.
+
+Nah, sekarang kita bikin deh simulasinya dalam `500`-an iterasi.
 
 ```{r}
-berapa_calon_responden()
-```
-
-Nah, sekarang kita bikin deh simulasinya dalam `2000`-an iterasi.
-
-```{r}
-hasil = data.frame(id = c(1:100))
+# simulasi dimulai dari mari
+hasil = data.frame(id = c(1:2)) # untuk keperluan blog ini, saya set di dua dulu. Data hasil simulasi 500 kali ada di github yah
 for(i in 1:length(hasil$id)){
   hasil$banyak_calon_resp[i] = berapa_calon_responden()
 }
 head(hasil)
 ```
 
-Berapa _expected value_ banyaknya calon responden dari simulasi ini:
+Berapa _expected value_ banyaknya calon responden dari simulasi ini: __`r mean(hasil$banyak_calon_resp)`__.
 
-```{r}
-mean(hasil$banyak_calon_resp)
-```
-
-```{r,echo=FALSE}
+___
 hasil %>% ggplot(aes(x = banyak_calon_resp)) + 
   geom_histogram(fill = 'darkred',color='steelblue',alpha=.1) +
   theme_pubclean() +
@@ -166,4 +162,4 @@ hasil %>% ggplot(aes(x = banyak_calon_resp)) +
         axis.title.y = element_blank(),
         axis.ticks = element_blank(),
         plot.title = element_text(face='bold'))
-```
+___
