@@ -717,8 +717,8 @@ Selain mengandalkan __base__ dari __R__, kita juga bisa menggunakan `library(str
 
 Setidaknya ada dua manfaat utama dari _regular expression_, yakni:
 
-1. _Pattern Matching_.
-2. _Replace Pattern_.
+1. _Pattern Matching_; mencari kecocokan _pattern_ dari suatu data bertipe `character`.
+2. _Replace Pattern_; mencari kecocokan _pattern_ dan mengubahnya dari suatu data bertipe `character`.
 
 Perbedaan cara penulisan (kapital atau _lower_) bisa kita pertimbangkan untuk dijadikan syarat pencarian atau tidak, yakni dengan penambahan `ignore.case = T` atau `ignore.case = F`.
 
@@ -734,44 +734,82 @@ knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/mast
 
 ### 3.5.1 _Pattern Matching_
 
-Berikut adalah contoh beberapa fungsi yang sering digunakan:
+Sebagai contoh, saya akan gunakan data berikut ini:
 
 ```{r}
 string = c('Market Research','market riset','survey','responden','mickey mouse')
 pattern = 'm..ke'
+```
 
-############
-# fungsi grep
-# perhatikan output dari masing-masing perntah sebagai berikut
+Berikut adalah beberapa fungsi yang sering digunakan.
+
+#### 3.5.1.1 Fungsi `grep()`
+
+Perhatikan output dari masing-masing perintah sebagai berikut:
+
+```{r}
 grep(pattern,string)
 grep(pattern,string,value = T)
 grep(pattern,string,ignore.case = T)
+```
 
-############
-# fungsi grepl
-# output dari fungsi ini berupa logic boolean
+#### 3.5.1.2 Fungsi `grepl()`
+
+Output dari fungsi ini berupa _logic_ (_boolean_):
+
+```{r}
 grepl(pattern,string,ignore.case = T)
+```
 
-############
-# menggunakan stringr dan fungsi str_detect
-# output dari fungsi ini berupa logic boolean
+#### 3.5.1.3 Fungsi menggunakan `stringr::` dan fungsi `str_detect()`
+
+Output dari fungsi ini berupa _logic_ (_boolean_):
+
+```{r}
 stringr::str_detect(string,pattern)
+```
 
-############
-# menggunakan stringr dan fungsi str_locate
-# find starting and end position of all matches
+#### 3.5.1.4 Fungsi menggunakan `stringr::` dan fungsi `str_locate()`
+
+_Find starting and end position of all matches_.
+
+```{r}
 stringr::str_locate(string, pattern)
+```
 
-############
-# menggunakan stringr dan fungsi str_extract
-# extract first match 
+#### 3.5.1.4 Fungsi menggunakan `stringr::` dan fungsi `str_extract()`
+
+_Extract first match_. 
+
+```{r}
 stringr::str_extract(string, pattern)
 ```
 
-### 3.5.w _Replace Pattern_
+### 3.5.2 _Replace Pattern_
 
-Berikut adalah contoh beberapa fungsi yang sering digunakan:
+Kita akan gunakan contoh data berikut ini:
 
+```{r}
+string = c('Market Research','market riset','survey','responden','mickey mouse')
+pattern = 'm..ke'
+replace = 'train'
+```
+
+Berikut adalah beberapa fungsi yang sering digunakan.
+
+#### 3.5.2.1 Fungsi `sub()`
+
+```{r}
+sub(pattern, replace, string)
+sub(pattern, replace, string, ignore.case = T)
+```
+
+#### 3.5.2.2 Fungsi `gsub()`
+
+```{r}
+gsub(pattern, replace, string)
+gsub(pattern, replace, string, ignore.case = T)
+```
 ___
 
 # Referensi

@@ -925,22 +925,23 @@ nama_orang = randomNames::randomNames(20)
 nama_orang
 ```
 
-    ##  [1] "Castro Carreta, Angel"      "Cisneros, Adrianna"        
-    ##  [3] "Verduzco, Mitchell"         "Pona, Terrance"            
-    ##  [5] "Thomas, Naugh'Tia"          "Mills, Samantha"           
-    ##  [7] "Perez, Raymond"             "Lee, Andrew"               
-    ##  [9] "Espinoza, Alexandra"        "Mcconnaughhay, Noe"        
-    ## [11] "Hunt, Matias"               "al-Ebrahim, Jumaima"       
-    ## [13] "Rivera San Miguel, Tiffani" "Ashlock, Tracy"            
-    ## [15] "Velez, Trevor"              "Le, Anthony"               
-    ## [17] "Killian, Cara Marie"        "Mondragon, David"          
-    ## [19] "Bartels, Austin"            "Glass, Kacee"
+    ##  [1] "Santiesteban, Marcus"   "el-Siddique, Zakariyya"
+    ##  [3] "Kerlee, Kathryn"        "al-Sarah, Kamaaluddeen"
+    ##  [5] "Colunga, Richard"       "el-Sharif, Tawfeeqa"   
+    ##  [7] "Williams, Harry"        "Bundrant, Kevin"       
+    ##  [9] "el-Ghaffari, Sabeeka"   "Stark, Drayton"        
+    ## [11] "Salazar, Carissa"       "Trujillo, Jorge"       
+    ## [13] "Walker, Yaphet"         "Vandriel, David"       
+    ## [15] "Giltner, Justin"        "Thomas, Randal"        
+    ## [17] "Daugherty, Kevin"       "Wade, Makelsii"        
+    ## [19] "Esquibel, Alma"         "Diener, Tyler"
 
 ``` r
 sample(nama_orang,3,replace = F)
 ```
 
-    ## [1] "Glass, Kacee"          "Hunt, Matias"          "Castro Carreta, Angel"
+    ## [1] "el-Ghaffari, Sabeeka"   "Williams, Harry"       
+    ## [3] "al-Sarah, Kamaaluddeen"
 
 `replace = F` digunakan saat kita tidak ingin ada pemilihan yang
 berulang. Sedangkan `replace = T` digunakan saat diperbolehkan hasil
@@ -1001,17 +1002,17 @@ absensi = data.frame(id,nama,tinggi_badan)
 absensi
 ```
 
-    ##    id     nama tinggi_badan
-    ## 1   1   Austin          193
-    ## 2   2 Esstefan          181
-    ## 3   3   Miguel          161
-    ## 4   4   Trevor          150
-    ## 5   5     Juan          179
-    ## 6   6   Tanner          199
-    ## 7   7    Jason          153
-    ## 8   8   Idrees          158
-    ## 9   9   Daniel          172
-    ## 10 10 Sullivan          190
+    ##    id    nama tinggi_badan
+    ## 1   1    Raul          163
+    ## 2   2   Yosef          159
+    ## 3   3 Brandon          176
+    ## 4   4   Jesse          165
+    ## 5   5 Maurice          179
+    ## 6   6    Dion          160
+    ## 7   7  Colton          155
+    ## 8   8   James          172
+    ## 9   9   Tommy          175
+    ## 10 10   Jafar          193
 
 Bentuk *data frame* kelak akan menjadi primadona dalam setiap analisa
 yang digunakan di **R**. Nanti saat kita belajar *data carpentry*
@@ -1142,8 +1143,8 @@ str(absensi)
 
     ## 'data.frame':    10 obs. of  3 variables:
     ##  $ id          : int  1 2 3 4 5 6 7 8 9 10
-    ##  $ nama        : Factor w/ 10 levels "Austin","Daniel",..: 1 3 7 10 6 9 5 4 2 8
-    ##  $ tinggi_badan: int  193 181 161 150 179 199 153 158 172 190
+    ##  $ nama        : Factor w/ 10 levels "Brandon","Colton",..: 8 10 1 6 7 3 2 5 9 4
+    ##  $ tinggi_badan: int  163 159 176 165 179 160 155 172 175 193
 
 Terlihat bahwa data `absensi` memiliki struktur **data.frame** dengan
 ada `3` *variables* dan `10` *observations* (baris data).
@@ -1158,7 +1159,7 @@ summary(absensi$tinggi_badan)
 ```
 
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##   150.0   158.8   175.5   173.6   187.8   199.0
+    ##   155.0   160.8   168.5   169.7   175.8   193.0
 
 ### 3.3.5 *Class*
 
@@ -1231,7 +1232,7 @@ while(orang>0){
 i
 ```
 
-    ## [1] 176
+    ## [1] 163
 
 ## 3.5 *Regex*
 
@@ -1245,8 +1246,10 @@ Selain mengandalkan **base** dari **R**, kita juga bisa menggunakan
 
 Setidaknya ada dua manfaat utama dari *regular expression*, yakni:
 
-1.  *Pattern Matching*.
-2.  *Replace Pattern*.
+1.  *Pattern Matching*; mencari kecocokan *pattern* dari suatu data
+    bertipe `character`.
+2.  *Replace Pattern*; mencari kecocokan *pattern* dan mengubahnya dari
+    suatu data bertipe `character`.
 
 Perbedaan cara penulisan (kapital atau *lower*) bisa kita pertimbangkan
 untuk dijadikan syarat pencarian atau tidak, yakni dengan penambahan
@@ -1261,16 +1264,21 @@ apa:
 
 ### 3.5.1 *Pattern Matching*
 
-Berikut adalah contoh beberapa fungsi yang sering
-digunakan:
+Sebagai contoh, saya akan gunakan data berikut
+ini:
 
 ``` r
 string = c('Market Research','market riset','survey','responden','mickey mouse')
 pattern = 'm..ke'
+```
 
-############
-# fungsi grep
-# perhatikan output dari masing-masing perntah sebagai berikut
+Berikut adalah beberapa fungsi yang sering digunakan.
+
+#### 3.5.1.1 Fungsi `grep()`
+
+Perhatikan output dari masing-masing perintah sebagai berikut:
+
+``` r
 grep(pattern,string)
 ```
 
@@ -1288,28 +1296,31 @@ grep(pattern,string,ignore.case = T)
 
     ## [1] 1 2 5
 
+#### 3.5.1.2 Fungsi `grepl()`
+
+Output dari fungsi ini berupa *logic* (*boolean*):
+
 ``` r
-############
-# fungsi grepl
-# output dari fungsi ini berupa logic boolean
 grepl(pattern,string,ignore.case = T)
 ```
 
     ## [1]  TRUE  TRUE FALSE FALSE  TRUE
 
+#### 3.5.1.3 Fungsi menggunakan `stringr::` dan fungsi `str_detect()`
+
+Output dari fungsi ini berupa *logic* (*boolean*):
+
 ``` r
-############
-# menggunakan stringr dan fungsi str_detect
-# output dari fungsi ini berupa logic boolean
 stringr::str_detect(string,pattern)
 ```
 
     ## [1] FALSE  TRUE FALSE FALSE  TRUE
 
+#### 3.5.1.4 Fungsi menggunakan `stringr::` dan fungsi `str_locate()`
+
+*Find starting and end position of all matches*.
+
 ``` r
-############
-# menggunakan stringr dan fungsi str_locate
-# find starting and end position of all matches
 stringr::str_locate(string, pattern)
 ```
 
@@ -1320,18 +1331,61 @@ stringr::str_locate(string, pattern)
     ## [4,]    NA  NA
     ## [5,]     1   5
 
+#### 3.5.1.4 Fungsi menggunakan `stringr::` dan fungsi `str_extract()`
+
+*Extract first match*.
+
 ``` r
-############
-# menggunakan stringr dan fungsi str_extract
-# extract first match 
 stringr::str_extract(string, pattern)
 ```
 
     ## [1] NA      "marke" NA      NA      "micke"
 
-### 3.5.w *Replace Pattern*
+### 3.5.2 *Replace Pattern*
 
-Berikut adalah contoh beberapa fungsi yang sering digunakan:
+Kita akan gunakan contoh data berikut
+ini:
+
+``` r
+string = c('Market Research','market riset','survey','responden','mickey mouse')
+pattern = 'm..ke'
+replace = 'train'
+```
+
+Berikut adalah beberapa fungsi yang sering
+    digunakan.
+
+#### 3.5.2.1 Fungsi `sub()`
+
+``` r
+sub(pattern, replace, string)
+```
+
+    ## [1] "Market Research" "traint riset"    "survey"          "responden"      
+    ## [5] "trainy mouse"
+
+``` r
+sub(pattern, replace, string, ignore.case = T)
+```
+
+    ## [1] "traint Research" "traint riset"    "survey"          "responden"      
+    ## [5] "trainy mouse"
+
+#### 3.5.2.2 Fungsi `gsub()`
+
+``` r
+gsub(pattern, replace, string)
+```
+
+    ## [1] "Market Research" "traint riset"    "survey"          "responden"      
+    ## [5] "trainy mouse"
+
+``` r
+gsub(pattern, replace, string, ignore.case = T)
+```
+
+    ## [1] "traint Research" "traint riset"    "survey"          "responden"      
+    ## [5] "trainy mouse"
 
 -----
 
