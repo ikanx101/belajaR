@@ -118,7 +118,11 @@ Kelebihan R Studio antara lain:
 
 1. _Free_, kita bisa memilih versi gratis dari __R Studio__ tanpa ada pengurangan fitur dasar dari __R__.
 2. _R Studio Cloud_, tersedia layanan _cloud_ sehingga bisa diakses dan digunakan menggunakan _browser_ di _gadget_ manapun. Layanan _cloud_ ini bisa diakses [di sini](https://rstudio.cloud) dan dikoneksikan ke akun __github__ Kamu. Kira-kira seperti ini tampilannya jika dibuka di _Chrome for Android_:
-![alt text](https://passingthroughresearcher.files.wordpress.com/2019/11/screenshot_20191113-045720_chrome8061063824617160210.jpg "chart")
+
+```{r out.width = '60%',echo=FALSE}
+knitr::include_graphics('https://passingthroughresearcher.files.wordpress.com/2019/11/screenshot_20191113-045720_chrome8061063824617160210.jpg')
+```
+
 3. _Shiny Apps_, kita bisa membuat _apps_ berbasis _web_ dari __R__. _Apps_ ini bisa dijadikan _dashboard_ atau mesin kalkulasi otomatis. Tergantung seberapa jauh Kamu membuat _coding_ algoritmanya.
 4. _R Markdown_, ini fitur yang paling saya sukai. Bahkan untuk menulis _web_ ini, saya menggunakan _R Markdown_. Output files -nya beragam, mulai dari `docx`, `pptx`, `pdf`, `html`, `md`, dll. Bahkan kita bisa membuat [_e-book_](https://bookdown.org/) dengan memanfaatkan `library(bookdown)`.
 
@@ -199,6 +203,7 @@ Beberapa contoh `library` yang sering saya gunakan:
 6. `readxl` atau `openxlsx`: _export_ dan _import_ _excel files_.
 7. `officer`: membuat _Ms. Office files_ seperti _excel_, _docx_, dan _powerpoint_.
 8. `expss`: __SPSS__ di __R__.
+8. `xaringan`: membuat _file_ presentasi berformat `html`.
 
 ### 1.7.1 Instalasi _Packages_
 
@@ -650,8 +655,33 @@ Fungsi `print()` digunakan untuk menampilkan data ke layar. Biasanya digunakan p
 print(nama_toko)
 ```
 
-str
-summary
+### 3.3.3 _str_
+
+Fungsi `str()` digunakan untuk melihat tipe dan struktur _object_ yang ada di __R__. Sebagai contoh, kita akan pakai data `absensi` dari _section_ __3.2.3__.
+
+```{r}
+str(absensi)
+```
+
+Terlihat bahwa data `absensi` memiliki struktur __data.frame__ dengan ada `3` _variables_ dan `10` _observations_ (baris data).
+
+### 3.3.4 _Summary_
+
+Fungsi `summary()` digunakan untuk melihat statistik deskriptif dari suatu data (tergantung dari tipe datanya). Contoh:
+
+```{r}
+summary(absensi$tinggi_badan)
+```
+
+### 3.3.5 _Class_
+
+Fungsi `class()` digunakan untuk melihat tipe atau struktur dari suatu data. Mirip dengan fungsi `str()`, tapi tidak sampai menampilkan dengan detail. Contoh:
+
+```{r}
+class(absensi)
+class(absensi$tinggi_badan)
+```
+
 class
 View
 Regex

@@ -173,9 +173,11 @@ Kelebihan R Studio antara lain:
     digunakan menggunakan *browser* di *gadget* manapun. Layanan *cloud*
     ini bisa diakses [di sini](https://rstudio.cloud) dan dikoneksikan
     ke akun **github** Kamu. Kira-kira seperti ini tampilannya jika
-    dibuka di *Chrome for Android*: ![alt
-    text](https://passingthroughresearcher.files.wordpress.com/2019/11/screenshot_20191113-045720_chrome8061063824617160210.jpg
-    "chart")
+    dibuka di *Chrome for
+Android*:
+
+<img src="https://passingthroughresearcher.files.wordpress.com/2019/11/screenshot_20191113-045720_chrome8061063824617160210.jpg" width="60%" />
+
 3.  *Shiny Apps*, kita bisa membuat *apps* berbasis *web* dari **R**.
     *Apps* ini bisa dijadikan *dashboard* atau mesin kalkulasi otomatis.
     Tergantung seberapa jauh Kamu membuat *coding* algoritmanya.
@@ -316,6 +318,7 @@ Beberapa contoh `library` yang sering saya gunakan:
 7.  `officer`: membuat *Ms. Office files* seperti *excel*, *docx*, dan
     *powerpoint*.
 8.  `expss`: **SPSS** di **R**.
+9.  `xaringan`: membuat *file* presentasi berformat `html`.
 
 ### 1.7.1 Instalasi *Packages*
 
@@ -933,19 +936,19 @@ nama_orang = randomNames::randomNames(20)
 nama_orang
 ```
 
-    ##  [1] "West, Amelia"         "Le, Shubheksha"       "Gebeor, Tyree"       
-    ##  [4] "el-Jabbar, Yaasmeen"  "Feemster, Alexis"     "Moore, Tyra"         
-    ##  [7] "Haveman, Derek"       "Whitworth, Ariunzaya" "Lor, Melinda"        
-    ## [10] "Kim, Scott"           "Watson, Stuart"       "Uballe, Randolph"    
-    ## [13] "al-Hassan, Amatullah" "el-Mohammad, Ulyaa"   "al-Ally, Warda"      
-    ## [16] "al-Odeh, Taahir"      "Chavez, Ingrid"       "Dai, Anushka"        
-    ## [19] "Silevani, Jenny"      "Silas, Thomas"
+    ##  [1] "el-Kanan, Muna"      "Wall, Morgann"       "Miller, Sky"        
+    ##  [4] "Morgan, Tilane"      "Zade, Krista"        "al-Quadri, Ruwaid"  
+    ##  [7] "Tu, Ashley"          "el-Yamin, Annnees"   "el-Jabbour, Afeef"  
+    ## [10] "Van Court, Derrick"  "Torres, Saul"        "Boucneau, Bryant"   
+    ## [13] "al-Fahs, Badruddeen" "Fong, Rebeka"        "Nelson, Lisa"       
+    ## [16] "Barnes, Anna"        "Pinto, Teddi"        "Wang, Sungjin"      
+    ## [19] "Sparks, Ernesto"     "Oleary, Elias"
 
 ``` r
 sample(nama_orang,3,replace = F)
 ```
 
-    ## [1] "Lor, Melinda"         "al-Hassan, Amatullah" "Chavez, Ingrid"
+    ## [1] "Sparks, Ernesto" "Barnes, Anna"    "Zade, Krista"
 
 `replace = F` digunakan saat kita tidak ingin ada pemilihan yang
 berulang. Sedangkan `replace = T` digunakan saat diperbolehkan hasil
@@ -1006,17 +1009,17 @@ absensi = data.frame(id,nama,tinggi_badan)
 absensi
 ```
 
-    ##    id      nama tinggi_badan
-    ## 1   1     Oscar          191
-    ## 2   2     Jorge          161
-    ## 3   3      Drew          177
-    ## 4   4    Hunter          183
-    ## 5   5   Anthony          192
-    ## 6   6 Alexander          176
-    ## 7   7   Alfredo          182
-    ## 8   8     Aaron          165
-    ## 9   9   Raakaan          194
-    ## 10 10     Dylan          159
+    ##    id     nama tinggi_badan
+    ## 1   1   Jalaal          198
+    ## 2   2    Aadam          187
+    ## 3   3   Dearee          159
+    ## 4   4 Kou Meng          155
+    ## 5   5   Ronnie          161
+    ## 6   6   Dustyn          193
+    ## 7   7    David          162
+    ## 8   8  Avreyon          154
+    ## 9   9 De'Vonta          151
+    ## 10 10  Anthony          182
 
 Bentuk *data frame* kelak akan menjadi primadona dalam setiap analisa
 yang digunakan di **R**. Nanti saat kita belajar *data carpentry*
@@ -1135,7 +1138,55 @@ print(nama_toko)
     ##  [7] "toko ke-7 Bandung" "toko ke-8 Bekasi"  "toko ke-9 Bandung"
     ## [10] "toko ke-10 Bekasi"
 
-str summary class View Regex
+### 3.3.3 *str*
+
+Fungsi `str()` digunakan untuk melihat tipe dan struktur *object* yang
+ada di **R**. Sebagai contoh, kita akan pakai data `absensi` dari
+*section* **3.2.3**.
+
+``` r
+str(absensi)
+```
+
+    ## 'data.frame':    10 obs. of  3 variables:
+    ##  $ id          : int  1 2 3 4 5 6 7 8 9 10
+    ##  $ nama        : Factor w/ 10 levels "Aadam","Anthony",..: 8 1 6 9 10 7 4 3 5 2
+    ##  $ tinggi_badan: int  198 187 159 155 161 193 162 154 151 182
+
+Terlihat bahwa data `absensi` memiliki struktur **data.frame** dengan
+ada `3` *variables* dan `10` *observations* (baris data).
+
+### 3.3.4 *Summary*
+
+Fungsi `summary()` digunakan untuk melihat statistik deskriptif dari
+suatu data (tergantung dari tipe datanya). Contoh:
+
+``` r
+summary(absensi$tinggi_badan)
+```
+
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    ##   151.0   156.0   161.5   170.2   185.8   198.0
+
+### 3.3.5 *Class*
+
+Fungsi `class()` digunakan untuk melihat tipe atau struktur dari suatu
+data. Mirip dengan fungsi `str()`, tapi tidak sampai menampilkan dengan
+detail. Contoh:
+
+``` r
+class(absensi)
+```
+
+    ## [1] "data.frame"
+
+``` r
+class(absensi$tinggi_badan)
+```
+
+    ## [1] "integer"
+
+class View Regex
 
 ## 3.4 *Some useful function*
 
