@@ -711,6 +711,25 @@ i
 
 ## 3.5 _Regex_
 
+_Regex_ adalah kepanjangan dari _reguler expression_, yakni mencari _pattern_ dari data berupa string. _Cheatsheet_ untuk _regex_ bisa dilihat di [sini](https://rstudio.com/wp-content/uploads/2016/09/RegExCheatsheet.pdf).
+
+Selain mengandalkan `base` _library_ dari __R__, kita bjuga bisa menggunakan `library(stringr)`.
+
+Perbedaan cara penulisan (kapital atau _lower_) bisa kita pertimbangkan untuk dijadikan syarat pencarian atau tidak, yakni dengan penambahan `ignore.case = T` atau `ignore.case = F`.
+
+Berikut adalah contohnya:
+
+```{r}
+string = c('Market Research','market riset','survey','responden')
+pattern = 'm..ke'
+
+############
+# fungsi grep
+# outputnya adalah nomor index dari string yang pattern-nya matched
+grep(pattern,string)
+grep(pattern,string,ignore.case = T)
+```
+
 ___
 
 # Referensi

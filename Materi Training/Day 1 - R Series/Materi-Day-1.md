@@ -925,19 +925,19 @@ nama_orang = randomNames::randomNames(20)
 nama_orang
 ```
 
-    ##  [1] "Snow, Tanner"       "Olson, Wenli"       "Mora, Brandon"     
-    ##  [4] "Camacho, Charlotte" "Jones, Tasharina"   "al-Halim, Nisma"   
-    ##  [7] "Thompson, Donte"    "Martinez, Cody"     "Lavassani, Kathy"  
-    ## [10] "al-Taheri, Taamir"  "Jimenez, Demetris"  "Smith, Emma"       
-    ## [13] "Babbitt, Tyler"     "Washburn, Tony"     "Colin, Madeleine"  
-    ## [16] "Burke, Austin"      "Draper, Benjamin"   "al-Tariq, Kanaan"  
-    ## [19] "Kim, An"            "Sylvain, Michell"
+    ##  [1] "Mabry, Justin"        "Smith, Marissa"       "Rocha, Diamante"     
+    ##  [4] "al-Sani, Widdad"      "Martinez, Erwin"      "Dejesus, Tate"       
+    ##  [7] "el-Abbasi, Ishaaq"    "al-Hassen, Haashid"   "Strader, Ismail"     
+    ## [10] "al-Mahmoud, Shahaama" "Rodriguez, Shelbie"   "Nguyen, Faleoge"     
+    ## [13] "Lucero, Jerry"        "Vasquez, Mika"        "al-Farooqui, Zain"   
+    ## [16] "Houdek, Tiffany"      "el-Javid, Sham'a"     "Coffman, Brianna"    
+    ## [19] "Wing, Joshua"         "Truong, Bich Tram"
 
 ``` r
 sample(nama_orang,3,replace = F)
 ```
 
-    ## [1] "Olson, Wenli"   "Smith, Emma"    "Martinez, Cody"
+    ## [1] "Vasquez, Mika"     "Houdek, Tiffany"   "Truong, Bich Tram"
 
 `replace = F` digunakan saat kita tidak ingin ada pemilihan yang
 berulang. Sedangkan `replace = T` digunakan saat diperbolehkan hasil
@@ -998,17 +998,17 @@ absensi = data.frame(id,nama,tinggi_badan)
 absensi
 ```
 
-    ##    id     nama tinggi_badan
-    ## 1   1   Trevor          184
-    ## 2   2     Milo          157
-    ## 3   3     Adam          151
-    ## 4   4   Thomas          175
-    ## 5   5  Matthew          181
-    ## 6   6   Tucker          156
-    ## 7   7     Cody          182
-    ## 8   8 Mukarram          169
-    ## 9   9    Arhab          176
-    ## 10 10    Laten          185
+    ##    id            nama tinggi_badan
+    ## 1   1           Uwais          185
+    ## 2   2          Joseph          165
+    ## 3   3            Jose          159
+    ## 4   4 Dante Alessandr          183
+    ## 5   5          Jeremy          161
+    ## 6   6     Christopher          176
+    ## 7   7       Jahangeer          197
+    ## 8   8             Bin          192
+    ## 9   9          Daniel          180
+    ## 10 10           Jacob          173
 
 Bentuk *data frame* kelak akan menjadi primadona dalam setiap analisa
 yang digunakan di **R**. Nanti saat kita belajar *data carpentry*
@@ -1139,8 +1139,8 @@ str(absensi)
 
     ## 'data.frame':    10 obs. of  3 variables:
     ##  $ id          : int  1 2 3 4 5 6 7 8 9 10
-    ##  $ nama        : Factor w/ 10 levels "Adam","Arhab",..: 9 6 1 8 5 10 3 7 2 4
-    ##  $ tinggi_badan: int  184 157 151 175 181 156 182 169 176 185
+    ##  $ nama        : Factor w/ 10 levels "Bin","Christopher",..: 10 9 8 4 7 2 6 1 3 5
+    ##  $ tinggi_badan: int  185 165 159 183 161 176 197 192 180 173
 
 Terlihat bahwa data `absensi` memiliki struktur **data.frame** dengan
 ada `3` *variables* dan `10` *observations* (baris data).
@@ -1155,7 +1155,7 @@ summary(absensi$tinggi_badan)
 ```
 
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##   151.0   160.0   175.5   171.6   181.8   185.0
+    ##   159.0   167.0   178.0   177.1   184.5   197.0
 
 ### 3.3.5 *Class*
 
@@ -1231,6 +1231,38 @@ i
     ## [1] 172
 
 ## 3.5 *Regex*
+
+*Regex* adalah kepanjangan dari *reguler expression*, yakni mencari
+*pattern* dari data berupa string. *Cheatsheet* untuk *regex* bisa
+dilihat di
+[sini](https://rstudio.com/wp-content/uploads/2016/09/RegExCheatsheet.pdf).
+
+Selain mengandalkan `base` *library* dari **R**, kita bjuga bisa
+menggunakan `library(stringr)`.
+
+Perbedaan cara penulisan (kapital atau *lower*) bisa kita pertimbangkan
+untuk dijadikan syarat pencarian atau tidak, yakni dengan penambahan
+`ignore.case = T` atau `ignore.case = F`.
+
+Berikut adalah contohnya:
+
+``` r
+string = c('Market Research','market riset','survey','responden')
+pattern = 'm..ke'
+
+############
+# fungsi grep
+# outputnya adalah nomor index dari string yang pattern-nya matched
+grep(pattern,string)
+```
+
+    ## [1] 2
+
+``` r
+grep(pattern,string,ignore.case = T)
+```
+
+    ## [1] 1 2
 
 -----
 
