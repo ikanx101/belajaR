@@ -925,22 +925,19 @@ nama_orang = randomNames::randomNames(20)
 nama_orang
 ```
 
-    ##  [1] "Goodman, Robel"         "Walker, Taylor"        
-    ##  [3] "Guardado, Nattalie"     "Largaespada, Tylyn"    
-    ##  [5] "Owusu Ansah, Roshae"    "al-Abad, Daleel"       
-    ##  [7] "Aguilar, Emilio"        "Nagashima, Parker"     
-    ##  [9] "el-Saah, Abdul Quddoos" "Wang, Tin"             
-    ## [11] "Fugett, Alexis"         "Kiley, Joi"            
-    ## [13] "al-Sultan, Talaal"      "el-Badie, Abdul Wadood"
-    ## [15] "Palomino, Parker"       "Howard, Brianna"       
-    ## [17] "Xiang, Foifon"          "Lefholz, Elizabeth"    
-    ## [19] "Lee, Paul"              "al-Rassi, Layaali"
+    ##  [1] "Nguyen, Minh-Tom"    "Conley, Elijah"      "Hale, Benjamin"     
+    ##  [4] "Murillo-Rivas, Sean" "Martzloff, Shenoa"   "Ruppert, Marcus"    
+    ##  [7] "Lewis, Elise"        "Warren, Richard"     "Shaull, Matthew"    
+    ## [10] "al-Sabet, Nadheera"  "Walter, James"       "Shino, Samuel"      
+    ## [13] "Desai, Chloe"        "Cranford, Kyle"      "Woolsey, Dante"     
+    ## [16] "Kim, Danielle"       "Sullivan, Kiauva"    "Pinelle, Courtney"  
+    ## [19] "Waddell, Jacquelyn"  "Wong, Kevin"
 
 ``` r
 sample(nama_orang,3,replace = F)
 ```
 
-    ## [1] "Xiang, Foifon"       "Owusu Ansah, Roshae" "Aguilar, Emilio"
+    ## [1] "Cranford, Kyle"   "Hale, Benjamin"   "Nguyen, Minh-Tom"
 
 `replace = F` digunakan saat kita tidak ingin ada pemilihan yang
 berulang. Sedangkan `replace = T` digunakan saat diperbolehkan hasil
@@ -1001,17 +998,17 @@ absensi = data.frame(id,nama,tinggi_badan)
 absensi
 ```
 
-    ##    id      nama tinggi_badan
-    ## 1   1    Emmett          165
-    ## 2   2     Faraj          193
-    ## 3   3     Jesse          150
-    ## 4   4     Noori          156
-    ## 5   5     Tyler          198
-    ## 6   6 Christian          183
-    ## 7   7   Tristan          173
-    ## 8   8  Virginio          174
-    ## 9   9      Alec          180
-    ## 10 10   Shabaan          164
+    ##    id    nama tinggi_badan
+    ## 1   1     Ian          184
+    ## 2   2 Kenneth          168
+    ## 3   3  Jerrad          176
+    ## 4   4 Estevan          185
+    ## 5   5   Aslam          167
+    ## 6   6  Johnny          195
+    ## 7   7 William          177
+    ## 8   8    Rick          166
+    ## 9   9 Sushant          151
+    ## 10 10  Tanner          174
 
 Bentuk *data frame* kelak akan menjadi primadona dalam setiap analisa
 yang digunakan di **R**. Nanti saat kita belajar *data carpentry*
@@ -1142,8 +1139,8 @@ str(absensi)
 
     ## 'data.frame':    10 obs. of  3 variables:
     ##  $ id          : int  1 2 3 4 5 6 7 8 9 10
-    ##  $ nama        : Factor w/ 10 levels "Alec","Christian",..: 3 4 5 6 9 2 8 10 1 7
-    ##  $ tinggi_badan: int  165 193 150 156 198 183 173 174 180 164
+    ##  $ nama        : Factor w/ 10 levels "Aslam","Estevan",..: 3 6 4 2 1 5 10 7 8 9
+    ##  $ tinggi_badan: int  184 168 176 185 167 195 177 166 151 174
 
 Terlihat bahwa data `absensi` memiliki struktur **data.frame** dengan
 ada `3` *variables* dan `10` *observations* (baris data).
@@ -1158,7 +1155,7 @@ summary(absensi$tinggi_badan)
 ```
 
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##   150.0   164.2   173.5   173.6   182.2   198.0
+    ##   151.0   167.2   175.0   174.3   182.2   195.0
 
 ### 3.3.5 *Class*
 
@@ -1231,7 +1228,7 @@ while(orang>0){
 i
 ```
 
-    ## [1] 165
+    ## [1] 164
 
 ## 3.5 *Regex*
 
@@ -1249,29 +1246,84 @@ untuk dijadikan syarat pencarian atau tidak, yakni dengan penambahan
 
 Berikut ini adalah *syntaxes* yang ada dan digunakan untuk mencari apa:
 
-Syntax Description - \\d Digit, 0,1,2 … 9 - \\D Not Digit - \\s Space -
-\\S Not Space - \\w Word - \\W Not Word - \\t Tab - \\n New line - ^
-Beginning of the string - $ End of the string -  Escape special
-characters, e.g. \\ is “", + is”+" - | Alternation match. e.g. /(e|d)n/
-matches “en” and “dn” - • Any character, except or line terminator -
-\[ab\] a or b \[^ab\] Any character except a and b \[0-9\] All Digit
-\[A-Z\] All uppercase A to Z letters \[a-z\] All lowercase a to z
-letters \[A-z\] All Uppercase and lowercase a to z letters i+ i at least
-one time i\* i zero or more times i? i zero or 1 time i{n} i occurs n
-times in sequence i{n1,n2} i occurs n1 - n2 times in sequence i{n1,n2}?
-non greedy match, see above example i{n,} i occures \>= n times
-\[:alnum:\] Alphanumeric characters: \[:alpha:\] and \[:digit:\]
-\[:alpha:\] Alphabetic characters: \[:lower:\] and \[:upper:\]
-\[:blank:\] Blank characters: e.g. space, tab \[:cntrl:\] Control
-characters \[:digit:\] Digits: 0 1 2 3 4 5 6 7 8 9 \[:graph:\] Graphical
-characters: \[:alnum:\] and \[:punct:\] \[:lower:\] Lower-case letters
-in the current locale \[:print:\] Printable characters: \[:alnum:\],
-\[:punct:\] and space \[:punct:\] Punctuation character: \! " \# $ % & ’
-( ) \* + , - . / : ; \< = \> ? @ \[  \] ^ \_ \` { | } ~ \[:space:\]
-Space characters: tab, newline, vertical tab, form feed, carriage
-return, space \[:upper:\] Upper-case letters in the current locale
-\[:xdigit:\] Hexadecimal digits: 0 1 2 3 4 5 6 7 8 9 A B C D E F a b c d
-e f
+  - \\d Digit, 0,1,2 … 9
+
+  - \\D Not Digit
+
+  - \\s Space
+
+  - \\S Not Space
+
+  - \\w Word
+
+  - \\W Not Word
+
+  - \\t Tab
+
+  - \\n New line
+
+  - ^ Beginning of the string
+
+  - $ End of the string
+
+  -  Escape special characters, e.g. \\ is “", + is”+"
+
+  - Alternation match. e.g. /(e|d)n/ matches “en” and “dn”
+
+  - • Any character, except or line terminator
+
+  - \[ab\] a or b
+
+  - \[^ab\] Any character except a and b
+
+  - \[0-9\] All Digit
+
+  - \[A-Z\] All uppercase A to Z letters
+
+  - \[a-z\] All lowercase a to z letters
+
+  - \[A-z\] All Uppercase and lowercase a to z letters
+
+  - i+ i at least one time
+
+  - i\* i zero or more times
+
+  - i? i zero or 1 time
+
+  - i{n} i occurs n times in sequence
+
+  - i{n1,n2} i occurs n1 - n2 times in sequence
+
+  - i{n1,n2}? non greedy match, see above example
+
+  - i{n,} i occures \>= n times
+
+  - \[:alnum:\] Alphanumeric characters: \[:alpha:\] and \[:digit:\]
+
+  - \[:alpha:\] Alphabetic characters: \[:lower:\] and \[:upper:\]
+
+  - \[:blank:\] Blank characters: e.g. space, tab
+
+  - \[:cntrl:\] Control characters
+
+  - \[:digit:\] Digits: 0 1 2 3 4 5 6 7 8 9
+
+  - \[:graph:\] Graphical characters: \[:alnum:\] and \[:punct:\]
+
+  - \[:lower:\] Lower-case letters in the current locale
+
+  - \[:print:\] Printable characters: \[:alnum:\], \[:punct:\] and space
+
+  - \[:punct:\] Punctuation character: \! " \# $ % & ’ ( ) \* + , - . /
+    : ; \< = \> ? @ \[  \] ^ \_ \` { | } ~
+
+  - \[:space:\] Space characters: tab, newline, vertical tab, form feed,
+    carriage return, space
+
+  - \[:upper:\] Upper-case letters in the current locale
+
+  - \[:xdigit:\] Hexadecimal digits: 0 1 2 3 4 5 6 7 8 9 A B C D E F a b
+    c d e f
 
 Berikut adalah contohnya:
 
