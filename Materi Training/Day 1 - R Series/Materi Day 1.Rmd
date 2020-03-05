@@ -814,12 +814,44 @@ gsub(pattern, replace, string, ignore.case = T)
 
 ___
 
-# Membuat _function_ di __R__.
+# 4. Membuat _function_ di __R__.
 
 __R__ memungkinkan kita untuk membuat fungsi yang _custom_ secara mandiri. Jika kita sering menggunakan perintah-perintah tertentu dan ingin menghemat penulisan algoritma, kita bisa membuat _custom_ `function()` sendiri.
 
-```{r out.width = '50%',echo=FALSE}
+```{r out.width = '80%',echo=FALSE}
 knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Materi%20Training/Day%201%20-%20R%20Series/function.png')
+```
+
+`function()` bisa memerlukan _entry variable_ atau tidak memerlukan _entry variable_ sama sekali.
+
+## 4.1 `function()` tanpa _entry variable_
+
+
+
+## 4.2 `function()` dengan _entry variable_
+
+_Entry variable_ yang digunakan bisa berbentuk macam-macam dan bisa lebih dari satu.
+
+Contoh, kita akan membuat fungsi untuk mencari modus dari sebuah _vector_:
+
+```{r}
+modus = function(x) {
+  ux = unique(x)
+  tab = tabulate(match(x, ux))
+  ux[tab == max(tab)]
+}
+
+nama = c('a','b','a','c','d')
+modus(nama)
+```
+
+Contoh, kita akan buat `function()` untuk menghitung rumus pitagoras dengan dua _entry variables_, yakni `a` dan `b` sebagai berikut:
+
+```{r}
+pytagoras = function(a,b){
+  sqrt((a^2) + (b^2))
+}
+pytagoras(3,4)
 ```
 
 ___

@@ -925,22 +925,22 @@ nama_orang = randomNames::randomNames(20)
 nama_orang
 ```
 
-    ##  [1] "Villanueva, Anay"       "Moreno, Olga"          
-    ##  [3] "Phillips, Daniel"       "Morales Lozano, Taylor"
-    ##  [5] "Mikesell, Melissa"      "Cowans, Jamel"         
-    ##  [7] "Shaw, Alexander"        "Lucero, Maria"         
-    ##  [9] "Randal, Jillian"        "Cox, Alexander"        
-    ## [11] "Bentley, Alexander"     "Gonzalez, Jorge"       
-    ## [13] "Baker, Gourisankar"     "Cradle, Sharaina"      
-    ## [15] "Rel, Chase"             "Delgadillo, Holly"     
-    ## [17] "Hogan, Kelby"           "Wilson-Parson, Michael"
-    ## [19] "Rape, Eric"             "Charity, Cerake"
+    ##  [1] "Micciulla, Mary"        "Hills, Shawn"          
+    ##  [3] "Gonzalez, Eunice"       "Harper Williams, Kaleb"
+    ##  [5] "Brave, Brandi"          "Towns, Yi"             
+    ##  [7] "Martin, Maranda"        "Alvarez, Cassidy"      
+    ##  [9] "Kroskob, Anita"         "Garcia, Iris"          
+    ## [11] "Sanchez, Darian"        "Bieser, Charles"       
+    ## [13] "Dumler, Long"           "Lakkaraju, Omer"       
+    ## [15] "Neurohr, Angelica"      "Maldonado, Omar"       
+    ## [17] "el-Salahuddin, Hikma"   "Beck, Gabriel"         
+    ## [19] "Fernandez Soto, David"  "Jackson, Nicole"
 
 ``` r
 sample(nama_orang,3,replace = F)
 ```
 
-    ## [1] "Villanueva, Anay" "Cox, Alexander"   "Cradle, Sharaina"
+    ## [1] "Garcia, Iris"    "Dumler, Long"    "Bieser, Charles"
 
 `replace = F` digunakan saat kita tidak ingin ada pemilihan yang
 berulang. Sedangkan `replace = T` digunakan saat diperbolehkan hasil
@@ -1002,16 +1002,16 @@ absensi
 ```
 
     ##    id    nama tinggi_badan
-    ## 1   1 Dominic          194
-    ## 2   2  Chance          153
-    ## 3   3   Aayid          199
-    ## 4   4 Jongwan          178
-    ## 5   5   Logan          195
-    ## 6   6 Michael          187
-    ## 7   7    Alan          158
-    ## 8   8 Michael          172
-    ## 9   9    Roba          196
-    ## 10 10   Shane          168
+    ## 1   1 Derrick          183
+    ## 2   2 Diondre          153
+    ## 3   3 Patrick          170
+    ## 4   4  Najeem          157
+    ## 5   5  Deshon          172
+    ## 6   6 Rayland          154
+    ## 7   7  Isaiah          176
+    ## 8   8 J'Azmin          187
+    ## 9   9  Donald          161
+    ## 10 10     Ken          179
 
 Bentuk *data frame* kelak akan menjadi primadona dalam setiap analisa
 yang digunakan di **R**. Nanti saat kita belajar *data carpentry*
@@ -1142,8 +1142,8 @@ str(absensi)
 
     ## 'data.frame':    10 obs. of  3 variables:
     ##  $ id          : int  1 2 3 4 5 6 7 8 9 10
-    ##  $ nama        : Factor w/ 9 levels "Aayid","Alan",..: 4 3 1 5 6 7 2 7 8 9
-    ##  $ tinggi_badan: int  194 153 199 178 195 187 158 172 196 168
+    ##  $ nama        : Factor w/ 10 levels "Derrick","Deshon",..: 1 3 9 8 2 10 5 6 4 7
+    ##  $ tinggi_badan: int  183 153 170 157 172 154 176 187 161 179
 
 Terlihat bahwa data `absensi` memiliki struktur **data.frame** dengan
 ada `3` *variables* dan `10` *observations* (baris data).
@@ -1158,7 +1158,7 @@ summary(absensi$tinggi_badan)
 ```
 
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##   153.0   169.0   182.5   180.0   194.8   199.0
+    ##   153.0   158.0   171.0   169.2   178.2   187.0
 
 ### 3.3.5 *Class*
 
@@ -1231,7 +1231,7 @@ while(orang>0){
 i
 ```
 
-    ## [1] 164
+    ## [1] 165
 
 ## 3.5 *Regex*
 
@@ -1387,7 +1387,7 @@ gsub(pattern, replace, string, ignore.case = T)
 
 -----
 
-# Membuat *function* di **R**.
+# 4\. Membuat *function* di **R**.
 
 **R** memungkinkan kita untuk membuat fungsi yang *custom* secara
 mandiri. Jika kita sering menggunakan perintah-perintah tertentu dan
@@ -1395,7 +1395,45 @@ ingin menghemat penulisan algoritma, kita bisa membuat *custom*
 `function()`
 sendiri.
 
-<img src="https://raw.githubusercontent.com/ikanx101/belajaR/master/Materi%20Training/Day%201%20-%20R%20Series/function.png" width="50%" />
+<img src="https://raw.githubusercontent.com/ikanx101/belajaR/master/Materi%20Training/Day%201%20-%20R%20Series/function.png" width="80%" />
+
+`function()` bisa memerlukan *entry variable* atau tidak memerlukan
+*entry variable* sama sekali.
+
+## 4.1 `function()` tanpa *entry variable*
+
+## 4.2 `function()` dengan *entry variable*
+
+*Entry variable* yang digunakan bisa berbentuk macam-macam dan bisa
+lebih dari satu.
+
+Contoh, kita akan membuat fungsi untuk mencari modus dari sebuah
+*vector*:
+
+``` r
+modus = function(x) {
+  ux = unique(x)
+  tab = tabulate(match(x, ux))
+  ux[tab == max(tab)]
+}
+
+nama = c('a','b','a','c','d')
+modus(nama)
+```
+
+    ## [1] "a"
+
+Contoh, kita akan buat `function()` untuk menghitung rumus pitagoras
+dengan dua *entry variables*, yakni `a` dan `b` sebagai berikut:
+
+``` r
+pytagoras = function(a,b){
+  sqrt((a^2) + (b^2))
+}
+pytagoras(3,4)
+```
+
+    ## [1] 5
 
 -----
 
