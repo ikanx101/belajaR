@@ -826,13 +826,32 @@ knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/mast
 
 ## 4.1 `function()` tanpa _entry variable_
 
+Ada kalanya kita membuat `function()` tanpa ada _entry variable_. _Lho kok gitu?_
 
+Tergantung dari kebutuhan kita _yah_.
+
+Sebagai contoh, kita akan membuat `function()` yang akan men- _generate_ nama orang, umur, tinggi, dan berat badan:
+
+```{r}
+demografi = function(){
+  nama = randomNames::randomNames(1)
+  umur = sample(c(20:60),1)
+  tinggi = rnorm(1,mean = 150, sd = 20)
+  tinggi = round(tinggi,1)
+  berat = rnorm(1,mean = 40, sd = 5)
+  berat = round(berat,1)
+  data = c(nama,umur,tinggi,berat)
+  return(data)
+}
+
+demografi()
+```
 
 ## 4.2 `function()` dengan _entry variable_
 
 _Entry variable_ yang digunakan bisa berbentuk macam-macam dan bisa lebih dari satu.
 
-Contoh, kita akan membuat fungsi untuk mencari modus dari sebuah _vector_:
+Contoh, kita akan membuat `function()` untuk mencari modus dari sebuah _vector_:
 
 ```{r}
 modus = function(x) {

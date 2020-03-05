@@ -925,22 +925,19 @@ nama_orang = randomNames::randomNames(20)
 nama_orang
 ```
 
-    ##  [1] "Micciulla, Mary"        "Hills, Shawn"          
-    ##  [3] "Gonzalez, Eunice"       "Harper Williams, Kaleb"
-    ##  [5] "Brave, Brandi"          "Towns, Yi"             
-    ##  [7] "Martin, Maranda"        "Alvarez, Cassidy"      
-    ##  [9] "Kroskob, Anita"         "Garcia, Iris"          
-    ## [11] "Sanchez, Darian"        "Bieser, Charles"       
-    ## [13] "Dumler, Long"           "Lakkaraju, Omer"       
-    ## [15] "Neurohr, Angelica"      "Maldonado, Omar"       
-    ## [17] "el-Salahuddin, Hikma"   "Beck, Gabriel"         
-    ## [19] "Fernandez Soto, David"  "Jackson, Nicole"
+    ##  [1] "Washington, Erika"   "Lalria, Bethany"     "Evans, Sequoia"     
+    ##  [4] "Inthapatha, Joanna"  "Mills, Jule"         "Taylor, Anthony"    
+    ##  [7] "Johnson, David"      "Le, Hye-Rin"         "Nguyen, Tuyet"      
+    ## [10] "Hess, Antonio"       "Duong, John"         "Jojola, Jesse"      
+    ## [13] "Nickerson, Saber"    "Renner, Brendin"     "Barron-Salas, Coree"
+    ## [16] "Topkar, Raenu"       "el-Shaheen, Muneer"  "Lashley, Sean"      
+    ## [19] "Provencio, Tanya"    "Kimmett, Tevin"
 
 ``` r
 sample(nama_orang,3,replace = F)
 ```
 
-    ## [1] "Garcia, Iris"    "Dumler, Long"    "Bieser, Charles"
+    ## [1] "Lalria, Bethany"  "Mills, Jule"      "Provencio, Tanya"
 
 `replace = F` digunakan saat kita tidak ingin ada pemilihan yang
 berulang. Sedangkan `replace = T` digunakan saat diperbolehkan hasil
@@ -1002,16 +999,16 @@ absensi
 ```
 
     ##    id    nama tinggi_badan
-    ## 1   1 Derrick          183
-    ## 2   2 Diondre          153
-    ## 3   3 Patrick          170
-    ## 4   4  Najeem          157
-    ## 5   5  Deshon          172
-    ## 6   6 Rayland          154
-    ## 7   7  Isaiah          176
-    ## 8   8 J'Azmin          187
-    ## 9   9  Donald          161
-    ## 10 10     Ken          179
+    ## 1   1  Johnny          158
+    ## 2   2   Cheng          195
+    ## 3   3 William          171
+    ## 4   4 Thaaqib          180
+    ## 5   5  Daniel          196
+    ## 6   6     Leo          172
+    ## 7   7   Pedro          150
+    ## 8   8   Brian          164
+    ## 9   9  Dakota          165
+    ## 10 10  Darien          160
 
 Bentuk *data frame* kelak akan menjadi primadona dalam setiap analisa
 yang digunakan di **R**. Nanti saat kita belajar *data carpentry*
@@ -1142,8 +1139,8 @@ str(absensi)
 
     ## 'data.frame':    10 obs. of  3 variables:
     ##  $ id          : int  1 2 3 4 5 6 7 8 9 10
-    ##  $ nama        : Factor w/ 10 levels "Derrick","Deshon",..: 1 3 9 8 2 10 5 6 4 7
-    ##  $ tinggi_badan: int  183 153 170 157 172 154 176 187 161 179
+    ##  $ nama        : Factor w/ 10 levels "Brian","Cheng",..: 6 2 10 9 4 7 8 1 3 5
+    ##  $ tinggi_badan: int  158 195 171 180 196 172 150 164 165 160
 
 Terlihat bahwa data `absensi` memiliki struktur **data.frame** dengan
 ada `3` *variables* dan `10` *observations* (baris data).
@@ -1158,7 +1155,7 @@ summary(absensi$tinggi_badan)
 ```
 
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##   153.0   158.0   171.0   169.2   178.2   187.0
+    ##   150.0   161.0   168.0   171.1   178.0   196.0
 
 ### 3.3.5 *Class*
 
@@ -1231,7 +1228,7 @@ while(orang>0){
 i
 ```
 
-    ## [1] 165
+    ## [1] 169
 
 ## 3.5 *Regex*
 
@@ -1402,12 +1399,37 @@ sendiri.
 
 ## 4.1 `function()` tanpa *entry variable*
 
+Ada kalanya kita membuat `function()` tanpa ada *entry variable*. *Lho
+kok gitu?*
+
+Tergantung dari kebutuhan kita *yah*.
+
+Sebagai contoh, kita akan membuat `function()` yang akan men- *generate*
+nama orang, umur, tinggi, dan berat badan:
+
+``` r
+demografi = function(){
+  nama = randomNames::randomNames(1)
+  umur = sample(c(20:60),1)
+  tinggi = rnorm(1,mean = 150, sd = 20)
+  tinggi = round(tinggi,1)
+  berat = rnorm(1,mean = 40, sd = 5)
+  berat = round(berat,1)
+  data = c(nama,umur,tinggi,berat)
+  return(data)
+}
+
+demografi()
+```
+
+    ## [1] "Dweh, Annette" "40"            "182.9"         "42.7"
+
 ## 4.2 `function()` dengan *entry variable*
 
 *Entry variable* yang digunakan bisa berbentuk macam-macam dan bisa
 lebih dari satu.
 
-Contoh, kita akan membuat fungsi untuk mencari modus dari sebuah
+Contoh, kita akan membuat `function()` untuk mencari modus dari sebuah
 *vector*:
 
 ``` r
