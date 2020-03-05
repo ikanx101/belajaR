@@ -925,22 +925,19 @@ nama_orang = randomNames::randomNames(20)
 nama_orang
 ```
 
-    ##  [1] "Williams, Paige"         "Adiamseged, Christina"  
-    ##  [3] "al-Alli, Dhareef"        "Howard, Stanley"        
-    ##  [5] "Lopez, Joshua"           "Ruff, Jayeir"           
-    ##  [7] "Mickelson, Lakesha"      "Moreland, Farley"       
-    ##  [9] "Fife, Tyler"             "Heimann, Chris"         
-    ## [11] "el-Pirani, Awaatif"      "Cummings, Leah"         
-    ## [13] "Wright-Stanford, Justin" "al-Mahdavi, Nawaar"     
-    ## [15] "Wilkins, Kadedra"        "al-Moustafa, Mujaahida" 
-    ## [17] "Vaughn, Victoria"        "Owusu, Cashmire"        
-    ## [19] "Wu, Cynthia"             "Salaz, Kale"
+    ##  [1] "al-Yasin, Maleeka"  "Nelson, Alayina"    "Mcintosh, Connor"  
+    ##  [4] "Epigat, Martha"     "West, Jessica"      "Arreola, Cari"     
+    ##  [7] "Stewart, Jessica"   "Costigan, Matthew"  "Carter, Aerika"    
+    ## [10] "al-Karam, Shahaama" "Wilson, Justin"     "Ruybal, Angelique" 
+    ## [13] "Bedonie, Silvano"   "Olson, Seth"        "Palmer IV, Quiana" 
+    ## [16] "Morgan, Benjamin"   "David, Mai"         "Thompson, Omari"   
+    ## [19] "Beckley, Angelo"    "Moreland, Chyenne"
 
 ``` r
 sample(nama_orang,3,replace = F)
 ```
 
-    ## [1] "Moreland, Farley" "Cummings, Leah"   "al-Alli, Dhareef"
+    ## [1] "Wilson, Justin"   "West, Jessica"    "Morgan, Benjamin"
 
 `replace = F` digunakan saat kita tidak ingin ada pemilihan yang
 berulang. Sedangkan `replace = T` digunakan saat diperbolehkan hasil
@@ -1002,16 +999,16 @@ absensi
 ```
 
     ##    id      nama tinggi_badan
-    ## 1   1    Samuel          168
-    ## 2   2     James          182
-    ## 3   3 Sebastian          152
-    ## 4   4 Zakariyya          193
-    ## 5   5  Tre'Sean          162
-    ## 6   6      Cody          167
-    ## 7   7   Zachary          191
-    ## 8   8     Fidal          165
-    ## 9   9   Farhaan          169
-    ## 10 10   Mahfooz          183
+    ## 1   1  Angelito          155
+    ## 2   2      Sami          153
+    ## 3   3     Miles          161
+    ## 4   4      Mark          154
+    ## 5   5   Michael          150
+    ## 6   6 Alexander          198
+    ## 7   7     James          165
+    ## 8   8    Faalih          199
+    ## 9   9       Ian          151
+    ## 10 10     Aaron          181
 
 Bentuk *data frame* kelak akan menjadi primadona dalam setiap analisa
 yang digunakan di **R**. Nanti saat kita belajar *data carpentry*
@@ -1142,8 +1139,8 @@ str(absensi)
 
     ## 'data.frame':    10 obs. of  3 variables:
     ##  $ id          : int  1 2 3 4 5 6 7 8 9 10
-    ##  $ nama        : Factor w/ 10 levels "Cody","Farhaan",..: 6 4 7 10 8 1 9 3 2 5
-    ##  $ tinggi_badan: int  168 182 152 193 162 167 191 165 169 183
+    ##  $ nama        : Factor w/ 10 levels "Aaron","Alexander",..: 3 10 9 7 8 2 6 4 5 1
+    ##  $ tinggi_badan: int  155 153 161 154 150 198 165 199 151 181
 
 Terlihat bahwa data `absensi` memiliki struktur **data.frame** dengan
 ada `3` *variables* dan `10` *observations* (baris data).
@@ -1158,7 +1155,7 @@ summary(absensi$tinggi_badan)
 ```
 
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##   152.0   165.5   168.5   173.2   182.8   193.0
+    ##   150.0   153.2   158.0   166.7   177.0   199.0
 
 ### 3.3.5 *Class*
 
@@ -1231,7 +1228,7 @@ while(orang>0){
 i
 ```
 
-    ## [1] 164
+    ## [1] 154
 
 ## 3.5 *Regex*
 
@@ -1247,87 +1244,12 @@ Perbedaan cara penulisan (kapital atau *lower*) bisa kita pertimbangkan
 untuk dijadikan syarat pencarian atau tidak, yakni dengan penambahan
 `ignore.case = T` atau `ignore.case = F`.
 
-Berikut ini adalah *syntaxes* yang ada dan digunakan untuk mencari apa:
+Berikut ini adalah *syntaxes* yang ada dan digunakan untuk mencari
+apa:
 
-  - \\d : Digit, 0,1,2 … 9
+<img src="https://raw.githubusercontent.com/ikanx101/belajaR/master/Materi%20Training/Day%201%20-%20R%20Series/regex%201.PNG" width="30%" />
 
-  - \\D : Not Digit
-
-  - \\s : Space
-
-  - \\S : Not Space
-
-  - \\w : Word
-
-  - \\W : Not Word
-
-  - \\t : Tab
-
-  - \\n : New line
-
-  - ^ : Beginning of the string
-
-  - $ vEnd of the string
-
-  -  : Escape special characters, e.g. \\ is “", + is”+"
-
-  - : Alternation match. e.g. /(e|d)n/ matches “en” and “dn”
-
-  - • : Any character, except or line terminator
-
-  - \[ab\] : a or b
-
-  - \[^ab\] : Any character except a and b
-
-  - \[0-9\] : All Digit
-
-  - \[A-Z\] : All uppercase A to Z letters
-
-  - \[a-z\] : All lowercase a to z letters
-
-  - \[A-z\] : All Uppercase and lowercase a to z letters
-
-  - i+ : i at least one time
-
-  - i\* : i zero or more times
-
-  - i? : i zero or 1 time
-
-  - i{n} : i occurs n times in sequence
-
-  - i{n1,n2} : i occurs n1 - n2 times in sequence
-
-  - i{n1,n2}? : non greedy match, see above example
-
-  - i{n,} : i occures \>= n times
-
-  - \[:alnum:\] : Alphanumeric characters: \[:alpha:\] and \[:digit:\]
-
-  - \[:alpha:\] : Alphabetic characters: \[:lower:\] and \[:upper:\]
-
-  - \[:blank:\] : Blank characters: e.g. space, tab
-
-  - \[:cntrl:\] : Control characters
-
-  - \[:digit:\] : Digits: 0 1 2 3 4 5 6 7 8 9
-
-  - \[:graph:\] : Graphical characters: \[:alnum:\] and \[:punct:\]
-
-  - \[:lower:\] : Lower-case letters in the current locale
-
-  - \[:print:\] : Printable characters: \[:alnum:\], \[:punct:\] and
-    space
-
-  - \[:punct:\] : Punctuation character: \! " \# $ % & ’ ( ) \* + , - .
-    / : ; \< = \> ? @ \[  \] ^ \_ \` { | } ~
-
-  - \[:space:\] : Space characters: tab, newline, vertical tab, form
-    feed, carriage return, space
-
-  - \[:upper:\] : Upper-case letters in the current locale
-
-  - \[:xdigit:\] : Hexadecimal digits: 0 1 2 3 4 5 6 7 8 9 A B C D E F a
-    b c d e f
+<img src="https://raw.githubusercontent.com/ikanx101/belajaR/master/Materi%20Training/Day%201%20-%20R%20Series/regex%202.PNG" width="60%" />
 
 Berikut adalah contohnya:
 
