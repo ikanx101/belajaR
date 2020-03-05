@@ -925,23 +925,22 @@ nama_orang = randomNames::randomNames(20)
 nama_orang
 ```
 
-    ##  [1] "Santiesteban, Marcus"   "el-Siddique, Zakariyya"
-    ##  [3] "Kerlee, Kathryn"        "al-Sarah, Kamaaluddeen"
-    ##  [5] "Colunga, Richard"       "el-Sharif, Tawfeeqa"   
-    ##  [7] "Williams, Harry"        "Bundrant, Kevin"       
-    ##  [9] "el-Ghaffari, Sabeeka"   "Stark, Drayton"        
-    ## [11] "Salazar, Carissa"       "Trujillo, Jorge"       
-    ## [13] "Walker, Yaphet"         "Vandriel, David"       
-    ## [15] "Giltner, Justin"        "Thomas, Randal"        
-    ## [17] "Daugherty, Kevin"       "Wade, Makelsii"        
-    ## [19] "Esquibel, Alma"         "Diener, Tyler"
+    ##  [1] "Shelton, Jerry"        "el-Khalili, Alawi"    
+    ##  [3] "Wartman, Nick"         "Stone, Alyssa"        
+    ##  [5] "Powless, Chanse"       "Ishizuka, Alexandra"  
+    ##  [7] "al-Abid, Atiyya"       "Eubanks, Katryna"     
+    ##  [9] "Barcus, Andrew"        "Barahona Medina, Alex"
+    ## [11] "al-Elbaz, Misbaah"     "Kim, David"           
+    ## [13] "Barrett, Margarita"    "Bober, Daniela"       
+    ## [15] "Farris, Grant"         "Pascua, Tuan"         
+    ## [17] "Quattlebaum, Carroll"  "James, Richard"       
+    ## [19] "Kim, Kaylee"           "Aggrey, Charmane"
 
 ``` r
 sample(nama_orang,3,replace = F)
 ```
 
-    ## [1] "el-Ghaffari, Sabeeka"   "Williams, Harry"       
-    ## [3] "al-Sarah, Kamaaluddeen"
+    ## [1] "Pascua, Tuan"        "el-Khalili, Alawi"   "Ishizuka, Alexandra"
 
 `replace = F` digunakan saat kita tidak ingin ada pemilihan yang
 berulang. Sedangkan `replace = T` digunakan saat diperbolehkan hasil
@@ -1002,17 +1001,17 @@ absensi = data.frame(id,nama,tinggi_badan)
 absensi
 ```
 
-    ##    id    nama tinggi_badan
-    ## 1   1    Raul          163
-    ## 2   2   Yosef          159
-    ## 3   3 Brandon          176
-    ## 4   4   Jesse          165
-    ## 5   5 Maurice          179
-    ## 6   6    Dion          160
-    ## 7   7  Colton          155
-    ## 8   8   James          172
-    ## 9   9   Tommy          175
-    ## 10 10   Jafar          193
+    ##    id      nama tinggi_badan
+    ## 1   1 Alexander          174
+    ## 2   2     Bryan          180
+    ## 3   3     Efren          189
+    ## 4   4 Nathaniel          173
+    ## 5   5      Juan          172
+    ## 6   6      Neil          168
+    ## 7   7      Juan          186
+    ## 8   8    Robert          177
+    ## 9   9    Cheyne          163
+    ## 10 10 Archibald          150
 
 Bentuk *data frame* kelak akan menjadi primadona dalam setiap analisa
 yang digunakan di **R**. Nanti saat kita belajar *data carpentry*
@@ -1143,8 +1142,8 @@ str(absensi)
 
     ## 'data.frame':    10 obs. of  3 variables:
     ##  $ id          : int  1 2 3 4 5 6 7 8 9 10
-    ##  $ nama        : Factor w/ 10 levels "Brandon","Colton",..: 8 10 1 6 7 3 2 5 9 4
-    ##  $ tinggi_badan: int  163 159 176 165 179 160 155 172 175 193
+    ##  $ nama        : Factor w/ 9 levels "Alexander","Archibald",..: 1 3 5 7 6 8 6 9 4 2
+    ##  $ tinggi_badan: int  174 180 189 173 172 168 186 177 163 150
 
 Terlihat bahwa data `absensi` memiliki struktur **data.frame** dengan
 ada `3` *variables* dan `10` *observations* (baris data).
@@ -1159,7 +1158,7 @@ summary(absensi$tinggi_badan)
 ```
 
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##   155.0   160.8   168.5   169.7   175.8   193.0
+    ##   150.0   169.0   173.5   173.2   179.2   189.0
 
 ### 3.3.5 *Class*
 
@@ -1232,7 +1231,7 @@ while(orang>0){
 i
 ```
 
-    ## [1] 163
+    ## [1] 167
 
 ## 3.5 *Regex*
 
@@ -1343,17 +1342,16 @@ stringr::str_extract(string, pattern)
 
 ### 3.5.2 *Replace Pattern*
 
-Kita akan gunakan contoh data berikut
-ini:
+Kita akan gunakan contoh data berikut ini:
 
 ``` r
-string = c('Market Research','market riset','survey','responden','mickey mouse')
-pattern = 'm..ke'
-replace = 'train'
+string = c("This is a sentence about axis",
+           "A second pattern is also listed here")
+pattern = 'is'
+replace = 'XY'
 ```
 
-Berikut adalah beberapa fungsi yang sering
-    digunakan.
+Berikut adalah beberapa fungsi yang sering digunakan.
 
 #### 3.5.2.1 Fungsi `sub()`
 
@@ -1361,15 +1359,15 @@ Berikut adalah beberapa fungsi yang sering
 sub(pattern, replace, string)
 ```
 
-    ## [1] "Market Research" "traint riset"    "survey"          "responden"      
-    ## [5] "trainy mouse"
+    ## [1] "ThXY is a sentence about axis"       
+    ## [2] "A second pattern XY also listed here"
 
 ``` r
 sub(pattern, replace, string, ignore.case = T)
 ```
 
-    ## [1] "traint Research" "traint riset"    "survey"          "responden"      
-    ## [5] "trainy mouse"
+    ## [1] "ThXY is a sentence about axis"       
+    ## [2] "A second pattern XY also listed here"
 
 #### 3.5.2.2 Fungsi `gsub()`
 
@@ -1377,15 +1375,27 @@ sub(pattern, replace, string, ignore.case = T)
 gsub(pattern, replace, string)
 ```
 
-    ## [1] "Market Research" "traint riset"    "survey"          "responden"      
-    ## [5] "trainy mouse"
+    ## [1] "ThXY XY a sentence about axXY"       
+    ## [2] "A second pattern XY also lXYted here"
 
 ``` r
 gsub(pattern, replace, string, ignore.case = T)
 ```
 
-    ## [1] "traint Research" "traint riset"    "survey"          "responden"      
-    ## [5] "trainy mouse"
+    ## [1] "ThXY XY a sentence about axXY"       
+    ## [2] "A second pattern XY also lXYted here"
+
+-----
+
+# Membuat *function* di **R**.
+
+**R** memungkinkan kita untuk membuat fungsi yang *custom* secara
+mandiri. Jika kita sering menggunakan perintah-perintah tertentu dan
+ingin menghemat penulisan algoritma, kita bisa membuat *custom*
+`function()`
+sendiri.
+
+<img src="https://raw.githubusercontent.com/ikanx101/belajaR/master/Materi%20Training/Day%201%20-%20R%20Series/function.png" width="50%" />
 
 -----
 

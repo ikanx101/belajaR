@@ -790,9 +790,10 @@ stringr::str_extract(string, pattern)
 Kita akan gunakan contoh data berikut ini:
 
 ```{r}
-string = c('Market Research','market riset','survey','responden','mickey mouse')
-pattern = 'm..ke'
-replace = 'train'
+string = c("This is a sentence about axis",
+           "A second pattern is also listed here")
+pattern = 'is'
+replace = 'XY'
 ```
 
 Berikut adalah beberapa fungsi yang sering digunakan.
@@ -810,6 +811,17 @@ sub(pattern, replace, string, ignore.case = T)
 gsub(pattern, replace, string)
 gsub(pattern, replace, string, ignore.case = T)
 ```
+
+___
+
+# Membuat _function_ di __R__.
+
+__R__ memungkinkan kita untuk membuat fungsi yang _custom_ secara mandiri. Jika kita sering menggunakan perintah-perintah tertentu dan ingin menghemat penulisan algoritma, kita bisa membuat _custom_ `function()` sendiri.
+
+```{r out.width = '50%',echo=FALSE}
+knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Materi%20Training/Day%201%20-%20R%20Series/function.png')
+```
+
 ___
 
 # Referensi
