@@ -682,9 +682,9 @@ class(absensi)
 class(absensi$tinggi_badan)
 ```
 
-class
-View
-Regex
+### 3.3.5 _View_
+
+Fungsi `View()` (dengan huruf __V__ kapital) digunakan untuk menampilkan `dataset` dalam _pop-up windows_.
 
 ## 3.4 _Some useful function_
 ### 3.4.1 _Looping_

@@ -936,19 +936,22 @@ nama_orang = randomNames::randomNames(20)
 nama_orang
 ```
 
-    ##  [1] "el-Kanan, Muna"      "Wall, Morgann"       "Miller, Sky"        
-    ##  [4] "Morgan, Tilane"      "Zade, Krista"        "al-Quadri, Ruwaid"  
-    ##  [7] "Tu, Ashley"          "el-Yamin, Annnees"   "el-Jabbour, Afeef"  
-    ## [10] "Van Court, Derrick"  "Torres, Saul"        "Boucneau, Bryant"   
-    ## [13] "al-Fahs, Badruddeen" "Fong, Rebeka"        "Nelson, Lisa"       
-    ## [16] "Barnes, Anna"        "Pinto, Teddi"        "Wang, Sungjin"      
-    ## [19] "Sparks, Ernesto"     "Oleary, Elias"
+    ##  [1] "Nan, Joei"              "al-Ramin, Abdul Hakeem"
+    ##  [3] "el-Rahaman, Nu'maan"    "Shin, Amy"             
+    ##  [5] "Kuck, Okatomi"          "Nevarez, Paul"         
+    ##  [7] "Alexander, Nina"        "Richardson, Katheryne" 
+    ##  [9] "Johnston, Michael"      "Revello, Ashley"       
+    ## [11] "Tran, Morgynne"         "Allen, Christina"      
+    ## [13] "Norman, Richard"        "al-Farooqui, Khawla"   
+    ## [15] "Seeley, Destiny"        "Miller, Mckinley"      
+    ## [17] "Won, Tomiko"            "Sallee, Preston"       
+    ## [19] "el-Sultana, Najeeba"    "Homann, Caitlin"
 
 ``` r
 sample(nama_orang,3,replace = F)
 ```
 
-    ## [1] "Sparks, Ernesto" "Barnes, Anna"    "Zade, Krista"
+    ## [1] "Tran, Morgynne"  "Homann, Caitlin" "Nan, Joei"
 
 `replace = F` digunakan saat kita tidak ingin ada pemilihan yang
 berulang. Sedangkan `replace = T` digunakan saat diperbolehkan hasil
@@ -1010,16 +1013,16 @@ absensi
 ```
 
     ##    id     nama tinggi_badan
-    ## 1   1   Jalaal          198
-    ## 2   2    Aadam          187
-    ## 3   3   Dearee          159
-    ## 4   4 Kou Meng          155
-    ## 5   5   Ronnie          161
-    ## 6   6   Dustyn          193
-    ## 7   7    David          162
-    ## 8   8  Avreyon          154
-    ## 9   9 De'Vonta          151
-    ## 10 10  Anthony          182
+    ## 1   1    Brian          160
+    ## 2   2   Manuel          171
+    ## 3   3 Abhisaar          199
+    ## 4   4    Mario          153
+    ## 5   5     Badr          167
+    ## 6   6    Aayid          150
+    ## 7   7     Davi          197
+    ## 8   8   Johnny          169
+    ## 9   9    Talha          176
+    ## 10 10  Shaheer          158
 
 Bentuk *data frame* kelak akan menjadi primadona dalam setiap analisa
 yang digunakan di **R**. Nanti saat kita belajar *data carpentry*
@@ -1150,8 +1153,8 @@ str(absensi)
 
     ## 'data.frame':    10 obs. of  3 variables:
     ##  $ id          : int  1 2 3 4 5 6 7 8 9 10
-    ##  $ nama        : Factor w/ 10 levels "Aadam","Anthony",..: 8 1 6 9 10 7 4 3 5 2
-    ##  $ tinggi_badan: int  198 187 159 155 161 193 162 154 151 182
+    ##  $ nama        : Factor w/ 10 levels "Aayid","Abhisaar",..: 4 7 2 8 3 1 5 6 10 9
+    ##  $ tinggi_badan: int  160 171 199 153 167 150 197 169 176 158
 
 Terlihat bahwa data `absensi` memiliki struktur **data.frame** dengan
 ada `3` *variables* dan `10` *observations* (baris data).
@@ -1166,7 +1169,7 @@ summary(absensi$tinggi_badan)
 ```
 
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##   151.0   156.0   161.5   170.2   185.8   198.0
+    ##   150.0   158.5   168.0   170.0   174.8   199.0
 
 ### 3.3.5 *Class*
 
@@ -1186,7 +1189,10 @@ class(absensi$tinggi_badan)
 
     ## [1] "integer"
 
-class View Regex
+### 3.3.5 *View*
+
+Fungsi `View()` (dengan huruf **V** kapital) digunakan untuk menampilkan
+`dataset` dalam *pop-up windows*.
 
 ## 3.4 *Some useful function*
 
