@@ -28,8 +28,6 @@ _Tools_ analisa data klasik seperti __Ms. Excel__ dan __SPSS__ sudah tidak mampu
 
 __R__ tidak sendirian, ada juga _software_ lain bernama __Python__. Keduanya digunakan untuk membuat algoritma _artificial intelligence_ (bahasa keren dari _machine learning_. Bahasa kerennya dari _computational science_).
 
-> _So_, daripada ngomong _ngalor-ngidul_ tentang _artificial intelligence_ padahal _gak_ tahu barangnya seperti apa, mending belajar __R__ bareng biar _gak_ gagal paham. _Heeee_
-
 
 # 1. Pendahuluan
 
@@ -879,9 +877,16 @@ ___
 
 Data yang kita temui sehari-hari biasanya memiliki format `.xlsx` atau `.xls`. Sekarang kita  akan _import_ data dari __Excel__ untuk masuk ke dalam __R__.
 
-```{r}
+_Library_ yang digunakan adalah `library(readxl)`
 
+Contoh [data yang digunakan](https://github.com/ikanx101/belajaR/blob/master/Materi%20Training/Day%201%20-%20R%20Series/Contoh_Data.xlsx):
+
+```{r}
+library(readxl)
+data = read_excel('Contoh_Data.xlsx')
+head(data)
 ```
+
 ___
 
 # Referensi

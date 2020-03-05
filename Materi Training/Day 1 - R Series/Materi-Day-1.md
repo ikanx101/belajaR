@@ -22,10 +22,6 @@ Keduanya digunakan untuk membuat algoritma *artificial intelligence*
 (bahasa keren dari *machine learning*. Bahasa kerennya dari
 *computational science*).
 
-> *So*, daripada ngomong *ngalor-ngidul* tentang *artificial
-> intelligence* padahal *gak* tahu barangnya seperti apa, mending
-> belajar **R** bareng biar *gak* gagal paham. *Heeee*
-
 # 1\. Pendahuluan
 
 **R** merupakan salah satu bahasa pemrograman yang biasa digunakan untuk
@@ -925,22 +921,22 @@ nama_orang = randomNames::randomNames(20)
 nama_orang
 ```
 
-    ##  [1] "Altmayer, Meaghan"       "el-Molla, Amaani"       
-    ##  [3] "el-Hamdan, Salaah"       "el-Siddiqi, Salmaan"    
-    ##  [5] "Rodriguez, Gabriel Saul" "Gonzales, Zarqa"        
-    ##  [7] "Silverston, Brandon"     "Johnson, Cassandra"     
-    ##  [9] "Boddy, Kaleb"            "Slechter, Jayden"       
-    ## [11] "Garza, Noah"             "Ehrmann, Koua"          
-    ## [13] "Taylor, Sylvana"         "Nunez, Michael"         
-    ## [15] "Solis, Melissa"          "el-Yacoub, Raihaana"    
-    ## [17] "Blake, David"            "Vazquez, Matthew"       
-    ## [19] "Rivera, Joshua"          "Kariem, Jerrell"
+    ##  [1] "Jimenez Lopez, Cristal"   "Hinojos-Lopez, Karina"   
+    ##  [3] "Davis, Dominic"           "Brott, Steven"           
+    ##  [5] "Rodgers, Allyssia"        "Chhay, Saurya"           
+    ##  [7] "Pham, Valerie"            "Garcia, Silviano"        
+    ##  [9] "Cournoyer, Erminio"       "Pitt, Christopher"       
+    ## [11] "Morgan, Rachelle"         "Padeway, Dongjoo"        
+    ## [13] "Jones, Alyssa"            "el-Jabbar, Misbaah"      
+    ## [15] "Everett, David"           "Moore, Lameek"           
+    ## [17] "Xiong, Danielle"          "Roma, Danielle"          
+    ## [19] "Merlos-Solorzano, Justen" "Houghton, Christopher"
 
 ``` r
 sample(nama_orang,3,replace = F)
 ```
 
-    ## [1] "Ehrmann, Koua"     "el-Hamdan, Salaah" "Blake, David"
+    ## [1] "Roma, Danielle"    "Rodgers, Allyssia" "Brott, Steven"
 
 `replace = F` digunakan saat kita tidak ingin ada pemilihan yang
 berulang. Sedangkan `replace = T` digunakan saat diperbolehkan hasil
@@ -1002,16 +998,16 @@ absensi
 ```
 
     ##    id        nama tinggi_badan
-    ## 1   1      Miguel          180
-    ## 2   2       Tomas          178
-    ## 3   3    Benjamin          167
-    ## 4   4     Zachary          177
-    ## 5   5       Slate          192
-    ## 6   6    Nicholas          190
-    ## 7   7       Rylee          188
-    ## 8   8 John Daniel          173
-    ## 9   9      Kolten          160
-    ## 10 10        Chad          184
+    ## 1   1       Tyler          199
+    ## 2   2      Tucker          191
+    ## 3   3        John          153
+    ## 4   4 Christopher          159
+    ## 5   5       Mario          162
+    ## 6   6       Bryan          173
+    ## 7   7         Jim          155
+    ## 8   8      Robert          188
+    ## 9   9      Miguel          196
+    ## 10 10     William          192
 
 Bentuk *data frame* kelak akan menjadi primadona dalam setiap analisa
 yang digunakan di **R**. Nanti saat kita belajar *data carpentry*
@@ -1142,8 +1138,8 @@ str(absensi)
 
     ## 'data.frame':    10 obs. of  3 variables:
     ##  $ id          : int  1 2 3 4 5 6 7 8 9 10
-    ##  $ nama        : Factor w/ 10 levels "Benjamin","Chad",..: 5 9 1 10 8 6 7 3 4 2
-    ##  $ tinggi_badan: int  180 178 167 177 192 190 188 173 160 184
+    ##  $ nama        : Factor w/ 10 levels "Bryan","Christopher",..: 9 8 4 2 5 1 3 7 6 10
+    ##  $ tinggi_badan: int  199 191 153 159 162 173 155 188 196 192
 
 Terlihat bahwa data `absensi` memiliki struktur **data.frame** dengan
 ada `3` *variables* dan `10` *observations* (baris data).
@@ -1158,7 +1154,7 @@ summary(absensi$tinggi_badan)
 ```
 
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##   160.0   174.0   179.0   178.9   187.0   192.0
+    ##   153.0   159.8   180.5   176.8   191.8   199.0
 
 ### 3.3.5 *Class*
 
@@ -1231,7 +1227,7 @@ while(orang>0){
 i
 ```
 
-    ## [1] 169
+    ## [1] 165
 
 ## 3.5 *Regex*
 
@@ -1425,7 +1421,7 @@ demografi = function(){
 demografi()
 ```
 
-    ## [1] "Abraham, Iniki" "46"             "121.8"          "33.7"
+    ## [1] "Miera, Molly" "36"           "68.9"         "44.8"
 
 ## 4.2 `function()` dengan *entry variable*
 
@@ -1459,6 +1455,36 @@ pytagoras(3,4)
 ```
 
     ## [1] 5
+
+-----
+
+# 5\. Membaca Data dari **Excel**
+
+Data yang kita temui sehari-hari biasanya memiliki format `.xlsx` atau
+`.xls`. Sekarang kita akan *import* data dari **Excel** untuk masuk ke
+dalam **R**.
+
+*Library* yang digunakan adalah `library(readxl)`
+
+Contoh [data yang
+digunakan](https://github.com/ikanx101/belajaR/blob/master/Materi%20Training/Day%201%20-%20R%20Series/Contoh_Data.xlsx):
+
+``` r
+library(readxl)
+data = read_excel('Contoh_Data.xlsx')
+head(data)
+```
+
+    ## # A tibble: 6 x 8
+    ##   dept  nama.karyawan status bulan tardines.freque… permit.frequency
+    ##   <chr> <chr>         <chr>  <chr>            <dbl>            <dbl>
+    ## 1 JES   Jimenez       Tetap  Jan                  2                2
+    ## 2 JES   Mccarthy      Tetap  Mar                  0                0
+    ## 3 JES   Topaha        Tetap  Jan                  0                1
+    ## 4 JES   el-Ghanem     Tetap  Mar                  3                1
+    ## 5 JES   Topaha        Tetap  Mei                  0                1
+    ## 6 JES   Lofton        Tetap  Mei                  0                2
+    ## # … with 2 more variables: sick.frequency <dbl>, leave.frequency <dbl>
 
 -----
 
