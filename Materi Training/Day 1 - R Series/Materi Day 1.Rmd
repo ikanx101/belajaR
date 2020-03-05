@@ -715,6 +715,11 @@ _Regex_ adalah kepanjangan dari _reguler expression_, yakni mencari _pattern_ da
 
 Selain mengandalkan __base__ dari __R__, kita juga bisa menggunakan `library(stringr)`.
 
+Setidaknya ada dua manfaat utama dari _regular expression_, yakni:
+
+1. _Pattern Matching_.
+2. _Replace Pattern_.
+
 Perbedaan cara penulisan (kapital atau _lower_) bisa kita pertimbangkan untuk dijadikan syarat pencarian atau tidak, yakni dengan penambahan `ignore.case = T` atau `ignore.case = F`.
 
 Berikut ini adalah _syntaxes_ yang ada dan digunakan untuk mencari apa:
@@ -723,22 +728,49 @@ Berikut ini adalah _syntaxes_ yang ada dan digunakan untuk mencari apa:
 knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Materi%20Training/Day%201%20-%20R%20Series/regex%201.PNG')
 ```
 
-```{r out.width = '60%',echo=FALSE}
+```{r out.width = '80%',echo=FALSE}
 knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Materi%20Training/Day%201%20-%20R%20Series/regex%202.PNG')
 ```
 
-Berikut adalah contohnya:
+### 3.5.1 _Pattern Matching_
+
+Berikut adalah contoh beberapa fungsi yang sering digunakan:
 
 ```{r}
-string = c('Market Research','market riset','survey','responden')
+string = c('Market Research','market riset','survey','responden','mickey mouse')
 pattern = 'm..ke'
 
 ############
 # fungsi grep
-# outputnya adalah nomor index dari string yang pattern-nya matched
+# perhatikan output dari masing-masing perntah sebagai berikut
 grep(pattern,string)
+grep(pattern,string,value = T)
 grep(pattern,string,ignore.case = T)
+
+############
+# fungsi grepl
+# output dari fungsi ini berupa logic boolean
+grepl(pattern,string,ignore.case = T)
+
+############
+# menggunakan stringr dan fungsi str_detect
+# output dari fungsi ini berupa logic boolean
+stringr::str_detect(string,pattern)
+
+############
+# menggunakan stringr dan fungsi str_locate
+# find starting and end position of all matches
+stringr::str_locate(string, pattern)
+
+############
+# menggunakan stringr dan fungsi str_extract
+# extract first match 
+stringr::str_extract(string, pattern)
 ```
+
+### 3.5.w _Replace Pattern_
+
+Berikut adalah contoh beberapa fungsi yang sering digunakan:
 
 ___
 

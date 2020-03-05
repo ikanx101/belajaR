@@ -925,19 +925,22 @@ nama_orang = randomNames::randomNames(20)
 nama_orang
 ```
 
-    ##  [1] "al-Yasin, Maleeka"  "Nelson, Alayina"    "Mcintosh, Connor"  
-    ##  [4] "Epigat, Martha"     "West, Jessica"      "Arreola, Cari"     
-    ##  [7] "Stewart, Jessica"   "Costigan, Matthew"  "Carter, Aerika"    
-    ## [10] "al-Karam, Shahaama" "Wilson, Justin"     "Ruybal, Angelique" 
-    ## [13] "Bedonie, Silvano"   "Olson, Seth"        "Palmer IV, Quiana" 
-    ## [16] "Morgan, Benjamin"   "David, Mai"         "Thompson, Omari"   
-    ## [19] "Beckley, Angelo"    "Moreland, Chyenne"
+    ##  [1] "Castro Carreta, Angel"      "Cisneros, Adrianna"        
+    ##  [3] "Verduzco, Mitchell"         "Pona, Terrance"            
+    ##  [5] "Thomas, Naugh'Tia"          "Mills, Samantha"           
+    ##  [7] "Perez, Raymond"             "Lee, Andrew"               
+    ##  [9] "Espinoza, Alexandra"        "Mcconnaughhay, Noe"        
+    ## [11] "Hunt, Matias"               "al-Ebrahim, Jumaima"       
+    ## [13] "Rivera San Miguel, Tiffani" "Ashlock, Tracy"            
+    ## [15] "Velez, Trevor"              "Le, Anthony"               
+    ## [17] "Killian, Cara Marie"        "Mondragon, David"          
+    ## [19] "Bartels, Austin"            "Glass, Kacee"
 
 ``` r
 sample(nama_orang,3,replace = F)
 ```
 
-    ## [1] "Wilson, Justin"   "West, Jessica"    "Morgan, Benjamin"
+    ## [1] "Glass, Kacee"          "Hunt, Matias"          "Castro Carreta, Angel"
 
 `replace = F` digunakan saat kita tidak ingin ada pemilihan yang
 berulang. Sedangkan `replace = T` digunakan saat diperbolehkan hasil
@@ -998,17 +1001,17 @@ absensi = data.frame(id,nama,tinggi_badan)
 absensi
 ```
 
-    ##    id      nama tinggi_badan
-    ## 1   1  Angelito          155
-    ## 2   2      Sami          153
-    ## 3   3     Miles          161
-    ## 4   4      Mark          154
-    ## 5   5   Michael          150
-    ## 6   6 Alexander          198
-    ## 7   7     James          165
-    ## 8   8    Faalih          199
-    ## 9   9       Ian          151
-    ## 10 10     Aaron          181
+    ##    id     nama tinggi_badan
+    ## 1   1   Austin          193
+    ## 2   2 Esstefan          181
+    ## 3   3   Miguel          161
+    ## 4   4   Trevor          150
+    ## 5   5     Juan          179
+    ## 6   6   Tanner          199
+    ## 7   7    Jason          153
+    ## 8   8   Idrees          158
+    ## 9   9   Daniel          172
+    ## 10 10 Sullivan          190
 
 Bentuk *data frame* kelak akan menjadi primadona dalam setiap analisa
 yang digunakan di **R**. Nanti saat kita belajar *data carpentry*
@@ -1139,8 +1142,8 @@ str(absensi)
 
     ## 'data.frame':    10 obs. of  3 variables:
     ##  $ id          : int  1 2 3 4 5 6 7 8 9 10
-    ##  $ nama        : Factor w/ 10 levels "Aaron","Alexander",..: 3 10 9 7 8 2 6 4 5 1
-    ##  $ tinggi_badan: int  155 153 161 154 150 198 165 199 151 181
+    ##  $ nama        : Factor w/ 10 levels "Austin","Daniel",..: 1 3 7 10 6 9 5 4 2 8
+    ##  $ tinggi_badan: int  193 181 161 150 179 199 153 158 172 190
 
 Terlihat bahwa data `absensi` memiliki struktur **data.frame** dengan
 ada `3` *variables* dan `10` *observations* (baris data).
@@ -1155,7 +1158,7 @@ summary(absensi$tinggi_badan)
 ```
 
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##   150.0   153.2   158.0   166.7   177.0   199.0
+    ##   150.0   158.8   175.5   173.6   187.8   199.0
 
 ### 3.3.5 *Class*
 
@@ -1228,7 +1231,7 @@ while(orang>0){
 i
 ```
 
-    ## [1] 154
+    ## [1] 176
 
 ## 3.5 *Regex*
 
@@ -1240,6 +1243,11 @@ dilihat di
 Selain mengandalkan **base** dari **R**, kita juga bisa menggunakan
 `library(stringr)`.
 
+Setidaknya ada dua manfaat utama dari *regular expression*, yakni:
+
+1.  *Pattern Matching*.
+2.  *Replace Pattern*.
+
 Perbedaan cara penulisan (kapital atau *lower*) bisa kita pertimbangkan
 untuk dijadikan syarat pencarian atau tidak, yakni dengan penambahan
 `ignore.case = T` atau `ignore.case = F`.
@@ -1249,27 +1257,81 @@ apa:
 
 <img src="https://raw.githubusercontent.com/ikanx101/belajaR/master/Materi%20Training/Day%201%20-%20R%20Series/regex%201.PNG" width="30%" />
 
-<img src="https://raw.githubusercontent.com/ikanx101/belajaR/master/Materi%20Training/Day%201%20-%20R%20Series/regex%202.PNG" width="60%" />
+<img src="https://raw.githubusercontent.com/ikanx101/belajaR/master/Materi%20Training/Day%201%20-%20R%20Series/regex%202.PNG" width="80%" />
 
-Berikut adalah contohnya:
+### 3.5.1 *Pattern Matching*
+
+Berikut adalah contoh beberapa fungsi yang sering
+digunakan:
 
 ``` r
-string = c('Market Research','market riset','survey','responden')
+string = c('Market Research','market riset','survey','responden','mickey mouse')
 pattern = 'm..ke'
 
 ############
 # fungsi grep
-# outputnya adalah nomor index dari string yang pattern-nya matched
+# perhatikan output dari masing-masing perntah sebagai berikut
 grep(pattern,string)
 ```
 
-    ## [1] 2
+    ## [1] 2 5
+
+``` r
+grep(pattern,string,value = T)
+```
+
+    ## [1] "market riset" "mickey mouse"
 
 ``` r
 grep(pattern,string,ignore.case = T)
 ```
 
-    ## [1] 1 2
+    ## [1] 1 2 5
+
+``` r
+############
+# fungsi grepl
+# output dari fungsi ini berupa logic boolean
+grepl(pattern,string,ignore.case = T)
+```
+
+    ## [1]  TRUE  TRUE FALSE FALSE  TRUE
+
+``` r
+############
+# menggunakan stringr dan fungsi str_detect
+# output dari fungsi ini berupa logic boolean
+stringr::str_detect(string,pattern)
+```
+
+    ## [1] FALSE  TRUE FALSE FALSE  TRUE
+
+``` r
+############
+# menggunakan stringr dan fungsi str_locate
+# find starting and end position of all matches
+stringr::str_locate(string, pattern)
+```
+
+    ##      start end
+    ## [1,]    NA  NA
+    ## [2,]     1   5
+    ## [3,]    NA  NA
+    ## [4,]    NA  NA
+    ## [5,]     1   5
+
+``` r
+############
+# menggunakan stringr dan fungsi str_extract
+# extract first match 
+stringr::str_extract(string, pattern)
+```
+
+    ## [1] NA      "marke" NA      NA      "micke"
+
+### 3.5.w *Replace Pattern*
+
+Berikut adalah contoh beberapa fungsi yang sering digunakan:
 
 -----
 
