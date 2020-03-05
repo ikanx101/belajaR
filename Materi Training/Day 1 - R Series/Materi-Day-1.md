@@ -925,22 +925,22 @@ nama_orang = randomNames::randomNames(20)
 nama_orang
 ```
 
-    ##  [1] "Shelton, Jerry"        "el-Khalili, Alawi"    
-    ##  [3] "Wartman, Nick"         "Stone, Alyssa"        
-    ##  [5] "Powless, Chanse"       "Ishizuka, Alexandra"  
-    ##  [7] "al-Abid, Atiyya"       "Eubanks, Katryna"     
-    ##  [9] "Barcus, Andrew"        "Barahona Medina, Alex"
-    ## [11] "al-Elbaz, Misbaah"     "Kim, David"           
-    ## [13] "Barrett, Margarita"    "Bober, Daniela"       
-    ## [15] "Farris, Grant"         "Pascua, Tuan"         
-    ## [17] "Quattlebaum, Carroll"  "James, Richard"       
-    ## [19] "Kim, Kaylee"           "Aggrey, Charmane"
+    ##  [1] "Villanueva, Anay"       "Moreno, Olga"          
+    ##  [3] "Phillips, Daniel"       "Morales Lozano, Taylor"
+    ##  [5] "Mikesell, Melissa"      "Cowans, Jamel"         
+    ##  [7] "Shaw, Alexander"        "Lucero, Maria"         
+    ##  [9] "Randal, Jillian"        "Cox, Alexander"        
+    ## [11] "Bentley, Alexander"     "Gonzalez, Jorge"       
+    ## [13] "Baker, Gourisankar"     "Cradle, Sharaina"      
+    ## [15] "Rel, Chase"             "Delgadillo, Holly"     
+    ## [17] "Hogan, Kelby"           "Wilson-Parson, Michael"
+    ## [19] "Rape, Eric"             "Charity, Cerake"
 
 ``` r
 sample(nama_orang,3,replace = F)
 ```
 
-    ## [1] "Pascua, Tuan"        "el-Khalili, Alawi"   "Ishizuka, Alexandra"
+    ## [1] "Villanueva, Anay" "Cox, Alexander"   "Cradle, Sharaina"
 
 `replace = F` digunakan saat kita tidak ingin ada pemilihan yang
 berulang. Sedangkan `replace = T` digunakan saat diperbolehkan hasil
@@ -1001,17 +1001,17 @@ absensi = data.frame(id,nama,tinggi_badan)
 absensi
 ```
 
-    ##    id      nama tinggi_badan
-    ## 1   1 Alexander          174
-    ## 2   2     Bryan          180
-    ## 3   3     Efren          189
-    ## 4   4 Nathaniel          173
-    ## 5   5      Juan          172
-    ## 6   6      Neil          168
-    ## 7   7      Juan          186
-    ## 8   8    Robert          177
-    ## 9   9    Cheyne          163
-    ## 10 10 Archibald          150
+    ##    id    nama tinggi_badan
+    ## 1   1 Dominic          194
+    ## 2   2  Chance          153
+    ## 3   3   Aayid          199
+    ## 4   4 Jongwan          178
+    ## 5   5   Logan          195
+    ## 6   6 Michael          187
+    ## 7   7    Alan          158
+    ## 8   8 Michael          172
+    ## 9   9    Roba          196
+    ## 10 10   Shane          168
 
 Bentuk *data frame* kelak akan menjadi primadona dalam setiap analisa
 yang digunakan di **R**. Nanti saat kita belajar *data carpentry*
@@ -1142,8 +1142,8 @@ str(absensi)
 
     ## 'data.frame':    10 obs. of  3 variables:
     ##  $ id          : int  1 2 3 4 5 6 7 8 9 10
-    ##  $ nama        : Factor w/ 9 levels "Alexander","Archibald",..: 1 3 5 7 6 8 6 9 4 2
-    ##  $ tinggi_badan: int  174 180 189 173 172 168 186 177 163 150
+    ##  $ nama        : Factor w/ 9 levels "Aayid","Alan",..: 4 3 1 5 6 7 2 7 8 9
+    ##  $ tinggi_badan: int  194 153 199 178 195 187 158 172 196 168
 
 Terlihat bahwa data `absensi` memiliki struktur **data.frame** dengan
 ada `3` *variables* dan `10` *observations* (baris data).
@@ -1158,7 +1158,7 @@ summary(absensi$tinggi_badan)
 ```
 
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##   150.0   169.0   173.5   173.2   179.2   189.0
+    ##   153.0   169.0   182.5   180.0   194.8   199.0
 
 ### 3.3.5 *Class*
 
@@ -1231,7 +1231,7 @@ while(orang>0){
 i
 ```
 
-    ## [1] 167
+    ## [1] 164
 
 ## 3.5 *Regex*
 
