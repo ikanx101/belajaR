@@ -506,15 +506,7 @@ var(tinggi_badan) # varian vektor x
 sort(tinggi_badan) # mengurutkan elemen vektor x dari yang terbesar
 ```
 
-#### 3.2.2.4 Fungsi Spesial Pada _Vector_
-
-Ada satu fungsi khusus yang sering saya pakai, yakni: `summary()`.
-
-```{r}
-summary(tinggi_badan)
-```
-
-#### 3.2.2.5 _Generating Sequences_
+#### 3.2.2.4 _Generating Sequences_
 
 _Sequences_ atau deret bisa kita bangun menggunakan __R__ dengan dua cara:
 
@@ -539,7 +531,7 @@ nomor_2
 Percayalah, suatu saat nanti deret bisa digunakan untuk membantu perhitungan atau analisa kita. Seolah-olah berperan sebagai __katalis__ pada reaksi kimia.
 
 
-#### 3.2.2.6 _Random sampling_ dari suatu _vector_
+#### 3.2.2.5 _Random sampling_ dari suatu _vector_
 
 Ada suatu masa saat kita membutuhkan untuk mengambil sampel (mengambil subset) dari suatu _vector_ secara acak. Kita bisa menggunakan fungsi `sample()`.
 
@@ -558,7 +550,7 @@ sample(nama_orang,3,replace = F)
 
 Perintah `sample()` ini akan sangat berguna saat kita hendak menggunakan prinsip simulasi [__Monte Carlo__](https://ikanx101.github.io/tags/#monte-carlo).
 
-#### 3.2.2.7 _Repeat_ 
+#### 3.2.2.6 _Repeat_ 
 
 Adakalanya kita hendak melakukan pengulangan yang simpel. _Instead of using looping_, kita bisa menggunakan perintah `rep()`. Misalkan:
 
@@ -686,9 +678,38 @@ class(absensi$tinggi_badan)
 
 Fungsi `View()` (dengan huruf __V__ kapital) digunakan untuk menampilkan `dataset` dalam _pop-up windows_.
 
-## 3.4 _Some useful function_
-### 3.4.1 _Looping_
-### 3.4.2 _Regex_
+## 3.4 _Looping_
+
+_Looping_ berarti pengulangan namun berbeda dengan _repeat_ yang pernah kita bahas sebelumnya. Ada dua fungsi _looping_ yang biasa digunakan, yakni: `for()` dan `while()`. Keduanya memiliki manfaat yang berbeda.
+
+### 3.4.1 _For_
+
+Fungsi `for()` biasa dilakukan untuk melakukan _looping_ dengan syarat iterasi yang didefinisikan terlebih dahulu. Jadi kita sudah mengetahui terlebih dahulu berapa kali kita akan melakukan _looping_. Contoh:
+
+```{r}
+for(i in 1:10){
+  print(paste('pertanyaan ke',i))
+}
+```
+
+### 3.4.2 _While_
+
+Fungsi `while()` digunakan untuk melakukan _looping_ dengan sampai syarat iterasi terpenuhi. Jadi kita belum mengetahui berapa kali kita akan melakukan _looping_. Contoh:
+
+```{r}
+orang = 1000
+i = 0
+while(orang>0){
+  n = sample(c(2:10),1)
+  orang = orang - n
+  i = i+1
+}
+
+# berapa kali iterasi?
+i
+```
+
+## 3.5 _Regex_
 
 ___
 

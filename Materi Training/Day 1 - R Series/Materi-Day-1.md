@@ -871,18 +871,7 @@ sort(tinggi_badan) # mengurutkan elemen vektor x dari yang terbesar
 
     ##  [1]  90 139 149 153 158 164 180 184 186 197 199
 
-#### 3.2.2.4 Fungsi Spesial Pada *Vector*
-
-Ada satu fungsi khusus yang sering saya pakai, yakni: `summary()`.
-
-``` r
-summary(tinggi_badan)
-```
-
-    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##    90.0   151.0   164.0   163.5   185.0   199.0
-
-#### 3.2.2.5 *Generating Sequences*
+#### 3.2.2.4 *Generating Sequences*
 
 *Sequences* atau deret bisa kita bangun menggunakan **R** dengan dua
 cara:
@@ -920,7 +909,7 @@ Percayalah, suatu saat nanti deret bisa digunakan untuk membantu
 perhitungan atau analisa kita. Seolah-olah berperan sebagai **katalis**
 pada reaksi kimia.
 
-#### 3.2.2.6 *Random sampling* dari suatu *vector*
+#### 3.2.2.5 *Random sampling* dari suatu *vector*
 
 Ada suatu masa saat kita membutuhkan untuk mengambil sampel (mengambil
 subset) dari suatu *vector* secara acak. Kita bisa menggunakan fungsi
@@ -936,22 +925,19 @@ nama_orang = randomNames::randomNames(20)
 nama_orang
 ```
 
-    ##  [1] "Nan, Joei"              "al-Ramin, Abdul Hakeem"
-    ##  [3] "el-Rahaman, Nu'maan"    "Shin, Amy"             
-    ##  [5] "Kuck, Okatomi"          "Nevarez, Paul"         
-    ##  [7] "Alexander, Nina"        "Richardson, Katheryne" 
-    ##  [9] "Johnston, Michael"      "Revello, Ashley"       
-    ## [11] "Tran, Morgynne"         "Allen, Christina"      
-    ## [13] "Norman, Richard"        "al-Farooqui, Khawla"   
-    ## [15] "Seeley, Destiny"        "Miller, Mckinley"      
-    ## [17] "Won, Tomiko"            "Sallee, Preston"       
-    ## [19] "el-Sultana, Najeeba"    "Homann, Caitlin"
+    ##  [1] "Snow, Tanner"       "Olson, Wenli"       "Mora, Brandon"     
+    ##  [4] "Camacho, Charlotte" "Jones, Tasharina"   "al-Halim, Nisma"   
+    ##  [7] "Thompson, Donte"    "Martinez, Cody"     "Lavassani, Kathy"  
+    ## [10] "al-Taheri, Taamir"  "Jimenez, Demetris"  "Smith, Emma"       
+    ## [13] "Babbitt, Tyler"     "Washburn, Tony"     "Colin, Madeleine"  
+    ## [16] "Burke, Austin"      "Draper, Benjamin"   "al-Tariq, Kanaan"  
+    ## [19] "Kim, An"            "Sylvain, Michell"
 
 ``` r
 sample(nama_orang,3,replace = F)
 ```
 
-    ## [1] "Tran, Morgynne"  "Homann, Caitlin" "Nan, Joei"
+    ## [1] "Olson, Wenli"   "Smith, Emma"    "Martinez, Cody"
 
 `replace = F` digunakan saat kita tidak ingin ada pemilihan yang
 berulang. Sedangkan `replace = T` digunakan saat diperbolehkan hasil
@@ -961,7 +947,7 @@ Perintah `sample()` ini akan sangat berguna saat kita hendak menggunakan
 prinsip simulasi [**Monte
 Carlo**](https://ikanx101.github.io/tags/#monte-carlo).
 
-#### 3.2.2.7 *Repeat*
+#### 3.2.2.6 *Repeat*
 
 Adakalanya kita hendak melakukan pengulangan yang simpel. *Instead of
 using looping*, kita bisa menggunakan perintah `rep()`.
@@ -1013,16 +999,16 @@ absensi
 ```
 
     ##    id     nama tinggi_badan
-    ## 1   1    Brian          160
-    ## 2   2   Manuel          171
-    ## 3   3 Abhisaar          199
-    ## 4   4    Mario          153
-    ## 5   5     Badr          167
-    ## 6   6    Aayid          150
-    ## 7   7     Davi          197
-    ## 8   8   Johnny          169
-    ## 9   9    Talha          176
-    ## 10 10  Shaheer          158
+    ## 1   1   Trevor          184
+    ## 2   2     Milo          157
+    ## 3   3     Adam          151
+    ## 4   4   Thomas          175
+    ## 5   5  Matthew          181
+    ## 6   6   Tucker          156
+    ## 7   7     Cody          182
+    ## 8   8 Mukarram          169
+    ## 9   9    Arhab          176
+    ## 10 10    Laten          185
 
 Bentuk *data frame* kelak akan menjadi primadona dalam setiap analisa
 yang digunakan di **R**. Nanti saat kita belajar *data carpentry*
@@ -1153,8 +1139,8 @@ str(absensi)
 
     ## 'data.frame':    10 obs. of  3 variables:
     ##  $ id          : int  1 2 3 4 5 6 7 8 9 10
-    ##  $ nama        : Factor w/ 10 levels "Aayid","Abhisaar",..: 4 7 2 8 3 1 5 6 10 9
-    ##  $ tinggi_badan: int  160 171 199 153 167 150 197 169 176 158
+    ##  $ nama        : Factor w/ 10 levels "Adam","Arhab",..: 9 6 1 8 5 10 3 7 2 4
+    ##  $ tinggi_badan: int  184 157 151 175 181 156 182 169 176 185
 
 Terlihat bahwa data `absensi` memiliki struktur **data.frame** dengan
 ada `3` *variables* dan `10` *observations* (baris data).
@@ -1169,7 +1155,7 @@ summary(absensi$tinggi_badan)
 ```
 
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##   150.0   158.5   168.0   170.0   174.8   199.0
+    ##   151.0   160.0   175.5   171.6   181.8   185.0
 
 ### 3.3.5 *Class*
 
@@ -1194,11 +1180,57 @@ class(absensi$tinggi_badan)
 Fungsi `View()` (dengan huruf **V** kapital) digunakan untuk menampilkan
 `dataset` dalam *pop-up windows*.
 
-## 3.4 *Some useful function*
+## 3.4 *Looping*
 
-### 3.4.1 *Looping*
+*Looping* berarti pengulangan namun berbeda dengan *repeat* yang pernah
+kita bahas sebelumnya. Ada dua fungsi *looping* yang biasa digunakan,
+yakni: `for()` dan `while()`. Keduanya memiliki manfaat yang berbeda.
 
-### 3.4.2 *Regex*
+### 3.4.1 *For*
+
+Fungsi `for()` biasa dilakukan untuk melakukan *looping* dengan syarat
+iterasi yang didefinisikan terlebih dahulu. Jadi kita sudah mengetahui
+terlebih dahulu berapa kali kita akan melakukan *looping*. Contoh:
+
+``` r
+for(i in 1:10){
+  print(paste('pertanyaan ke',i))
+}
+```
+
+    ## [1] "pertanyaan ke 1"
+    ## [1] "pertanyaan ke 2"
+    ## [1] "pertanyaan ke 3"
+    ## [1] "pertanyaan ke 4"
+    ## [1] "pertanyaan ke 5"
+    ## [1] "pertanyaan ke 6"
+    ## [1] "pertanyaan ke 7"
+    ## [1] "pertanyaan ke 8"
+    ## [1] "pertanyaan ke 9"
+    ## [1] "pertanyaan ke 10"
+
+### 3.4.2 *While*
+
+Fungsi `while()` digunakan untuk melakukan *looping* dengan sampai
+syarat iterasi terpenuhi. Jadi kita belum mengetahui berapa kali kita
+akan melakukan *looping*. Contoh:
+
+``` r
+orang = 1000
+i = 0
+while(orang>0){
+  n = sample(c(2:10),1)
+  orang = orang - n
+  i = i+1
+}
+
+# berapa kali iterasi?
+i
+```
+
+    ## [1] 172
+
+## 3.5 *Regex*
 
 -----
 
