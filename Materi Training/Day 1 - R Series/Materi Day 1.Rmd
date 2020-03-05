@@ -878,7 +878,7 @@ ___
 # Referensi
 
 1. [Metode Numerik Menggunakan R Untuk Teknik Lingkungan](https://bookdown.org/moh_rosidi2610/Metode_Numerik/), Mohammad Rosidi: R bookdown.
-2. [Cara Install R di Android](https://passingthroughresearcher.wordpress.com/2019/07/30/install-r-3-5-2-di-android/), Ikang Fadhli personal blog.
+2. [Cara Install R di Android](https://passingthroughresearcher.wordpress.com/2019/07/30/install-r-3-5-2-di-android/).
 3. [Install R base for Windows](https://cran.r-project.org/bin/windows/base/).
 4. [Install R Studio](https://rstudio.com/products/rstudio/download/).
 5. [R Studio Cloud](https://rstudio.cloud/).

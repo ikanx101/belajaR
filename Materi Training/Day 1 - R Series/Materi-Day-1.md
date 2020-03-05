@@ -925,19 +925,22 @@ nama_orang = randomNames::randomNames(20)
 nama_orang
 ```
 
-    ##  [1] "Washington, Erika"   "Lalria, Bethany"     "Evans, Sequoia"     
-    ##  [4] "Inthapatha, Joanna"  "Mills, Jule"         "Taylor, Anthony"    
-    ##  [7] "Johnson, David"      "Le, Hye-Rin"         "Nguyen, Tuyet"      
-    ## [10] "Hess, Antonio"       "Duong, John"         "Jojola, Jesse"      
-    ## [13] "Nickerson, Saber"    "Renner, Brendin"     "Barron-Salas, Coree"
-    ## [16] "Topkar, Raenu"       "el-Shaheen, Muneer"  "Lashley, Sean"      
-    ## [19] "Provencio, Tanya"    "Kimmett, Tevin"
+    ##  [1] "Altmayer, Meaghan"       "el-Molla, Amaani"       
+    ##  [3] "el-Hamdan, Salaah"       "el-Siddiqi, Salmaan"    
+    ##  [5] "Rodriguez, Gabriel Saul" "Gonzales, Zarqa"        
+    ##  [7] "Silverston, Brandon"     "Johnson, Cassandra"     
+    ##  [9] "Boddy, Kaleb"            "Slechter, Jayden"       
+    ## [11] "Garza, Noah"             "Ehrmann, Koua"          
+    ## [13] "Taylor, Sylvana"         "Nunez, Michael"         
+    ## [15] "Solis, Melissa"          "el-Yacoub, Raihaana"    
+    ## [17] "Blake, David"            "Vazquez, Matthew"       
+    ## [19] "Rivera, Joshua"          "Kariem, Jerrell"
 
 ``` r
 sample(nama_orang,3,replace = F)
 ```
 
-    ## [1] "Lalria, Bethany"  "Mills, Jule"      "Provencio, Tanya"
+    ## [1] "Ehrmann, Koua"     "el-Hamdan, Salaah" "Blake, David"
 
 `replace = F` digunakan saat kita tidak ingin ada pemilihan yang
 berulang. Sedangkan `replace = T` digunakan saat diperbolehkan hasil
@@ -998,17 +1001,17 @@ absensi = data.frame(id,nama,tinggi_badan)
 absensi
 ```
 
-    ##    id    nama tinggi_badan
-    ## 1   1  Johnny          158
-    ## 2   2   Cheng          195
-    ## 3   3 William          171
-    ## 4   4 Thaaqib          180
-    ## 5   5  Daniel          196
-    ## 6   6     Leo          172
-    ## 7   7   Pedro          150
-    ## 8   8   Brian          164
-    ## 9   9  Dakota          165
-    ## 10 10  Darien          160
+    ##    id        nama tinggi_badan
+    ## 1   1      Miguel          180
+    ## 2   2       Tomas          178
+    ## 3   3    Benjamin          167
+    ## 4   4     Zachary          177
+    ## 5   5       Slate          192
+    ## 6   6    Nicholas          190
+    ## 7   7       Rylee          188
+    ## 8   8 John Daniel          173
+    ## 9   9      Kolten          160
+    ## 10 10        Chad          184
 
 Bentuk *data frame* kelak akan menjadi primadona dalam setiap analisa
 yang digunakan di **R**. Nanti saat kita belajar *data carpentry*
@@ -1139,8 +1142,8 @@ str(absensi)
 
     ## 'data.frame':    10 obs. of  3 variables:
     ##  $ id          : int  1 2 3 4 5 6 7 8 9 10
-    ##  $ nama        : Factor w/ 10 levels "Brian","Cheng",..: 6 2 10 9 4 7 8 1 3 5
-    ##  $ tinggi_badan: int  158 195 171 180 196 172 150 164 165 160
+    ##  $ nama        : Factor w/ 10 levels "Benjamin","Chad",..: 5 9 1 10 8 6 7 3 4 2
+    ##  $ tinggi_badan: int  180 178 167 177 192 190 188 173 160 184
 
 Terlihat bahwa data `absensi` memiliki struktur **data.frame** dengan
 ada `3` *variables* dan `10` *observations* (baris data).
@@ -1155,7 +1158,7 @@ summary(absensi$tinggi_badan)
 ```
 
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##   150.0   161.0   168.0   171.1   178.0   196.0
+    ##   160.0   174.0   179.0   178.9   187.0   192.0
 
 ### 3.3.5 *Class*
 
@@ -1422,7 +1425,7 @@ demografi = function(){
 demografi()
 ```
 
-    ## [1] "Dweh, Annette" "40"            "182.9"         "42.7"
+    ## [1] "Abraham, Iniki" "46"             "121.8"          "33.7"
 
 ## 4.2 `function()` dengan *entry variable*
 
@@ -1465,8 +1468,7 @@ pytagoras(3,4)
     Lingkungan](https://bookdown.org/moh_rosidi2610/Metode_Numerik/),
     Mohammad Rosidi: R bookdown.
 2.  [Cara Install R di
-    Android](https://passingthroughresearcher.wordpress.com/2019/07/30/install-r-3-5-2-di-android/),
-    Ikang Fadhli personal blog.
+    Android](https://passingthroughresearcher.wordpress.com/2019/07/30/install-r-3-5-2-di-android/).
 3.  [Install R base for
     Windows](https://cran.r-project.org/bin/windows/base/).
 4.  [Install R Studio](https://rstudio.com/products/rstudio/download/).
