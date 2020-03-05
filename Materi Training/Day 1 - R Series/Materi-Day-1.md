@@ -925,19 +925,22 @@ nama_orang = randomNames::randomNames(20)
 nama_orang
 ```
 
-    ##  [1] "Mabry, Justin"        "Smith, Marissa"       "Rocha, Diamante"     
-    ##  [4] "al-Sani, Widdad"      "Martinez, Erwin"      "Dejesus, Tate"       
-    ##  [7] "el-Abbasi, Ishaaq"    "al-Hassen, Haashid"   "Strader, Ismail"     
-    ## [10] "al-Mahmoud, Shahaama" "Rodriguez, Shelbie"   "Nguyen, Faleoge"     
-    ## [13] "Lucero, Jerry"        "Vasquez, Mika"        "al-Farooqui, Zain"   
-    ## [16] "Houdek, Tiffany"      "el-Javid, Sham'a"     "Coffman, Brianna"    
-    ## [19] "Wing, Joshua"         "Truong, Bich Tram"
+    ##  [1] "Goodman, Robel"         "Walker, Taylor"        
+    ##  [3] "Guardado, Nattalie"     "Largaespada, Tylyn"    
+    ##  [5] "Owusu Ansah, Roshae"    "al-Abad, Daleel"       
+    ##  [7] "Aguilar, Emilio"        "Nagashima, Parker"     
+    ##  [9] "el-Saah, Abdul Quddoos" "Wang, Tin"             
+    ## [11] "Fugett, Alexis"         "Kiley, Joi"            
+    ## [13] "al-Sultan, Talaal"      "el-Badie, Abdul Wadood"
+    ## [15] "Palomino, Parker"       "Howard, Brianna"       
+    ## [17] "Xiang, Foifon"          "Lefholz, Elizabeth"    
+    ## [19] "Lee, Paul"              "al-Rassi, Layaali"
 
 ``` r
 sample(nama_orang,3,replace = F)
 ```
 
-    ## [1] "Vasquez, Mika"     "Houdek, Tiffany"   "Truong, Bich Tram"
+    ## [1] "Xiang, Foifon"       "Owusu Ansah, Roshae" "Aguilar, Emilio"
 
 `replace = F` digunakan saat kita tidak ingin ada pemilihan yang
 berulang. Sedangkan `replace = T` digunakan saat diperbolehkan hasil
@@ -998,17 +1001,17 @@ absensi = data.frame(id,nama,tinggi_badan)
 absensi
 ```
 
-    ##    id            nama tinggi_badan
-    ## 1   1           Uwais          185
-    ## 2   2          Joseph          165
-    ## 3   3            Jose          159
-    ## 4   4 Dante Alessandr          183
-    ## 5   5          Jeremy          161
-    ## 6   6     Christopher          176
-    ## 7   7       Jahangeer          197
-    ## 8   8             Bin          192
-    ## 9   9          Daniel          180
-    ## 10 10           Jacob          173
+    ##    id      nama tinggi_badan
+    ## 1   1    Emmett          165
+    ## 2   2     Faraj          193
+    ## 3   3     Jesse          150
+    ## 4   4     Noori          156
+    ## 5   5     Tyler          198
+    ## 6   6 Christian          183
+    ## 7   7   Tristan          173
+    ## 8   8  Virginio          174
+    ## 9   9      Alec          180
+    ## 10 10   Shabaan          164
 
 Bentuk *data frame* kelak akan menjadi primadona dalam setiap analisa
 yang digunakan di **R**. Nanti saat kita belajar *data carpentry*
@@ -1139,8 +1142,8 @@ str(absensi)
 
     ## 'data.frame':    10 obs. of  3 variables:
     ##  $ id          : int  1 2 3 4 5 6 7 8 9 10
-    ##  $ nama        : Factor w/ 10 levels "Bin","Christopher",..: 10 9 8 4 7 2 6 1 3 5
-    ##  $ tinggi_badan: int  185 165 159 183 161 176 197 192 180 173
+    ##  $ nama        : Factor w/ 10 levels "Alec","Christian",..: 3 4 5 6 9 2 8 10 1 7
+    ##  $ tinggi_badan: int  165 193 150 156 198 183 173 174 180 164
 
 Terlihat bahwa data `absensi` memiliki struktur **data.frame** dengan
 ada `3` *variables* dan `10` *observations* (baris data).
@@ -1155,7 +1158,7 @@ summary(absensi$tinggi_badan)
 ```
 
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##   159.0   167.0   178.0   177.1   184.5   197.0
+    ##   150.0   164.2   173.5   173.6   182.2   198.0
 
 ### 3.3.5 *Class*
 
@@ -1228,7 +1231,7 @@ while(orang>0){
 i
 ```
 
-    ## [1] 172
+    ## [1] 165
 
 ## 3.5 *Regex*
 
@@ -1237,12 +1240,38 @@ i
 dilihat di
 [sini](https://rstudio.com/wp-content/uploads/2016/09/RegExCheatsheet.pdf).
 
-Selain mengandalkan `base` *library* dari **R**, kita bjuga bisa
-menggunakan `library(stringr)`.
+Selain mengandalkan **base** dari **R**, kita juga bisa menggunakan
+`library(stringr)`.
 
 Perbedaan cara penulisan (kapital atau *lower*) bisa kita pertimbangkan
 untuk dijadikan syarat pencarian atau tidak, yakni dengan penambahan
 `ignore.case = T` atau `ignore.case = F`.
+
+Berikut ini adalah *syntaxes* yang ada dan digunakan untuk mencari apa:
+
+Syntax Description - \\d Digit, 0,1,2 … 9 - \\D Not Digit - \\s Space -
+\\S Not Space - \\w Word - \\W Not Word - \\t Tab - \\n New line - ^
+Beginning of the string - $ End of the string -  Escape special
+characters, e.g. \\ is “", + is”+" - | Alternation match. e.g. /(e|d)n/
+matches “en” and “dn” - • Any character, except or line terminator -
+\[ab\] a or b \[^ab\] Any character except a and b \[0-9\] All Digit
+\[A-Z\] All uppercase A to Z letters \[a-z\] All lowercase a to z
+letters \[A-z\] All Uppercase and lowercase a to z letters i+ i at least
+one time i\* i zero or more times i? i zero or 1 time i{n} i occurs n
+times in sequence i{n1,n2} i occurs n1 - n2 times in sequence i{n1,n2}?
+non greedy match, see above example i{n,} i occures \>= n times
+\[:alnum:\] Alphanumeric characters: \[:alpha:\] and \[:digit:\]
+\[:alpha:\] Alphabetic characters: \[:lower:\] and \[:upper:\]
+\[:blank:\] Blank characters: e.g. space, tab \[:cntrl:\] Control
+characters \[:digit:\] Digits: 0 1 2 3 4 5 6 7 8 9 \[:graph:\] Graphical
+characters: \[:alnum:\] and \[:punct:\] \[:lower:\] Lower-case letters
+in the current locale \[:print:\] Printable characters: \[:alnum:\],
+\[:punct:\] and space \[:punct:\] Punctuation character: \! " \# $ % & ’
+( ) \* + , - . / : ; \< = \> ? @ \[  \] ^ \_ \` { | } ~ \[:space:\]
+Space characters: tab, newline, vertical tab, form feed, carriage
+return, space \[:upper:\] Upper-case letters in the current locale
+\[:xdigit:\] Hexadecimal digits: 0 1 2 3 4 5 6 7 8 9 A B C D E F a b c d
+e f
 
 Berikut adalah contohnya:
 
