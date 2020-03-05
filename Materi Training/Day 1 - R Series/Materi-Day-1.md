@@ -1,9 +1,7 @@
 Training R-Series: Day 1
 ================
 
-![alt
-text](https://bookdown.org/moh_rosidi2610/Metode_Numerik/images/r-icon.png
-"logo")
+<img src="https://bookdown.org/moh_rosidi2610/Metode_Numerik/images/r-icon.png" width="20%" />
 
 # Untuk apa saya belajar **R**?
 
@@ -935,22 +933,19 @@ nama_orang = randomNames::randomNames(20)
 nama_orang
 ```
 
-    ##  [1] "Klocker, Tiffine"        "el-Moghaddam, Lateefa"  
-    ##  [3] "Gonzalez, Sasha"         "Nguyen, Anthony"        
-    ##  [5] "Castro, Alejandro"       "Mcilhone O'Hara, Alvian"
-    ##  [7] "Hughes, Donisha"         "el-Saleem, Mu,Aawiya"   
-    ##  [9] "Dattore, David"          "Vue, Ash"               
-    ## [11] "Makaiwi, Riley"          "Greenlee, Jeffrey"      
-    ## [13] "al-Rehman, Naafoora"     "Robinson, Shaekia"      
-    ## [15] "el-Beshara,  Saalih"     "Sainbayar, Padua"       
-    ## [17] "Artichoker, Jacob"       "Arnold, Ashlee"         
-    ## [19] "el-Tawil, Habeeba"       "Ponce, Danielle"
+    ##  [1] "West, Amelia"         "Le, Shubheksha"       "Gebeor, Tyree"       
+    ##  [4] "el-Jabbar, Yaasmeen"  "Feemster, Alexis"     "Moore, Tyra"         
+    ##  [7] "Haveman, Derek"       "Whitworth, Ariunzaya" "Lor, Melinda"        
+    ## [10] "Kim, Scott"           "Watson, Stuart"       "Uballe, Randolph"    
+    ## [13] "al-Hassan, Amatullah" "el-Mohammad, Ulyaa"   "al-Ally, Warda"      
+    ## [16] "al-Odeh, Taahir"      "Chavez, Ingrid"       "Dai, Anushka"        
+    ## [19] "Silevani, Jenny"      "Silas, Thomas"
 
 ``` r
 sample(nama_orang,3,replace = F)
 ```
 
-    ## [1] "Greenlee, Jeffrey" "Gonzalez, Sasha"   "el-Tawil, Habeeba"
+    ## [1] "Lor, Melinda"         "al-Hassan, Amatullah" "Chavez, Ingrid"
 
 `replace = F` digunakan saat kita tidak ingin ada pemilihan yang
 berulang. Sedangkan `replace = T` digunakan saat diperbolehkan hasil
@@ -1011,17 +1006,17 @@ absensi = data.frame(id,nama,tinggi_badan)
 absensi
 ```
 
-    ##    id   nama tinggi_badan
-    ## 1   1 Ziyaad          165
-    ## 2   2  Marco          176
-    ## 3   3   Mark          185
-    ## 4   4 Tyrone          160
-    ## 5   5   Khoa          164
-    ## 6   6 Isaiah          192
-    ## 7   7 Joshua          169
-    ## 8   8  David          156
-    ## 9   9  Ramzi          155
-    ## 10 10  Corey          154
+    ##    id      nama tinggi_badan
+    ## 1   1     Oscar          191
+    ## 2   2     Jorge          161
+    ## 3   3      Drew          177
+    ## 4   4    Hunter          183
+    ## 5   5   Anthony          192
+    ## 6   6 Alexander          176
+    ## 7   7   Alfredo          182
+    ## 8   8     Aaron          165
+    ## 9   9   Raakaan          194
+    ## 10 10     Dylan          159
 
 Bentuk *data frame* kelak akan menjadi primadona dalam setiap analisa
 yang digunakan di **R**. Nanti saat kita belajar *data carpentry*

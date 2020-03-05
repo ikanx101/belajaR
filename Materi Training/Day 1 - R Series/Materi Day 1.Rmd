@@ -12,7 +12,9 @@ setwd("/cloud/project/Materi Training/Day 1 - R Series")
 rm(list=ls())
 ```
 
-![alt text](https://bookdown.org/moh_rosidi2610/Metode_Numerik/images/r-icon.png "logo")
+```{r out.width = '20%',echo=FALSE}
+knitr::include_graphics('https://bookdown.org/moh_rosidi2610/Metode_Numerik/images/r-icon.png')
+```
 
 # Untuk apa saya belajar __R__?
 
