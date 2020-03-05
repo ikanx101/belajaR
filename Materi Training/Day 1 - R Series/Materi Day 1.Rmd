@@ -875,6 +875,15 @@ pytagoras(3,4)
 
 ___
 
+# 5. Membaca Data dari __Excel__
+
+Data yang kita temui sehari-hari biasanya memiliki format `.xlsx` atau `.xls`. Sekarang kita  akan _import_ data dari __Excel__ untuk masuk ke dalam __R__.
+
+```{r}
+
+```
+___
+
 # Referensi
 
 1. [Metode Numerik Menggunakan R Untuk Teknik Lingkungan](https://bookdown.org/moh_rosidi2610/Metode_Numerik/), Mohammad Rosidi: R bookdown.
