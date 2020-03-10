@@ -887,6 +887,21 @@ data = read_excel('Contoh_Data.xlsx')
 head(data)
 ```
 
+## 5.1 Membaca Data dari Format File Lain
+
+__R__ memiliki kemampuan untuk membaca data dalam format lain seperti `csv`, `sav` (SPSS), `txt`, dan lainnya. Secara _default_, __R__ bisa membaca file dalam bentuk `csv` dan `txt` tanpa menggunakan `library()` lainnya.
+
+Gunakan fungsi `read.csv()` untuk membaca file `csv` dan `readLines()` untuk file `txt`.
+
+___
+
+# 6. Berkenalan dengan `Tidyverse`
+
+
+
+
+
+
 ___
 
 # Referensi

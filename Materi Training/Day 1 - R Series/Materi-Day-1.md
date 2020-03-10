@@ -921,22 +921,19 @@ nama_orang = randomNames::randomNames(20)
 nama_orang
 ```
 
-    ##  [1] "Jimenez Lopez, Cristal"   "Hinojos-Lopez, Karina"   
-    ##  [3] "Davis, Dominic"           "Brott, Steven"           
-    ##  [5] "Rodgers, Allyssia"        "Chhay, Saurya"           
-    ##  [7] "Pham, Valerie"            "Garcia, Silviano"        
-    ##  [9] "Cournoyer, Erminio"       "Pitt, Christopher"       
-    ## [11] "Morgan, Rachelle"         "Padeway, Dongjoo"        
-    ## [13] "Jones, Alyssa"            "el-Jabbar, Misbaah"      
-    ## [15] "Everett, David"           "Moore, Lameek"           
-    ## [17] "Xiong, Danielle"          "Roma, Danielle"          
-    ## [19] "Merlos-Solorzano, Justen" "Houghton, Christopher"
+    ##  [1] "Needham, Joseph"      "Liang, Julia"         "el-Sinai, Badraan"   
+    ##  [4] "Cleary, Allison"      "al-Mansur, Tuhfa"     "el-Radi, Adhraaa"    
+    ##  [7] "Tomlinson, Angelique" "Humphries, Aris"      "Hall, Namon"         
+    ## [10] "Garrett, Julian"      "al-Quadri, Najwa"     "Smith, Jacob"        
+    ## [13] "Aghi, Raymond Kiet"   "Jimenez, Andrea"      "Perez, Fernando"     
+    ## [16] "al-Hussain, Nahla"    "Krumwiede, Jennifer"  "Chavez-Cantu, David" 
+    ## [19] "Nguyen, Alexander"    "Martinez, Sabrina"
 
 ``` r
 sample(nama_orang,3,replace = F)
 ```
 
-    ## [1] "Roma, Danielle"    "Rodgers, Allyssia" "Brott, Steven"
+    ## [1] "Perez, Fernando"   "Martinez, Sabrina" "al-Mansur, Tuhfa"
 
 `replace = F` digunakan saat kita tidak ingin ada pemilihan yang
 berulang. Sedangkan `replace = T` digunakan saat diperbolehkan hasil
@@ -997,17 +994,17 @@ absensi = data.frame(id,nama,tinggi_badan)
 absensi
 ```
 
-    ##    id        nama tinggi_badan
-    ## 1   1       Tyler          199
-    ## 2   2      Tucker          191
-    ## 3   3        John          153
-    ## 4   4 Christopher          159
-    ## 5   5       Mario          162
-    ## 6   6       Bryan          173
-    ## 7   7         Jim          155
-    ## 8   8      Robert          188
-    ## 9   9      Miguel          196
-    ## 10 10     William          192
+    ##    id     nama tinggi_badan
+    ## 1   1    Aadil          182
+    ## 2   2 Bradford          180
+    ## 3   3   Bandar          183
+    ## 4   4     Amos          169
+    ## 5   5     Asad          167
+    ## 6   6 Nicholas          170
+    ## 7   7  Michael          159
+    ## 8   8  Fayyaad          151
+    ## 9   9   Fareed          150
+    ## 10 10  Gabriel          184
 
 Bentuk *data frame* kelak akan menjadi primadona dalam setiap analisa
 yang digunakan di **R**. Nanti saat kita belajar *data carpentry*
@@ -1138,8 +1135,8 @@ str(absensi)
 
     ## 'data.frame':    10 obs. of  3 variables:
     ##  $ id          : int  1 2 3 4 5 6 7 8 9 10
-    ##  $ nama        : Factor w/ 10 levels "Bryan","Christopher",..: 9 8 4 2 5 1 3 7 6 10
-    ##  $ tinggi_badan: int  199 191 153 159 162 173 155 188 196 192
+    ##  $ nama        : Factor w/ 10 levels "Aadil","Amos",..: 1 5 4 2 3 10 9 7 6 8
+    ##  $ tinggi_badan: int  182 180 183 169 167 170 159 151 150 184
 
 Terlihat bahwa data `absensi` memiliki struktur **data.frame** dengan
 ada `3` *variables* dan `10` *observations* (baris data).
@@ -1154,7 +1151,7 @@ summary(absensi$tinggi_badan)
 ```
 
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##   153.0   159.8   180.5   176.8   191.8   199.0
+    ##   150.0   161.0   169.5   169.5   181.5   184.0
 
 ### 3.3.5 *Class*
 
@@ -1227,7 +1224,7 @@ while(orang>0){
 i
 ```
 
-    ## [1] 165
+    ## [1] 162
 
 ## 3.5 *Regex*
 
@@ -1421,7 +1418,8 @@ demografi = function(){
 demografi()
 ```
 
-    ## [1] "Miera, Molly" "36"           "68.9"         "44.8"
+    ## [1] "al-Hana, Ghaaliya" "31"                "147.5"            
+    ## [4] "43.3"
 
 ## 4.2 `function()` dengan *entry variable*
 
@@ -1485,6 +1483,20 @@ head(data)
     ## 5 JES   Topaha        Tetap  Mei                  0                1
     ## 6 JES   Lofton        Tetap  Mei                  0                2
     ## # … with 2 more variables: sick.frequency <dbl>, leave.frequency <dbl>
+
+## 5.1 Membaca Data dari Format File Lain
+
+**R** memiliki kemampuan untuk membaca data dalam format lain seperti
+`csv`, `sav` (SPSS), `txt`, dan lainnya. Secara *default*, **R** bisa
+membaca file dalam bentuk `csv` dan `txt` tanpa menggunakan `library()`
+lainnya.
+
+Gunakan fungsi `read.csv()` untuk membaca file `csv` dan `readLines()`
+untuk file `txt`.
+
+-----
+
+# 6\. Berkenalan dengan `Tidyverse`
 
 -----
 
