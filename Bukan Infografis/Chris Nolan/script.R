@@ -64,6 +64,15 @@ prestige = data.frame(from = prestige[1,],
                       to = prestige[2,],
                       film = 'The Prestige')
 
+# Batman Begins
+url = 'https://en.wikipedia.org/wiki/Batman_Begins'
+begin = read_html(url) %>% html_nodes('tr:nth-child(8) li') %>% html_text()
+begin = begin[1:10]
+begin = combn(begin,2,simplify = T)
+begin = data.frame(from = begin[1,],
+                   to = begin[2,],
+                   film = 'Batman Begins')
+
 # Gabung DATA
 DATA = rbind(tenet,dunkirk)
 DATA = rbind(DATA,inter)
@@ -71,6 +80,7 @@ DATA = rbind(DATA,TDKR)
 DATA = rbind(DATA,incep)
 DATA = rbind(DATA,tdk)
 DATA = rbind(DATA,prestige)
+DATA = rbind(DATA,begin)
 DATA = distinct(DATA)
 
 DATA %>% 
@@ -84,3 +94,35 @@ DATA %>%
   labs(title = 'FILM ARAHAN CHRISTOPHER NOLAN',
        subtitle = 'base: aktor dan aktris yang bermain dalam film') +
   theme(plot.title = element_text(size=15,face='bold'))
+
+# SNA analisis
+final = DATA[1:2]
+library(dils)
+final$id=1
+tes = AdjacencyFromEdgelist(final)
+hasil = tes$adjacency
+colnames(hasil) = tes$nodelist
+rownames(hasil) = tes$nodelist
+
+# centers
+library(sna)
+close = sna::closeness(hasil)
+between = sna::betweenness(hasil)
+degree = sna::degree(hasil)
+eigen = sna::evcent(hasil)
+
+# lanjutan
+analisa.hasil = data.frame(nama=tes$nodelist,
+                           close,
+                           between,
+                           degree,
+                           eigen)
+View(analisa.hasil)
+
+# chart dengan centers
+#bikin chart yg sama
+g = graph.adjacency(hasil,weighted = T, mode='undirected')
+g = simplify(g)
+fc = fastgreedy.community(as.undirected(g))
+V(g)$color <- ifelse(membership(fc)==1,"red","blue")
+plot(g)
