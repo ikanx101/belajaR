@@ -897,11 +897,37 @@ ___
 
 # 6. Berkenalan dengan `Tidyverse`
 
+Salah satu fungsi utama __R__ adalah kemampuannya melakukan _data carpentry_ untuk _dataset_ berukuran besar dengan cepat. Salah satu `library` yang sering digunakan untuk melkukan _data carpentry_ adalah `tidyverse`.
 
+Salah satu ciri utama pada `tidyverse` adalah penggunaaan _piping_: `%>%` yang memiliki arti _then_.
 
+Beberapa fungsi yang sering digunakan antara lain:
 
+1. `filter()`
+2. `select()`
+3. `mutate()`
+4. `group_by()` dan `summarise()`
+5. `separate()`
 
+## 6.1 `filter()`
 
+Digunakan untuk melakukan filter pada data.
+
+## 6.2 `select()`
+
+Digunakan untuk memilih variabel dari _dataset_.
+
+## 6.3 `mutate()`
+
+Digunakan untuk membuat dan menghitung variabel baru atau _existing_.
+
+## 6.4 `group_by()` dan `summarise()`
+
+Digunakan untuk melakukan pengelompokkan serta membuat dan menghitung variabel baru atau _existing_ berdasarkan pengelompokkan tersebut.
+
+## 6.5 `separate()`
+
+Digunakan untuk memecah satu variabel ke dua atau lebih variabel.
 ___
 
 # Referensi

@@ -921,19 +921,19 @@ nama_orang = randomNames::randomNames(20)
 nama_orang
 ```
 
-    ##  [1] "Needham, Joseph"      "Liang, Julia"         "el-Sinai, Badraan"   
-    ##  [4] "Cleary, Allison"      "al-Mansur, Tuhfa"     "el-Radi, Adhraaa"    
-    ##  [7] "Tomlinson, Angelique" "Humphries, Aris"      "Hall, Namon"         
-    ## [10] "Garrett, Julian"      "al-Quadri, Najwa"     "Smith, Jacob"        
-    ## [13] "Aghi, Raymond Kiet"   "Jimenez, Andrea"      "Perez, Fernando"     
-    ## [16] "al-Hussain, Nahla"    "Krumwiede, Jennifer"  "Chavez-Cantu, David" 
-    ## [19] "Nguyen, Alexander"    "Martinez, Sabrina"
+    ##  [1] "Abalos, Luz"         "Evans, Marcus"       "Smith, Ira"         
+    ##  [4] "Hornbuckle, Kevin"   "Lumba, Chandler"     "Gumataotao, Russell"
+    ##  [7] "Westfall, Almina"    "el-Beshara, Raaida"  "Woody, Jesse"       
+    ## [10] "Abzari, Selina"      "Nguyen, Shanhuan"    "Vargas, Linnea"     
+    ## [13] "Gallegos, Sergio"    "Mack, Luke"          "Bowman, Sadie"      
+    ## [16] "Allen, Lyndsay"      "Green, Andrew"       "el-Yamin, Nahla"    
+    ## [19] "Aldaz, Arissa"       "Walker, Kyanna"
 
 ``` r
 sample(nama_orang,3,replace = F)
 ```
 
-    ## [1] "Perez, Fernando"   "Martinez, Sabrina" "al-Mansur, Tuhfa"
+    ## [1] "Evans, Marcus"  "Vargas, Linnea" "Mack, Luke"
 
 `replace = F` digunakan saat kita tidak ingin ada pemilihan yang
 berulang. Sedangkan `replace = T` digunakan saat diperbolehkan hasil
@@ -994,17 +994,17 @@ absensi = data.frame(id,nama,tinggi_badan)
 absensi
 ```
 
-    ##    id     nama tinggi_badan
-    ## 1   1    Aadil          182
-    ## 2   2 Bradford          180
-    ## 3   3   Bandar          183
-    ## 4   4     Amos          169
-    ## 5   5     Asad          167
-    ## 6   6 Nicholas          170
-    ## 7   7  Michael          159
-    ## 8   8  Fayyaad          151
-    ## 9   9   Fareed          150
-    ## 10 10  Gabriel          184
+    ##    id    nama tinggi_badan
+    ## 1   1  Ziyaad          163
+    ## 2   2  Shawqi          183
+    ## 3   3   Louis          184
+    ## 4   4 Zachary          171
+    ## 5   5   Koree          181
+    ## 6   6    Alex          162
+    ## 7   7  Tanner          154
+    ## 8   8 Charlie          182
+    ## 9   9   Anwar          170
+    ## 10 10  Joseph          198
 
 Bentuk *data frame* kelak akan menjadi primadona dalam setiap analisa
 yang digunakan di **R**. Nanti saat kita belajar *data carpentry*
@@ -1135,8 +1135,8 @@ str(absensi)
 
     ## 'data.frame':    10 obs. of  3 variables:
     ##  $ id          : int  1 2 3 4 5 6 7 8 9 10
-    ##  $ nama        : Factor w/ 10 levels "Aadil","Amos",..: 1 5 4 2 3 10 9 7 6 8
-    ##  $ tinggi_badan: int  182 180 183 169 167 170 159 151 150 184
+    ##  $ nama        : Factor w/ 10 levels "Alex","Anwar",..: 10 7 6 9 5 1 8 3 2 4
+    ##  $ tinggi_badan: int  163 183 184 171 181 162 154 182 170 198
 
 Terlihat bahwa data `absensi` memiliki struktur **data.frame** dengan
 ada `3` *variables* dan `10` *observations* (baris data).
@@ -1151,7 +1151,7 @@ summary(absensi$tinggi_badan)
 ```
 
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##   150.0   161.0   169.5   169.5   181.5   184.0
+    ##   154.0   164.8   176.0   174.8   182.8   198.0
 
 ### 3.3.5 *Class*
 
@@ -1224,7 +1224,7 @@ while(orang>0){
 i
 ```
 
-    ## [1] 162
+    ## [1] 160
 
 ## 3.5 *Regex*
 
@@ -1418,8 +1418,7 @@ demografi = function(){
 demografi()
 ```
 
-    ## [1] "al-Hana, Ghaaliya" "31"                "147.5"            
-    ## [4] "43.3"
+    ## [1] "Huguley, Justin" "50"              "165.4"           "45.2"
 
 ## 4.2 `function()` dengan *entry variable*
 
@@ -1498,7 +1497,42 @@ untuk file `txt`.
 
 # 6\. Berkenalan dengan `Tidyverse`
 
------
+Salah satu fungsi utama **R** adalah kemampuannya melakukan *data
+carpentry* untuk *dataset* berukuran besar dengan cepat. Salah satu
+`library` yang sering digunakan untuk melkukan *data carpentry* adalah
+`tidyverse`.
+
+Salah satu ciri utama pada `tidyverse` adalah penggunaaan *piping*:
+`%>%` yang memiliki arti *then*.
+
+Beberapa fungsi yang sering digunakan antara lain:
+
+1.  `filter()`
+2.  `select()`
+3.  `mutate()`
+4.  `group_by()` dan `summarise()`
+5.  `separate()`
+
+## 6.1 `filter()`
+
+Digunakan untuk melakukan filter pada data.
+
+## 6.2 `select()`
+
+Digunakan untuk memilih variabel dari *dataset*.
+
+## 6.3 `mutate()`
+
+Digunakan untuk membuat dan menghitung variabel baru atau *existing*.
+
+## 6.4 `group_by()` dan `summarise()`
+
+Digunakan untuk melakukan pengelompokkan serta membuat dan menghitung
+variabel baru atau *existing* berdasarkan pengelompokkan tersebut.
+
+## 6.5 `separate()`
+
+Digunakan untuk memecah satu variabel ke dua atau lebih variabel. \_\_\_
 
 # Referensi
 
