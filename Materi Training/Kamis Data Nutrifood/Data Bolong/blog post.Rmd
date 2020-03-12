@@ -49,13 +49,13 @@ Saya harus mengisi data pada variabel `nama_karyawan` yang kosong dengan isi ata
 
 Oleh karena itu, saya akan contohkan algoritma pengerjaannya di __R__.
 
-Cara pengerjaannya sebenarnya simpel, yakni dengan menggunakan _conditional_ dan _looping_.
+Cara pengerjaannya sebenarnya simpel, yakni dengan menggunakan _conditional_ sebagai berikut:
 
 ```{r out.width = '80%',echo=FALSE}
 knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Materi%20Training/Kamis%20Data%20Nutrifood/Data%20Bolong/algoritma.png')
 ```
 
-_Conditional_ tersebut akan diulang ke semua baris data.
+Kemudian akan dilakukan _looping_ hingga baris data terakhir.
 
 ```{r}
 for(i in 2:100){
@@ -63,5 +63,45 @@ for(i in 2:100){
                                  data$nama_karyawan[i-1],
                                  data$nama_karyawan[i])
 }
+```
+
+```{r,echo=FALSE}
 data
 ```
+
+____
+
+# Contoh Kasus II
+Suatu waktu saya berhadapan dengan data __Excel__ seperti berikut ini:
+
+```{r,echo=FALSE}
+data = data.frame(id = c(1:100),
+                  nama = randomNames::randomNames(100,which.names = 'last'),
+                  tinggi_badan = round(rnorm(100,mean=150,sd=20),0))
+posisi = sample(data$id,20,replace = F)
+data$tinggi_badan[posisi] = NA
+data
+```
+
+Ada `20` baris data `tinggi_badan` yang kosong tidak ada nilainya. Salah satu cara untuk menghadapi nilai kosong seperti ini adalah dengan mengisinya dengan `mean`, `median`, atau `modus` dari data.
+
+Untuk kasus ini, saya akan mencoba mengisi `tinggi_badan` yang kosong dengan `mean` yah.
+
+```{r,message=FALSE,warning=FALSE}
+library(dplyr)
+mean = data %>% filter(!is.na(tinggi_badan)) %>% mutate(mean = mean(tinggi_badan)) %>% select(mean) %>% distinct()
+mean = as.numeric(mean)
+```
+
+Saat menghitung `mean` jangan sampai kita mengikutsertakan data yang bolong _yah_. Pastikan data yang bolong tersebut sudah kita _exclude_.
+
+Kita dapatkan `mean` sebesar __`r round(mean,3)`__.
+
+Untuk mengisi data yang bolong dengan `mean`, kita bisa lakukan hal simpel seperti ini:
+
+```{r}
+data$tinggi_badan = ifelse(is.na(data$tinggi_badan),mean,data$tinggi_badan)
+data
+```
+
+# _Gimana_? Mudah _kan_?
