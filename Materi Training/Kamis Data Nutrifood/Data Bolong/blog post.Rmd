@@ -1,0 +1,56 @@
+---
+title: "Data Carpentry: Filling in NA's data"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("/cloud/project/Materi Training/Kamis Data Nutrifood/Data Bolong")
+rm(list=ls())
+```
+
+# Data Carpentry
+
+Salah satu kegunaan __R__ yang paling saya rasakan adalah kita bisa membuat algoritma otomasi dalam melakukan _data cleaning_.
+
+Pada [tulisan yang lalu](https://ikanx101.github.io/blog/data-carpentry-carmudi/), saya sudah mencontohkan bagaimana membuat algoritma yang bisa melakukan _web scraping_ sekaligus membersihkannya agar siap dianalisa.
+
+Sekarang saya ingin mencontohkan proses _data cleaning_ yang terlihat sepele tapi bisa jadi _painful_ saat dilakukan secara manual dan berulang-ulang. 
+
+## Apa itu?
+
+Mengisi data bolong!
+
+___
+
+# Contoh Kasus I
+Suatu waktu saya berhadapan dengan data __Excel__ seperti berikut ini:
+
+```{r,echo=FALSE}
+id = c(1:100)
+nama_PIC = randomNames::randomNames(10,gender='male',which.names = 'last')
+posisi = sample(c(2:100),10)
+posisi = sort(posisi)
+data = data.frame(id,nama_karyawan = NA,urutan_ceklis=NA)
+data$nama_karyawan[1] = 'Ikang'
+data$urutan_ceklis[1] = 1
+data$nama_karyawan[posisi] = nama_PIC
+data$urutan_ceklis[posisi] = c(2:11)
+
+for(i in 2:100){
+  data$urutan_ceklis[i] = ifelse(is.na(data$urutan_ceklis[i]),
+                                 data$urutan_ceklis[i-1],
+                                 data$urutan_ceklis[i])
+}
+data
+```
+
+Saya harus mengisi data pada variabel `nama_karyawan` yang kosong dengan isi atasnya. Hal ini sepertinya sepele, tapi jika variabel yang harus diisi ada banyak dan baris datanya juga banyak, saya jamin akan lumayan mengerjakannya.
+
+Oleh karena itu, saya akan contohkan algoritma pengerjaannya di __R__.
+
+Cara pengerjaannya sebenarnya simpel, yakni dengan menggunakan _conditional_ dan _looping_.
+
+```{r out.width = '20%',echo=FALSE}
+knitr::include_graphics('https://bookdown.org/moh_rosidi2610/Metode_Numerik/images/r-icon.png')
+```

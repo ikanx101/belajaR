@@ -911,21 +911,94 @@ Beberapa fungsi yang sering digunakan antara lain:
 
 ## 6.1 `filter()`
 
-Digunakan untuk melakukan filter pada data.
+Digunakan untuk melakukan filter pada data. Kita bisa menggunakan tanda `==`, `>`, `>=`, `<`, `<=`, atau `!=`. 
 
-## 6.2 `select()`
+Contohnya:
 
-Digunakan untuk memilih variabel dari _dataset_.
+Kita hendak melakukan _filter_ terhadap karyawan yang telat (_tardines_) lebih dari 10 kali dalam bulan Januari.
 
-## 6.3 `mutate()`
+```{r}
+# melakukan filter:
+# keterlambatan > 10
+# bulan == Jan
+data %>% filter(tardines.frequency>10, bulan == 'Jan')
+```
 
-Digunakan untuk membuat dan menghitung variabel baru atau _existing_.
+Misalkan kita hendak melakukan filter untuk beberapa `dept` tertentu, kita bisa melakukan cara berikut:
 
-## 6.4 `group_by()` dan `summarise()`
+```{r}
+dept_filter = c('JES','ELL','OSH')
+
+# melakukan filter untuk dept tersebut
+data %>% filter(dept %in% dept_filter)
+
+# melakukan filter untuk BUKAN dept tersebut
+data %>% filter(!dept %in% dept_filter)
+```
+
+## 6.2 `arrange()`
+
+Digunakan untuk melakukan _sort_ pada data dengan menggunakan _piping_.
+
+```{r}
+# kita akan sort berdasarkan angka tardines tersebut
+# descending
+data %>% filter(tardines.frequency>10, bulan == 'Jan') %>% arrange(desc(tardines.frequency))
+
+# ascending
+data %>% filter(tardines.frequency>10, bulan == 'Jan') %>% arrange(tardines.frequency)
+```
+
+## 6.3 `select()`
+
+Digunakan untuk memilih variabel dari _dataset_. Jika `filter()` dilakukan untuk melakukan pemilihan atas variabel tertentu, sedangkan `select()` digunakan untuk memilih variabel yang akan digunakan.
+
+Contoh:
+
+Kita akan memilih variabel `dept` dan `sick.frequency` dari data tersebut.
+
+```{r}
+data %>% select(dept,sick.frequency)
+```
+
+Misalkan kita hendak memilih semua variabel yang mengandung kata _frequency_, kita bisa lakukan hal berikut:
+
+```{r}
+data %>% select(contains('frequency'))
+```
+
+## 6.4 `mutate()`
+
+Digunakan untuk membuat dan menghitung variabel baru atau _existing_. 
+
+Misalkan kita hendak membuat variabel baru bernama `telat.y.n` yang gunanya untuk mengecek apakah karyawan di bulan tersebut pernah telat atau tidak:
+
+```{r}
+data %>% 
+  mutate(telat.y.n = ifelse(tardines.frequency>0,'Yes','No')) %>% 
+  select(dept,nama.karyawan,bulan,telat.y.n)
+```
+
+Misalkan kita hendak me- _replace_ variabel `tardines.frequency` dan menggantinya menjadi 3 kelompok kelas (low, med, high):
+
+```{r}
+data %>% 
+  filter(tardines.frequency>0) %>% # melakukan filter hanya utk karyawan yag telat
+  filter(status == "Tetap") %>% # hanya yang statusnya tetap
+  filter(bulan == 'Jan') %>% # hanya pada bulan Jan
+  mutate(tardines.frequency = cut(tardines.frequency,
+                                  3,
+                                  labels=c('low','med','high'))) # membagi tardines menjadi 3 kelas
+```
+
+Fungsi `cut()` membagi data numerik menjadi kelas-kelas tertentu
+Untuk melakukan _vectorize_ dari _conditional_ `ifelse()`, kita bisa menggunakan fungsi `case_when()`.
+
+## 6.5 `group_by()` dan `summarise()`
 
 Digunakan untuk melakukan pengelompokkan serta membuat dan menghitung variabel baru atau _existing_ berdasarkan pengelompokkan tersebut.
 
-## 6.5 `separate()`
+## 6.6 `separate()`
 
 Digunakan untuk memecah satu variabel ke dua atau lebih variabel.
 ___
