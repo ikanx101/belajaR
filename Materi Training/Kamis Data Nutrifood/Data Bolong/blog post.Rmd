@@ -51,6 +51,17 @@ Oleh karena itu, saya akan contohkan algoritma pengerjaannya di __R__.
 
 Cara pengerjaannya sebenarnya simpel, yakni dengan menggunakan _conditional_ dan _looping_.
 
-```{r out.width = '20%',echo=FALSE}
-knitr::include_graphics('https://bookdown.org/moh_rosidi2610/Metode_Numerik/images/r-icon.png')
+```{r out.width = '80%',echo=FALSE}
+knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Materi%20Training/Kamis%20Data%20Nutrifood/Data%20Bolong/algoritma.png')
+```
+
+_Conditional_ tersebut akan diulang ke semua baris data.
+
+```{r}
+for(i in 2:100){
+  data$nama_karyawan[i] = ifelse(is.na(data$nama_karyawan[i]),
+                                 data$nama_karyawan[i-1],
+                                 data$nama_karyawan[i])
+}
+data
 ```
