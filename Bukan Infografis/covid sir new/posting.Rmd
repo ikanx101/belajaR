@@ -195,13 +195,15 @@ SIR.model(1000,150,200,beta_max,gamm,zeta)
 
 # Kesimpulan
 
-Model kali ini memberikan gambaran bahwa orang yang sakit akan mencapai _peak position_ di sekitar `40%` populasi. Tapi perlu diperhatikan bahwa semua orang sehat akan terinfeksi pada akhirnya dan menjadi resisten.
+Model kali ini memberikan gambaran bahwa orang yang sakit akan mencapai _peak position_ di sekitar `40%` populasi. 
+
+> Tapi perlu diperhatikan bahwa semua orang sehat akan terinfeksi pada akhirnya dan menjadi resisten.
 
 Dengan mempertimbangkan maksimum kapasitas fasilitas kesehatan yang ada saat ini, saya tetap menghimbau agar kita harus melakukan langkah konkrit untuk menurunkan $\beta$ dengan gerakan _social distancing_ dan __WFH__.
 
 # Sedikit Catatan Terkait _Mortality Rate_ di Indonesia
 
-Ada hal yang cukup mencengangkan terjadi di Indonesia. _Mortality rate_ dari __COVID-19__ sudah menembus angka `~8%`. Salah satu yang tertinggi di dunia.
+Ada hal yang cukup mencengangkan terjadi di Indonesia. _Mortality rate_ dari __COVID-19__ sudah menembus angka `~10%`. Salah satu yang tertinggi di dunia.
 
 > Mengapa demikian?
 
