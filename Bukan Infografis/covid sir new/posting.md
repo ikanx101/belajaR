@@ -142,8 +142,7 @@ SIR.model <- function(N,I,t, b, g, z){
 
 Misalkan dalam satu lingkungan berisi `1000` orang dengan `999` orang
 sehat dan `1` orang yang sakit, maka kondisinya dalam `200` hari menjadi
-sebagai
-berikut:
+sebagai berikut:
 
 ``` r
 SIR.model(1000,1,200,beta,gamm,zeta)
@@ -232,21 +231,51 @@ SIR.model(1000,150,200,beta_max,gamm,zeta)
 
 ![](posting_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
-# Kesimpulan
+> Perbedaan nilai ![I(0)](https://latex.codecogs.com/png.latex?I%280%29
+> "I(0)") mempengaruhi seberapa cepat wabah menyebar tapi tidak
+> menjadikan puncak semakin tinggi.
 
-Model kali ini memberikan gambaran bahwa orang yang sakit akan mencapai
-*peak position* di sekitar `40%` populasi.
+# Kesimpulan Sementara
+
+*Update* model kali ini memberikan gambaran bahwa orang yang sakit akan
+mencapai *peak position* di sekitar `40%` populasi.
 
 > Tapi perlu diperhatikan bahwa semua orang sehat akan terinfeksi pada
-> akhirnya dan menjadi resisten.
+> akhirnya dan menjadi resisten dengan waktu relatif cepat (sekitar `30`
+> hari).
 
-Dengan mempertimbangkan maksimum kapasitas fasilitas kesehatan yang ada
-saat ini, saya tetap menghimbau agar kita harus melakukan langkah
-konkrit untuk menurunkan
+Dengan mempertimbangkan maksimum kapasitas fasilitas dan tenaga
+kesehatan yang ada saat ini, saya tetap menghimbau agar kita harus
+melakukan langkah konkrit untuk menurunkan
 ![\\beta](https://latex.codecogs.com/png.latex?%5Cbeta "\\beta") dengan
 gerakan *social distancing* dan **WFH**.
 
-# Sedikit Catatan Terkait *Mortality Rate* di Indonesia
+-----
+
+# Komentar Lainnya
+
+## Persentase Bisa Menipu
+
+Di awal-awal penanganan **COVID-19** di Indonesia, kita mendengar
+beberapa pejabat dan politisi yang berkata bahwa tingkat kematian akibat
+**COVID-19** ini relatif kecil, hanya `~3%` saja.
+
+> Persentase itu masih lebih kecil dibandingkan SARS dan MERS.
+> *katanya…*
+
+Dengan data yang ada sampai saat ini, tentunya pernyataan tersebut tidak
+salah tapi kurang bijak. Kenapa begitu? Secara psikologi, penyampaian
+pernyataan tersebut tanpa disadari membuat sebagian masyarakat
+meremehkan penyakit ini. *Gak* percaya? Lihat aja lokasi wisata di
+Puncak dan Pantai Carita beberapa saat lalu.
+
+Coba *deh* cari informasi berapa angka absolut kematian antara
+**COVID-19**, SARS, dan MERS lalu coba kalian bandingkan.
+
+Oleh karena itu, akan sangat bijak saat kita melihat nilai absolut dari
+kasus kematian yang ada.
+
+## Kenapa *Mortality Rate* di Indonesia Tinggi?
 
 Ada hal yang cukup mencengangkan terjadi di Indonesia. *Mortality rate*
 dari **COVID-19** sudah menembus angka `~10%`. Salah satu yang tertinggi
@@ -258,5 +287,22 @@ Berdasarkan pendapat para ahli, **COVID-19** sendiri tidak bisa
 menimbulkan kematian namun komplikasi yang menyertainya yang bisa
 menimbulkan kematian.
 
+<img src="virus new.PNG" width="40%" />
+
 Angka ini sendiri menurut saya menjadi cerminan buruknya kualitas
 kesehatan bangsa Indonesia sebagai individual.
+
+Ada yang bisa bantu carikan hasil Riskesdas terbaru terkait kondisi
+kesehatan tersebut di atas?
+
+## Bukan Terdistribusi Normal tapi Terdistribusi Pareto\!
+
+Kita tahu bahwa **COVID-19** ini lebih berbahaya bagi warga senior.
+
+<img src="capture 2.PNG" width="60%" />
+
+Saya menduga bahwa data ini terdistribusi pareto, tidak berbentuk *bell
+curved*. Ini akan saya jadikan bahan tulisan di *blog* selanjutnya
+*yah*.
+
+*Stay safe* dan *stay healthy* yah.

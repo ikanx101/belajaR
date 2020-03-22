@@ -193,15 +193,33 @@ SIR.model(1000,100,200,beta_max,gamm,zeta)
 SIR.model(1000,150,200,beta_max,gamm,zeta)
 ```
 
-# Kesimpulan
+> Perbedaan nilai $I(0)$ mempengaruhi seberapa cepat wabah menyebar tapi tidak menjadikan puncak semakin tinggi.
 
-Model kali ini memberikan gambaran bahwa orang yang sakit akan mencapai _peak position_ di sekitar `40%` populasi. 
+# Kesimpulan Sementara
 
-> Tapi perlu diperhatikan bahwa semua orang sehat akan terinfeksi pada akhirnya dan menjadi resisten.
+_Update_ model kali ini memberikan gambaran bahwa orang yang sakit akan mencapai _peak position_ di sekitar `40%` populasi. 
 
-Dengan mempertimbangkan maksimum kapasitas fasilitas kesehatan yang ada saat ini, saya tetap menghimbau agar kita harus melakukan langkah konkrit untuk menurunkan $\beta$ dengan gerakan _social distancing_ dan __WFH__.
+> Tapi perlu diperhatikan bahwa semua orang sehat akan terinfeksi pada akhirnya dan menjadi resisten dengan waktu relatif cepat (sekitar `30` hari).
 
-# Sedikit Catatan Terkait _Mortality Rate_ di Indonesia
+Dengan mempertimbangkan maksimum kapasitas fasilitas dan tenaga kesehatan yang ada saat ini, saya tetap menghimbau agar kita harus melakukan langkah konkrit untuk menurunkan $\beta$ dengan gerakan _social distancing_ dan __WFH__.
+
+____
+
+# Komentar Lainnya 
+
+## Persentase Bisa Menipu
+
+Di awal-awal penanganan __COVID-19__ di Indonesia, kita mendengar beberapa pejabat dan politisi yang berkata bahwa tingkat kematian akibat __COVID-19__ ini relatif kecil, hanya `~3%` saja. 
+
+> Persentase itu masih lebih kecil dibandingkan SARS dan MERS. _katanya..._
+
+Dengan data yang ada sampai saat ini, tentunya pernyataan tersebut tidak salah tapi kurang bijak. Kenapa begitu? Secara psikologi, penyampaian pernyataan tersebut tanpa disadari membuat sebagian masyarakat meremehkan penyakit ini. _Gak_ percaya? Lihat aja lokasi wisata di Puncak dan Pantai Carita beberapa saat lalu. 
+
+Coba _deh_ cari informasi berapa angka absolut kematian antara __COVID-19__, SARS, dan MERS lalu coba kalian bandingkan.
+
+Oleh karena itu, akan sangat bijak saat kita melihat nilai absolut dari kasus kematian yang ada. 
+
+## Kenapa _Mortality Rate_ di Indonesia Tinggi?
 
 Ada hal yang cukup mencengangkan terjadi di Indonesia. _Mortality rate_ dari __COVID-19__ sudah menembus angka `~10%`. Salah satu yang tertinggi di dunia.
 
@@ -209,4 +227,22 @@ Ada hal yang cukup mencengangkan terjadi di Indonesia. _Mortality rate_ dari __C
 
 Berdasarkan pendapat para ahli, __COVID-19__ sendiri tidak bisa menimbulkan kematian namun komplikasi yang menyertainya yang bisa menimbulkan kematian.
 
+```{r out.width = '40%',echo=FALSE}
+knitr::include_graphics('virus new.PNG')
+```
+
 Angka ini sendiri menurut saya menjadi cerminan buruknya kualitas kesehatan bangsa Indonesia sebagai individual.
+
+Ada yang bisa bantu carikan hasil Riskesdas terbaru terkait kondisi kesehatan tersebut di atas?
+
+## Bukan Terdistribusi Normal tapi Terdistribusi Pareto!
+
+Kita tahu bahwa __COVID-19__ ini lebih berbahaya bagi warga senior.
+
+```{r out.width = '60%',echo=FALSE}
+knitr::include_graphics('capture 2.PNG')
+```
+
+Saya menduga bahwa data ini terdistribusi pareto, tidak berbentuk _bell curved_. Ini akan saya jadikan bahan tulisan di _blog_ selanjutnya _yah_.
+
+_Stay safe_ dan _stay healthy_ yah.
