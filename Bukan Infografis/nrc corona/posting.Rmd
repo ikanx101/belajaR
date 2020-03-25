@@ -1,0 +1,197 @@
+---
+title: "Updated: SIR Compartment Model"
+output: 
+  github_document:
+    pandoc_args: --webtex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("/cloud/project/Bukan Infografis/nrc corona")
+rm(list=ls())
+library(ggplot2)
+library(dplyr)
+library(deSolve)
+
+sir_model <- function(N,I,t, b, g){
+  init <- c(S=(N-I),I=I,R=0)
+  parameters <- c(bet=b,gamm=g)
+  time <- c(1:t)
+  eqn <- function(time,state,parameters){
+    with(as.list(c(state,parameters)),{
+      dS <- -bet*(S)*I 
+      dR <- gamm*I
+      dI <- bet*S*I - gamm*I
+      return(list(c(dS,dI,dR)))})}
+  out<-ode(y=init,times=time,eqn,parms=parameters)
+  out.df<-as.data.frame(out)
+  return(out.df)
+}
+```
+
+Kemarin teman SMA saya bercerita bahwa ketika orang tuanya pulang dari Inggris beberapa minggu yang lalu, mereka tiba-tiba batuk-batuk dan demam. Dalam waktu yang relatif singkat, seisi rumah menjadi tertular dan memiliki gejala yang sama.
+
+# Apa sih perbedaan antara COVID-19 dengan flu lainnya?
+
+Sebagai orang yang tidak memiliki latar belakang medis sama sekali, saya tentu tidak bisa menjawab pertanyaan ini.
+
+Sama jika Anda tidak memiliki latar belakang medis. Jangan sekali-kali mencoba menjawab sesuatu yang bukan merupakan bidang keahlian atau keilmuan Anda.
+
+__TAPI...__
+
+Setidaknya ada satu hal yang saya bisa lakukan untuk menjawab pertanyaan ini.
+
+> Bagaimana?
+
+Menggunakan model matematika yang pernah saya bikin sebelumnya.
+
+Kita bisa membandingkan seberapa cepat penyebaran __COVID-19__, __seasonal flu__, dan __2009 flu__ berdasarkan informasi $R0$-nya.
+
+Mari kita mulai analisanya _yah_ !
+
+# Data $R0$
+
+Dari informasi yang dihimpun di wikipedia.org, saya mendapatkan data terkait $R0$ sebagai berikut:
+
+```{r,echo=FALSE}
+dise = c('COVID-19','Seasonal Flu','Swine Flu')
+r0_min = c(1.4,0.9,1.4)
+r0_max = c(3.9,2.1,1.6)
+
+data = data.frame(dise,r0_min,r0_max)
+
+data %>% ggplot(aes(x=reorder(dise,-r0_min))) + 
+  geom_errorbar(aes(ymin=r0_min, ymax=r0_max), width=.1,size=1.25) +
+  theme_minimal() +
+  labs(title = 'Rentang R0 dari Beberapa Flu',
+       subtitle = 'Sumber: wikipedia.org',
+       caption = 'Visualized using R\nikanx101.github.io') +
+  theme(axis.title = element_blank())
+```
+
+Berdasarkan tulisan saya sebelumnya, seberapa besar $R0$ ini akan mempengaruhi $\beta$, yakni seberapa cepat wabah menyebar.
+
+Mari kita hitung seberapa cepat wabah penyakit ini menyebar menggunakan $R0$ untuk masing-masing penyakit.
+
+# Simulasi nilai $R0$ dengan Monte Carlo
+
+> Kenapa sih harus pakai simulasi Monte Carlo?
+
+Ada masukan yang sangat berharga dari senior saya di Matematika ITB. Beliau menyatakan bahwa pendekatan deterministik belum cukup baik untuk memodelkan keadaan sebenarnya. Oleh karena itu, kali ini saya akan menambahkan faktor ketidakpastian dari model deterministik yang sudah saya bangun sebelumnya.
+
+> Bagaimana caranya?
+
+Dari data di atas, kita tahu bahwa nilai $R0$ berada dalam _range_ tertentu. Kali ini saya akan menggunakan simulasi Monte Carlo untuk _generate various number of_ $R0$ agar didapat selang estimasi dari model yang ada.
+
+Selain itu, akan dilakukan Monte Carlo juga untuk _generate various number of_ kecepatan seseorang sehat.
+
+Akan dilakukan simulasi sebanyak `5000` kali untuk masing-masing penyakit.
+
+Nanti parameter yang akan dicari adalah __seberapa lama wabah menyebar sehingga semua orang sehat tertular__.
+
+## Asumsi yang digunakan
+
+Saya akan menggunakan contoh kondisi di tempat kerja saya agar bisa lebih mudah bagi kalian membayangkannya.
+
+1. Misalnya di suatu ruangan kantor ada total `18` orang. Pada hari ke `0`, salah seorang dari kami sakit.
+1. Oleh karena semua penyakit ini adalah berasal dari varian virus flu, maka semua orang akan sembuh dengan sendirinya pada _range_ hari ke `14` - `21`. _Notes_: parameter ini juga akan dilakukan simulasi Monte Carlo. 
+2. Tidak ada orang sakit yang meninggal.
+2. Semua orang dalam populasi berinteraksi seperti biasa (tidak ada karantina, orang sakit tidak mengenakan masker, dan orang sakit masih masuk kerja).
+
+## __COVID-19__
+
+```{r}
+covid = function(n){
+  n
+  r_nol = seq(1.4,3.9,by=.1)
+  r_nol = sample(r_nol,1)
+  gamm = sample(c(14:21),1)
+  gamm = 1/gamm
+  beta = r_nol * gamm
+  temp = sir_model(18,1,14,beta,gamm)
+  hari = temp %>% filter(S<0.5) %>% summarise(min(time))
+  hari = as.numeric(hari)
+  return(hari)
+}
+
+simulasi = data.frame(id=c(1:5000))
+simulasi$hari_covid = sapply(simulasi$id,covid)
+```
+
+## __Seasonal Flu__
+
+```{r}
+seasonal = function(n){
+  n
+  r_nol = seq(.9,2.1,by=.1)
+  r_nol = sample(r_nol,1)
+  gamm = sample(c(14:21),1)
+  gamm = 1/gamm
+  beta = r_nol * gamm
+  temp = sir_model(18,1,14,beta,gamm)
+  hari = temp %>% filter(S<0.5) %>% summarise(min(time))
+  hari = as.numeric(hari)
+  return(hari)
+}
+
+simulasi$hari_seasonal = sapply(simulasi$id,seasonal)
+```
+
+## __Swine Flu__
+
+```{r}
+flu = function(n){
+  n
+  r_nol = seq(1.4,1.6,by=.1)
+  r_nol = sample(r_nol,1)
+  gamm = sample(c(14:21),1)
+  gamm = 1/gamm
+  beta = r_nol * gamm
+  temp = sir_model(18,1,14,beta,gamm)
+  hari = temp %>% filter(S<0.5) %>% summarise(min(time))
+  hari = as.numeric(hari)
+  return(hari)
+}
+
+simulasi$hari_flu = sapply(simulasi$id,flu)
+```
+
+## Hasil Simulasi
+
+Dari simulasi yang dilakukan di atas, berikut adalah hasilnya:
+
+```{r,echo=FALSE,fig.width=7.5,fig.height=8}
+simulasi %>% 
+  rename(COVID = hari_covid,
+         SEASONAL_FLU = hari_seasonal,
+         SWINE_FLU = hari_flu) %>%
+  reshape2::melt(id.vars='id') %>%
+  group_by(variable,value) %>% 
+  summarise(freq = n()/5000,
+            freq = freq*100,
+            freq = round(freq,1)) %>%
+  mutate(new_freq = cumsum(freq)) %>%
+  ggplot() + 
+  geom_col(aes(x=as.factor(value),y=freq),fill='steelblue') +
+  geom_line(aes(x=as.factor(value),y=new_freq,group=1),size=.7,color='darkred') +
+  geom_label(aes(x=as.factor(value),y=freq,label = paste0(freq,'%')),
+             size=3,color='steelblue') +
+  geom_label(aes(x=as.factor(value),y=new_freq,label = paste0(new_freq,'%')),
+             size=3,color='darkred') +
+  facet_wrap(~variable,ncol=1,nrow=3) +
+  theme_minimal() +
+  labs(title = 'Pada hari ke berapa semua orang akan tertular?',
+       subtitle = 'Jika pada awalnya ada 18 orang dengan seorang diantaranya sakit\nBiru: Peluang semua orang akan tertular\nMerah: Peluang kumulatif semua orang akan tertular',
+       caption = 'Simulated and Visualized\nusing R\nikanx101.github.io',
+       y = "Peluang",
+       x = 'Pada hari ke-') +
+  theme(axis.text.y = element_blank())
+```
+
+# Kesimpulan
+
+Hasil grafik di atas seiring sejalan dengan _range_ nilai $R0$ yang ada. 
+
+- __COVID-19__ lebih cepat menyebar dibandingkan dua jenis flu lainnya. 
+  - Pada hari ketiga dan keempat, peluang kumulatif-nya sudah hampir mencapai angka hampir `70%`. Semua orang berpeluang besar sudah terkena penyakit ini.
+- Sedangkan varian flu lainnya relatif lebih lambat penyebarannya.
