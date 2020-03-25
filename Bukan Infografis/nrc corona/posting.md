@@ -1,10 +1,15 @@
-Updated: SIR Compartment Model
+Bagaimana Membedakan Flu dengan COVID-19?
 ================
 
-Kemarin teman SMA saya bercerita bahwa ketika orang tuanya pulang dari
+Kemarin teman saya bercerita bahwa ketika orang tuanya pulang dari
 Inggris beberapa minggu yang lalu, mereka tiba-tiba batuk-batuk dan
 demam. Dalam waktu yang relatif singkat, seisi rumah menjadi tertular
 dan memiliki gejala yang sama.
+
+Namun sekarang kondisi mereka sudah lebih baik dan beberapa sudah sembuh
+seperti sediakala.
+
+Pertanyaannya:
 
 # Apa sih perbedaan antara COVID-19 dengan flu lainnya?
 
@@ -25,31 +30,27 @@ ini.
 Menggunakan model matematika yang pernah saya bikin sebelumnya.
 
 Kita bisa membandingkan seberapa cepat penyebaran **COVID-19**,
-**seasonal flu**, dan **2009 flu** berdasarkan informasi
-![R0](https://latex.codecogs.com/png.latex?R0 "R0")-nya.
+**seasonal flu**, dan **2009 flu** berdasarkan informasi **R0**-nya.
 
 Mari kita mulai analisanya *yah* \!
 
-# Data ![R0](https://latex.codecogs.com/png.latex?R0 "R0")
+# Data **R0**
 
 Dari informasi yang dihimpun di wikipedia.org, saya mendapatkan data
-terkait ![R0](https://latex.codecogs.com/png.latex?R0 "R0") sebagai
-berikut:
+terkait **R0** sebagai berikut:
 
 ![](posting_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
 
-Berdasarkan tulisan saya sebelumnya, seberapa besar
-![R0](https://latex.codecogs.com/png.latex?R0 "R0") ini akan
+Berdasarkan tulisan saya sebelumnya, seberapa besar **R0** ini akan
 mempengaruhi ![\\beta](https://latex.codecogs.com/png.latex?%5Cbeta
 "\\beta"), yakni seberapa cepat wabah menyebar.
 
 Mari kita hitung seberapa cepat wabah penyakit ini menyebar menggunakan
-![R0](https://latex.codecogs.com/png.latex?R0 "R0") untuk masing-masing
-penyakit.
+**R0** untuk masing-masing penyakit.
 
-# Simulasi nilai ![R0](https://latex.codecogs.com/png.latex?R0 "R0") dengan Monte Carlo
+# Simulasi Parameter dengan Monte Carlo
 
-> Kenapa sih harus pakai simulasi Monte Carlo?
+## Kenapa sih harus pakai simulasi Monte Carlo?
 
 Ada masukan yang sangat berharga dari senior saya di Matematika ITB.
 Beliau menyatakan bahwa pendekatan deterministik belum cukup baik untuk
@@ -57,22 +58,26 @@ memodelkan keadaan sebenarnya. Oleh karena itu, kali ini saya akan
 menambahkan faktor ketidakpastian dari model deterministik yang sudah
 saya bangun sebelumnya.
 
-> Bagaimana caranya?
+## Ketidakpastian yang Seperti Apa?
 
-Dari data di atas, kita tahu bahwa nilai
-![R0](https://latex.codecogs.com/png.latex?R0 "R0") berada dalam *range*
+Pada kehidupan *real*, kita tidak tahu pasti apakah penyebarannya itu
+cepat atau lambat di beberapa kondisi. Kita juga tidak tahu apsti
+seberapa cepat seseorang bisa sembuh dari penyakit.
+
+## Parameter yang Akan Disimulasikan
+
+Dari data di atas, kita tahu bahwa nilai **R0** berada dalam *range*
 tertentu. Kali ini saya akan menggunakan simulasi Monte Carlo untuk
-*generate various number of*
-![R0](https://latex.codecogs.com/png.latex?R0 "R0") agar didapat selang
-estimasi dari model yang ada.
+*generate various number of* **R0** agar didapat selang estimasi dari
+model yang ada.
 
-Selain itu, akan dilakukan Monte Carlo juga untuk *generate various
-number of* kecepatan seseorang sehat.
+Selain itu, kecepatan seseorang bisa menjadi sehat juga akan dilakukan
+simulasi Monte Carlo.
 
-Akan dilakukan simulasi sebanyak `5000` kali untuk masing-masing
-penyakit.
+Akan dilakukan simulasi sebanyak `5000` kali untuk ketiga tipe penyakit
+di atas.
 
-Nanti parameter yang akan dicari adalah **seberapa lama wabah menyebar
+*Goals* dari model ini adalah menghitung **berapa lama wabah menyebar
 sehingga semua orang sehat tertular**.
 
 ## Asumsi yang digunakan
@@ -91,7 +96,7 @@ lebih mudah bagi kalian membayangkannya.
     karantina, orang sakit tidak mengenakan masker, dan orang sakit
     masih masuk kerja).
 
-## **COVID-19**
+### **COVID-19**
 
 ``` r
 covid = function(n){
@@ -111,7 +116,7 @@ simulasi = data.frame(id=c(1:5000))
 simulasi$hari_covid = sapply(simulasi$id,covid)
 ```
 
-## **Seasonal Flu**
+### **Seasonal Flu**
 
 ``` r
 seasonal = function(n){
@@ -130,7 +135,7 @@ seasonal = function(n){
 simulasi$hari_seasonal = sapply(simulasi$id,seasonal)
 ```
 
-## **Swine Flu**
+### **Swine Flu**
 
 ``` r
 flu = function(n){
@@ -157,8 +162,8 @@ Dari simulasi yang dilakukan di atas, berikut adalah hasilnya:
 
 # Kesimpulan
 
-Hasil grafik di atas seiring sejalan dengan *range* nilai
-![R0](https://latex.codecogs.com/png.latex?R0 "R0") yang ada.
+Hasil grafik di atas seiring sejalan dengan *range* nilai **R0** yang
+ada.
 
   - **COVID-19** lebih cepat menyebar dibandingkan dua jenis flu
     lainnya.
@@ -166,3 +171,5 @@ Hasil grafik di atas seiring sejalan dengan *range* nilai
         mencapai angka hampir `70%`. Semua orang berpeluang besar sudah
         terkena penyakit ini.
   - Sedangkan varian flu lainnya relatif lebih lambat penyebarannya.
+
+Apakah dari uraian di atas kita bisa menyimpulkan sesuatu?

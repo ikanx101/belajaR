@@ -1,5 +1,5 @@
 ---
-title: "Updated: SIR Compartment Model"
+title: "Bagaimana Membedakan Flu dengan COVID-19?"
 output: 
   github_document:
     pandoc_args: --webtex
@@ -29,7 +29,11 @@ sir_model <- function(N,I,t, b, g){
 }
 ```
 
-Kemarin teman SMA saya bercerita bahwa ketika orang tuanya pulang dari Inggris beberapa minggu yang lalu, mereka tiba-tiba batuk-batuk dan demam. Dalam waktu yang relatif singkat, seisi rumah menjadi tertular dan memiliki gejala yang sama.
+Kemarin teman saya bercerita bahwa ketika orang tuanya pulang dari Inggris beberapa minggu yang lalu, mereka tiba-tiba batuk-batuk dan demam. Dalam waktu yang relatif singkat, seisi rumah menjadi tertular dan memiliki gejala yang sama.
+
+Namun sekarang kondisi mereka sudah lebih baik dan beberapa sudah sembuh seperti sediakala.
+
+Pertanyaannya:
 
 # Apa sih perbedaan antara COVID-19 dengan flu lainnya?
 
@@ -45,13 +49,13 @@ Setidaknya ada satu hal yang saya bisa lakukan untuk menjawab pertanyaan ini.
 
 Menggunakan model matematika yang pernah saya bikin sebelumnya.
 
-Kita bisa membandingkan seberapa cepat penyebaran __COVID-19__, __seasonal flu__, dan __2009 flu__ berdasarkan informasi $R0$-nya.
+Kita bisa membandingkan seberapa cepat penyebaran __COVID-19__, __seasonal flu__, dan __2009 flu__ berdasarkan informasi __R0__-nya.
 
 Mari kita mulai analisanya _yah_ !
 
-# Data $R0$
+# Data __R0__
 
-Dari informasi yang dihimpun di wikipedia.org, saya mendapatkan data terkait $R0$ sebagai berikut:
+Dari informasi yang dihimpun di wikipedia.org, saya mendapatkan data terkait __R0__ sebagai berikut:
 
 ```{r,echo=FALSE}
 dise = c('COVID-19','Seasonal Flu','Swine Flu')
@@ -69,25 +73,29 @@ data %>% ggplot(aes(x=reorder(dise,-r0_min))) +
   theme(axis.title = element_blank())
 ```
 
-Berdasarkan tulisan saya sebelumnya, seberapa besar $R0$ ini akan mempengaruhi $\beta$, yakni seberapa cepat wabah menyebar.
+Berdasarkan tulisan saya sebelumnya, seberapa besar __R0__ ini akan mempengaruhi $\beta$, yakni seberapa cepat wabah menyebar.
 
-Mari kita hitung seberapa cepat wabah penyakit ini menyebar menggunakan $R0$ untuk masing-masing penyakit.
+Mari kita hitung seberapa cepat wabah penyakit ini menyebar menggunakan __R0__ untuk masing-masing penyakit.
 
-# Simulasi nilai $R0$ dengan Monte Carlo
+# Simulasi Parameter dengan Monte Carlo
 
-> Kenapa sih harus pakai simulasi Monte Carlo?
+## Kenapa sih harus pakai simulasi Monte Carlo?
 
 Ada masukan yang sangat berharga dari senior saya di Matematika ITB. Beliau menyatakan bahwa pendekatan deterministik belum cukup baik untuk memodelkan keadaan sebenarnya. Oleh karena itu, kali ini saya akan menambahkan faktor ketidakpastian dari model deterministik yang sudah saya bangun sebelumnya.
 
-> Bagaimana caranya?
+## Ketidakpastian yang Seperti Apa?
 
-Dari data di atas, kita tahu bahwa nilai $R0$ berada dalam _range_ tertentu. Kali ini saya akan menggunakan simulasi Monte Carlo untuk _generate various number of_ $R0$ agar didapat selang estimasi dari model yang ada.
+Pada kehidupan _real_, kita tidak tahu pasti apakah penyebarannya itu cepat atau lambat di beberapa kondisi. Kita juga tidak tahu apsti seberapa cepat seseorang bisa sembuh dari penyakit.
 
-Selain itu, akan dilakukan Monte Carlo juga untuk _generate various number of_ kecepatan seseorang sehat.
+## Parameter yang Akan Disimulasikan
 
-Akan dilakukan simulasi sebanyak `5000` kali untuk masing-masing penyakit.
+Dari data di atas, kita tahu bahwa nilai __R0__ berada dalam _range_ tertentu. Kali ini saya akan menggunakan simulasi Monte Carlo untuk _generate various number of_ __R0__ agar didapat selang estimasi dari model yang ada.
 
-Nanti parameter yang akan dicari adalah __seberapa lama wabah menyebar sehingga semua orang sehat tertular__.
+Selain itu, kecepatan seseorang bisa menjadi sehat juga akan dilakukan simulasi Monte Carlo.
+
+Akan dilakukan simulasi sebanyak `5000` kali untuk ketiga tipe penyakit di atas.
+
+_Goals_ dari model ini adalah menghitung __berapa lama wabah menyebar sehingga semua orang sehat tertular__.
 
 ## Asumsi yang digunakan
 
@@ -98,7 +106,7 @@ Saya akan menggunakan contoh kondisi di tempat kerja saya agar bisa lebih mudah 
 2. Tidak ada orang sakit yang meninggal.
 2. Semua orang dalam populasi berinteraksi seperti biasa (tidak ada karantina, orang sakit tidak mengenakan masker, dan orang sakit masih masuk kerja).
 
-## __COVID-19__
+### __COVID-19__
 
 ```{r}
 covid = function(n){
@@ -118,7 +126,7 @@ simulasi = data.frame(id=c(1:5000))
 simulasi$hari_covid = sapply(simulasi$id,covid)
 ```
 
-## __Seasonal Flu__
+### __Seasonal Flu__
 
 ```{r}
 seasonal = function(n){
@@ -137,7 +145,7 @@ seasonal = function(n){
 simulasi$hari_seasonal = sapply(simulasi$id,seasonal)
 ```
 
-## __Swine Flu__
+### __Swine Flu__
 
 ```{r}
 flu = function(n){
@@ -190,8 +198,10 @@ simulasi %>%
 
 # Kesimpulan
 
-Hasil grafik di atas seiring sejalan dengan _range_ nilai $R0$ yang ada. 
+Hasil grafik di atas seiring sejalan dengan _range_ nilai __R0__ yang ada. 
 
 - __COVID-19__ lebih cepat menyebar dibandingkan dua jenis flu lainnya. 
   - Pada hari ketiga dan keempat, peluang kumulatif-nya sudah hampir mencapai angka hampir `70%`. Semua orang berpeluang besar sudah terkena penyakit ini.
 - Sedangkan varian flu lainnya relatif lebih lambat penyebarannya.
+
+Apakah dari uraian di atas kita bisa menyimpulkan sesuatu?
