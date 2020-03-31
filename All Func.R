@@ -1,3 +1,11 @@
+print('===============================================================================================================')
+print('Syarat dan ketentuan berlaku')
+print('Pastikan library berikut ini sudah terinstall yah:')
+print('readxl, dplyr, officer, gridExtra, ggplot2, expss, foreign')
+print('Khusus untuk membuat powerpoint menggunakan officer, pastikan bahwa template powerpoint diberikan nama doc yah')
+print('Khusus untuk melakukan tabulasi data, pastikan bahwa data diberikan nama data yah')
+print('===============================================================================================================')
+
 #load library yg dbutuhkan
 library(readxl)
 library(dplyr)
@@ -6,29 +14,6 @@ library(gridExtra)
 library(ggplot2)
 library(foreign)
 library(expss)
-library(tidyr)
-library(ggrepel)
-
-#membersihkan nama variabel dalam data frame
-tolong.bersihin.judul.donk = function(data){
-judul=colnames(data)
-judul=tolower(judul)
-judul=gsub(' ','.',judul)
-judul=gsub('_','.',judul)
-judul=gsub('-','.',judul)
-judul=gsub('\\|','.',judul)
-judul=gsub('\\/','.',judul)
-judul=gsub('\r','.',judul)
-judul=gsub('\n','.',judul)
-judul=gsub('\t','.',judul)
-judul=gsub('\\(','',judul)
-judul=gsub('\\)','',judul)
-judul=gsub('\\:','',judul)
-judul=gsub('..','.',judul,fixed=T)
-judul=gsub('..','.',judul,fixed=T)
-judul=gsub('..','.',judul,fixed=T)
-return(judul)
-}
 
 #Gabung data dalam satu folder csv
 gabungin.data.csv.saya.donk = function(path){
@@ -109,8 +94,9 @@ tambahin.slide.isi.donk=function(slide.title,isi){
 
 #tambahin slide Ending
 tambahin.slide.ending.donk=function(){
-  doc <- add_slide(doc,layout = "Title Only", master = "Office Theme")
-  doc <- ph_with(x=doc,"This is AI Generated Presentation\nUsing R\ni k A n g\n\nThank You", location = ph_location_type(type = "title"))
+  doc <- add_slide(doc,layout = "Title Slide", master = "Office Theme")
+  doc <- ph_with(x=doc,"This is AI Generated Presentation\nUsing R 3.6.1\ni k A n g", location = ph_location_type(type = "subTitle"))
+  doc <- ph_with(x=doc,"Thank You", location = ph_location_type(type = "ctrTitle"))
 }
 
 #tambahin slide title dan two content
@@ -132,6 +118,7 @@ liat.variable.labels.donk=function(data){
   }
 
 #bikin pie chart
+# real number dan percentage
 bikinin.pie.chart.dari.data.saya.donk=function(data,variabel,pertanyaan,sub.judul){
   tabulasi=data %>% tab_cells(variabel) %>% tab_stat_cpct() %>% tab_pivot()
   tabulasi$dummy=strsplit(tabulasi$row_labels,'\\|')
@@ -141,15 +128,48 @@ bikinin.pie.chart.dari.data.saya.donk=function(data,variabel,pertanyaan,sub.judu
   tabulasi=tabulasi[-3]
   colnames(tabulasi)=c('ket','percent')
   tabulasi$percent=round(tabulasi$percent,2)
-  n = as.numeric(tabulasi %>% filter(grepl('total',ket,ignore.case=T)) %>% summarize(n=sum(percent))) #ambil base buat kepentingan chart
-  tabulasi = tabulasi %>% filter(!grepl('total',ket,ignore.case=T)) #tabulasi final untuk chart
+  n = as.numeric(tabulasi %>% filter(grepl('total',ket,ignore.case=T)) %>% 
+                   summarise(n=sum(percent))) #ambil base buat kepentingan chart
+  tabulasi = tabulasi %>% 
+    filter(!grepl('total',ket,ignore.case=T)) #tabulasi final untuk chart
   tabulasi = tabulasi %>% filter(!is.na(ket))
-  ggplot(tabulasi,aes(x='',y=percent,fill=ket,label=paste(ket,', ',percent,'%',sep=''))) + geom_bar(stat='identity') + coord_polar("y", start=0) +scale_fill_brewer(palette="Pastel2") + theme_minimal() + theme(axis.title.y=element_blank(),axis.title.x=element_blank(),legend.position = 'none',plot.title=element_text(size=14),plot.caption=element_text(size=10))+geom_text(position = position_stack(vjust = 0.5),size=4) +labs(caption = paste('n = ',ifelse(n>=30,n,paste(n,', indikasi',sep='')),sep='')) + labs(title=pertanyaan) + labs(subtitle = sub.judul) #ini grafiknya yah. Pertanyaan masukin dari subtitle
+  
+  if(n>30){
+    label_n=paste0(tabulasi$ket,
+                   ', ',
+                   tabulasi$percent,'%')
+    caption_n = paste0('PERCENTAGE - n = ',n)
+  } else{
+    label_n=paste0(tabulasi$ket,', ',
+                   round(tabulasi$percent*n/100,0),
+                   ' (',
+                   tabulasi$percent,'%)')
+    caption_n = paste0('REAL NUMBER - n = ',n,', indikasi')
+  }
+  
+  ggplot(tabulasi,aes(x='',y=percent,fill=ket,label=label_n)) + 
+    geom_bar(stat='identity') + 
+    coord_polar("y", start=0) +
+    scale_fill_brewer(palette="Accent") + 
+    theme_minimal() + 
+    theme(panel.grid=element_blank(),axis.title.y=element_blank(),
+          axis.title.x=element_blank(),legend.position = 'none',
+          plot.title = element_text(size=17),
+          plot.subtitle = element_text(size=13),
+          plot.caption=element_text(size=12),
+          axis.text.y = element_blank(),
+          axis.text.x = element_blank()) +
+    geom_label(position = position_stack(vjust = 0.5),size=4.5) +
+    labs(caption = caption_n) +
+    labs(title=pertanyaan,subtitle = sub.judul)
 }
 
+
 #bikin pie chart facet
+# sudah revised
 bikinin.pie.chart.facet.dari.data.saya.donk=function(data,variabel,facet,pertanyaan,sub.judul,caption){
-  tabulasi=data %>% tab_cells(variabel) %>% tab_rows(facet) %>% tab_stat_cpct() %>% tab_pivot()
+  tabulasi=data %>% tab_cells(variabel) %>% tab_rows(facet) %>% 
+    tab_stat_cpct() %>% tab_pivot()
   tabulasi$dummy=strsplit(tabulasi$row_labels,'\\|')
   for(i in 1:length(tabulasi$dummy))
   {tabulasi$row_labels[i]=unlist(tabulasi$dummy[i])[4]
@@ -159,39 +179,118 @@ bikinin.pie.chart.facet.dari.data.saya.donk=function(data,variabel,facet,pertany
   tabulasi=tabulasi[-3]
   colnames(tabulasi)=c('ket','percent','facet')
   tabulasi$percent=round(tabulasi$percent,2)
-  new=tabulasi %>% filter(grepl('total',ket,ignore.case=T)) %>% mutate(facet.new=paste(facet,', n=',percent,ifelse(percent<30,' - indikasi',''),sep=''))
+  new=tabulasi %>% filter(grepl('total',ket,ignore.case=T)) %>% 
+    mutate(facet.new=paste(facet,', n=',percent,ifelse(percent<30,' - indikasi',''),sep=''))
   new$ket=NULL
   new$percent=NULL #baru sampe sini yah
-  tabulasi = tabulasi %>% filter(!grepl('total',ket,ignore.case=T)) #tabulasi final untuk chart
+  tabulasi = tabulasi %>% 
+    filter(!grepl('total',ket,ignore.case=T)) #tabulasi final untuk chart
   tabulasi = tabulasi %>% filter(!is.na(ket))
   tabulasi=merge(tabulasi,new)
-  ggplot(tabulasi,aes(x='',y=percent,fill=ket,label=paste(ket,', ',percent,'%',sep=''))) + geom_bar(stat='identity') + coord_polar("y", start=0) +scale_fill_brewer(palette="Pastel2") + theme_minimal() + theme(axis.title.y=element_blank(),axis.title.x=element_blank(),legend.position = 'none',plot.title=element_text(size=16),plot.subtitle = element_text(size=13))+geom_text(position = position_stack(vjust = 0.5),size=4) + labs(title=pertanyaan) + facet_wrap(~facet.new) + theme(strip.background = element_rect(colour="black", fill="white",size=1.5, linetype="solid")) + labs(subtitle = sub.judul,caption=caption) #ini grafiknya yah. Pertanyaan masukin dari subtitle
+  ggplot(tabulasi,aes(x='',y=percent,fill=ket,label=paste(ket,', ',percent,'%',sep=''))) + 
+    geom_bar(stat='identity') + 
+    coord_polar("y", start=0) +
+    scale_fill_brewer(palette="Accent") + 
+    theme_minimal() + 
+    theme(panel.grid=element_blank(),axis.title.y=element_blank(),
+          axis.title.x=element_blank(),legend.position = 'none',
+          plot.title = element_text(size=17),
+          plot.subtitle = element_text(size=13),
+          plot.caption=element_text(size=12),
+          axis.text.y = element_blank(),
+          axis.text.x = element_blank()) +
+    geom_label(position = position_stack(vjust = 0.5),size=4.5) +
+    labs(caption = paste('n = ',ifelse(n>=30,n,paste(n,', indikasi',sep='')),sep='')) +
+    labs(title=pertanyaan,subtitle = sub.judul)
 }
 
 #bikin bar chart standar - dari tabulasi (sort)
-bikinin.bar.chart.sort.dari.data.tabulasi.saya.donk=function(tabulasi,pertanyaan,sub.judul){
+# real number dan percentage
+bikinin.bar.chart.sort.dari.data.tabulasi.saya.donk=function(tabulasi,
+                                                             pertanyaan,
+                                                             sub.judul){
   colnames(tabulasi)=c('ket','percent')
   tabulasi$percent=round(tabulasi$percent,2)
-  n = as.numeric(tabulasi %>% filter(grepl('total',ket,ignore.case=T)) %>% summarize(n=sum(percent))) #ambil base buat kepentingan chart
-  tabulasi = tabulasi %>% filter(!grepl('total',ket,ignore.case=T)) #tabulasi final untuk chart
+  n = as.numeric(tabulasi %>% 
+                   filter(grepl('total',ket,ignore.case=T)) %>% 
+                   summarize(n=sum(percent))) #ambil base buat kepentingan chart
+  tabulasi = tabulasi %>% 
+    filter(!grepl('total',ket,ignore.case=T)) #tabulasi final untuk chart
   tabulasi = tabulasi %>% filter(!is.na(ket))
   tabulasi = tabulasi %>% filter(!is.na(percent))
-  ggplot(tabulasi,aes(reorder(ket,-percent),percent,label=paste(percent,'%',sep='')))+geom_bar(fill='steelblue',stat='identity')+scale_fill_brewer(palette="Pastel2") + theme_minimal() + theme(panel.grid=element_blank(),axis.title.y=element_blank(),axis.title.x=element_blank(),legend.position = 'none',plot.title=element_text(size=16),plot.subtitle=element_text(size=13),plot.caption=element_text(size=10),axis.text.y = element_blank())+geom_text(position = position_stack(vjust = 1.03),size=3.5) +labs(caption = paste('n = ',ifelse(n>=30,n,paste(n,', indikasi',sep='')),sep='')) + labs(title=pertanyaan,subtitle = sub.judul)
+  
+  if(n>30){
+    label_n=paste0(tabulasi$percent,'%')
+    caption_n = paste0('PERCENTAGE - n = ',n)
+  } else{
+    label_n=paste0(round(tabulasi$percent*n/100,0))
+    caption_n = paste0('REAL NUMBER - n = ',n,', indikasi')
+  }
+  
+  
+  ggplot(tabulasi,aes(reorder(ket,-percent),percent,label=label_n)) +
+    geom_bar(color='steelblue',
+             fill='grey',
+             stat='identity',
+             alpha=.6,
+             size=2) +
+    theme_minimal() + 
+    theme(panel.grid=element_blank(),axis.title.y=element_blank(),
+          axis.title.x=element_blank(),legend.position = 'none',
+          plot.title = element_text(size=17),
+          plot.subtitle = element_text(size=13),
+          plot.caption=element_text(size=12),
+          axis.text.y = element_blank(),
+          axis.text.x = element_text(size=12)) +
+    geom_label(size=4.5) +
+    labs(caption = caption_n) +
+    labs(title=pertanyaan,subtitle = sub.judul)
 }
 
 #bikin bar chart standar - dari tabulasi (not sort)
-bikinin.bar.chart.not.sort.dari.data.tabulasi.saya.donk=function(tabulasi,pertanyaan,sub.judul){
+# real number dan percentage
+bikinin.bar.chart.not.sort.dari.data.tabulasi.saya.donk=function(tabulasi,
+                                                                 pertanyaan,
+                                                                 sub.judul){
   colnames(tabulasi)=c('ket','percent')
   tabulasi$percent=round(tabulasi$percent,2)
-  n = as.numeric(tabulasi %>% filter(grepl('total',ket,ignore.case=T)) %>% summarize(n=sum(percent))) #ambil base buat kepentingan chart
-  tabulasi = tabulasi %>% filter(!grepl('total',ket,ignore.case=T)) #tabulasi final untuk chart
+  n = as.numeric(tabulasi %>% filter(grepl('total',ket,ignore.case=T)) %>% 
+                   summarize(n=sum(percent))) #ambil base buat kepentingan chart
+  tabulasi = tabulasi %>% 
+    filter(!grepl('total',ket,ignore.case=T)) #tabulasi final untuk chart
   tabulasi = tabulasi %>% filter(!is.na(ket))
   tabulasi = tabulasi %>% filter(!is.na(percent))
   tabulasi$ket=factor(tabulasi$ket,levels = (tabulasi$ket))
-  ggplot(tabulasi,aes(ket,percent,label=paste(percent,'%',sep='')))+geom_bar(fill='steelblue',stat='identity')+scale_fill_brewer(palette="Pastel2") + theme_minimal() + theme(panel.grid=element_blank(),axis.title.y=element_blank(),axis.title.x=element_blank(),legend.position = 'none',plot.title=element_text(size=16),plot.subtitle=element_text(size=13),plot.caption=element_text(size=10),axis.text.y = element_blank())+geom_text(position = position_stack(vjust = 1.03),size=3.5) +labs(caption = paste('n = ',ifelse(n>=30,n,paste(n,', indikasi',sep='')),sep='')) + labs(title=pertanyaan,subtitle = sub.judul)
+  
+  if(n>30){
+    label_n=paste0(tabulasi$percent,'%')
+    caption_n = paste0('PERCENTAGE - n = ',n)
+  } else{
+    label_n=paste0(round(tabulasi$percent*n/100,0))
+    caption_n = paste0('REAL NUMBER - n = ',n,', indikasi')
+  }
+  
+  ggplot(tabulasi,aes(ket,percent,label=label_n)) +
+    geom_bar(color='steelblue',
+             fill='grey',
+             stat='identity',
+             alpha=.6,
+             size=2) +
+    theme_minimal() + 
+    theme(panel.grid=element_blank(),axis.title.y=element_blank(),
+          axis.title.x=element_blank(),legend.position = 'none',
+          plot.title = element_text(size=17),
+          plot.subtitle = element_text(size=13),
+          plot.caption=element_text(size=12),
+          axis.text.y = element_blank(),
+          axis.text.x = element_text(size=12)) +
+    geom_label(size=3.5) +
+    labs(caption = caption_n) +
+    labs(title=pertanyaan,subtitle = sub.judul)
 }
 
-#bikin bar chart standar (sort)
+#bikin bar chart standar (sort) 
+#real number dan percentage
 bikinin.bar.chart.sort.dari.data.saya.donk=function(data,variabel,pertanyaan,sub.judul){
   tabulasi=data %>% tab_cells(variabel) %>% tab_stat_cpct() %>% tab_pivot()
   tabulasi$dummy=strsplit(tabulasi$row_labels,'\\|')
@@ -205,10 +304,36 @@ bikinin.bar.chart.sort.dari.data.saya.donk=function(data,variabel,pertanyaan,sub
   tabulasi = tabulasi %>% filter(!grepl('total',ket,ignore.case=T)) #tabulasi final untuk chart
   tabulasi = tabulasi %>% filter(!is.na(ket))
   tabulasi = tabulasi %>% filter(!is.na(percent))
-  ggplot(tabulasi,aes(reorder(ket,-percent),percent,label=paste(percent,'%',sep='')))+geom_bar(fill='steelblue',stat='identity')+scale_fill_brewer(palette="Pastel2") + theme_minimal() + theme(panel.grid=element_blank(),axis.title.y=element_blank(),axis.title.x=element_blank(),legend.position = 'none',plot.title=element_text(size=16),plot.subtitle=element_text(size=13),plot.caption=element_text(size=10),axis.text.y = element_blank())+geom_text(position = position_stack(vjust = 1.03),size=3.5) +labs(caption = paste('n = ',ifelse(n>=30,n,paste(n,', indikasi',sep='')),sep='')) + labs(title=pertanyaan,subtitle = sub.judul)
+  
+  if(n>30){
+    label_n=paste0(tabulasi$percent,'%')
+    caption_n = paste0('PERCENTAGE - n = ',n)
+  } else{
+    label_n=paste0(round(tabulasi$percent*n/100,0))
+    caption_n = paste0('REAL NUMBER - n = ',n,', indikasi')
+  }
+  
+  ggplot(tabulasi,aes(reorder(ket,-percent),percent,label=label_n)) +
+    geom_bar(color='steelblue',
+             fill='grey',
+             stat='identity',
+             alpha=.6,
+             size=2) +
+    theme_minimal() + 
+    theme(panel.grid=element_blank(),axis.title.y=element_blank(),
+          axis.title.x=element_blank(),legend.position = 'none',
+          plot.title = element_text(size=17),
+          plot.subtitle = element_text(size=13),
+          plot.caption=element_text(size=12),
+          axis.text.y = element_blank(),
+          axis.text.x = element_text(size=12)) +
+    geom_label(size=4.5) +
+    labs(caption = caption_n) +
+    labs(title=pertanyaan,subtitle = sub.judul)
 }
 
 #bikin bar chart standar (not sort)
+# real number dan percentage
 bikinin.bar.chart.not.sort.dari.data.saya.donk=function(data,variabel,pertanyaan,sub.judul){
   tabulasi=data %>% tab_cells(variabel) %>% tab_stat_cpct() %>% tab_pivot()
   tabulasi$dummy=strsplit(tabulasi$row_labels,'\\|')
@@ -218,17 +343,51 @@ bikinin.bar.chart.not.sort.dari.data.saya.donk=function(data,variabel,pertanyaan
   tabulasi=tabulasi[-3]
   colnames(tabulasi)=c('ket','percent')
   tabulasi$percent=round(tabulasi$percent,2)
-  n = as.numeric(tabulasi %>% filter(grepl('total',ket,ignore.case=T)) %>% summarize(n=sum(percent))) #ambil base buat kepentingan chart
-  tabulasi = tabulasi %>% filter(!grepl('total',ket,ignore.case=T)) #tabulasi final untuk chart
+  n = as.numeric(tabulasi %>% filter(grepl('total',ket,ignore.case=T)) %>% 
+                   summarize(n=sum(percent))) #ambil base buat kepentingan chart
+  tabulasi = tabulasi %>% 
+    filter(!grepl('total',ket,ignore.case=T)) #tabulasi final untuk chart
   tabulasi = tabulasi %>% filter(!is.na(ket))
   tabulasi = tabulasi %>% filter(!is.na(percent))
   tabulasi$ket=factor(tabulasi$ket,levels = (tabulasi$ket))
-  ggplot(tabulasi,aes(ket,percent,label=paste(percent,'%',sep='')))+geom_bar(fill='steelblue',stat='identity')+scale_fill_brewer(palette="Pastel2") + theme_minimal() + theme(panel.grid=element_blank(),axis.title.y=element_blank(),axis.title.x=element_blank(),legend.position = 'none',plot.title = element_text(size=14),plot.caption=element_text(size=10),axis.text.y = element_blank())+geom_text(position = position_stack(vjust = 1.02),size=3.5) +labs(caption = paste('n = ',ifelse(n>=30,n,paste(n,', indikasi',sep='')),sep='')) + labs(title=pertanyaan,subtitle = sub.judul)
+  
+  if(n>30){
+    label_n=paste0(tabulasi$percent,'%')
+    caption_n = paste0('PERCENTAGE - n = ',n)
+  } else{
+    label_n=paste0(round(tabulasi$percent*n/100,0))
+    caption_n = paste0('REAL NUMBER - n = ',n,', indikasi')
+  }
+  
+  ggplot(tabulasi,aes(ket,percent,label=label_n)) +
+    geom_bar(color='steelblue',
+             fill='grey',
+             stat='identity',
+             alpha=.6,
+             size=2) +
+    theme_minimal() + 
+    theme(panel.grid=element_blank(),axis.title.y=element_blank(),
+          axis.title.x=element_blank(),legend.position = 'none',
+          plot.title = element_text(size=17),
+          plot.subtitle = element_text(size=13),
+          plot.caption=element_text(size=12),
+          axis.text.y = element_blank(),
+          axis.text.x = element_text(size=12)) +
+    geom_label(size=4.5) +
+    labs(caption = caption_n) +
+    labs(title=pertanyaan,subtitle = sub.judul)
 }
 
 #bikin bar chart standar facet (not sort)
-bikinin.bar.chart.facet.not.sort.dari.data.saya.donk=function(data,variabel,facet,pertanyaan,sub.judul,caption){
-  tabulasi=data %>% tab_cells(variabel) %>% tab_rows(facet) %>% tab_stat_cpct() %>% tab_pivot()
+# sudah revised
+bikinin.bar.chart.facet.not.sort.dari.data.saya.donk=function(data,
+                                                              variabel,
+                                                              facet,
+                                                              pertanyaan,
+                                                              sub.judul,
+                                                              caption){
+  tabulasi=data %>% tab_cells(variabel) %>% tab_rows(facet) %>% 
+    tab_stat_cpct() %>% tab_pivot()
   tabulasi$dummy=strsplit(tabulasi$row_labels,'\\|')
   for(i in 1:length(tabulasi$dummy))
   {tabulasi$row_labels[i]=unlist(tabulasi$dummy[i])[4]
@@ -238,16 +397,40 @@ bikinin.bar.chart.facet.not.sort.dari.data.saya.donk=function(data,variabel,face
   tabulasi=tabulasi[-3]
   colnames(tabulasi)=c('ket','percent','facet')
   tabulasi$percent=round(tabulasi$percent,2)
-  new=tabulasi %>% filter(grepl('total',ket,ignore.case=T)) %>% mutate(facet.new=paste(facet,', n=',percent,ifelse(percent<30,' - indikasi',''),sep=''))
+  new=tabulasi %>% filter(grepl('total',ket,ignore.case=T)) %>% 
+    mutate(facet.new=paste(facet,', n=',percent,ifelse(percent<30,' - indikasi',''),sep=''))
   new$ket=NULL
   new$percent=NULL #baru sampe sini yah
-  tabulasi = tabulasi %>% filter(!grepl('total',ket,ignore.case=T)) #tabulasi final untuk chart
+  tabulasi = tabulasi %>% 
+    filter(!grepl('total',ket,ignore.case=T)) #tabulasi final untuk chart
   tabulasi = tabulasi %>% filter(!is.na(ket))
   tabulasi=merge(tabulasi,new)
-  ggplot(tabulasi,aes(ket,percent,label=paste(percent,'%',sep='')))+geom_bar(fill='steelblue',stat='identity')+scale_fill_brewer(palette="Pastel2") + theme_minimal() + theme(panel.grid=element_blank(),axis.title.y=element_blank(),axis.title.x=element_blank(),legend.position = 'none',plot.subtitle=element_text(size=13),plot.caption=element_text(size=10),axis.text.y = element_blank(),axis.text.x = element_text(angle = 90),plot.title = element_text(size = 16))+geom_text(position = position_stack(vjust = 1.03),size=3.5) + labs(title=pertanyaan,subtitle = sub.judul,caption=caption)+ facet_wrap(~facet.new) + theme(strip.background = element_rect(colour="black", fill="white",size=1.5, linetype="solid"))
+  ggplot(tabulasi,aes(ket,percent,label=paste(percent,'%',sep=''))) +
+    geom_bar(color='steelblue',
+             fill='grey',
+             stat='identity',
+             alpha=.6,
+             size=2) + 
+    theme_minimal() + 
+    theme(panel.grid=element_blank(),axis.title.y=element_blank(),
+          axis.title.x=element_blank(),legend.position = 'none',
+          plot.title = element_text(size=17),
+          plot.subtitle = element_text(size=13),
+          plot.caption=element_text(size=12),
+          axis.text.y = element_blank(),
+          axis.text.x = element_text(size=12)) +
+    geom_label(size=4.5) +
+    labs(caption = paste('n = ',ifelse(n>=30,n,paste(n,', indikasi',sep='')),sep='')) +
+    labs(title=pertanyaan,subtitle = sub.judul) +
+    facet_wrap(~facet.new) + 
+    theme(strip.background = element_rect(colour="black", 
+                                          fill="white",
+                                          size=1.5, 
+                                          linetype="solid"))
 }
 
 #bikin bar chart standar facet (sort)
+# sudah revised
 bikinin.bar.chart.facet.sort.dari.data.saya.donk=function(data,variabel,facet,pertanyaan,sub.judul,caption){
   tabulasi=data %>% tab_cells(variabel) %>% tab_rows(facet) %>% tab_stat_cpct() %>% tab_pivot()
   tabulasi$dummy=strsplit(tabulasi$row_labels,'\\|')
@@ -265,10 +448,32 @@ bikinin.bar.chart.facet.sort.dari.data.saya.donk=function(data,variabel,facet,pe
   tabulasi = tabulasi %>% filter(!grepl('total',ket,ignore.case=T)) #tabulasi final untuk chart
   tabulasi = tabulasi %>% filter(!is.na(ket))
   tabulasi=merge(tabulasi,new)
-  ggplot(tabulasi,aes(reorder(ket,-percent),percent,label=paste(percent,'%',sep='')))+geom_bar(fill='steelblue',stat='identity')+scale_fill_brewer(palette="Pastel2") + theme_minimal() + theme(panel.grid=element_blank(),axis.title.y=element_blank(),axis.title.x=element_blank(),legend.position = 'none',plot.subtitle=element_text(size=13),plot.caption=element_text(size=10),axis.text.y = element_blank(),axis.text.x = element_text(angle = 90),plot.title = element_text(size = 16))+geom_text(position = position_stack(vjust = 1.03),size=3.5) + labs(title=pertanyaan,subtitle = sub.judul,caption=caption)+ facet_wrap(~facet.new) + theme(strip.background = element_rect(colour="black", fill="white",size=1.5, linetype="solid"))
+  ggplot(tabulasi,aes(reorder(ket,-percent),percent,label=paste(percent,'%',sep=''))) +
+    geom_bar(color='steelblue',
+             fill='grey',
+             stat='identity',
+             alpha=.6,
+             size=2) + 
+    theme_minimal() + 
+    theme(panel.grid=element_blank(),axis.title.y=element_blank(),
+          axis.title.x=element_blank(),legend.position = 'none',
+          plot.title = element_text(size=17),
+          plot.subtitle = element_text(size=13),
+          plot.caption=element_text(size=12),
+          axis.text.y = element_blank(),
+          axis.text.x = element_text(size=12)) +
+    geom_label(size=4.5) +
+    labs(caption = paste('n = ',ifelse(n>=30,n,paste(n,', indikasi',sep='')),sep='')) +
+    labs(title=pertanyaan,subtitle = sub.judul) +
+    facet_wrap(~facet.new) + 
+    theme(strip.background = element_rect(colour="black", 
+                                          fill="white",
+                                          size=1.5, 
+                                          linetype="solid"))
 }
 
 #bikin bar chart standar facet dari tabulasi (sort)
+# sudah revised
 bikinin.bar.chart.facet.sort.dari.tabulasi.saya.donk=function(tabulasi,pertanyaan,sub.judul,caption){
   tabulasi$dummy=strsplit(tabulasi$row_labels,'\\|')
   for(i in 1:length(tabulasi$dummy))
@@ -279,16 +484,40 @@ bikinin.bar.chart.facet.sort.dari.tabulasi.saya.donk=function(tabulasi,pertanyaa
   tabulasi=tabulasi[-3]
   colnames(tabulasi)=c('ket','percent','facet')
   tabulasi$percent=round(tabulasi$percent,2)
-  new=tabulasi %>% filter(grepl('total',ket,ignore.case=T)) %>% mutate(facet.new=paste(facet,', n=',percent,ifelse(percent<30,' - indikasi',''),sep=''))
+  new=tabulasi %>% filter(grepl('total',ket,ignore.case=T)) %>% 
+    mutate(facet.new=paste(facet,', n=',percent,ifelse(percent<30,' - indikasi',''),sep=''))
   new$ket=NULL
   new$percent=NULL #baru sampe sini yah
-  tabulasi = tabulasi %>% filter(!grepl('total',ket,ignore.case=T)) #tabulasi final untuk chart
+  tabulasi = tabulasi %>% 
+    filter(!grepl('total',ket,ignore.case=T)) #tabulasi final untuk chart
   tabulasi = tabulasi %>% filter(!is.na(ket))
   tabulasi=merge(tabulasi,new)
-  ggplot(tabulasi,aes(reorder(ket,-percent),percent,label=paste(percent,'%',sep='')))+geom_bar(fill='steelblue',stat='identity')+scale_fill_brewer(palette="Pastel2") + theme_minimal() + theme(panel.grid=element_blank(),axis.title.y=element_blank(),axis.title.x=element_blank(),legend.position = 'none',plot.subtitle=element_text(size=13),plot.caption=element_text(size=10),axis.text.y = element_blank(),axis.text.x = element_text(angle = 90),plot.title = element_text(size = 16))+geom_text(position = position_stack(vjust = 1.08),size=2.25) + labs(title=pertanyaan,subtitle = sub.judul,caption=caption)+ facet_wrap(~facet.new) + theme(strip.background = element_rect(colour="black", fill="white",size=1.5, linetype="solid"))
+  ggplot(tabulasi,aes(reorder(ket,-percent),percent,label=paste(percent,'%',sep=''))) +
+    geom_bar(color='steelblue',
+             fill='grey',
+             stat='identity',
+             alpha=.6,
+             size=2) + 
+    theme_minimal() + 
+    theme(panel.grid=element_blank(),axis.title.y=element_blank(),
+          axis.title.x=element_blank(),legend.position = 'none',
+          plot.title = element_text(size=17),
+          plot.subtitle = element_text(size=13),
+          plot.caption=element_text(size=12),
+          axis.text.y = element_blank(),
+          axis.text.x = element_text(size=12)) +
+    geom_label(size=4.5) +
+    labs(caption = paste('n = ',ifelse(n>=30,n,paste(n,', indikasi',sep='')),sep='')) +
+    labs(title=pertanyaan,subtitle = sub.judul) +
+    facet_wrap(~facet.new) + 
+    theme(strip.background = element_rect(colour="black", 
+                                          fill="white",
+                                          size=1.5, 
+                                          linetype="solid"))
 }
 
 #bikin bar chart standar facet dari tabulasi (not sort)
+# sudah revised
 bikinin.bar.chart.facet.not.sort.dari.tabulasi.saya.donk=function(tabulasi,pertanyaan,sub.judul,caption){
   tabulasi$dummy=strsplit(tabulasi$row_labels,'\\|')
   for(i in 1:length(tabulasi$dummy))
@@ -299,17 +528,41 @@ bikinin.bar.chart.facet.not.sort.dari.tabulasi.saya.donk=function(tabulasi,perta
   tabulasi=tabulasi[-3]
   colnames(tabulasi)=c('ket','percent','facet')
   tabulasi$percent=round(tabulasi$percent,2)
-  new=tabulasi %>% filter(grepl('total',ket,ignore.case=T)) %>% mutate(facet.new=paste(facet,', n=',percent,ifelse(percent<30,' - indikasi',''),sep=''))
+  new=tabulasi %>% filter(grepl('total',ket,ignore.case=T)) %>% 
+    mutate(facet.new=paste(facet,', n=',percent,ifelse(percent<30,' - indikasi',''),sep=''))
   new$ket=NULL
   new$percent=NULL #baru sampe sini yah
-  tabulasi = tabulasi %>% filter(!grepl('total',ket,ignore.case=T)) #tabulasi final untuk chart
+  tabulasi = tabulasi %>% 
+    filter(!grepl('total',ket,ignore.case=T)) #tabulasi final untuk chart
   tabulasi = tabulasi %>% filter(!is.na(ket))
   tabulasi=merge(tabulasi,new)
   tabulasi=tabulasi %>% mutate(ket=factor(ket,levels = unique(ket)))
-  ggplot(tabulasi,aes(ket,percent,label=paste(percent,'%',sep='')))+geom_bar(fill='steelblue',stat='identity')+scale_fill_brewer(palette="Pastel2") + theme_minimal() + theme(panel.grid=element_blank(),axis.title.y=element_blank(),axis.title.x=element_blank(),legend.position = 'none',plot.subtitle=element_text(size=13),plot.caption=element_text(size=10),axis.text.y = element_blank(),axis.text.x = element_text(angle = 90),plot.title = element_text(size = 16))+geom_text(position = position_stack(vjust = 1.08),size=2.25) + labs(title=pertanyaan,subtitle = sub.judul,caption=caption)+ facet_wrap(~facet.new) + theme(strip.background = element_rect(colour="black", fill="white",size=1.5, linetype="solid"))
+  ggplot(tabulasi,aes(ket,percent,label=paste(percent,'%',sep=''))) +
+    geom_bar(color='steelblue',
+             fill='grey',
+             stat='identity',
+             alpha=.6,
+             size=2) + 
+    theme_minimal() + 
+    theme(panel.grid=element_blank(),axis.title.y=element_blank(),
+          axis.title.x=element_blank(),legend.position = 'none',
+          plot.title = element_text(size=17),
+          plot.subtitle = element_text(size=13),
+          plot.caption=element_text(size=12),
+          axis.text.y = element_blank(),
+          axis.text.x = element_text(size=12)) +
+    geom_label(size=4.5) +
+    labs(caption = paste('n = ',ifelse(n>=30,n,paste(n,', indikasi',sep='')),sep='')) +
+    labs(title=pertanyaan,subtitle = sub.judul) +
+    facet_wrap(~facet.new) + 
+    theme(strip.background = element_rect(colour="black", 
+                                          fill="white",
+                                          size=1.5, 
+                                          linetype="solid"))
 }
 
 #bikin bar chart khusus skala 6
+# sudah revised
 bikinin.bar.chart.untuk.likert.6.skala.dari.data.saya.donk=function(data,variabel,pertanyaan){
   tabulasi=data %>% tab_cells(variabel) %>% tab_stat_cpct() %>% tab_pivot()
   tabulasi$dummy=strsplit(tabulasi$row_labels,'\\|')
@@ -320,15 +573,38 @@ bikinin.bar.chart.untuk.likert.6.skala.dari.data.saya.donk=function(data,variabe
   tabulasi=tabulasi[-3]
   colnames(tabulasi)=c('ket','percent')
   tabulasi$percent=round(tabulasi$percent,2)
-  n = as.numeric(tabulasi %>% filter(grepl('total',ket,ignore.case=T)) %>% summarize(n=mean(percent))) #ambil base buat kepentingan chart
-  tabulasi = tabulasi %>% filter(!grepl('total',ket,ignore.case=T)) #tabulasi final untuk chart
+  n = as.numeric(tabulasi %>% filter(grepl('total',ket,ignore.case=T)) %>% 
+                   summarize(n=mean(percent))) #ambil base buat kepentingan chart
+  tabulasi = tabulasi %>% 
+    filter(!grepl('total',ket,ignore.case=T)) #tabulasi final untuk chart
   tabulasi$ket=factor(tabulasi$ket,levels = (tabulasi$ket)) #untuk mengurutkan grafiknya
   T2B=paste('Top 2 Boxes = ',tabulasi$percent[5]+tabulasi$percent[6],'%',sep='')
   tabulasi$kat=c('B2B','B2B','Neutral','Neutral','T2B','T2B')
   tabulasi$angka=c(1:6)
   tabulasi$angka=tabulasi$angka*(tabulasi$percent/100*n)
   mean.score=paste('Mean score=',round(sum(tabulasi$angka)/n,2))
-  ggplot(tabulasi,aes(ket,percent,label=paste(percent,'%',sep='')))+geom_bar(fill='steelblue',stat='identity')+scale_fill_brewer(palette="Pastel2") + theme_minimal() + theme(axis.title.y=element_blank(),axis.title.x=element_blank(),legend.position = 'none',plot.title=element_text(size=16),plot.caption=element_text(size=10),axis.text.y = element_blank(),axis.text.x = element_text(angle=90))+geom_text(position = position_stack(vjust = 1.05),size=3.5) +labs(caption = paste('base:',ifelse(n>=30,n,paste(n,', indikasi',sep='')),sep='')) + labs(title=pertanyaan,subtitle=paste(T2B,mean.score,sep='  ')) + facet_wrap(~kat,scales='free_x') + theme(strip.background = element_rect(colour="black", fill="white",size=1.5, linetype="solid")) #kalau mau pakai facet
+  ggplot(tabulasi,aes(ket,percent,label=paste(percent,'%',sep=''))) +
+    geom_bar(color='steelblue',
+             fill='grey',
+             stat='identity',
+             alpha=.6,
+             size=2) + 
+    theme_minimal() + 
+    theme(panel.grid=element_blank(),axis.title.y=element_blank(),
+          axis.title.x=element_blank(),legend.position = 'none',
+          plot.title = element_text(size=17),
+          plot.subtitle = element_text(size=13),
+          plot.caption=element_text(size=12),
+          axis.text.y = element_blank(),
+          axis.text.x = element_text(angle=90,size=12)) +
+    geom_label(size=4.5) +
+    labs(caption = paste('n = ',ifelse(n>=30,n,paste(n,', indikasi',sep='')),sep='')) +
+    labs(title=pertanyaan,subtitle = sub.judul) + 
+    facet_wrap(~kat,scales='free_x') + 
+    theme(strip.background = element_rect(colour="black", 
+                                          fill="white",
+                                          size=1.5, 
+                                          linetype="solid")) #kalau mau pakai facet
 }
 
 #bikin bar chart khusus cross tab
@@ -351,7 +627,7 @@ bikinin.bar.chart.crosstab.dari.data.saya.donk=function(data,variabel1,variabel2
   tabulasi = tabulasi %>% filter(!is.na(label.2))
   tabulasi = tabulasi %>% filter(!is.na(percent))
   n=paste(n,collapse = '; ')
-  ggplot(tabulasi,aes(label.2,percent,label=paste(percent,'%',sep='')))+geom_bar(fill='steelblue',stat='identity')+scale_fill_brewer(palette="Pastel2") + theme_minimal() + theme(axis.title.y=element_blank(),axis.title.x=element_blank(),legend.position = 'none',plot.title=element_text(size=16),plot.caption=element_text(size=10),axis.text.y = element_blank())+geom_text(position = position_stack(vjust = 1.05),size=3.5) +labs(caption = paste('base: ',n,sep='')) + labs(title=pertanyaan) + facet_wrap(~label.1,scales='free_x') + theme(strip.background = element_rect(colour="black", fill="white",size=1.5, linetype="solid")) #kalau mau pakai facet
+  ggplot(tabulasi,aes(label.2,percent,label=paste(percent,'%',sep='')))+geom_bar(fill='steelblue',stat='identity')+scale_fill_brewer(palette="Accent") + theme_minimal() + theme(axis.title.y=element_blank(),axis.title.x=element_blank(),legend.position = 'none',plot.title=element_text(size=16),plot.caption=element_text(size=10),axis.text.y = element_blank())+geom_text(position = position_stack(vjust = 1.05),size=3.5) +labs(caption = paste('base: ',n,sep='')) + labs(title=pertanyaan) + facet_wrap(~label.1,scales='free_x') + theme(strip.background = element_rect(colour="black", fill="white",size=1.5, linetype="solid")) #kalau mau pakai facet
 }
 
 #bikin bar chart khusus NPS
@@ -370,7 +646,7 @@ bikinin.bar.chart.untuk.NPS.dari.data.saya.donk=function(data,variabel,pertanyaa
   tabulasi$ket=factor(tabulasi$ket,levels = (tabulasi$ket)) #untuk mengurutkan grafiknya
   T2B=paste('Net Promoter Score = ',tabulasi$percent[10]+tabulasi$percent[11]-(tabulasi$percent[1]+tabulasi$percent[2]+tabulasi$percent[3]+tabulasi$percent[4]+tabulasi$percent[5]+tabulasi$percent[6]+tabulasi$percent[7]),'%',sep='')
   tabulasi$kat=c('Detractors','Detractors','Detractors','Detractors','Detractors','Detractors','Detractors','Passives','Passives','Promoters','Promoters')
-  ggplot(tabulasi,aes(ket,percent,label=paste(percent,'%',sep='')))+geom_bar(fill='steelblue',stat='identity')+scale_fill_brewer(palette="Pastel2") + theme_minimal() + theme(axis.title.y=element_blank(),axis.title.x=element_blank(),legend.position = 'none',plot.title=element_text(size=16),plot.caption=element_text(size=10),axis.text.y = element_blank(),axis.text.x = element_text(angle=90))+geom_text(position = position_stack(vjust = 1.05),size=3.5) +labs(caption = paste('base:',ifelse(n>=30,n,paste(n,', indikasi',sep='')),sep='')) + labs(title=pertanyaan,subtitle=T2B) + facet_wrap(~kat,scales='free_x') + theme(strip.background = element_rect(colour="black", fill="white",size=1.5, linetype="solid"))+labs(subtitle = sub.judul) #kalau mau pakai facet
+  ggplot(tabulasi,aes(ket,percent,label=paste(percent,'%',sep='')))+geom_bar(fill='steelblue',stat='identity')+scale_fill_brewer(palette="Accent") + theme_minimal() + theme(axis.title.y=element_blank(),axis.title.x=element_blank(),legend.position = 'none',plot.title=element_text(size=16),plot.caption=element_text(size=10),axis.text.y = element_blank(),axis.text.x = element_text(angle=90))+geom_text(position = position_stack(vjust = 1.05),size=3.5) +labs(caption = paste('base:',ifelse(n>=30,n,paste(n,', indikasi',sep='')),sep='')) + labs(title=pertanyaan,subtitle=T2B) + facet_wrap(~kat,scales='free_x') + theme(strip.background = element_rect(colour="black", fill="white",size=1.5, linetype="solid"))+labs(subtitle = sub.judul) #kalau mau pakai facet
 }
 
 export.powerpoint.saya.donk=function(judul.ppt){
@@ -386,11 +662,6 @@ ggplot(dataframe,aes(x=var.x, y=var.y,group=1,label=round(var.y,2)))+geom_line()
 bikinin.bar.chart.facet.dari.dataframe.donk=function(judul,sub.judul,caption,dataframe,var.x,var.y,facet){
   ggplot(dataframe,aes(x=reorder(var.x,-var.y),y=var.y,label=var.y)) + geom_bar(stat='identity',fill='steelblue')+geom_text(position = position_stack(vjust = 1.03),size=2)+theme_minimal()+facet_wrap(~facet)+ theme(strip.background = element_rect(colour="black", fill="white",size=1.5, linetype="solid"))+theme(panel.grid = element_blank(),axis.title.y = element_blank(),axis.title.x = element_blank(),axis.text.x = element_text(size=8,angle = 90),plot.title=element_text(size=16))+labs(title = judul,subtitle = sub.judul,caption=caption)
 }
-
-#Buat boxplot
-bikinin.boxplot.donk=function(judul,sub.judul,caption,dataframe,var.x,var.y){
-  ggplot(dataframe,aes(x=var.x, y=var.y))+geom_boxplot()+theme_minimal()+theme(axis.title.y = element_blank(),axis.title.x = element_blank(),axis.text.y = element_text(size=7),plot.title=element_text(size=16))+labs(title = judul,subtitle = sub.judul,caption=caption)
-} 
 
 liatin.package.yang.ada.di.R.saya.donk=function(){
   package=as.data.frame(installed.packages())
@@ -408,11 +679,12 @@ gabung.string.donk=function(vector,vector.number){
   i=1
   while(i<n){
     y=vector.number[i+1]
-    x=paste(x,vector[y],sep=' --> ')
+    x=paste(x,vector[y])
     i=i+1
   }
   return(x)
 }
+
 
 ubahin.rasio.jadi.persen.donk=function(rasio){
   rasio=round(rasio*100,2)
