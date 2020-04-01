@@ -1,0 +1,136 @@
+---
+title: 'Mencoba Menjawab Pertanyaan Seputar COVID-19'
+output: 
+  github_document:
+    pandoc_args: --webtex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+rm(list=ls())
+setwd("/cloud/project/Bukan Infografis/covid angka real")
+```
+
+Tulisan ini masih bertemakan COVID-19, karena banyak sekali sisi yang bisa dibahas terkait dengan fenomena wabah ini secara matematis.
+
+Kali ini saya mencoba untuk menjawab beberapa pertanyaan yang sering ada di WAG kita semuanya. Apa saja?
+
+1. [Wabah ini kapan selesainya](https://ikanx101.github.io/blog/covid/#pertanyaan-yang-sering-muncul)? Akan _peak_ saat _infected person_ berapa persen dari populasi Indonesia (atau Jakarta)?
+2. [Kenapa banyak korban jiwa COVID-19 di Indonesia](https://ikanx101.github.io/blog/sir-covid/#kenapa-mortality-rate-di-indonesia-tinggi)?
+
+# Pertanyaan Pertama
+
+Saya pernah menyinggung mengenai pertanyaan ini di tulisan saya yang pertama terkait [SIS model](https://ikanx101.github.io/blog/covid/) untuk COVID-19. Saya sarankan untuk bisa membacanya terlebih dahulu agar bisa lebih cepat _catch-up_ dengan pembahasan saya ini.
+
+Banyak pihak (baca: matematikawan lain) telah membuat berbagai macam model dengan berbagai macam cara. Mulai dari pendekatan deterministik seperti yang saya buat hingga pendekatan statistik. Namun perlu diperhatikan bahwa [setiap model memiliki batasan](https://passingthroughresearcher.wordpress.com/2018/04/08/kenapa-sih-harus-belajar-sains/) walau itu adalah _tools_ terbaik yang dimiliki kita saat ini untuk menggambarkan kondisi dan bahkan membuat prediksi.
+
+Namun ada yang perlu saya garis bawahi. Khusus di Indonesia, saya berpikir bahwa membangun model berdasarkan _curve fitting_ tidak bisa dilakukan. Kalaupun dilakukan bisa jadi akan cenderung bias.
+
+__Kenapa?__
+
+Pada awal penanganan COVID-19, pemerintah pusat [hanya mampu melakukan tes sebanyak 1.700 tes dalam sehari](https://tirto.id/siapkah-pemerintah-hadapi-pandemi-corona-covid-19-eFqf). Setelah [beberapa lembaga diperbolehkan untuk melakukan tes](https://katadata.co.id/berita/2020/03/16/unair-dan-eijkman-jadi-laboratorium-corona-berapa-lama-hasil-tesnya), kapasitas tersebut sudah naik. Apalagi dengan tambahan pemeriksaan dengan metode _rapid test_. 
+
+> KONSEKUENSInya adalah terjadi lonjakan kasus positif setelah kapasitas pemeriksaan ditambah!
+
+Jadi penambahan tinggi itu sejatinya adalah penambahan _new reported cases_ bukan _new infected cases_.
+
+Dari data yang saya ambil dari situs [kawalcovid19](https://kawalcovid19.blob.core.windows.net/viz/statistik_harian.html), pada 1 April 2020 pukul 09.24 WIB kita bisa melihat grafiknya sebagai berikut:
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE,fig.retina=5}
+library(readxl)
+library(ggplot2)
+library(dplyr)
+
+data = read_excel('Kasus Harian.xlsx',skip=1)
+colnames(data) = janitor::make_clean_names(colnames(data))
+data %>% mutate(kasus_baru = ifelse(is.na(kasus_baru),0,kasus_baru)) %>%
+  ggplot(aes(x=dt,y=kasus_baru)) +
+  geom_col(color='black',alpha=.4) +
+  geom_label(aes(label=kasus_baru),size=2) +
+  theme_minimal() +
+  labs(title='Penambahan New Reported Cases di Indonesia',
+       subtitle='sumber: kawalcovid19.id',
+       caption='Scraped and Visualised\nusing R\nikanx101.github.io',
+       x='Tanggal') +
+  theme(axis.title.y=element_blank(),
+        axis.text.y=element_blank())
+```
+
+Jika diperhatikan, lonjakan _new reported cases_ terjadi setelah pemerintah mengizinkan lembaga lain untuk melakukan tes COVID-19 (setelah 16 Maret 2020). Lonjakan tinggi terjadi kembali [saat _rapid test_ mulai dilakukan sekitar seminggu yang lalu](https://katadata.co.id/berita/2020/03/20/deteksi-corona-pemerintah-mulai-lakukan-rapid-test-hari-ini).
+
+Salah satu alasan saya membuat model adalah ingin [menggambarkan situasi dan mencoba memberikan solusi](https://ikanx101.github.io/blog/covid/#kesimpulan) dari kondisi saat ini. Tidak untuk membuat prediksi karena ada [satu hal yang paling penting untuk diketahui tapi tidak kita ketahui](https://ikanx101.github.io/blog/covid/#mengetahui-angka-pasti-) sampai saat ini.
+
+__Apa itu?__
+
+Berapa banyak $I0$?
+
+__Kenapa menjadi penting?__
+
+COVID-19 merupakan penyakit yang berasal dari Wuhan, China. Jika sekarang wabah tersebut ada di Indonesia, berarti ada orang sakit yang masuk ke Indonesia.
+
+Masalahnya adalah, saat terjadi epidemi di China, kita tidak melakukan pembatasan penerbangan dan alur manusia masuk dari negara lain yang sudah terjangkit wabah tersebut.
+
+Sudah lihat [video penelusuran](https://www.narasi.tv/buka-mata/ceroboh-di-cianjur-jejak-buram-pemerintah-menangani-pandemi-covid-19) pasien positif asal Bekasi yang meninggal di Cianjur?
+
+Hal ini menunjukkan bahwa COVID-19 bisa jadi sudah ada di Indonesia sebelum kasus `01` dan `02` diumumkan oleh presiden.
+
+Dengan $I0$, kita bisa melihat seberapa cepat penyebaran wabah ini. Oleh karena kita tidak tahu ada berapa banyak $I0$ yang ada di masyarakat. Akibatnya, kita tidak tahu posisi Indonesia sekarang di mana.
+
+> Apakah berada di awal kurva? 
+
+Baru mulai naik.
+
+> Apakah berada di tengah? 
+
+Mulai naik eksponensial.
+
+
+> Atau berada di akhir kurva?
+
+Akan landai sebentar lagi.
+
+```{r,echo=FALSE}
+knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/covid%20sir%20new/posting_files/figure-gfm/unnamed-chunk-4-1.png')
+```
+
+# Jawaban Pertanyaan Kedua
+
+Sebelum memulai pembahasan kedua ini, saya perlu nyatakan bahwa setiap korban jiwa ini memiliki nama, memiliki keluarga, memiliki kehidupannya sendiri. Jadi _put your empathy please, this is not about number and statistics !_. Kita sama-sama doakan agar para korban tersebut mendapatkan tempat terbaik dari Allah dan keluarga yang ditinggalkan diberikan kesehatan dan kesabaran. _Aamiin_
+
+_Oke, saya mulai yah:_
+
+Di Indonesia, banyak korban jiwa yang berjatuhan. Sebagaimana yang kita ketahui, hal yang membunuh adalah [kondisi dan komplikasi yang datang bersamaan](https://www.kompas.com/sains/read/2020/03/28/180000523/angka-kematian-akibat-virus-corona-di-indonesia-tinggi-apa-sebabnya-?page=all#page3) dengan COVID-19 ini.
+
+Berdasarkan data yang saya ambil dari [worldometers](https://www.worldometers.info/coronavirus/coronavirus-age-sex-demographics/#pre-existing-conditions), _death rates_ yang tinggi terjadi saat pasien telah memiliki kondisi kesehatan yang kurang baik.
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE,fig.retina=5}
+data = data.frame(disease=c(1:6),rate=c(1:6))
+data$disease = c('Cardiovascular disease',
+                 'Diabetes',
+                 'Chronic respiratory disease',
+                 'Hypertension',
+                 'Cancer',
+                 'no pre-existing conditions')
+data$rate = c(10.5,7.3,6.3,6,5.6,.9)
+
+caption = 'Scraped and Visualised\nusing R\nikanx101.github.io'
+judul = 'Probability of Dying If Infected by the Virus (%)'
+sub_judul = 'For a patient with a given pre-existing condition,\nthe risk of dying if infected by COVID-19.'
+
+data %>% ggplot(aes(x=reorder(disease,rate),
+                    y=rate,
+                    label=paste0(rate,'%'))) +
+  geom_col(color='black',alpha=.4) +
+  geom_label(size=3.3) +
+  coord_flip() +
+  labs(title=judul,
+       subtitle=sub_judul,
+       caption=caption,
+       x='Pre Exsiting Condition') +
+  theme_minimal() +
+  theme(axis.title.x = element_blank(),
+        axis.text.x=element_blank())
+```
+
+
+
