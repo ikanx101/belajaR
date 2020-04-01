@@ -62,7 +62,7 @@ Salah satu alasan saya membuat model adalah ingin [menggambarkan situasi dan men
 
 __Apa itu?__
 
-Berapa banyak $I0$?
+Berapa banyak $I_0$?
 
 __Kenapa menjadi penting?__
 
@@ -74,7 +74,7 @@ Sudah lihat [video penelusuran](https://www.narasi.tv/buka-mata/ceroboh-di-cianj
 
 Hal ini menunjukkan bahwa COVID-19 bisa jadi sudah ada di Indonesia sebelum kasus `01` dan `02` diumumkan oleh presiden.
 
-Dengan $I0$, kita bisa melihat seberapa cepat penyebaran wabah ini. Oleh karena kita tidak tahu ada berapa banyak $I0$ yang ada di masyarakat. Akibatnya, kita tidak tahu posisi Indonesia sekarang di mana.
+Dengan $I_0$, kita bisa melihat seberapa cepat penyebaran wabah ini. Oleh karena kita tidak tahu ada berapa banyak $I_0$ yang ada di masyarakat. Akibatnya, kita tidak tahu posisi Indonesia sekarang di mana.
 
 > Apakah berada di awal kurva? 
 
@@ -131,6 +131,29 @@ data %>% ggplot(aes(x=reorder(disease,rate),
   theme(axis.title.x = element_blank(),
         axis.text.x=element_blank())
 ```
+
+Mari kita lihat data _death rates_ per pagi ini pukul 07.00 WIB yang dihimpun di situs [wordometers](https://www.worldometers.info/coronavirus/) berikut:
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE,fig.retina=5}
+data = read.csv('data corona.csv')
+data$country_other = as.character(data$country_other)
+data$rate = round(data$rate*100,2)
+mean = mean(data$rate)
+
+data %>% 
+  arrange(desc(total_deaths)) %>%
+  filter(total_deaths>100) %>%
+  ggplot(aes(x=reorder(country_other,-rate),
+             y=rate,
+             label=paste0(rate,'%'))) +
+  geom_col(color='black',alpha=.4) +
+  geom_label(size=2) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle=90)) +
+  labs(caption = caption,
+       title = '')
+```
+
 
 
 

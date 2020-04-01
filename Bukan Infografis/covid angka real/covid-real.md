@@ -72,7 +72,7 @@ sampai saat ini.
 
 **Apa itu?**
 
-Berapa banyak ![I0](https://latex.codecogs.com/png.latex?I0 "I0")?
+Berapa banyak ![I\_0](https://latex.codecogs.com/png.latex?I_0 "I_0")?
 
 **Kenapa menjadi penting?**
 
@@ -91,11 +91,11 @@ pasien positif asal Bekasi yang meninggal di Cianjur?
 Hal ini menunjukkan bahwa COVID-19 bisa jadi sudah ada di Indonesia
 sebelum kasus `01` dan `02` diumumkan oleh presiden.
 
-Dengan ![I0](https://latex.codecogs.com/png.latex?I0 "I0"), kita bisa
-melihat seberapa cepat penyebaran wabah ini. Oleh karena kita tidak tahu
-ada berapa banyak ![I0](https://latex.codecogs.com/png.latex?I0 "I0")
-yang ada di masyarakat. Akibatnya, kita tidak tahu posisi Indonesia
-sekarang di mana.
+Dengan ![I\_0](https://latex.codecogs.com/png.latex?I_0 "I_0"), kita
+bisa melihat seberapa cepat penyebaran wabah ini. Oleh karena kita tidak
+tahu ada berapa banyak ![I\_0](https://latex.codecogs.com/png.latex?I_0
+"I_0") yang ada di masyarakat. Akibatnya, kita tidak tahu posisi
+Indonesia sekarang di mana.
 
 > Apakah berada di awal kurva?
 
