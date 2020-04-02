@@ -327,7 +327,7 @@ pengulangan
 <img src="covid-real_files/figure-gfm/unnamed-chunk-12-1.png" width="672" />
 
 Dari grafik di atas, saya memperkirakan bahwa *real infected person* di
-Indonesia berada di rentang antara 7269 sampai 1.243510^{4} orang.
+Indonesia berada di rentang antara 7269 sampai 1.238910^{4} orang.
 
 Wallahu a’lam.
 
