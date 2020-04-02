@@ -91,11 +91,12 @@ pasien positif asal Bekasi yang meninggal di Cianjur?
 Hal ini menunjukkan bahwa COVID-19 bisa jadi sudah ada di Indonesia
 sebelum kasus `01` dan `02` diumumkan oleh presiden.
 
-Dengan ![I\_0](https://latex.codecogs.com/png.latex?I_0 "I_0"), kita
-bisa melihat seberapa cepat penyebaran wabah ini. Oleh karena kita tidak
-tahu ada berapa banyak ![I\_0](https://latex.codecogs.com/png.latex?I_0
-"I_0") yang ada di masyarakat. Akibatnya, kita tidak tahu posisi
-Indonesia sekarang di mana.
+Dengan mengetahui ![I\_0](https://latex.codecogs.com/png.latex?I_0
+"I_0"), kita bisa melihat seberapa cepat penyebaran wabah ini. Oleh
+karena kita tidak tahu ada berapa banyak
+![I\_0](https://latex.codecogs.com/png.latex?I_0 "I_0") yang ada di
+masyarakat. Akibatnya, kita tidak tahu posisi Indonesia sekarang di
+mana.
 
 > Apakah berada di awal kurva?
 
@@ -107,10 +108,20 @@ Mulai naik eksponensial.
 
 > Atau berada di akhir kurva?
 
-Akan landai sebentar
-lagi.
+Akan landai sebentar lagi.
 
-![](https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/covid%20sir%20new/posting_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+![](https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/covid%20sir%20new/posting_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+Tanpa informasi ![I\_0](https://latex.codecogs.com/png.latex?I_0 "I_0")
+yang tepat (atau mendekati), kita akan sulit menghitung kecepatan
+penyebaran wabah. Namun demikian, kita masih bisa menghitung pada
+persentase berapa *infected person* ada di *peak position* dengan
+mengandalkan ![R\_0](https://latex.codecogs.com/png.latex?R_0 "R_0").
+
+Saya coba lihat, hampir semua perhitungan model rekan-rekan
+matematikawan berada di kisaran `40%` - `65%` untuk *peak position* dari
+*infected person* (perhitungan model tanpa ada karantina atau *physical
+distancing*).
 
 # Jawaban Pertanyaan Kedua
 
@@ -131,7 +142,193 @@ dengan COVID-19 ini.
 Berdasarkan data yang saya ambil dari
 [worldometers](https://www.worldometers.info/coronavirus/coronavirus-age-sex-demographics/#pre-existing-conditions),
 *death rates* yang tinggi terjadi saat pasien telah memiliki kondisi
-kesehatan yang kurang
-baik.
+kesehatan yang kurang baik.
 
 <img src="covid-real_files/figure-gfm/unnamed-chunk-3-1.png" width="672" />
+
+Mari kita lihat data *death rates* per pagi ini pukul 07.00 WIB yang
+dihimpun di situs
+[wordometers](https://www.worldometers.info/coronavirus/) berikut:
+
+<img src="covid-real_files/figure-gfm/unnamed-chunk-4-1.png" width="672" />
+
+Indonesia memiliki persentase tertinggi ketiga sekarang.
+
+Jika kita lihat kembali di atas, kematian akibat COVID-19 disebabkan
+oleh kondisi dan komplikasi yang dimiliki oleh pasien.
+
+Lalu, kenapa di Indonesia bisa setinggi itu?
+
+Setidaknya ada dua hipotesa saya:
+
+## Hipotesa Pertama
+
+Kualitas kesehatan individual di Indonesia relatif buruk.
+
+Oleh karena COVID-19 menyerang sistem pernafasan, saya jadi menduga
+kondisi seperti TBC jadi hal yang berpengaruh. Sebagaimana yang kita
+tahu, bahwa angka penderita TBC di [Indonesia cukup tinggi di
+dunia](https://databoks.katadata.co.id/datapublish/2019/10/09/who-kasus-tbc-indonesia-2017-terbesar-ketiga-dunia).
+
+Beberapa tahun lalu, istri saya divonis menderita TBC sehingga harus
+diobati selama 9 bulan padahal tidak ada gejala klinis sama sekali yang
+terlihat. Tapi hasil *rontgen* dan pemeriksaan oleh beberapa dokter
+spesialis paru menyatakan demikian.
+
+Oleh karena itu, saya jadi berpikir mungkin ini adalah dugaan yang
+tepat. Bisa jadi banyak juga penderita TBC yang tidak mengetahui dirinya
+terjangkit TBC sehingga saat terpapar COVID-19 kondisinya jadi memburuk.
+
+Ini baru TBC saja, belum kondisi lainnya seperti kardiovaskular, kanker,
+dan diabetes.
+
+Tapi jika saya ambil data dari
+[WorldBank](https://www.google.com/publicdata/explore?ds=d5bncppjof8f9_&ctype=l&met_y=sh_xpd_publ#!ctype=l&strail=false&bcs=d&nselm=h&met_y=sh_tbs_incd&scale_y=lin&ind_y=false&rdim=region&idim=country:IDN:ITA:ESP:NLD:FRA&ifdim=region&hl=en_US&dl=en_US&ind=false):
+
+![](TBC.jpg)<!-- -->
+
+Kita bisa lihat bersama, angka insiden TBC di Indonesia relatif sangat
+tinggi dibandingkan negara lain yang memiliki korban COVID-19 \> 100
+jiwa.
+
+Tapi jika ini berkorelasi, seharusnya hal ini tidak akan terjadi untuk
+negara-negara Eropa yang relatif lebih sehat dan siap secara fasilitas.
+
+Oke, sekarang kita lihat data lain terkait faskes dan tenaga kesehatan,
+didapatkan data sebagai berikut:
+
+![](faskes1.jpg)<!-- -->![](faskes2.jpg)<!-- -->
+
+Sayangnya saya tidak menemukan angka perbandingan kardiovaskular,
+diabetes, kanker, dan kondisi lainnya yang berbahaya bagi penderita
+COVID-19.
+
+Berdasarkan informasi terbatas di atas, mungkin hipotesa pertama saya
+menjadi lemah.
+
+Lalu saya berpikir kembali, jangan-jangan korban jiwa di Indonesia ini
+dikarenakan oleh usia.
+
+Kita tahu bahwa virus ini lebih berbahaya bagi orang yang sudah tua.
+Berdasarkan data yang dihimpun di
+[webm.net](https://www.cebm.net/covid-19/global-covid-19-case-fatality-rates/)
+saya dapatkan informasi bahwa semakin tua usia pasien COVID-19, maka
+peluang penyakit ini berbahaya juga semakin tinggi.
+
+![](cfr.jpg)<!-- -->
+
+Mari kita bandingkan dengan kejadian di Indonesia berikut ini. Data saya
+dapatkan dari
+[kawalcovid19](https://kawalcovid19.blob.core.windows.net/viz/statistik_harian.html)
+per 2 April 2020 pukul 11.00.
+
+![](demografi.jpg)<!-- -->
+
+Pada rentang usia 50-59 tahun, ada 9 orang yang meninggal dari 115 kasus
+yang tercatat. Artinya *case fatality rate* (CFR) pada rentang usia ini
+adalah 7.83% lebih tinggi dibandingkan angka di webm.net tersebut.
+
+Hal yang sama pun terjadi di rentang usia 60-69 tahun, ada 5 orang yang
+meninggal dari 55 kasus yang tercatat. Artinya CFR pada rentang usia ini
+adalah 9.09% masih relatif lebih tinggi dibandingkan angka di webm.net
+tersebut.
+
+Indonesia masih memiliki angka *rate* yang lebih tinggi. Saya jadi
+mempertanyakan pertanyaan saya ini. Jangan-jangan bukan KENAPA RATE DI
+INDONESIA TINGGI? tapi:
+
+> Apakah kita sudah benar menghitung death rate di Indonesia?
+
+Oleh karena itu, *this new question lead me to a new hypothesis*.
+
+## Hipotesa Kedua
+
+Hipotesa kedua ini mungkin lebih provokatif tapi menurut saya masuk
+akal.
+
+Berdasarkan [informasi dan kalkulasi dari
+WHO](https://www.worldometers.info/coronavirus/coronavirus-death-rate/),
+*mortality rate* COVID-19 adalah `3.4%`. Sedangkan beberapa studi
+lainnya, secara *nationwide* di China menunjukkan angka sebesar `3.8%`.
+
+Coba kita lihat kembali *density plot* dari sebaran data *mortality
+rate* semua negara yang ada.
+
+<img src="covid-real_files/figure-gfm/unnamed-chunk-9-1.png" width="672" />
+
+Distribusinya terlihat mirip *pareto distribution* atau *lognormal
+distribution* dimana hampir semua data berkumpul di sebelah kiri.
+
+Kalau saya hitung,78% negara-negara yang ada di data tersebut memiliki
+*rate* berada di bawah angka WHO (`3.4%`).
+
+-----
+
+### Catatan terkait pembuktian distribusi lognormal atau pareto:
+
+Saya bisa saja melakukan pengecekan apakah memang data *rate* ini
+memiliki distribusi pareto atau lognormal. Tapi dengan catatan *lower
+bound* dari data harus sangat kecil tapi tidak `nol` (*near zero*).
+Sedangkan data *real*-nya banyak negara yang memiliki *mortality rate* =
+`0%`.
+
+Pembuktiannya bisa dilakukan dengan menggunakan [**Cullen Frey
+Diagram**](https://passingthroughresearcher.wordpress.com/2019/08/09/mencari-peluang-kegagalan-dari-data-yang-tak-pernah-gagal/),
+contohnya:
+
+<img src="covid-real_files/figure-gfm/unnamed-chunk-11-1.png" width="672" />
+
+    ## summary statistics
+    ## ------
+    ## min:  0.001697793   max:  33.33 
+    ## median:  0.835 
+    ## mean:  2.768637 
+    ## estimated sd:  5.036037 
+    ## estimated skewness:  3.350569 
+    ## estimated kurtosis:  16.41686
+
+<img src="covid-real_files/figure-gfm/unnamed-chunk-11-2.png" width="672" />
+
+-----
+
+Oke, kita kembali ke pembahasan hipotesa saya.
+
+Saya jadi berpikir menggunakan argumen di **jawaban pertanyaan pertama**
+dimana ada keterbatasan-keterbatasan yang dilakukan pemerintah dalam
+melakukan tes sehingga angka yang didapatkan adalah *reported cases*
+bukan *real infected person*.
+
+> Jadi berapa real infected person di Indonesia?
+
+Per 2 April 2020, ada `157` orang yang meninggal akibat COVID-19.
+
+Jika saya asumsikan *death rates* milik WHO bisa dijadikan acuan, maka
+angka *real infected* di Indonesia seharusnya:
+
+  
+![ \\frac{3.4}{100} = \\frac{157}{infected}
+](https://latex.codecogs.com/png.latex?%20%5Cfrac%7B3.4%7D%7B100%7D%20%3D%20%5Cfrac%7B157%7D%7Binfected%7D%20
+" \\frac{3.4}{100} = \\frac{157}{infected} ")  
+
+  
+![ infected = 157 \* \\frac{100}{3.4} = 4617.647
+\\approx 4617](https://latex.codecogs.com/png.latex?%20infected%20%3D%20157%20%2A%20%5Cfrac%7B100%7D%7B3.4%7D%20%3D%204617.647%20%5Capprox%204617
+" infected = 157 * \\frac{100}{3.4} = 4617.647 \\approx 4617")  
+Jadi *expected infected person* COVID-19 ada sekitar `4.617` orang.
+
+> Besar juga *yah*…
+
+Sekarang kita coba lakukan simulasi menggunakan rentang *rate* disebelah
+kiri garis merah (Indonesia) pada *density plot*.
+
+Saya gunakan prinsip simullasi MonteCarlo dengan `9.000` kali
+pengulangan
+
+<img src="covid-real_files/figure-gfm/unnamed-chunk-12-1.png" width="672" />
+
+Dari grafik di atas, saya memperkirakan bahwa *real infected person* di
+Indonesia berada di rentang antara 7269 sampai 1.243510^{4} orang.
+
+Wallahu a’lam.
+
+Jika ada yang mau didiskusikan, silakan *drop me a message* yah.

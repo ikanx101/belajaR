@@ -74,7 +74,7 @@ Sudah lihat [video penelusuran](https://www.narasi.tv/buka-mata/ceroboh-di-cianj
 
 Hal ini menunjukkan bahwa COVID-19 bisa jadi sudah ada di Indonesia sebelum kasus `01` dan `02` diumumkan oleh presiden.
 
-Dengan $I_0$, kita bisa melihat seberapa cepat penyebaran wabah ini. Oleh karena kita tidak tahu ada berapa banyak $I_0$ yang ada di masyarakat. Akibatnya, kita tidak tahu posisi Indonesia sekarang di mana.
+Dengan mengetahui $I_0$, kita bisa melihat seberapa cepat penyebaran wabah ini. Oleh karena kita tidak tahu ada berapa banyak $I_0$ yang ada di masyarakat. Akibatnya, kita tidak tahu posisi Indonesia sekarang di mana.
 
 > Apakah berada di awal kurva? 
 
@@ -90,8 +90,12 @@ Mulai naik eksponensial.
 Akan landai sebentar lagi.
 
 ```{r,echo=FALSE}
-knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/covid%20sir%20new/posting_files/figure-gfm/unnamed-chunk-4-1.png')
+knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/covid%20sir%20new/posting_files/figure-gfm/unnamed-chunk-7-1.png')
 ```
+
+Tanpa informasi $I_0$ yang tepat (atau mendekati), kita akan sulit menghitung kecepatan penyebaran wabah. Namun demikian, kita masih bisa menghitung pada persentase berapa _infected person_ ada di _peak position_ dengan mengandalkan $R_0$.
+
+Saya coba lihat, hampir semua perhitungan model rekan-rekan matematikawan berada di kisaran `40%` - `65%` untuk _peak position_ dari _infected person_ (perhitungan model tanpa ada karantina atau _physical distancing_).
 
 # Jawaban Pertanyaan Kedua
 
@@ -140,7 +144,7 @@ data$country_other = as.character(data$country_other)
 data$rate = round(data$rate*100,2)
 mean = mean(data$rate)
 
-data %>% 
+data %>% filter(!grepl('total',country_other,ignore.case = T)) %>%
   arrange(desc(total_deaths)) %>%
   filter(total_deaths>100) %>%
   ggplot(aes(x=reorder(country_other,-rate),
@@ -149,11 +153,224 @@ data %>%
   geom_col(color='black',alpha=.4) +
   geom_label(size=2) +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle=90)) +
+  theme(axis.text.x = element_text(angle=90),
+        axis.text.y = element_blank()) +
   labs(caption = caption,
-       title = '')
+       title = 'Negara dengan Banyak Korban di Atas 100 Jiwa',
+       subtitle = 'sumber: worldometers.info',
+       x = 'Negara',
+       y = 'Deaths Rate')
+```
+
+Indonesia memiliki persentase tertinggi ketiga sekarang.
+
+Jika kita lihat kembali di atas, kematian akibat COVID-19 disebabkan oleh kondisi dan komplikasi yang dimiliki oleh pasien.
+
+Lalu, kenapa di Indonesia bisa setinggi itu?
+
+Setidaknya ada dua hipotesa saya:
+
+## Hipotesa Pertama
+
+Kualitas kesehatan individual di Indonesia relatif buruk. 
+
+Oleh karena COVID-19 menyerang sistem pernafasan, saya jadi menduga kondisi seperti TBC jadi hal yang berpengaruh. Sebagaimana yang kita tahu, bahwa angka penderita TBC di [Indonesia cukup tinggi di dunia](https://databoks.katadata.co.id/datapublish/2019/10/09/who-kasus-tbc-indonesia-2017-terbesar-ketiga-dunia).
+
+Beberapa tahun lalu, istri saya divonis menderita TBC sehingga harus diobati selama 9 bulan padahal tidak ada gejala klinis sama sekali yang terlihat. Tapi hasil _rontgen_ dan pemeriksaan oleh beberapa dokter spesialis paru menyatakan demikian.
+
+Oleh karena itu, saya jadi berpikir mungkin ini adalah dugaan yang tepat. Bisa jadi banyak juga penderita TBC yang tidak mengetahui dirinya terjangkit TBC sehingga saat terpapar COVID-19 kondisinya jadi memburuk.
+
+Ini baru TBC saja, belum kondisi lainnya seperti kardiovaskular, kanker, dan diabetes.
+
+Tapi jika saya ambil data dari [WorldBank](https://www.google.com/publicdata/explore?ds=d5bncppjof8f9_&ctype=l&met_y=sh_xpd_publ#!ctype=l&strail=false&bcs=d&nselm=h&met_y=sh_tbs_incd&scale_y=lin&ind_y=false&rdim=region&idim=country:IDN:ITA:ESP:NLD:FRA&ifdim=region&hl=en_US&dl=en_US&ind=false):
+
+```{r,echo=FALSE}
+knitr::include_graphics('TBC.jpg')
+```
+
+Kita bisa lihat bersama, angka insiden TBC di Indonesia relatif sangat tinggi dibandingkan negara lain yang memiliki korban COVID-19 > 100 jiwa. 
+
+Tapi jika ini berkorelasi, seharusnya hal ini tidak akan terjadi untuk negara-negara Eropa yang relatif lebih sehat dan siap secara fasilitas.
+
+Oke, sekarang kita lihat data lain terkait faskes dan tenaga kesehatan, didapatkan data sebagai berikut:
+
+```{r,echo=FALSE}
+knitr::include_graphics('faskes1.jpg')
+knitr::include_graphics('faskes2.jpg')
+```
+
+Sayangnya saya tidak menemukan angka perbandingan kardiovaskular, diabetes, kanker, dan kondisi lainnya yang berbahaya bagi penderita COVID-19.
+
+Berdasarkan informasi terbatas di atas, mungkin hipotesa pertama saya menjadi lemah.
+
+Lalu saya berpikir kembali, jangan-jangan korban jiwa di Indonesia ini dikarenakan oleh usia.
+
+Kita tahu bahwa virus ini lebih berbahaya bagi orang yang sudah tua. Berdasarkan data yang dihimpun di [webm.net](https://www.cebm.net/covid-19/global-covid-19-case-fatality-rates/) saya dapatkan informasi bahwa semakin tua usia pasien COVID-19, maka peluang penyakit ini berbahaya juga semakin tinggi.
+
+```{r,echo=FALSE}
+knitr::include_graphics('cfr.jpg')
+```
+
+Mari kita bandingkan dengan kejadian di Indonesia berikut ini. Data saya dapatkan dari [kawalcovid19](https://kawalcovid19.blob.core.windows.net/viz/statistik_harian.html) per 2 April 2020 pukul 11.00.
+
+```{r,echo=FALSE}
+knitr::include_graphics('demografi.jpg')
+```
+
+Pada rentang usia 50-59 tahun, ada 9 orang yang meninggal dari 115 kasus yang tercatat. Artinya _case fatality rate_ (CFR) pada rentang usia ini adalah `r paste0(round(9/115*100,2),'%')` lebih tinggi dibandingkan angka di webm.net tersebut.
+
+Hal yang sama pun terjadi di rentang usia 60-69 tahun, ada 5 orang yang meninggal dari 55 kasus yang tercatat. Artinya CFR pada rentang usia ini adalah `r paste0(round(5/55*100,2),'%')` masih relatif lebih tinggi dibandingkan angka di webm.net tersebut.
+
+Indonesia masih memiliki angka _rate_ yang lebih tinggi. Saya jadi mempertanyakan pertanyaan saya ini. Jangan-jangan bukan KENAPA RATE DI INDONESIA TINGGI? tapi:
+
+> Apakah kita sudah benar menghitung death rate di Indonesia?
+
+Oleh karena itu, _this new question lead me to a new hypothesis_.
+
+## Hipotesa Kedua
+
+Hipotesa kedua ini mungkin lebih provokatif tapi menurut saya masuk akal.
+
+Berdasarkan [informasi dan kalkulasi dari WHO](https://www.worldometers.info/coronavirus/coronavirus-death-rate/), _mortality rate_ COVID-19 adalah `3.4%`. Sedangkan beberapa studi lainnya, secara _nationwide_ di China menunjukkan angka sebesar `3.8%`.
+
+Coba kita lihat kembali _density plot_ dari sebaran data _mortality rate_ semua negara yang ada.
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE,fig.retina=5}
+data = read.csv('data corona.csv')
+data$country_other = as.character(data$country_other)
+data$rate = round(data$rate*100,2)
+mean = mean(data$rate)
+
+data =
+data %>% 
+  filter(!grepl('total',country_other,ignore.case = T),
+         !grepl('diamond',country_other,ignore.case = T),
+         !grepl('zaandam',country_other,ignore.case = T))
+
+data %>% 
+  ggplot(aes(x=rate)) +
+  geom_density() +
+  theme_minimal() +
+  theme(axis.text.y = element_blank()) +
+  geom_vline(xintercept=3.4, color='blue') +
+  annotate(geom='text',label='WHO',x=3.4,y=.2,color='blue') +
+  geom_vline(xintercept = 8.63,color='red') +
+  annotate(geom='text',label='Indonesia',x=8.63,y=.1,
+           color='red') +
+  labs(caption = caption,
+       title = 'Density Plot dari Mortality Rate',
+       subtitle = 'sumber: worldometers.info',
+       x = 'Mortality Rate',
+       y = 'Density')
+```
+
+Distribusinya terlihat mirip _pareto distribution_ atau _lognormal distribution_ dimana hampir semua data berkumpul di sebelah kiri. 
+
+```{r,include=FALSE}
+length(data$rate)
+persen = data %>% filter(rate<=3.4) %>% summarise(n()/200)
+persen = as.numeric(persen)
+persen = persen*100
+```
+
+Kalau saya hitung,`r persen`% negara-negara yang ada di data tersebut memiliki _rate_ berada di bawah angka WHO (`3.4%`).
+
+_____
+
+### Catatan terkait pembuktian distribusi lognormal atau pareto:
+
+Saya bisa saja melakukan pengecekan apakah memang data _rate_ ini memiliki distribusi pareto atau lognormal. Tapi dengan catatan _lower bound_ dari data harus sangat kecil tapi tidak `nol` (_near zero_). Sedangkan data _real_-nya banyak negara yang memiliki _mortality rate_ = `0%`.
+
+Pembuktiannya bisa dilakukan dengan menggunakan [__Cullen Frey Diagram__](https://passingthroughresearcher.wordpress.com/2019/08/09/mencari-peluang-kegagalan-dari-data-yang-tak-pernah-gagal/), contohnya:
+
+```{r,echo=FALSE,fig.retina=5,warning=FALSE,message=FALSE}
+library(fitdistrplus)
+data$rate = ifelse(data$rate==0,
+                   1/589,
+                   data$rate)
+descdist(data$rate)
+hasil = fitdist(data$rate,'lnorm',method='mme')
+plot(hasil)
 ```
 
 
+_______
 
+Oke, kita kembali ke pembahasan hipotesa saya.
 
+Saya jadi berpikir menggunakan argumen di __jawaban pertanyaan pertama__ dimana ada keterbatasan-keterbatasan yang dilakukan pemerintah dalam melakukan tes sehingga angka yang didapatkan adalah _reported cases_ bukan _real infected person_.
+
+> Jadi berapa real infected person di Indonesia?
+
+Per 2 April 2020, ada `157` orang yang meninggal akibat COVID-19.
+
+Jika saya asumsikan _death rates_ milik WHO bisa dijadikan acuan, maka angka _real infected_ di Indonesia seharusnya:
+
+$$ \frac{3.4}{100} = \frac{157}{infected} $$
+
+$$ infected = 157 * \frac{100}{3.4} = 4617.647 \approx 4617$$
+Jadi _expected infected person_ COVID-19 ada sekitar `4.617` orang.
+
+> Besar juga _yah_...
+
+Sekarang kita coba lakukan simulasi menggunakan rentang _rate_ disebelah kiri garis merah (Indonesia) pada _density plot_.
+
+Saya gunakan prinsip simullasi MonteCarlo dengan `9.000` kali pengulangan
+
+```{r,echo=FALSE,fig.retina=5}
+rate_sim = data %>% filter(rate>0.2 & rate<8.63)
+rate_sim = rate_sim$rate
+
+simulasi = function(n){
+  n
+  sim = sample(rate_sim,1)
+  sim = 157*100/sim
+  return(sim)
+}
+
+data_simulasi = data.frame(id = c(1:9000),infected = 1)
+data_simulasi$infected = sapply(data_simulasi$id,simulasi)
+
+median_sim = median(data_simulasi$infected)
+median_sim = round(median_sim,0)
+q1_sim = quantile(data_simulasi$infected,.25)
+q1_sim = round(q1_sim,0)
+mean_sim = mean(data_simulasi$infected)
+mean_sim = round(mean_sim,0)
+
+data_simulasi %>% 
+  ggplot(aes(x=infected)) +
+  geom_density() +
+  geom_vline(xintercept = median_sim,color='red') +
+  geom_vline(xintercept = q1_sim,color='steelblue') +
+  annotate(geom='text',
+           label=paste0('Median = ',median_sim),
+           x=median_sim+6000,
+           y=.00005,
+           color='red') +
+  annotate(geom='text',
+           label=paste0('Quantile 1 = ',q1_sim),
+           x=q1_sim+7000,
+           y=.00003,
+           color='steelblue') +
+  geom_vline(xintercept = mean_sim,color='darkred') +
+  annotate(geom='text',
+           label=paste0('Mean = ',mean_sim),
+           x=mean_sim+6000,
+           y=.00004,
+           color='darkred') +
+  theme_minimal() +
+  labs(caption = 'Simulated and Visualized\nusing R\nikanx101.github.io',
+       title = 'Simulasi untuk Menghitung Real Infected Person',
+       subtitle = 'Menggunakan MonteCarlo',
+       x = 'Number of infected person') +
+  theme(axis.text.y = element_blank(),
+        axis.title.y = element_blank())
+
+```
+
+Dari grafik di atas, saya memperkirakan bahwa _real infected person_ di Indonesia berada di rentang antara `r median_sim` sampai `r mean_sim` orang.
+
+Wallahu a'lam.
+
+Jika ada yang mau didiskusikan, silakan _drop me a message_ yah.
