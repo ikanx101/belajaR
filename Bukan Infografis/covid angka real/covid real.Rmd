@@ -62,7 +62,7 @@ Salah satu alasan saya membuat model adalah ingin [menggambarkan situasi dan men
 
 __Apa itu?__
 
-Berapa banyak $I_0$?
+Berapa banyak $I(0)$?
 
 __Kenapa menjadi penting?__
 
@@ -74,7 +74,7 @@ Sudah lihat [video penelusuran](https://www.narasi.tv/buka-mata/ceroboh-di-cianj
 
 Hal ini menunjukkan bahwa COVID-19 bisa jadi sudah ada di Indonesia sebelum kasus `01` dan `02` diumumkan oleh presiden.
 
-Dengan mengetahui $I_0$, kita bisa melihat seberapa cepat penyebaran wabah ini. Oleh karena kita tidak tahu ada berapa banyak $I_0$ yang ada di masyarakat. Akibatnya, kita tidak tahu posisi Indonesia sekarang di mana.
+Dengan mengetahui $I(0)$, kita bisa melihat seberapa cepat penyebaran wabah ini. Oleh karena kita tidak tahu ada berapa banyak $I(0)$ yang ada di masyarakat. Akibatnya, kita tidak tahu posisi Indonesia sekarang di mana.
 
 > Apakah berada di awal kurva? 
 
@@ -93,7 +93,7 @@ Akan landai sebentar lagi.
 knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/covid%20sir%20new/posting_files/figure-gfm/unnamed-chunk-7-1.png')
 ```
 
-Tanpa informasi $I_0$ yang tepat (atau mendekati), kita akan sulit menghitung kecepatan penyebaran wabah. Namun demikian, kita masih bisa menghitung pada persentase berapa _infected person_ ada di _peak position_ dengan mengandalkan $R_0$.
+Tanpa informasi $I(0)$ yang tepat (atau mendekati), kita akan sulit menghitung kecepatan penyebaran wabah. Namun demikian, kita masih bisa menghitung pada persentase berapa _infected person_ ada di _peak position_ dengan mengandalkan $R_0$.
 
 Saya coba lihat, hampir semua perhitungan model rekan-rekan matematikawan berada di kisaran `40%` - `65%` untuk _peak position_ dari _infected person_ (perhitungan model tanpa ada karantina atau _physical distancing_).
 
@@ -370,6 +370,8 @@ data_simulasi %>%
 ```
 
 Dari grafik di atas, saya memperkirakan bahwa _real infected person_ di Indonesia berada di rentang antara `r median_sim` sampai `r mean_sim` orang.
+
+Jadi ada selisih ribuan orang yang belum dilaporkan ke pemerintah. Bisa jadi tidak dilaporkan karena gejala yang dialami sangat ringan sehingga bisa sembuh sendiri atau tidak perlu ke faskes atau tidak terdeteksi di faskes tingkat pertama.
 
 Wallahu a'lam.
 

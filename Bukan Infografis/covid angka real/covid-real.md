@@ -72,7 +72,8 @@ sampai saat ini.
 
 **Apa itu?**
 
-Berapa banyak ![I\_0](https://latex.codecogs.com/png.latex?I_0 "I_0")?
+Berapa banyak ![I(0)](https://latex.codecogs.com/png.latex?I%280%29
+"I(0)")?
 
 **Kenapa menjadi penting?**
 
@@ -91,11 +92,11 @@ pasien positif asal Bekasi yang meninggal di Cianjur?
 Hal ini menunjukkan bahwa COVID-19 bisa jadi sudah ada di Indonesia
 sebelum kasus `01` dan `02` diumumkan oleh presiden.
 
-Dengan mengetahui ![I\_0](https://latex.codecogs.com/png.latex?I_0
-"I_0"), kita bisa melihat seberapa cepat penyebaran wabah ini. Oleh
+Dengan mengetahui ![I(0)](https://latex.codecogs.com/png.latex?I%280%29
+"I(0)"), kita bisa melihat seberapa cepat penyebaran wabah ini. Oleh
 karena kita tidak tahu ada berapa banyak
-![I\_0](https://latex.codecogs.com/png.latex?I_0 "I_0") yang ada di
-masyarakat. Akibatnya, kita tidak tahu posisi Indonesia sekarang di
+![I(0)](https://latex.codecogs.com/png.latex?I%280%29 "I(0)") yang ada
+di masyarakat. Akibatnya, kita tidak tahu posisi Indonesia sekarang di
 mana.
 
 > Apakah berada di awal kurva?
@@ -112,10 +113,10 @@ Akan landai sebentar lagi.
 
 ![](https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/covid%20sir%20new/posting_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
-Tanpa informasi ![I\_0](https://latex.codecogs.com/png.latex?I_0 "I_0")
-yang tepat (atau mendekati), kita akan sulit menghitung kecepatan
-penyebaran wabah. Namun demikian, kita masih bisa menghitung pada
-persentase berapa *infected person* ada di *peak position* dengan
+Tanpa informasi ![I(0)](https://latex.codecogs.com/png.latex?I%280%29
+"I(0)") yang tepat (atau mendekati), kita akan sulit menghitung
+kecepatan penyebaran wabah. Namun demikian, kita masih bisa menghitung
+pada persentase berapa *infected person* ada di *peak position* dengan
 mengandalkan ![R\_0](https://latex.codecogs.com/png.latex?R_0 "R_0").
 
 Saya coba lihat, hampir semua perhitungan model rekan-rekan
@@ -327,7 +328,12 @@ pengulangan
 <img src="covid-real_files/figure-gfm/unnamed-chunk-12-1.png" width="672" />
 
 Dari grafik di atas, saya memperkirakan bahwa *real infected person* di
-Indonesia berada di rentang antara 7269 sampai 1.238910^{4} orang.
+Indonesia berada di rentang antara 7235 sampai 1.233410^{4} orang.
+
+Jadi ada selisih ribuan orang yang belum dilaporkan ke pemerintah. Bisa
+jadi tidak dilaporkan karena gejala yang dialami sangat ringan sehingga
+bisa sembuh sendiri atau tidak perlu ke faskes atau tidak terdeteksi di
+faskes tingkat pertama.
 
 Wallahu a’lam.
 
