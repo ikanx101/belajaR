@@ -72,8 +72,7 @@ sampai saat ini.
 
 **Apa itu?**
 
-Berapa banyak ![I(0)](https://latex.codecogs.com/png.latex?I%280%29
-"I(0)")?
+Berapa banyak `I0`?
 
 **Kenapa menjadi penting?**
 
@@ -92,10 +91,8 @@ pasien positif asal Bekasi yang meninggal di Cianjur?
 Hal ini menunjukkan bahwa COVID-19 bisa jadi sudah ada di Indonesia
 sebelum kasus `01` dan `02` diumumkan oleh presiden.
 
-Dengan mengetahui ![I(0)](https://latex.codecogs.com/png.latex?I%280%29
-"I(0)"), kita bisa melihat seberapa cepat penyebaran wabah ini. Oleh
-karena kita tidak tahu ada berapa banyak
-![I(0)](https://latex.codecogs.com/png.latex?I%280%29 "I(0)") yang ada
+Dengan mengetahui `I0`, kita bisa melihat seberapa cepat penyebaran
+wabah ini. Oleh karena kita tidak tahu ada berapa banyak `I0` yang ada
 di masyarakat. Akibatnya, kita tidak tahu posisi Indonesia sekarang di
 mana.
 
@@ -113,11 +110,10 @@ Akan landai sebentar lagi.
 
 ![](https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/covid%20sir%20new/posting_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
-Tanpa informasi ![I(0)](https://latex.codecogs.com/png.latex?I%280%29
-"I(0)") yang tepat (atau mendekati), kita akan sulit menghitung
-kecepatan penyebaran wabah. Namun demikian, kita masih bisa menghitung
-pada persentase berapa *infected person* ada di *peak position* dengan
-mengandalkan ![R\_0](https://latex.codecogs.com/png.latex?R_0 "R_0").
+Tanpa informasi `I0` yang tepat (atau mendekati), kita akan sulit
+menghitung kecepatan penyebaran wabah. Namun demikian, kita masih bisa
+menghitung pada persentase berapa *infected person* ada di *peak
+position* dengan mengandalkan `R0`.
 
 Saya coba lihat, hampir semua perhitungan model rekan-rekan
 matematikawan berada di kisaran `40%` - `65%` untuk *peak position* dari
@@ -306,15 +302,8 @@ Per 2 April 2020, ada `157` orang yang meninggal akibat COVID-19.
 Jika saya asumsikan *death rates* milik WHO bisa dijadikan acuan, maka
 angka *real infected* di Indonesia seharusnya:
 
-  
-![ \\frac{3.4}{100} = \\frac{157}{infected}
-](https://latex.codecogs.com/png.latex?%20%5Cfrac%7B3.4%7D%7B100%7D%20%3D%20%5Cfrac%7B157%7D%7Binfected%7D%20
-" \\frac{3.4}{100} = \\frac{157}{infected} ")  
+![](formula1.jpg)<!-- -->
 
-  
-![ infected = 157 \* \\frac{100}{3.4} = 4617.647
-\\approx 4617](https://latex.codecogs.com/png.latex?%20infected%20%3D%20157%20%2A%20%5Cfrac%7B100%7D%7B3.4%7D%20%3D%204617.647%20%5Capprox%204617
-" infected = 157 * \\frac{100}{3.4} = 4617.647 \\approx 4617")  
 Jadi *expected infected person* COVID-19 ada sekitar `4.617` orang.
 
 > Besar juga *yah*…
@@ -325,10 +314,10 @@ kiri garis merah (Indonesia) pada *density plot*.
 Saya gunakan prinsip simullasi MonteCarlo dengan `9.000` kali
 pengulangan
 
-<img src="covid-real_files/figure-gfm/unnamed-chunk-12-1.png" width="672" />
+<img src="covid-real_files/figure-gfm/unnamed-chunk-13-1.png" width="672" />
 
 Dari grafik di atas, saya memperkirakan bahwa *real infected person* di
-Indonesia berada di rentang antara 7235 sampai 1.233410^{4} orang.
+Indonesia berada di rentang antara 7202 sampai 12159 orang.
 
 Jadi ada selisih ribuan orang yang belum dilaporkan ke pemerintah. Bisa
 jadi tidak dilaporkan karena gejala yang dialami sangat ringan sehingga
