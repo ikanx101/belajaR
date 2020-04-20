@@ -111,7 +111,7 @@ chart_2 =
                  label = paste0('Rp',round(rata/1000,1),' ribu')),
              size = 2) +
   theme_minimal() +
-  labs(title = 'Total Transaksi Belanja Harian',
+  labs(title = 'Rata-Rata Transaksi Belanja Harian',
        x = 'Tanggal',
        subtitle = 'Garis menunjukkan range (min - max) belanjaan pada hari tersebut') +
   theme(axis.text.y = element_blank(),
