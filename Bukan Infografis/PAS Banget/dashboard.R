@@ -164,7 +164,7 @@ chart_4 =
            alpha = .3) +
   theme_minimal() +
   labs(title = 'Berapa Banyak Item yang Dibeli berdasarkan Asal Toko',
-      subtitle = 'Real number berapa item',
+      subtitle = 'Dalam real number',
       x = 'Tanggal',
       fill = 'Toko') +
   theme(axis.title.y = element_blank())
@@ -185,6 +185,7 @@ chart_5 =
            alpha = .3) +
   theme_minimal() +
   labs(title = 'Cara Pembayaran Pelanggan',
+       subtitle = 'Dalam persentase',
        x = 'Tanggal',
        fill = 'Cara Pembayaran') +
   theme(axis.title.y = element_blank())
@@ -213,4 +214,4 @@ chart_6 =
 item_1 = ggarrange(chart_1,chart_3,chart_6,ncol=3,nrow=1,widths = c(1,1,.75))
 item_2 = ggarrange(chart_2,chart_4,chart_5,ncol=3,nrow=1)
 ggarrange(item_1,item_2,ncol=1,nrow=2,heights = c(1,1.25))
-ggsave('pas.png',width = 15,height=6,dpi=500)
+ggsave('pas.png',width = 14,height=6,dpi=500)
