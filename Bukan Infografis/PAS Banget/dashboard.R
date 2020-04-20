@@ -163,10 +163,10 @@ chart_4 =
            size = .7,
            alpha = .3) +
   theme_minimal() +
-  labs(title = 'Berapa Banyak Item yang Dibeli berdasarkan Asal Toko',
+  labs(title = 'Berapa Banyak Toko yang Terlibat',
       subtitle = 'Dalam real number',
       x = 'Tanggal',
-      fill = 'Toko') +
+      fill = 'Jenis Toko') +
   theme(axis.title.y = element_blank())
 
 
@@ -190,28 +190,42 @@ chart_5 =
        fill = 'Cara Pembayaran') +
   theme(axis.title.y = element_blank())
 
+koor_pasar =
+  data %>%
+  group_by(tanggal) %>%
+  summarise(fee_pasar = sum(bagi_hasil_koord_pasar_80_percent))
+
 chart_6 = 
-  data %>% 
+  data %>%
   group_by(tanggal,ojek) %>%
-  summarise(order = n()) %>%
+  summarise(donasi = sum(donasi_pelanggan),
+            fee = sum(bagi_hasil_ojek_80_percent)) %>%
+  ungroup() %>%
+  mutate(fee_total = donasi + fee) %>%
+  select(tanggal,ojek,fee_total) %>% 
+  merge(koor_pasar) %>%
+  mutate(final = ifelse(ojek=='Indri',
+                        fee_total+fee_pasar,
+                        fee_total)) %>%
   ggplot() +
   geom_line(aes(x = tanggal,
-                y = order,
-                color = ojek)) +
+                y = final),
+            color = 'steelblue') +
   geom_label(aes(x = tanggal,
-                 y = order,
-                 label = paste0(order,' order'),
-                 color = ojek),
+                 y = final,
+                 label = paste0('Rp',round(final/1000,1),' ribu')),
              size = 2) +
+  facet_wrap(~ojek,nrow=2,ncol=2) +
   theme_minimal() +
-  labs(title = 'Order per Driver Ojek',
-       x = 'Tanggal',
-       color = 'Driver') +
+  labs(title = 'Fee Masing-Masing Driver Ojek',
+       x = 'Tanggal') +
   theme(axis.text.y = element_blank(),
         axis.title.y = element_blank(),
-        axis.ticks.y = element_blank())
+        axis.ticks.y = element_blank()) +
+  theme(strip.background = element_rect(colour="steelblue", fill="white", 
+                                        size=1.5, linetype="solid"))
 
-item_1 = ggarrange(chart_1,chart_3,chart_6,ncol=3,nrow=1,widths = c(1,1,.75))
+item_1 = ggarrange(chart_1,chart_3,chart_6,ncol=3,nrow=1,widths = c(.5,.5,1))
 item_2 = ggarrange(chart_2,chart_4,chart_5,ncol=3,nrow=1)
-ggarrange(item_1,item_2,ncol=1,nrow=2,heights = c(1,1.25))
+ggarrange(item_1,item_2,ncol=1,nrow=2,heights = c(1.25,.8))
 ggsave('pas.png',width = 14,height=6,dpi=500)
