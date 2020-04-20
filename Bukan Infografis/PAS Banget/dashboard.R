@@ -118,35 +118,6 @@ chart_2 =
         axis.title.y = element_blank(),
         axis.ticks.y = element_blank())
 
-chart_3 = 
-  rekap %>%
-  ggplot() +
-  geom_line(aes(x = tanggal,
-                y = fee_ojek),
-            group = 1,
-            color = 'darkred') +
-  geom_label(aes(x = tanggal,
-                 y = fee_ojek,
-                 label = paste0('Rp',round(fee_ojek/1000,1),' ribu')),
-             size = 2,
-             color = 'darkred') +
-  geom_line(aes(x = tanggal,
-                y = donasi),
-            group = 1,
-            color = 'steelblue') +
-  geom_label(aes(x = tanggal,
-                 y = donasi,
-                 label = paste0('Rp',round(donasi/1000,1),' ribu')),
-             size = 2,
-             color = 'steelblue') +
-  theme_minimal() +
-  labs(title = 'Fee Ojek dan Donasi Harian',
-       x = 'Tanggal',
-       subtitle = 'Merah: Total fee ojek\nBiru: Total donasi pelanggan') +
-  theme(axis.text.y = element_blank(),
-        axis.title.y = element_blank(),
-        axis.ticks.y = element_blank())
-
 chart_4 =
   rekap %>%
   select(tanggal,trans_212,trans_nusantara,trans_lainnya) %>%
@@ -225,7 +196,7 @@ chart_6 =
   theme(strip.background = element_rect(colour="steelblue", fill="white", 
                                         size=1.5, linetype="solid"))
 
-item_1 = ggarrange(chart_1,chart_3,chart_6,ncol=3,nrow=1,widths = c(.5,.5,1))
+item_1 = ggarrange(chart_1,chart_6,ncol=2,nrow=1,widths = c(1,1.75))
 item_2 = ggarrange(chart_2,chart_4,chart_5,ncol=3,nrow=1)
 ggarrange(item_1,item_2,ncol=1,nrow=2,heights = c(1.25,.8))
 ggsave('pas.png',width = 14,height=6,dpi=500)
