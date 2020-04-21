@@ -109,11 +109,6 @@ chart_2 =
         axis.title.y = element_blank(),
         axis.ticks.y = element_blank())
 
-
-
-
-
-
 chart_4 =
   data %>%
   select(tanggal,
@@ -121,15 +116,13 @@ chart_4 =
          total_pas_mart_212_mart,
          total_pas_mart_own,
          total_pas_mart_other,
-         total_pas_food,
-         tarif_pas_send) %>%
+         total_pas_food) %>%
   reshape2::melt(id.vars = 'tanggal') %>%
   mutate(variable = case_when(variable == 'total_pas_mart_212_mart' ~ '212 Mart',
                               variable == 'total_pas_mart_pasar_nusantara' ~ 'Pasar Nusantara',
                               variable == 'total_pas_mart_other' ~ 'Lainnya',
                               variable == 'total_pas_mart_own' ~ 'PAS Own Mart',
-                              variable == 'total_pas_food' ~ 'PAS Food',
-                              variable == 'tarif_pas_send' ~ 'PAS Send')
+                              variable == 'total_pas_food' ~ 'PAS Food')
          ) %>%
   rename(toko = variable,
          trans = value) %>%
@@ -148,6 +141,45 @@ chart_4 =
       x = 'Tanggal',
       fill = 'Jenis Toko') +
   theme(axis.title.y = element_blank())
+
+# tambahan
+
+chart_42 =
+  data %>%
+  select(tanggal,
+         tarif_pas_mart_ojek,
+         tarif_pas_mart_tambahan_kios_pasar,
+         tarif_pas_mart_tambahan_market,
+         tarif_pas_food,
+         tarif_pas_food_tambahan_kuliner,
+         tarif_pas_send) %>%
+  reshape2::melt(id.vars = 'tanggal') %>%
+  mutate(variable = case_when(variable == 'tarif_pas_mart_ojek' ~ 'Ojek',
+                              variable == 'tarif_pas_mart_tambahan_kios_pasar' ~ 'Tambahan kios pasar',
+                              variable == 'tarif_pas_mart_tambahan_market' ~ 'Tambahan market',
+                              variable == 'tarif_pas_food' ~ 'PAS food',
+                              variable == 'tarif_pas_food_tambahan_kuliner' ~ 'Tambahan kuliner',
+                              variable == 'tarif_pas_send' ~ 'PAS send')
+  ) %>%
+  rename(toko = variable,
+         trans = value) %>%
+  group_by(tanggal,toko) %>%
+  summarise(trans = sum(trans)) %>%
+  ggplot(aes(x = tanggal,
+             y = trans)) +
+  geom_col(aes(fill = toko),
+           color = 'steelblue',
+           size = .7,
+           alpha = .3) +
+  scale_fill_brewer(palette = 'Set1') +
+  theme_minimal() +
+  labs(title = 'Berapa Market Size dari Tarif',
+       subtitle = 'Dalam Rupiah',
+       x = 'Tanggal',
+       fill = 'Jenis Tarif') +
+  theme(axis.title.y = element_blank())
+
+# selesai
 
 
 chart_5 = 
@@ -206,6 +238,6 @@ chart_6 =
                                         size=1.5, linetype="solid"))
 
 item_1 = ggarrange(chart_1,chart_6,ncol=2,nrow=1,widths = c(1,1.75))
-item_2 = ggarrange(chart_2,chart_4,chart_5,ncol=3,nrow=1,widths = c(1,1.25,.8))
+item_2 = ggarrange(chart_2,chart_4,chart_42,chart_5,ncol=4,nrow=1,widths = c(1,1.25,1.25,.8))
 ggarrange(item_1,item_2,ncol=1,nrow=2,heights = c(1.25,.8))
-ggsave('pas.png',width = 14,height=6,dpi=500)
+ggsave('pas.png',width = 17,height=6,dpi=500)
