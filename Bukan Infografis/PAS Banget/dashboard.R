@@ -104,7 +104,7 @@ chart_2 =
   theme_minimal() +
   labs(title = 'Rata-Rata Transaksi Belanja Harian',
        x = 'Tanggal',
-       subtitle = 'Total Bayar plus Tips Pelanggan\nGaris menunjukkan range (min-max) belanjaan pada hari tersebut') +
+       subtitle = 'Total Bayar plus Tips Pelanggan\nGaris menunjukkan range (min-max) di hari tersebut') +
   theme(axis.text.y = element_blank(),
         axis.title.y = element_blank(),
         axis.ticks.y = element_blank())
