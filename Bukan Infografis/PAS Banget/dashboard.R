@@ -140,7 +140,8 @@ chart_4 =
       subtitle = 'Dalam Rupiah',
       x = 'Tanggal',
       fill = 'Jenis Toko') +
-  theme(axis.title.y = element_blank())
+  theme(axis.title.y = element_blank(),
+        legend.position = 'bottom')
 
 # tambahan
 
@@ -177,7 +178,8 @@ chart_42 =
        subtitle = 'Dalam Rupiah',
        x = 'Tanggal',
        fill = 'Jenis Tarif') +
-  theme(axis.title.y = element_blank())
+  theme(axis.title.y = element_blank(),
+        legend.position = 'bottom')
 
 # selesai
 
@@ -200,7 +202,8 @@ chart_5 =
        subtitle = 'Dalam persentase',
        x = 'Tanggal',
        fill = 'Cara Pembayaran') +
-  theme(axis.title.y = element_blank())
+  theme(axis.title.y = element_blank(),
+        legend.position = 'bottom')
 
 koor_pasar =
   data %>%
@@ -238,6 +241,59 @@ chart_6 =
                                         size=1.5, linetype="solid"))
 
 item_1 = ggarrange(chart_1,chart_6,ncol=2,nrow=1,widths = c(1,1.75))
-item_2 = ggarrange(chart_2,chart_4,chart_42,chart_5,ncol=4,nrow=1,widths = c(1,1.25,1.25,.8))
-ggarrange(item_1,item_2,ncol=1,nrow=2,heights = c(1.25,.8))
-ggsave('pas.png',width = 17,height=6,dpi=500)
+item_2 = ggarrange(chart_2,chart_4,chart_42,ncol=3,nrow=1,widths = c(1,1.25,1.25))
+final_1 = ggarrange(item_1,item_2,ncol=1,nrow=2,heights = c(1.25,1))
+
+
+# kita bikin analisa baru yah
+
+chart_7 = 
+  data %>%
+  select(tanggal,
+         ojek,
+         pas_mart_212_mart,
+         pas_mart_pasar_nusantara,
+         pasmart_own,
+         pas_mart_other,
+         pas_food,
+         pas_send) %>%
+  mutate(pas_mart_212_mart = ifelse(pas_mart_212_mart>0,1,0),
+         pas_mart_pasar_nusantara = ifelse(pas_mart_pasar_nusantara>0,1,0),
+         pasmart_own = ifelse(pasmart_own>0,1,0),
+         pas_mart_other = ifelse(pas_mart_other>0,1,0),
+         pas_food = ifelse(pas_food>0,1,0),
+         pas_send = ifelse(pas_send>0,1,0)) %>%
+  reshape2::melt(id.vars = c('ojek','tanggal')) %>%
+  rename(layanan = variable,
+         banyak = value) %>%
+  mutate(layanan = case_when(layanan == 'pas_mart_212_mart' ~ '212 Mart',
+                             layanan == 'pas_mart_pasar_nusantara' ~ 'Pasar Nusantara',
+                             layanan == 'pasmart_own' ~ 'Pas Own',
+                             layanan == 'pas_mart_other' ~ 'Pas Other',
+                             layanan == 'pas_food' ~ 'Food',
+                             layanan == 'pas_send' ~ 'Send')
+         ) %>%
+  group_by(tanggal,ojek,layanan) %>%
+  summarise(banyak = sum(banyak)) %>%
+  ggplot() +
+  geom_col(aes(x = tanggal,
+               y = banyak,
+               fill = layanan),
+           color = 'steelblue',
+           size = .7,
+           alpha = .3) +
+  scale_fill_brewer(palette = 'Set1') +
+  theme_minimal() +
+  facet_wrap(~ojek,ncol=2) +
+  labs(title = 'Total Semua Jenis Layanan yang Di-Handle Masing-Masing Driver',
+       subtitle = 'Dalam real number',
+       x = 'Tanggal',
+       fill = 'Jenis Layanan') +
+  theme(axis.title.y = element_blank()) +
+  theme(strip.background = element_rect(colour="steelblue", fill="white", 
+                                        size=1.5, linetype="solid"))
+
+item_baru = ggarrange(chart_5,chart_7,ncol=2,widths = c(1,3))
+
+ggarrange(final_1,item_baru,nrow=2,heights = c(2,1))
+ggsave('pas.png',width = 20,height=13,dpi=500)
