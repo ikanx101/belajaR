@@ -48,7 +48,7 @@ data %>%
             pembayaran_cash = round(sum(transfer_cash)/n()*100,1)
             )
 
-# chart 1 aman
+# Rekap Harian
 chart_1 = 
   rekap %>%
   ggplot() +
@@ -78,139 +78,13 @@ chart_1 =
         axis.title.y = element_blank(),
         axis.ticks.y = element_blank())
 
-# aman
-chart_2 = 
-  data %>%
-  group_by(tanggal) %>%
-  summarise(rata = mean(total_bayar + tips_pelanggan),
-            min = min(total_bayar + tips_pelanggan),
-            max = max(total_bayar + tips_pelanggan)) %>%
-  ggplot() +
-  geom_col(aes(x = tanggal,
-               y = rata),
-           size = 1,
-           color = 'steelblue',
-           fill = 'orange',
-           alpha = .2) +
-  geom_errorbar(aes(x = tanggal,
-                    ymin = min,
-                    ymax = max),
-                size=.8,
-                width = .25) +
-  geom_label(aes(x = tanggal,
-                 y = rata,
-                 label = paste0('Rp',round(rata/1000,1),' ribu')),
-             size = 2) +
-  theme_minimal() +
-  labs(title = 'Rata-Rata Transaksi Belanja Harian',
-       x = 'Tanggal',
-       subtitle = 'Total Bayar plus Tips Pelanggan\nGaris menunjukkan range (min-max) di hari tersebut') +
-  theme(axis.text.y = element_blank(),
-        axis.title.y = element_blank(),
-        axis.ticks.y = element_blank())
-
-chart_4 =
-  data %>%
-  select(tanggal,
-         total_pas_mart_pasar_nusantara,
-         total_pas_mart_212_mart,
-         total_pas_mart_own,
-         total_pas_mart_other,
-         total_pas_food) %>%
-  reshape2::melt(id.vars = 'tanggal') %>%
-  mutate(variable = case_when(variable == 'total_pas_mart_212_mart' ~ '212 Mart',
-                              variable == 'total_pas_mart_pasar_nusantara' ~ 'Pasar Nusantara',
-                              variable == 'total_pas_mart_other' ~ 'Lainnya',
-                              variable == 'total_pas_mart_own' ~ 'PAS Own Mart',
-                              variable == 'total_pas_food' ~ 'PAS Food')
-         ) %>%
-  rename(toko = variable,
-         trans = value) %>%
-  group_by(tanggal,toko) %>%
-  summarise(trans = sum(trans)) %>%
-  ggplot(aes(x = tanggal,
-             y = trans)) +
-  geom_col(aes(fill = toko),
-           color = 'steelblue',
-           size = .7,
-           alpha = .3) +
-  scale_fill_brewer(palette = 'Set1') +
-  theme_minimal() +
-  labs(title = 'Berapa Market Size dari Toko yang Terlibat',
-      subtitle = 'Dalam Rupiah',
-      x = 'Tanggal',
-      fill = 'Jenis Toko') +
-  theme(axis.title.y = element_blank(),
-        legend.position = 'bottom')
-
-# tambahan
-
-chart_42 =
-  data %>%
-  select(tanggal,
-         tarif_pas_mart_ojek,
-         tarif_pas_mart_tambahan_kios_pasar,
-         tarif_pas_mart_tambahan_market,
-         tarif_pas_food,
-         tarif_pas_food_tambahan_kuliner,
-         tarif_pas_send) %>%
-  reshape2::melt(id.vars = 'tanggal') %>%
-  mutate(variable = case_when(variable == 'tarif_pas_mart_ojek' ~ 'Ojek',
-                              variable == 'tarif_pas_mart_tambahan_kios_pasar' ~ 'Tambahan kios pasar',
-                              variable == 'tarif_pas_mart_tambahan_market' ~ 'Tambahan market',
-                              variable == 'tarif_pas_food' ~ 'PAS food',
-                              variable == 'tarif_pas_food_tambahan_kuliner' ~ 'Tambahan kuliner',
-                              variable == 'tarif_pas_send' ~ 'PAS send')
-  ) %>%
-  rename(toko = variable,
-         trans = value) %>%
-  group_by(tanggal,toko) %>%
-  summarise(trans = sum(trans)) %>%
-  ggplot(aes(x = tanggal,
-             y = trans)) +
-  geom_col(aes(fill = toko),
-           color = 'steelblue',
-           size = .7,
-           alpha = .3) +
-  scale_fill_brewer(palette = 'Set1') +
-  theme_minimal() +
-  labs(title = 'Berapa Market Size dari Tarif',
-       subtitle = 'Dalam Rupiah',
-       x = 'Tanggal',
-       fill = 'Jenis Tarif') +
-  theme(axis.title.y = element_blank(),
-        legend.position = 'bottom')
-
-# selesai
-
-
-chart_5 = 
-  rekap %>%
-  mutate(transfer = 100 - pembayaran_cash) %>%
-  select(tanggal,pembayaran_cash,transfer) %>%
-  reshape2::melt(id.vars = 'tanggal') %>%
-  mutate(variable = case_when(variable == 'pembayaran_cash' ~ 'Cash',
-                              variable == 'transfer' ~ 'Transfer')) %>%
-  ggplot(aes(x = tanggal,
-             y = value)) +
-  geom_col(aes(fill = variable),
-           color = 'steelblue',
-           size = .7,
-           alpha = .3) +
-  theme_minimal() +
-  labs(title = 'Cara Pembayaran Pelanggan',
-       subtitle = 'Dalam persentase',
-       x = 'Tanggal',
-       fill = 'Cara Pembayaran') +
-  theme(axis.title.y = element_blank(),
-        legend.position = 'bottom')
-
+# Fee masing-masing ojek
 koor_pasar =
   data %>%
   group_by(tanggal) %>%
   summarise(fee_pasar = sum(bagi_hasil_koord_pasar_80_percent))
 
-chart_6 = 
+chart_2 = 
   data %>%
   group_by(tanggal,ojek) %>%
   summarise(donasi = sum(tips_pelanggan),
@@ -240,14 +114,139 @@ chart_6 =
   theme(strip.background = element_rect(colour="steelblue", fill="white", 
                                         size=1.5, linetype="solid"))
 
-item_1 = ggarrange(chart_1,chart_6,ncol=2,nrow=1,widths = c(1,1.75))
-item_2 = ggarrange(chart_2,chart_4,chart_42,ncol=3,nrow=1,widths = c(1,1.25,1.25))
-final_1 = ggarrange(item_1,item_2,ncol=1,nrow=2,heights = c(1.25,1))
+baris_1 = ggarrange(chart_1,chart_2,ncol=2,widths = c(1,2))
 
+# Transaksi Belanja Harian
+chart_31 = 
+  data %>%
+  group_by(tanggal) %>%
+  summarise(rata = mean(total_bayar + tips_pelanggan),
+            min = min(total_bayar + tips_pelanggan),
+            max = max(total_bayar + tips_pelanggan)) %>%
+  ggplot() +
+  geom_col(aes(x = tanggal,
+               y = rata),
+           size = 1,
+           color = 'steelblue',
+           fill = 'orange',
+           alpha = .2) +
+  geom_errorbar(aes(x = tanggal,
+                    ymin = min,
+                    ymax = max),
+                size=.8,
+                width = .25) +
+  geom_label(aes(x = tanggal,
+                 y = rata,
+                 label = paste0('Rp',round(rata/1000,1),' ribu')),
+             size = 2) +
+  theme_minimal() +
+  labs(title = 'Rata-Rata Transaksi Belanja Harian',
+       x = 'Tanggal',
+       subtitle = 'Total Bayar plus Tips Pelanggan\nGaris menunjukkan range (min-max) di hari tersebut') +
+  theme(axis.text.y = element_blank(),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank())
+
+# pembayaran kes transper
+chart_32 = 
+  rekap %>%
+  mutate(transfer = 100 - pembayaran_cash) %>%
+  select(tanggal,pembayaran_cash,transfer) %>%
+  reshape2::melt(id.vars = 'tanggal') %>%
+  mutate(variable = case_when(variable == 'pembayaran_cash' ~ 'Cash',
+                              variable == 'transfer' ~ 'Transfer')) %>%
+  ggplot(aes(x = tanggal,
+             y = value)) +
+  geom_col(aes(fill = variable),
+           color = 'steelblue',
+           size = .7,
+           alpha = .3) +
+  theme_minimal() +
+  labs(title = 'Cara Pembayaran Pelanggan',
+       subtitle = 'Dalam persentase',
+       x = 'Tanggal',
+       fill = 'Cara Pembayaran') +
+  theme(axis.title.y = element_blank(),
+        legend.position = 'bottom')
+
+chart_4 =
+  data %>%
+  select(tanggal,
+         total_pas_mart_pasar_nusantara,
+         total_pas_mart_212_mart,
+         total_pas_mart_own,
+         total_pas_mart_other,
+         total_pas_food) %>%
+  reshape2::melt(id.vars = 'tanggal') %>%
+  mutate(variable = case_when(variable == 'total_pas_mart_212_mart' ~ '212 Mart',
+                              variable == 'total_pas_mart_pasar_nusantara' ~ 'Pasar Nusantara',
+                              variable == 'total_pas_mart_other' ~ 'Lainnya',
+                              variable == 'total_pas_mart_own' ~ 'PAS Own Mart',
+                              variable == 'total_pas_food' ~ 'PAS Food')
+         ) %>%
+  rename(toko = variable,
+         trans = value) %>%
+  group_by(tanggal,toko) %>%
+  summarise(trans = sum(trans)) %>%
+  ggplot(aes(x = tanggal,
+             y = trans)) +
+  geom_line() +
+  geom_label(aes(label = paste0('Rp',round(trans/1000,1),' ribu')),size=2) +
+  facet_wrap(~toko,ncol=3) +
+  theme_minimal() +
+  labs(title = 'Berapa Total Transaksi dari Toko yang Terlibat',
+      subtitle = 'Dalam Rupiah',
+      x = 'Tanggal',
+      fill = 'Jenis Toko') +
+  theme(axis.title.y = element_blank(),
+        axis.text.y = element_blank()) +
+  theme(strip.background = element_rect(colour="steelblue", fill="white", 
+                                          size=1.5, linetype="solid"))
+
+
+chart_5 =
+  data %>%
+  select(tanggal,
+         tarif_pas_mart_ojek,
+         tarif_pas_mart_tambahan_kios_pasar,
+         tarif_pas_mart_tambahan_market,
+         tarif_pas_food,
+         tarif_pas_food_tambahan_kuliner,
+         tarif_pas_send) %>%
+  reshape2::melt(id.vars = 'tanggal') %>%
+  mutate(variable = case_when(variable == 'tarif_pas_mart_ojek' ~ 'Ojek',
+                              variable == 'tarif_pas_mart_tambahan_kios_pasar' ~ 'Tambahan kios pasar',
+                              variable == 'tarif_pas_mart_tambahan_market' ~ 'Tambahan market',
+                              variable == 'tarif_pas_food' ~ 'PAS food',
+                              variable == 'tarif_pas_food_tambahan_kuliner' ~ 'Tambahan kuliner',
+                              variable == 'tarif_pas_send' ~ 'PAS send')
+  ) %>%
+  rename(toko = variable,
+         trans = value) %>%
+  group_by(tanggal,toko) %>%
+  summarise(trans = sum(trans)) %>%
+  ggplot(aes(x = tanggal,
+             y = trans)) +
+  geom_line() +
+  geom_label(aes(label = paste0('Rp',round(trans/1000,1),' ribu')),size=2) +
+  facet_wrap(~toko,ncol=3) +
+  theme_minimal() +
+  labs(title = 'Berapa Total Tarif per Layanan',
+       subtitle = 'Dalam Rupiah',
+       x = 'Tanggal',
+       fill = 'Jenis Tarif') +
+  theme(axis.title.y = element_blank(),
+        axis.text.y = element_blank()) +
+    theme(strip.background = element_rect(colour="steelblue", fill="white", 
+                                          size=1.5, linetype="solid"))
+
+item_1 = ggarrange(chart_4,chart_5,ncol=1,nrow=2,heights = c(1,1))
+item_2 = ggarrange(chart_31,chart_32,ncol=1,nrow=2,heights = c(1.5,.8))
+baris_2 = ggarrange(item_2,item_1,ncol=2,widths = c(1,2.5))
 
 # kita bikin analisa baru yah
 
-chart_7 = 
+chart_6 = 
   data %>%
   select(tanggal,
          ojek,
@@ -293,7 +292,5 @@ chart_7 =
   theme(strip.background = element_rect(colour="steelblue", fill="white", 
                                         size=1.5, linetype="solid"))
 
-item_baru = ggarrange(chart_5,chart_7,ncol=2,widths = c(1,3))
-
-ggarrange(final_1,item_baru,nrow=2,heights = c(2,1))
+ggarrange(baris_1,baris_2,chart_6,nrow=3,heights = c(1,1.5,1.2))
 ggsave('pas.png',width = 20,height=13,dpi=500)
