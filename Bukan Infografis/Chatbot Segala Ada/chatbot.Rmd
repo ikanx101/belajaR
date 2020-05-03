@@ -25,11 +25,8 @@ ___
 
 Ini adalah algoritma yang cukup mudah untuk di-_embed_ ke _chatbot_ di __R__. Flownya juga sangat mudah, yakni:
 
-```{r,echo=FALSE}
-nomnoml::nomnoml('[Start|sender kirim\npesan ke chatbot] -> [Scrape|ambil harga emas\ndi situs sumber\nsecara real time]
-                 [Scrape] -> [Cleaning|bersih struktur data\nhasil scrape]
-                 [Cleaning] -> [Enrich|membuat summary\ndan melengkapinya\ndalam bentuk kalimat]
-                 [Enrich] -> [Send|kirim hasil enrich\nbalik ke sender]')
+```{r out.width = '100%',echo=FALSE}
+knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Chatbot%20Segala%20Ada/chunk/unnamed-chunk-1-1.png')
 ```
 
 Contohnya ini _yah_:
@@ -44,11 +41,8 @@ ___
 
 Algoritma ini sama dengan algoritma harga emas. _Flow_-nya seperti ini:
 
-```{r,echo=FALSE}
-nomnoml::nomnoml('[Start|sender kirim\npesan ke chatbot] -> [Scrape|ambil kurs rupiah\ndi situs sumber\nsecara real time]
-                 [Scrape] -> [Cleaning|bersih struktur data\nhasil scrape]
-                 [Cleaning] -> [Enrich|membuat summary\ndan melengkapinya\ndalam bentuk kalimat]
-                 [Enrich] -> [Send|kirim hasil enrich\nbalik ke sender]')
+```{r out.width = '100%',echo=FALSE}
+knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Chatbot%20Segala%20Ada/chunk/unnamed-chunk-3-1.png')
 ```
 
 Contohnya ini _yah_:
@@ -63,11 +57,8 @@ ___
 
 Algoritma karhutla ini saya buat saat terjadi kebakaran hutan yang sempat heboh tahun 2019 lalu. _Flow_-nya juga relatif mudah, hanya ada tambahan membuat _chart_ atau grafik untuk _sender_.
 
-```{r,echo=FALSE}
-nomnoml::nomnoml('[Start|sender kirim\npesan ke chatbot] -> [Scrape|ambil data karhutla\ndi sipongi KEMENLHK\nsecara real time]
-                 [Scrape] -> [Cleaning|bersih struktur data\nhasil scrape]
-                 [Cleaning] -> [Visualization|membuat grafik dari\ndata yang ada]
-                 [Visualization] -> [Send|kirim hasil enrich\nbalik ke sender]')
+```{r out.width = '100%',echo=FALSE}
+knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Chatbot%20Segala%20Ada/chunk/unnamed-chunk-5-1.png')
 ```
 
 
@@ -78,7 +69,7 @@ knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/mast
 ```
 
 ```{r out.width = '70%',echo=FALSE}
-knitr::include_graphics('D:/Project_R/TelegramBOT/sipongi.png')
+knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Chatbot%20Segala%20Ada/resources/sipongi.png')
 ```
 
 ____
@@ -93,16 +84,14 @@ Saya membuat algoritma yang bisa menampilkan lima berita ter-_update_ (_real tim
 
 _Flow_-nya sebagai berikut:
 
-```{r,echo=FALSE}
-nomnoml::nomnoml('[Start|sender kirim\npesan ke chatbot] -> [Scrape|ambil 5 berita detik.com\nsecara real time]
-                 [Scrape] -> [Cleaning|bersih karakter yang\ntidak diperlukan]
-                 [Cleaning] -> [Send|kirim hasil berita\nbalik ke sender]')
+```{r out.width = '100%',echo=FALSE}
+knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Chatbot%20Segala%20Ada/chunk/unnamed-chunk-8-1.png')
 ```
 
 Contohnya ini _yah_:
 
 ```{r out.width = '70%',echo=FALSE}
-knitr::include_graphics('corona.PNG')
+knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Chatbot%20Segala%20Ada/resources/corona.PNG')
 ```
 
 ____
@@ -114,10 +103,10 @@ Sekali lagi, tampaknya _chatbot_ ini bisa digunakan untuk mengambil dan menganal
 Dengan menggunakan perintah `/covid`, maka secara otomatis algoritma akan melakukan _scraping_ dan _visualising_ data berikut ini:
 
 ```{r out.width = '70%',echo=FALSE}
-knitr::include_graphics('D:/Project_R/TelegramBOT/covid 19 1.png')
-knitr::include_graphics('D:/Project_R/TelegramBOT/covid 19 2.png')
-knitr::include_graphics('D:/Project_R/TelegramBOT/covid 19 3.png')
-knitr::include_graphics('D:/Project_R/TelegramBOT/covid 19 4.png')
+knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Chatbot%20Segala%20Ada/resources/covid 19 1.png')
+knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Chatbot%20Segala%20Ada/resources/covid 19 2.png')
+knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Chatbot%20Segala%20Ada/resources/covid 19 3.png')
+knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Chatbot%20Segala%20Ada/resources/covid 19 4.png')
 ```
 
 ____
