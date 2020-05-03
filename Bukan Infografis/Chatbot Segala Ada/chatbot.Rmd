@@ -102,7 +102,7 @@ Sekali lagi, tampaknya _chatbot_ ini bisa digunakan untuk mengambil dan menganal
 
 Dengan menggunakan perintah `/covid`, maka secara otomatis algoritma akan melakukan _scraping_ dan _visualising_ data berikut ini:
 
-```{r out.width = '70%',echo=FALSE}
+```{r out.width = '100%',echo=FALSE}
 knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Chatbot%20Segala%20Ada/resources/covid 19 1.png')
 knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Chatbot%20Segala%20Ada/resources/covid 19 2.png')
 knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Chatbot%20Segala%20Ada/resources/covid 19 3.png')
@@ -113,4 +113,14 @@ ____
 
 ## _SurveyBot_
 
-Penerapan PSBB ini membuat saya tidak bisa
+Seharusnya dalam beberapa minggu ini, saya sedang melakukan suatu project survey. Namun akibat wabah ini, tidak mungkin bagi tim _interviewer_ untuk berkeliling melakukan survey. Oleh karena itu diperlukan cara lain untuk melakukan survey.
+
+Entah kenapa survey dengan menggunakan _online form_ terlihat membosankan dan tidak cukup interaktif. Sekarang saya ingin mencoba membuat algoritma yang memungkinkan _chatbot_ digunakan untuk melakukan survey.
+
+Jadi seolah-olah responden sedang ditanya-tanya oleh orang melalui _chat_.
+
+```{r out.width = '70%',echo=FALSE}
+knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Chatbot%20Segala%20Ada/resources/survey bot.PNG')
+```
+
+Nanti hasilnya akan direkap secara otomatis di _log files_ dengan format __.xlsx__. Ini lebih baik daripada _online forms_, karena kita bisa memberikan sentuhan humanis dan responden bisa menyelesaikan kuesioner kapanpun dia sempat tanpa harus khawatir _form_-nya hilang karena jaringan terputus.
