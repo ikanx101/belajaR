@@ -124,3 +124,27 @@ knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/mast
 ```
 
 Nanti hasilnya akan direkap secara otomatis di _log files_ dengan format __.xlsx__. Ini lebih baik daripada _online forms_, karena kita bisa memberikan sentuhan humanis dan responden bisa menyelesaikan kuesioner kapanpun dia sempat tanpa harus khawatir _form_-nya hilang karena jaringan terputus.
+
+_____
+
+## _Text to Data Frame Converter_
+
+Pada [tulisan sebelumnya](https://ikanx101.github.io/blog/pas-banget/), saya pernah bercerita bahwa teman saya membuat layanan jual-beli antar sebagai pemberdayaan masyarakat.
+
+Waktu itu, ia menggunakan pesan WA untuk menerima order dari pelanggan dan meneruskannya kepada seller dan kurir.
+
+Kira-kira seperti ini bentuknya:
+
+```{r out.width = '70%',echo=FALSE}
+knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Chatbot%20Segala%20Ada/resources/pas banget.PNG')
+```
+
+Dari pesan WA tersebut, secara manual tim yang terlibat merekapnya dalam bentuk format excel.
+
+Nah, saya berpikir apakah ada cara otomatis untuk melakukan itu?
+
+Saya membuat algoritma yang bisa merekap data teks tersebut ke dalam tabel excel secara otomatis. Teman saya itu tinggal memforward saja pesan tersebut ke chatbot telegram saya, maka dalam hitung milisecond, chatbot saya akan mengembalikannya dalam bentuk file Excel.
+
+```{r out.width = '70%',echo=FALSE}
+knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Chatbot%20Segala%20Ada/resources/rekap pas.PNG')
+```
