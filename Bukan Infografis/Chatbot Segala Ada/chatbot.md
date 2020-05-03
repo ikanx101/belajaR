@@ -123,3 +123,36 @@ Nanti hasilnya akan direkap secara otomatis di *log files* dengan format
 memberikan sentuhan humanis dan responden bisa menyelesaikan kuesioner
 kapanpun dia sempat tanpa harus khawatir *form*-nya hilang karena
 jaringan terputus.
+
+-----
+
+## *Text to Data Frame Converter*
+
+Pada [tulisan sebelumnya](https://ikanx101.github.io/blog/pas-banget/),
+saya pernah bercerita bahwa teman saya membuat layanan jual-beli antar
+sebagai pemberdayaan masyarakat.
+
+Waktu itu, ia menggunakan pesan WA untuk menerima order dari pelanggan
+dan meneruskannya kepada seller dan kurir.
+
+Kira-kira seperti ini
+bentuknya:
+
+<img src="https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Chatbot%20Segala%20Ada/resources/pas banget.PNG" width="30%" />
+
+Dari pesan WA tersebut, secara manual tim yang terlibat merekapnya dalam
+bentuk format **Excel**.
+
+*Nah*, saya berpikir apakah ada cara otomatis untuk melakukan itu?
+
+Saya membuat algoritma yang bisa merekap data teks tersebut ke dalam
+tabel excel secara otomatis. Teman saya itu tinggal memforward saja
+pesan tersebut ke *chatbot* telegram saya, maka dalam hitungan
+*miliseconds*, *chatbot* saya akan mengembalikannya dalam bentuk file
+**Excel**.
+
+<img src="https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Chatbot%20Segala%20Ada/resources/rekap pas.PNG" width="70%" />
+
+-----
+
+# Ya begitulah kira-kira… Ada pertanyaan?

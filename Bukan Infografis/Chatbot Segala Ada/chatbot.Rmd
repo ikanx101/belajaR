@@ -135,16 +135,20 @@ Waktu itu, ia menggunakan pesan WA untuk menerima order dari pelanggan dan mener
 
 Kira-kira seperti ini bentuknya:
 
-```{r out.width = '70%',echo=FALSE}
+```{r out.width = '30%',echo=FALSE}
 knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Chatbot%20Segala%20Ada/resources/pas banget.PNG')
 ```
 
-Dari pesan WA tersebut, secara manual tim yang terlibat merekapnya dalam bentuk format excel.
+Dari pesan WA tersebut, secara manual tim yang terlibat merekapnya dalam bentuk format __Excel__.
 
-Nah, saya berpikir apakah ada cara otomatis untuk melakukan itu?
+_Nah_, saya berpikir apakah ada cara otomatis untuk melakukan itu?
 
-Saya membuat algoritma yang bisa merekap data teks tersebut ke dalam tabel excel secara otomatis. Teman saya itu tinggal memforward saja pesan tersebut ke chatbot telegram saya, maka dalam hitung milisecond, chatbot saya akan mengembalikannya dalam bentuk file Excel.
+Saya membuat algoritma yang bisa merekap data teks tersebut ke dalam tabel excel secara otomatis. Teman saya itu tinggal memforward saja pesan tersebut ke _chatbot_ telegram saya, maka dalam hitungan _miliseconds_, _chatbot_ saya akan mengembalikannya dalam bentuk file __Excel__.
 
 ```{r out.width = '70%',echo=FALSE}
 knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Chatbot%20Segala%20Ada/resources/rekap pas.PNG')
 ```
+
+_____
+
+# Ya begitulah kira-kira... Ada pertanyaan?
