@@ -35,7 +35,7 @@ nomnoml::nomnoml('[Start|sender kirim\npesan ke chatbot] -> [Scrape|ambil harga 
 Contohnya ini _yah_:
 
 ```{r out.width = '50%',echo=FALSE}
-knitr::include_graphics('emas.PNG')
+knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Chatbot%20Segala%20Ada/resources/emas.PNG')
 ```
 
 ___
@@ -54,7 +54,7 @@ nomnoml::nomnoml('[Start|sender kirim\npesan ke chatbot] -> [Scrape|ambil kurs r
 Contohnya ini _yah_:
 
 ```{r out.width = '50%',echo=FALSE}
-knitr::include_graphics('rupiah.PNG')
+knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Chatbot%20Segala%20Ada/resources/rupiah.PNG')
 ```
 
 ___
@@ -74,7 +74,7 @@ nomnoml::nomnoml('[Start|sender kirim\npesan ke chatbot] -> [Scrape|ambil data k
 Contohnya ini _yah_:
 
 ```{r out.width = '50%',echo=FALSE}
-knitr::include_graphics('karhutla.PNG')
+knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/Chatbot%20Segala%20Ada/resources/karhutla.PNG')
 ```
 
 ```{r out.width = '70%',echo=FALSE}
