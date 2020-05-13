@@ -1,0 +1,21 @@
+---
+title: "Perubahan Habit Belanja Ketika PSBB pada Suatu Wilayah di Bekasi"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+rm(list=ls())
+setwd("/cloud/project/Bukan Infografis/212 Mart")
+
+library(dplyr)
+library(ggplot2)
+library(ggthemes)
+library(ggpubr)
+
+load('trx.rda')
+```
+
+Beberapa waktu yang lalu, saya _ngobrol_ secara virtual dengan beberapa rekan SMA saya dulu. Sudah dua tahun ini mereka bersama-sama merintis usaha toko retail waralaba di salah satu perumahan di daerah Bekasi.
+
+Singkat cerita, mereka memberikan data _sales_ harian toko retail tersebut kepada saya untuk saya oprek-oprek.
