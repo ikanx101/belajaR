@@ -16,6 +16,287 @@ library(ggpubr)
 load('trx.rda')
 ```
 
-Beberapa waktu yang lalu, saya _ngobrol_ secara virtual dengan beberapa rekan SMA saya dulu. Sudah dua tahun ini mereka bersama-sama merintis usaha toko retail waralaba di salah satu perumahan di daerah Bekasi.
+Beberapa waktu yang lalu, saya _ngobrol_ secara _virtual_ dengan beberapa rekan SMA saya dulu. Ternyata sudah dua tahun ini mereka bersama-sama merintis usaha minimarket _retail_ waralaba di salah satu perumahan di daerah Bekasi. Nama waralabanya apa akan saya rahasiakan _yah_. 
 
-Singkat cerita, mereka memberikan data _sales_ harian toko retail tersebut kepada saya untuk saya oprek-oprek.
+Singkat cerita, mereka memberikan data _sales_ harian minimarket tersebut kepada saya untuk saya oprek-oprek. 
+
+Jangan membayangkan data yang saya terima itu sudah sangat bersih dan rapi secara struktur _yah_. Walaupun bentuknya berformat __Microsoft Excel__ tapi bentuknya _unstructured_. Jadi harus ada _effort_ untuk merapikan datanya menggunakan __R__. Sayang sekali saya tidak bisa memperlihatkan format _raw data_-nya. Padahal lumayan _banget_ kalau dijadikan bahan latihan _data carpentry using_ __R__.
+
+Kenapa _sih_ merapikannya harus pakai __R__?
+
+> Biar bisa _reproducible_ untuk _files_ selanjutnya. Jadi _gak_ akan capek kalau ada data baru.
+
+Data _retail audit_ semacam ini memiliki informasi yang __sangat amat kaya sekali__. Agak _lebay sih_ tapi memang begitu faktanya.
+
+Pada awalnya _blueprint_ dari analisa yang hendak saya lakukan saya tuangkan dalam bagan berikut ini:
+
+```{r out.width = '90%',echo=FALSE}
+knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/212%20Mart/Ide%20Analisa.png')
+```
+
+Semua analisa pada _blueprint_ saya rasa sudah cukup.
+
+Namun karena keterbatasan waktu dan sumber daya, maka saya hanya akan lakukan beberapa yang _menarique_ dan _urgent_ saja sesuai dengan diskusi _virtual_ dengan rekan-rekan saya. Salah satu analisa yang membuat penasaran adalah:
+
+# Apakah ada perubahan habit belanja pelanggan selama COVID-19 ini?
+
+Awalnya saya melakukan analisa ini secara tidak sengaja saat mengeksplorasi data yang ada. Pertama, saya coba dengan melihat total _sales_ harian sebagai berikut:
+
+```{r, echo=FALSE, fig.retina=10,fig.width=9,fig.height=4}
+data %>% 
+  group_by(tanggal) %>%
+  summarise(belanja = round(sum(total_harga)/1000000,2)) %>%
+  ggplot(aes(x = tanggal,
+             y = belanja)) +
+  geom_line(color = 'steelblue') +
+  theme_economist() +
+  labs(x = 'Tanggal',
+       y = 'Total sales (dalam juta Rupiah)',
+       title = 'Total Sales Harian',
+       caption = 'Visualized using R\nikanx101.github.io',
+       subtitle = 'Januari 2020 - April 2020')
+```
+
+Kalau dilihat sekilas, total _sales_ harian memiliki fluktuatif yang cukup tinggi. Pada beberapa tanggal, kita bisa melihat total _sales_ bisa mencapai angka di atas Rp 10 juta.
+
+Pada bulan `Februari 2020`, kita bisa lihat juga sepertinya total _sales_ yang dicapai relatif lebih rendah dibandingkan bulan lainnya.
+
+Mari kita lihat total _sales_ per bulan sebagai berikut:
+
+```{r, echo=FALSE, fig.retina=10,fig.width=9,fig.height=4}
+data %>% 
+  mutate(bulan = lubridate::month(tanggal,label=T)) %>%
+  group_by(bulan) %>%
+  summarise(belanja = sum(total_harga)/1000000) %>%
+  ggplot(aes(x = bulan,
+             y = belanja)) +
+  geom_col(fill = 'white',
+           color = 'steelblue',
+           size = 1.25) +
+  theme_economist() +
+  labs(title = 'Total Sales per Bulan',
+       subtitle = 'Januari 2020 - April 2020',
+       y = 'Total sales (dalam juta Rupiah)',
+       x = 'Bulan',
+       caption = 'Visualized using R\nikanx101.github.io')
+```
+
+Ternyata benar bahwa di bulan `Februari 2020` ada penurunan omset. Namun terjadi _bounce back_ sehingga ada peningkatan pada bulan-bulan setelahnya.
+
+## Rata-rata Sales Harian per Bulan
+
+Jika pada bagian sebelumnya, kita telah melihat total _sales_, sekarang mari kita lihat analisa berdasarkan `rata-rata sales per hari` di setiap bulan.
+
+Maksudnya _gimana_?
+
+> Yakni berapa nominal rupiah rata-rata yang dikeluarkan pelanggan saat bertransaksi di minimarket setiap bulannya?
+
+```{r, echo=FALSE, fig.retina=10,fig.width=9,fig.height=4}
+data %>% 
+  mutate(bulan = lubridate::month(tanggal,label=T)) %>%
+  group_by(bulan, id_transaksi) %>%
+  summarise(belanja = sum(total_harga)) %>%
+  ungroup() %>%
+  group_by(bulan) %>%
+  summarise(belanja = mean(belanja)/1000) %>%
+  ggplot(aes(x = bulan,
+             y = belanja)) +
+  geom_col(fill = 'white',
+           color = 'steelblue',
+           size = 1.25) +
+  theme_economist() +
+  labs(title = 'Rata-rata Belanja per Pelanggan per Bulan',
+       subtitle = 'Januari 2020 - April 2020',
+       y = 'Total sales (dalam ribu Rupiah)',
+       x = 'Bulan',
+       caption = 'Visualized using R\nikanx101.github.io')
+
+```
+
+
+_Wah_, ternyata secara `rata-rata sales harian`, angka di `Januari 2020` hampir sama dengan angka di `Februari 2020` lalu selalu ada kenaikan di bulan-bulan setelahnya.
+
+Lalu apa penyebab `total sales` di `Februari 2020` turun sedangkan `rata-rata sales harian`-nya hampir mirip dengan `Januari 2020`?
+
+## Banyaknya Transaksi per Bulan
+
+Mari kita lihat grafik berikut ini:
+
+```{r, echo=FALSE, fig.retina=10,fig.width=9,fig.height=4}
+data %>% 
+  mutate(bulan = lubridate::month(tanggal,label=T)) %>%
+  group_by(bulan,id_transaksi) %>%
+  summarise(n()) %>%
+  ungroup() %>%
+  group_by(bulan) %>%
+  summarise(transaksi = length(id_transaksi)) %>%
+  ggplot(aes(x = bulan,
+             y = transaksi)) +
+  geom_col(fill = 'white',
+           color = 'steelblue',
+           size = 1.25) +
+  theme_economist() +
+  labs(title = 'Banyaknya Transaksi per Bulan',
+       subtitle = 'Januari 2020 - April 2020',
+       y = 'Banyaknya transaksi (dalam kali)',
+       caption = 'Visualized using R\nikanx101.github.io') 
+
+```
+
+Ternyata ada penurunan transaksi pada bulan `Februari 2020` (turun sebesar `r 3412-3025` transaksi). Ini adalah penyebab turunnya `total sales` pada bulan tersebut.
+
+Bagaimana dengan penurunan di bulan `Maret 2020` - `April 2020`? 
+
+> Walaupun ada penurunan `banyaknya transaksi`, tapi `rata-rata belanja per transaksi` di bulan `April 2020` justru meningkat tajam. Oleh karena itu `total sales` juga cenderung aman (tetap naik).
+
+Namun justru ini bisa menjadi pertanyaan tersendiri:
+
+### Apakah konsumen di bulan `Maret 2020` tidak berbelanja lagi di bulan `April 2020`? 
+
+Jika ini yang terjadi, maka mungkin perlu dicari tahu alasannya sehingga 212 Mart bisa membuat mereka kembali berbelanja di bulan berikutnya.
+
+Sayangnya, saya belum bisa membuktikan dugaan ini dengan data yang ada.
+
+__ATAU__
+
+### Apakah konsumen di bulan `Maret 2020` menaikkan _basket size_ (berbelanja lebih banyak dalam sekali waktu) di bulan `April 2020`
+
+Bisa jadi penurunan banyaknya transaksi dikarenakan oleh perubahan _habit_ dari pelanggan dalam berbelanja. 
+
+Pelanggan yang tadinya lebih sering ke toko untuk berbelanja dengan _basket size_ kecil, sekarang berubah menjadi lebih jarang ke toko namun sekalinya berbelanja mereka memperbesar _basket size_.
+
+Mari kita buktikan dengan menghitung rata-rata berapa banyak _item_ yang dibeli per pelanggan disetiap bulannya:
+
+
+```{r, echo=FALSE, fig.retina=10,fig.width=9,fig.height=4}
+data %>% 
+  filter(grepl('pcs',unit,ignore.case = T)) %>%
+  mutate(bulan = lubridate::month(tanggal,label=T)) %>%
+  group_by(bulan,id_transaksi) %>%
+  summarise(banyak_item = sum(qty)) %>%
+  ungroup() %>%
+  group_by(bulan) %>%
+  summarise(banyak_item = mean(banyak_item)) %>%
+  ggplot(aes(x = bulan,
+             y = banyak_item)) +
+  geom_col(fill = 'white',
+           color = 'steelblue',
+           size = 1.25) +
+  theme_economist() +
+  labs(title = 'Rata-Rata Banyaknya Barang yang Dibeli Pelanggan per Bulan',
+       subtitle = 'Januari 2020 - April 2020',
+       y = 'Dalam unit pcs',
+       caption = 'Visualized using R\nikanx101.github.io')
+
+```
+
+Benar dugaan saya. Ada kenaikan _basket size_ di bulan `April 2020`. Hal ini mengindikasikan ada perubahan _habit_ belanja pelanggan di __212 Mart__.
+
+Sedangkan pada `Januari 2020` - `Februari 2020` _basket size_ pelanggan tetap sama. Ada apa di `Februari 2020` ya?
+
+____
+
+# Analisa Lebih Lanjut Terkait Perubahan Habit Belanja
+
+## Analisa _Basket Size_ Overall
+
+Untuk meyakinkan kembali dugaan saya pada poin sebelumnya, mari kita lihat grafik berikut ini:
+
+```{r, echo=FALSE, fig.retina=10,fig.width=9,fig.height=4}
+data %>% 
+  filter(grepl('pcs',unit,ignore.case = T)) %>%
+  mutate(bulan = lubridate::month(tanggal,label=T)) %>%
+  group_by(tanggal,id_transaksi) %>%
+  summarise(banyak_item = sum(qty)) %>%
+  ungroup() %>%
+  group_by(tanggal) %>%
+  summarise(banyak_item = mean(banyak_item)) %>% 
+  ggplot(aes(x = tanggal,
+             y = banyak_item)) +
+  geom_line(color = 'steelblue') +
+  theme_economist() +
+  labs(title = 'Rata-Rata Banyak Barang yang Dibeli Pelanggan per Hari',
+       subtitle = 'Januari 2020 - April 2020',
+       caption = 'Visualized using R\nikanx101.github.io',
+       y = 'Dalam unit pcs',
+       x = 'Tanggal')
+
+```
+
+Terlihat bahwa ada peningkatan _basket size_ per transaksi pada bulan `May 2020`. 
+
+## Analisa Berdasarkan Member vs Non Member 
+
+Ternyata minimarket teman saya ini memiliki program _membership_. Oleh karena itu, kita akan lihat apakah pola kenaikan _basket size_ terjadi untuk member saja atau juga untuk non member.
+
+### _Basket Size_ Member vs Non Member
+
+Pertama-tama, kita akan menghitung berapa banyak barang yang dibeli oleh member dan non member. 
+
+```{r, echo=FALSE, fig.retina=10,fig.width=9,fig.height=4}
+data %>% 
+  filter(grepl('pcs',unit,ignore.case = T)) %>%
+  mutate(bulan = lubridate::month(tanggal,label=T),
+         id_pelanggan = ifelse(grepl('umum',id_pelanggan,ignore.case = T),
+                               'umum',
+                               'member')) %>%
+  group_by(bulan,id_transaksi,id_pelanggan) %>%
+  summarise(banyak_item = sum(qty)) %>%
+  ungroup() %>%
+  group_by(bulan,id_pelanggan) %>%
+  summarise(banyak_item = mean(banyak_item)) %>%
+  ggplot(aes(x = bulan,
+             y = banyak_item)) +
+  geom_col(aes(fill = id_pelanggan),
+           color = 'black',
+           size = 1.25,
+           position = 'dodge') +
+  theme_economist() +
+  labs(title = 'Rata-Rata Banyaknya Barang yang Dibeli Pelanggan per Bulan',
+       subtitle = 'Januari 2020 - April 2020',
+       fill = 'Jenis Pelanggan',
+       caption = 'Visualized using R\nikanx101.github.io',
+       y = 'Dalam unit pcs',
+       x = 'Bulan')
+
+```
+
+### _Market Size_ Member vs Non Member
+
+Sekarang kita akan bandingkan nominal uang yang dibelanjakan oleh member vs non member.
+
+```{r, echo=FALSE, fig.retina=10,fig.width=9,fig.height=4}
+data %>% 
+  filter(grepl('pcs',unit,ignore.case = T)) %>%
+  mutate(bulan = lubridate::month(tanggal,label=T),
+         id_pelanggan = ifelse(grepl('umum',id_pelanggan,ignore.case = T),
+                               'umum',
+                               'member')) %>%
+  group_by(bulan,id_transaksi,id_pelanggan) %>%
+  summarise(belanja = sum(total_harga)) %>%
+  ungroup() %>%
+  group_by(bulan,id_pelanggan) %>%
+  summarise(belanja = mean(belanja)/1000) %>%
+  ggplot(aes(x = bulan,
+             y = belanja)) +
+  geom_col(aes(fill = id_pelanggan),
+           color = 'black',
+           size = 1.25,
+           position = 'dodge') +
+  theme_economist() +
+  labs(title = 'Rata-Rata Rupiah yang Dibelanjakan Pelanggan per Bulan',
+       subtitle = 'Januari 2020 - April 2020',
+       fill = 'Jenis Pelanggan',
+       caption = 'Visualized using R\nikanx101.github.io',
+       y = 'Dalam ribu rupiah',
+       x = 'Bulan') 
+
+```
+
+# Kesimpulan
+
+> Adanya PSBB yang dilakukan sepertinya mengubah pola belanja pelanggan di minimarket teman saya.
+
+Walaupun hanya terjadi di minimarket milik teman saya ini, tapi temuan ini memberikan optimisme roda ekonomi masih bergerak. Semoga saja.
+
+Aamiin.
