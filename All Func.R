@@ -691,26 +691,6 @@ ubahin.rasio.jadi.persen.donk=function(rasio){
   return(rasio)
 }
 
-#Send email outlook via RDCOM
-library(RDCOMClient)
-Outlook <- COMCreate("Outlook.Application")
-kirim.email.nutrifood.donk = function(email.to,attacment,subject,body){
-Email = Outlook$CreateItem(0)
-# Set the recipient, subject, and body
-Email[["to"]] = email.to
-Email[["subject"]] = subject
-Email[["body"]] = body
-Email[["attachments"]]$Add(attacment)
-# Send the message
-Email$Send()
-}
-
-#hitung modus
-modus <- function(v) {
-   uniqv <- unique(v)
-   uniqv[which.max(tabulate(match(v, uniqv)))]
-}
-
 x='i'
 print(x)
 for(i in 2:12){
@@ -721,5 +701,5 @@ for(i in 2:12){
 }
 print('===============================================================================================================')
 print('https://passingthroughresearcher.wordpress.com/')
-print('Last update: 27 Sept 2019')
+print('Last update: 2020-05-26')
 #sir.ikanx
