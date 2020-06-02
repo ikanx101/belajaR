@@ -1,0 +1,17 @@
+---
+title: "Review: UBUNTU 20.04 LTS"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("~/Documents/belajaR/Bukan Infografis/Ubuntu")
+```
+
+```{r out.width = 50%,echo=FALSE}
+knitr::include_graphics("https://computerscience.id/wp-content/uploads/2015/08/ubuntu-logo.png")
+```
+
+Pada masa WFH ini, saya sangat bergantung pada kekuatan dan kehandalan laptop yang diberikan oleh kantor saya. Sebenarnya laptop tersebut sangat mumpuni. Bisa dibilang bukan laptop murah lah dari segi _hardware_. _Software_ pun dibekali dengan __Windows Genuine__ dan __Microsoft 365 Licensed__.
+
+Tapi diawali oleh Google Chrome yang crash dan corrupt-nya salah satu file di Microsoft Excel, performanya jadi sangat parah dan tidak bisa dihandalkan.
