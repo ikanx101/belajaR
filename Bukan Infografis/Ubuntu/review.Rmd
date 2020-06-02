@@ -1,5 +1,5 @@
 ---
-title: "Review: UBUNTU 20.04 LTS"
+title: "Review: UBUNTU 20.04 LTS after 2 weeks as daily driver"
 output: github_document
 ---
 
@@ -8,10 +8,178 @@ knitr::opts_chunk$set(echo = TRUE)
 setwd("~/Documents/belajaR/Bukan Infografis/Ubuntu")
 ```
 
-```{r out.width = 50%,echo=FALSE}
+```{r out.width="50%", echo=FALSE}
 knitr::include_graphics("https://computerscience.id/wp-content/uploads/2015/08/ubuntu-logo.png")
 ```
 
-Pada masa WFH ini, saya sangat bergantung pada kekuatan dan kehandalan laptop yang diberikan oleh kantor saya. Sebenarnya laptop tersebut sangat mumpuni. Bisa dibilang bukan laptop murah lah dari segi _hardware_. _Software_ pun dibekali dengan __Windows Genuine__ dan __Microsoft 365 Licensed__.
+Pada masa WFH ini, saya sangat bergantung pada kekuatan dan kehandalan laptop yang diberikan oleh kantor saya. Sebenarnya laptop tersebut sangat mumpuni. Bisa dibilang bukan laptop murah lah dari segi _hardware_. _Software_ pun dibekali dengan __Windows Genuine__ dan __Microsoft 365 Licensed__. Namun beberapa bulan ini performanya jadi merosot dan sangat lambat.
 
-Tapi diawali oleh Google Chrome yang crash dan corrupt-nya salah satu file di Microsoft Excel, performanya jadi sangat parah dan tidak bisa dihandalkan.
+Praktis sejak pertengahan Maret, saya sudah tidak bisa lagi membuka _files_ __Microsoft Excel__. Padahal _file_ format `.xlsx` menjadi santapan utama dalam pekerjaan sehari-hari.
+
+Awalnya saya berusaha berdamai dengan cara membuka dan _view_ menggunakan __RStudio__. Untuk beberapa kasus, saya harus membuka dan melakukan operasi di dalam _file_ tersebut. Maka dari itu, saya gunakan __Google Sheet__ (setelah saya _upload_ terlebih dahulu ke __Google Drive__)
+
+Lambat laun, saya menjadi jengah dan tidak efisien dalam bekerja. Saya coba hubungi tim _helpdesk_ dari IT kantor untuk melakukan _remote checking and repairing_.
+
+Setelah dicek dan dibenarkan, didapati bahwa __Google Chrome__ saya _crash_ karena proses _upgrade_ yang tidak selesai. Setelah itu, performa laptop saya sudah mulai membaik tapi belum cukup untuk bisa dipakai lancar dalam bekerja. Apalagi didapati _system file_ __Microsoft Excel__ saya ternyata _corrupt_.
+
+Karena tidak mungkin bagi saya untuk ke kantor, maka saya harus mencari solusi lain (mungkin sementara, mungkin seterusnya) agar laptop saya bisa kembali difungsikan secara maksimal.
+
+Sebenarnya di rumah ada laptop milik nyonya, tapi jika digunakan untuk bekerja rasanya masih agak lama.
+
+Lalu saya berpikir untuk mengalihkan beberapa _space_ kosong yang tersedia di _drive_ laptop untuk di- _install_ __OS__ lain yang lebih ringan tapi _powerful enough_ untuk saya bekerja. Definisi powerful adalah setidaknya saya bisa menggunakan __R__ dan __RStudio__ dalam __OS__ tersebut! Wajib!
+
+Setelah riset ke sana dan ke sini, akhirnya saya memutuskan untuk mencoba __Linux Ubuntu__.
+
+Sebenarnya ini bukanlah yang pertama saya berkenalan dengan __Linux OS__. Dulu sewaktu kuliah, saya sudah terbiasa menggunakan __Linux__ di komputer kampus (dulu __ITB__ gencar memberikan _training_ seputar __Linux__ dan _open source_ pada mahasiswa barunya). Selain itu, saya adalah pengguna __Raspberry Pi 3B+__ yang menggunakan __Raspbian OS__ berbasis __Linux Debian Buster__.
+
+> Berbeda dengan Raspberry yang memiliki insfrastruktur ARMHF, laptop saya ini jika dibekali Ubuntu pasti bisa diinstall R versi terbaru dan RStudio versi terbaru. Pikir saya.
+
+# Proses Instalasi
+
+Proses instalasi Ubuntu sebenarnya sangat mudah. Pertama-tama, kita bisa _download image_ Ubuntu terbaru di [situsnya](https://ubuntu.com/download/desktop). Saya menggunakan versi Ubuntu terbaru, yakni 20.04 LTS (_long time support_).
+
+Dibutuhkan satu _usb drive_ berkapasitas minimal 8Gb untuk dijadikan semacam __installation and recovery USB__. Caranya bisa lihat di panduan pada situs tersebut yah. Sangat mudah kok.
+
+Proses download dan pembuatan recovery USB memakan waktu 30 menit (tergantung koneksi juga _sih_).
+
+Setelah itu, saya _reboot_ laptop menggunakan USB tadi.
+
+Saya telah mengalokasikan 55Gb _space_ kosong di laptop saya. Rencananya, akan saya bagi menjadi tiga bagian, yakni:
+
+1. 5Gb untuk _swap memory_; Sebenarnya saya sudah memiliki RAM 8Gb dalam laptop saya, tapi saya tetap menambahkan _swap memory_ sebagai _contingency plan_ jika suatu saat saya mengoprek data dalam jumlah sangat amat besar. 
+2. 20Gb untuk `\home` sebagai _working directory_ saya kelak.
+3. 30Gb untuk _root directory_.
+
+Proses instalasi Ubuntu relatif mudah dan cepat yah. Tidak sampai 30 menit, proses instalasinya sudah selesai.
+
+# Instalasi Pernak - Pernik
+
+_Nah_, sekarang agar Ubuntu bisa dijadikan _daily driver_ saya yang mumpuni, maka saya harus meng-_install_ beberapa aplikasi pendukung pekerjaan saya.
+
+## Instalasi `Git`
+
+Hal pertama yang saya lakukan adalah meng-_install_ `Git` agar saya bisa dengan mudah meng-_update_ _repository_ __github__ saya dengan mudah.
+
+Cara instalasi dan _setting_ awalnya juga mudah dan cepat, yakni:
+
+```{r}
+# sudo apt update
+# sudo apt install git
+
+# git config --global user.name "isi user name"
+# git config --global user.email "isi email"
+```
+
+## Instalasi `Ubuntu Cleaner`
+
+Ternyata Linux itu selalu menyimpan _files cache_, _logs_, _old files_, dan _journals_ dalam _root directory_. Oleh karena itu, ukuran _root directory_ pada awalnya saya buat lebih besar. 
+
+Untuk membersihkannya, saya akan gunakan aplikasi bernama `Ubuntu Cleaner`.
+
+```{r}
+# sudo add-apt-repository ppa:gerardpuig/ppa
+# sudo apt update
+# sudo apt install ubuntu-cleaner
+```
+
+Selain itu, saya juga bisa _bebersih_ dengan menggunakan perintah berikut ini:
+
+```{r}
+# sudo apt-get autoremove
+# sudo apt-get clean
+# sudo apt-get autoclean
+# sudo apt-get autoremove --purge
+
+# journalctl --disk-usage
+# sudo journalctl --rotate --vacuum-size=1M
+
+```
+
+## Instalasi `Chromium` _Web Browser_
+
+Ubuntu secara default memiliki _browser Firefox_ dan _Mail Client Thunderbird_. Berhubung saya tidak membutuhkannya, maka saya _uninstall_ terlebih dahulu:
+
+```{r}
+# sudo apt-get autoremove --purge firefox
+# sudo apt-get autoremove --purge thunderbird
+```
+
+Sekarang saya akan meng-_install_ __Chromium__ sebagai _web browser_ saya. Kenapa tidak menggunakan __Chrome__ saja? __Chromium__ menurut saya lebih ringan dengan fitur yang sama dengan __Chrome__ (berdasarkan pengalam menggunakan Raspbian OS).
+
+```{r}
+# sudo apt-get install chromium-browser
+```
+
+## Instalasi `Openshot Editor`
+
+Aplikasi ini biasa saya gunakan untuk mengedit video. Versi Linuxnya sangat amat ringan. Entah kenapa berbeda jauh performanya dengan versi di Windows yang selama ini saya gunakan.
+
+```{r}
+# sudo add-apt-repository ppa:openshot.developers/ppa
+# sudo apt-get update
+# sudo apt-get install openshot-qt
+```
+
+## Instalasi `OBS Studio`
+
+Aplikasi ini berguna banget jika ingin membuat video _screen capture_ atau membuat _live broadcast_. Pokoknya ini berguna banget lah.
+
+```{r}
+# sudo apt install ffmpeg
+# sudo add-apt-repository ppa:obsproject/obs-studio
+# sudo apt update
+# sudo apt install obs-studio
+```
+
+## Instalasi `R` dan `RStudio`
+
+Ini adalah menu utama dari Ubuntu saya. __R__ dan __RStudio__ yang akan di-_install_ haruslah versi yang terbaru dan stabil.
+
+Pertama-tama, kita _install_ terlebih dahulu `R 4.0` dari _cran repository_.
+
+```{r}
+# sudo apt install gnupg
+# sudo apt install ca-certificates
+# sudo apt install nano
+# sudo apt install gdebi-core
+
+# sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+
+# sudo add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/'
+
+# sudo apt update
+# sudo apt upgrade
+
+# sudo apt install r-base
+
+```
+
+Maka dalam waktu sekejap, `R 4.0` tersedia di Ubuntu saya.
+
+Untuk meng-_install_ __RStudio__, kita langsung _download_ saja _installer_-nya di situsnya. Kita bisa _download_ versi untuk [Ubuntu 18](https://download1.rstudio.org/desktop/bionic/amd64/rstudio-1.3.959-amd64.deb) _yah_.
+
+Instalasinya menggunakan `gdebi` yang telah kita _install_ tadi dengan cara masuk ke dalam folder `Downloads` dan mengeksekusinya.
+
+```{r}
+# cd Downloads
+# sudo gdebi <nama file .deb>
+```
+
+Tahap akhir, karena saya biasa menggunakan `library(rvest)`, maka saya perlu meng-_install_ _dependencies_ berikut ini:
+
+```{r}
+# sudo apt install libcurl4-openssl-dev
+# sudo apt install libssl-dev
+# sudo apt install libxml2-dev
+```
+
+# Review Setelah 2 Minggu Pemakaian
+
+## PLUS
+
+1. Proses _booting_ sangat cepat. Dari mulai menyalakan komputer sampai masuk ke RStudio saja kurang dari 30 detik.
+2. Efisien dalam produktivitas. __RStudio__ bekerja dengan baik dan cepat. Aplikasi seperti __Rambox__ sangat berguna sekali.
+3. _Swap memory_ hampir tidak pernah terpakai walau sudah digeber maksimal. Konsumsi RAM tertinggi hanya mencapai tak lebih dari 80% dari total RAM saja.
+
+## MINUS
+
