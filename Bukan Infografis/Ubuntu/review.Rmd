@@ -131,6 +131,13 @@ Aplikasi ini berguna banget jika ingin membuat video _screen capture_ atau membu
 # sudo apt install obs-studio
 ```
 
+## Instalasi `Rambox`
+
+`Rambox` adalah salah satu aplikasi komunikasi yang brilian menurut saya. Dibangun secara _web-based_, kita bisa memasukkan hampir semua layanan konektivitas kita seperti _Whatsapp_ (_business_ atau personal), _Telegram_, _Microsoft Teams_, _Outlook 365_, _Facebook Messenger_, _Instagram Direct_, _Google Hangout_, dll.
+
+Ada dua aplikasi, `Rambox` biasa dan `Rambox Pro`. Saya sudah mencoba keduanya, perbedaan antara yang __Pro__ dan tidak hanya di tampilan __GUI__ dan banyaknya layanan yang ada.
+
+
 ## Instalasi `R` dan `RStudio`
 
 Ini adalah menu utama dari Ubuntu saya. __R__ dan __RStudio__ yang akan di-_install_ haruslah versi yang terbaru dan stabil.
@@ -183,3 +190,8 @@ Tahap akhir, karena saya biasa menggunakan `library(rvest)`, maka saya perlu men
 
 ## MINUS
 
+Ternyata Linux diam-diam masih menyimpan _cache_, _journals_, dan _log files_. Oleh karena itu secara berkala saya harus membersihkan _drive_.
+
+# Kesimpulan
+
+Ternyata sangat amat berguna bagi saya sebagai seorang _market researcher_ dan _computational scientist_ untuk menggunakan UBUNTU.

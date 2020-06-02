@@ -107,63 +107,156 @@ Cara instalasi dan *setting* awalnya juga mudah dan cepat, yakni:
 # git config --global user.email "isi email"
 ```
 
-Catatan swap memory, ternyata hanya menghabiskan 70% dari RAM. swap
-tidak digunakan sama sekali
+## Instalasi `Ubuntu Cleaner`
 
-Lalu buka RStudio, pilih new project version control. Masukin url dari
-clone repository belajaR di github ya
+Ternyata Linux itu selalu menyimpan *files cache*, *logs*, *old files*,
+dan *journals* dalam *root directory*. Oleh karena itu, ukuran *root
+directory* pada awalnya saya buat lebih besar.
 
-sudo add-apt-repository ppa:gerardpuig/ppa sudo apt update sudo apt
-install ubuntu-cleaner
+Untuk membersihkannya, saya akan gunakan aplikasi bernama `Ubuntu
+Cleaner`.
 
-sudo apt-get install chromium-browser
+``` r
+# sudo add-apt-repository ppa:gerardpuig/ppa
+# sudo apt update
+# sudo apt install ubuntu-cleaner
+```
 
-# Untuk bebersih
+Selain itu, saya juga bisa *bebersih* dengan menggunakan perintah
+berikut ini:
 
-sudo apt-get autoremove sudo apt-get clean sudo apt-get autoclean sudo
-apt-get autoremove –purge
+``` r
+# sudo apt-get autoremove
+# sudo apt-get clean
+# sudo apt-get autoclean
+# sudo apt-get autoremove --purge
 
-journalctl –disk-usage sudo journalctl –rotate –vacuum-size=1M
+# journalctl --disk-usage
+# sudo journalctl --rotate --vacuum-size=1M
+```
 
-# cek aplikasi apa aja yang terinstall
+## Instalasi `Chromium` *Web Browser*
 
-ls /usr/share/applications | awk -F ‘.desktop’ ’ { print $1}’ - \>
-\~/Desktop/applications.txt
+Ubuntu secara default memiliki *browser Firefox* dan *Mail Client
+Thunderbird*. Berhubung saya tidak membutuhkannya, maka saya *uninstall*
+terlebih dahulu:
 
-# cara uninstall
+``` r
+# sudo apt-get autoremove --purge firefox
+# sudo apt-get autoremove --purge thunderbird
+```
 
-sudo apt-get autoremove –purge namanya
+Sekarang saya akan meng-*install* **Chromium** sebagai *web browser*
+saya. Kenapa tidak menggunakan **Chrome** saja? **Chromium** menurut
+saya lebih ringan dengan fitur yang sama dengan **Chrome** (berdasarkan
+pengalam menggunakan Raspbian OS).
 
-# openshot editor
+``` r
+# sudo apt-get install chromium-browser
+```
 
-sudo add-apt-repository ppa:openshot.developers/ppa sudo apt-get update
-sudo apt-get install openshot-qt
+## Instalasi `Openshot Editor`
 
-sudo apt install gnupg sudo apt install ca-certificates sudo apt install
-nano sudo apt install gdebi-core
+Aplikasi ini biasa saya gunakan untuk mengedit video. Versi Linuxnya
+sangat amat ringan. Entah kenapa berbeda jauh performanya dengan versi
+di Windows yang selama ini saya gunakan.
 
-sudo apt-key adv –keyserver keyserver.ubuntu.com –recv-keys
-E298A3A825C0D65DFD57CBB651716619E084DAB9
+``` r
+# sudo add-apt-repository ppa:openshot.developers/ppa
+# sudo apt-get update
+# sudo apt-get install openshot-qt
+```
 
-sudo add-apt-repository ‘deb
-<https://cloud.r-project.org/bin/linux/ubuntu> focal-cran40/’
+## Instalasi `OBS Studio`
 
-sudo apt update sudo apt upgrade
+Aplikasi ini berguna banget jika ingin membuat video *screen capture*
+atau membuat *live broadcast*. Pokoknya ini berguna banget lah.
 
-sudo apt install r-base
+``` r
+# sudo apt install ffmpeg
+# sudo add-apt-repository ppa:obsproject/obs-studio
+# sudo apt update
+# sudo apt install obs-studio
+```
 
-Lalu silakan ke webnya rstudio, download .deb installer untuk R Studio
+## Instalasi `Rambox`
 
-cd Downloads
+`Rambox` adalah salah satu aplikasi komunikasi yang brilian menurut
+saya. Dibangun secara *web-based*, kita bisa memasukkan hampir semua
+layanan konektivitas kita seperti *Whatsapp* (*business* atau personal),
+*Telegram*, *Microsoft Teams*, *Outlook 365*, *Facebook Messenger*,
+*Instagram Direct*, *Google Hangout*, dll.
 
-sudo gdebi \<nama file .deb\>
+Ada dua aplikasi, `Rambox` biasa dan `Rambox Pro`. Saya sudah mencoba
+keduanya, perbedaan antara yang **Pro** dan tidak hanya di tampilan
+**GUI** dan banyaknya layanan yang ada.
 
-# obs studio
+## Instalasi `R` dan `RStudio`
 
-sudo apt install ffmpeg sudo add-apt-repository
-ppa:obsproject/obs-studio sudo apt update sudo apt install obs-studio
+Ini adalah menu utama dari Ubuntu saya. **R** dan **RStudio** yang akan
+di-*install* haruslah versi yang terbaru dan stabil.
 
-# untuk rvest
+Pertama-tama, kita *install* terlebih dahulu `R 4.0` dari *cran
+repository*.
 
-sudo apt install libcurl4-openssl-dev sudo apt install libssl-dev sudo
-apt install libxml2-dev
+``` r
+# sudo apt install gnupg
+# sudo apt install ca-certificates
+# sudo apt install nano
+# sudo apt install gdebi-core
+
+# sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+
+# sudo add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/'
+
+# sudo apt update
+# sudo apt upgrade
+
+# sudo apt install r-base
+```
+
+Maka dalam waktu sekejap, `R 4.0` tersedia di Ubuntu saya.
+
+Untuk meng-*install* **RStudio**, kita langsung *download* saja
+*installer*-nya di situsnya. Kita bisa *download* versi untuk
+[Ubuntu 18](https://download1.rstudio.org/desktop/bionic/amd64/rstudio-1.3.959-amd64.deb)
+*yah*.
+
+Instalasinya menggunakan `gdebi` yang telah kita *install* tadi dengan
+cara masuk ke dalam folder `Downloads` dan mengeksekusinya.
+
+``` r
+# cd Downloads
+# sudo gdebi <nama file .deb>
+```
+
+Tahap akhir, karena saya biasa menggunakan `library(rvest)`, maka saya
+perlu meng-*install* *dependencies* berikut ini:
+
+``` r
+# sudo apt install libcurl4-openssl-dev
+# sudo apt install libssl-dev
+# sudo apt install libxml2-dev
+```
+
+# Review Setelah 2 Minggu Pemakaian
+
+## PLUS
+
+1.  Proses *booting* sangat cepat. Dari mulai menyalakan komputer sampai
+    masuk ke RStudio saja kurang dari 30 detik.
+2.  Efisien dalam produktivitas. **RStudio** bekerja dengan baik dan
+    cepat. Aplikasi seperti **Rambox** sangat berguna sekali.
+3.  *Swap memory* hampir tidak pernah terpakai walau sudah digeber
+    maksimal. Konsumsi RAM tertinggi hanya mencapai tak lebih dari 80%
+    dari total RAM saja.
+
+## MINUS
+
+Ternyata Linux diam-diam masih menyimpan *cache*, *journals*, dan *log
+files*. Oleh karena itu secara berkala saya harus membersihkan *drive*.
+
+# Kesimpulan
+
+Ternyata sangat amat berguna bagi saya sebagai seorang *market
+researcher* dan *computational scientist* untuk menggunakan UBUNTU.
