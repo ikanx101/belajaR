@@ -1,1 +1,0 @@
-# nitip doang bentar yah

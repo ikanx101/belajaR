@@ -599,7 +599,7 @@ bikinin.bar.chart.untuk.likert.6.skala.dari.data.saya.donk=function(data,variabe
           axis.text.x = element_text(angle=90,size=12)) +
     geom_label(size=4.5) +
     labs(caption = paste('n = ',ifelse(n>=30,n,paste(n,', indikasi',sep='')),sep='')) +
-    labs(title=pertanyaan,subtitle = sub.judul) + 
+    labs(title=pertanyaan,subtitle = mean.score) + 
     facet_wrap(~kat,scales='free_x') + 
     theme(strip.background = element_rect(colour="black", 
                                           fill="white",
