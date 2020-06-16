@@ -96,12 +96,12 @@ covid_detail = tabItem(tabName = 'covid_detail',
 tbc = tabItem(tabName = 'tbc',
                     fluidRow(
                         column(width = 12,
-                               h1('Informasi yang Bisa Dihimpun dari Open Data DKI Jakarta'),
-                               h4('Berikut adalah beberapa informasi yang bisa dihimpun dari situs open data provinsi DKI Jakarta.')
+                               h1('Informasi Terkait Tuberculosis'),
+                               h4('Various sources')
                                )
                     ),
                     fluidRow(
-                        column(width = 12,
+                        column(width = 4,
                                plotOutput('plot4',height = 350))
                     )
                     )
@@ -200,7 +200,17 @@ server <- function(input, output) {
     
     # plot 4
     output$plot4 <- renderPlot({
-       
+       spread %>% 
+            ggplot(aes(x = dise)) +
+            geom_errorbar(aes(ymin = r0_min,
+                              ymax = r0_max),
+                          size=1,
+                          width=.1) +
+            labs(title = 'Perbandingan R0\nCovid 19 dan TBC') +
+            theme_pubclean() +
+            theme(axis.title = element_blank(),
+                  axis.text = element_text(size=15)) +
+            coord_flip()
     })
 }
 
