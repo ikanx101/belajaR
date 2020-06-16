@@ -15,14 +15,11 @@ library(shinydashboard)
 library(ggrepel)
 library(plotly)
 library(deSolve)
-
+# library(shiny)
 
 # ---------------------------------
 # ambil fungsi
 rm(list=ls())
-
-# sir model
-source('sir model.R')
 
 # untuk spread R0
 dise = c('Covid 19','TBC')
@@ -45,15 +42,15 @@ sidebar = dashboardSidebar(width = 350,
                                         text = 'Filter Pane'),
                                menuItem(tabName = 'covid_detail',
                                         text = 'Covid Pandemi in Indonesia'),
-                               menuItem(tabName = 'spreadtime',
-                                        text = 'Spreading Time TBC vs Covid 19')
+                               menuItem(tabName = 'tbc',
+                                        text = 'Data TBC di Indonesia')
                            )
                            )
 
 filterpane = tabItem(tabName = 'filterpane',
                      fluidRow(
                          column(width = 12,
-                                h1('Filter Pane'),
+                                h1('Filter Pane pada tab Pandemi Covid'),
                                 h3('Silakan pilih filter berikut ini sesuai dengan kebutuhan'))
                      ),
                      br(),
@@ -96,9 +93,20 @@ covid_detail = tabItem(tabName = 'covid_detail',
                        )
                        )
 
-
+tbc = tabItem(tabName = 'tbc',
+                    fluidRow(
+                        column(width = 12,
+                               h1('Informasi yang Bisa Dihimpun dari Open Data DKI Jakarta'),
+                               h4('Berikut adalah beberapa informasi yang bisa dihimpun dari situs open data provinsi DKI Jakarta.')
+                               )
+                    ),
+                    fluidRow(
+                        column(width = 12,
+                               plotOutput('plot4',height = 350))
+                    )
+                    )
     
-body = dashboardBody(tabItems(filterpane,covid_detail))
+body = dashboardBody(tabItems(filterpane,covid_detail,tbc))
 
 ui = dashboardPage(skin = "red",header,sidebar,body)
 
@@ -190,6 +198,10 @@ server <- function(input, output) {
     })
     
     
+    # plot 4
+    output$plot4 <- renderPlot({
+       
+    })
 }
 
 # ---------------------------------
