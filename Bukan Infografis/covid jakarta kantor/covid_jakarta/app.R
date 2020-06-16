@@ -14,10 +14,22 @@ library(dplyr)
 library(shinydashboard)
 library(ggrepel)
 library(plotly)
+library(deSolve)
+
 
 # ---------------------------------
 # ambil fungsi
 rm(list=ls())
+
+# sir model
+source('sir model.R')
+
+# untuk spread R0
+dise = c('Covid 19','TBC')
+r0_min = c(1.4,1.19)
+r0_max = c(4,3.33)
+
+spread = data.frame(dise,r0_min,r0_max)
 
 # ambil data
 load('all files.rda')
@@ -32,7 +44,9 @@ sidebar = dashboardSidebar(width = 350,
                                menuItem(tabName = 'filterpane',
                                         text = 'Filter Pane'),
                                menuItem(tabName = 'covid_detail',
-                                        text = 'Covid Pandemi in Indonesia')
+                                        text = 'Covid Pandemi in Indonesia'),
+                               menuItem(tabName = 'spreadtime',
+                                        text = 'Spreading Time TBC vs Covid 19')
                            )
                            )
 
@@ -81,6 +95,8 @@ covid_detail = tabItem(tabName = 'covid_detail',
                                   plotlyOutput('plot3',height = 600))
                        )
                        )
+
+
     
 body = dashboardBody(tabItems(filterpane,covid_detail))
 
@@ -172,6 +188,8 @@ server <- function(input, output) {
         
         ggplotly(chart, tooltip = "text")
     })
+    
+    
 }
 
 # ---------------------------------
