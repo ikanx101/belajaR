@@ -44,4 +44,5 @@ data =
 data_covid_provinsi = data
 data_covid_provinsi$last_update = NULL
 data_covid_provinsi$major_city = NULL
+data_covid_provinsi$province[13] = "DKI Jakarta"
 save(data_covid_provinsi,file='all files.rda')

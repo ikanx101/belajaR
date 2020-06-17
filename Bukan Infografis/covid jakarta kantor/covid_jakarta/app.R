@@ -54,13 +54,13 @@ filterpane = tabItem(tabName = 'filterpane',
                      fluidRow(
                          column(width = 12,
                                 h1('READ ME'),
-                                h3('Silakan pilih filter berikut ini sesuai dengan kebutuhan'),
-                                h4(paste0('Update data per: ',today))
+                                h2(paste0('Update data per: ',today))
                                 )
                      ),
                      br(),
                      fluidRow(
-                         column(width = 4,
+                         column(width = 12,
+                                h3('Silakan pilih filter berikut ini sesuai dengan kebutuhan'),
                                 checkboxGroupInput('prop','Provinsi di Indonesia',
                                                    sort(provinsi),selected = provinsi))
                      )
