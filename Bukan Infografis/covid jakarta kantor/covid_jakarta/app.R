@@ -15,13 +15,13 @@ library(shinydashboard)
 library(ggrepel)
 library(plotly)
 library(deSolve)
-# library(shiny)
+#library(shiny)
 
 # ---------------------------------
 # ambil fungsi
-source('data wikipedia.R')
-source('jabar clean.R')
-source('jakarta clean.R')
+# source('data wikipedia.R')
+# source('jabar clean.R')
+# source('jakarta clean.R')
 rm(list=ls())
 today = Sys.Date()
 today = as.character(today)
@@ -122,7 +122,18 @@ jabar = tabItem(tabName = 'jabar',
                                plotOutput('plot4',height = 400),
                                br(),
                                plotOutput('plot5',height = 300))
-                    )
+                    ),
+                    br(),
+                fluidRow(
+                    column(width = 12,
+                           h1('Grafik Total Provinsi Jawa Barat'))
+                ),
+                fluidRow(
+                    column(width = 6,
+                           plotOutput('plot_tambah1',height = 400)),
+                    column(width = 6,
+                           plotOutput('plot_tambah2',height = 400))
+                )
                     )
 
 jakarta = tabItem(tabName = 'jkt48',
@@ -333,11 +344,142 @@ server <- function(input, output) {
                  color = 'Kota / Kabupaten')
     })
     
-    # plot 5
-    output$plot5 <- renderPlot({
-        data_jakarta %>% 
+    # plot 6
+    output$plot6 <- renderPlot({
+        data_new =
+            data_jakarta %>% 
             mutate(tanggal = as.Date(tanggal)) %>% 
-            group_by(tanggal)
+            group_by(tanggal) %>% 
+            summarise(odp = sum(odp),
+                      pdp = sum(pdp),
+                      positif = sum(positif),
+                      meninggal = sum(meninggal),
+                      sembuh = sum(sembuh))
+        
+        chart_1 = 
+        data_new %>% 
+            ggplot(aes(x = tanggal,
+                       y = odp)) +
+            geom_line(color = 'steelblue') +
+            theme_pubclean() +
+            labs(title = 'Tren Total ODP di DKI Jakarta') +
+            theme(axis.title = element_blank()) +
+            geom_smooth(method = 'loess',color = 'gray',fill = 'yellow')
+        
+        chart_2 = 
+            data_new %>% 
+            ggplot(aes(x = tanggal,
+                       y = pdp)) +
+            geom_line(color = 'darkred') +
+            theme_pubclean() +
+            labs(title = 'Tren Total PDP di DKI Jakarta') +
+            theme(axis.title = element_blank()) +
+            geom_smooth(method = 'loess',color = 'gray',fill = 'yellow')
+        
+        ggarrange(chart_1,chart_2,nrow=2)    
+    })
+    
+    # plot 7
+    output$plot7 <- renderPlot({
+        data_new =
+            data_jakarta %>% 
+            mutate(tanggal = as.Date(tanggal)) %>% 
+            group_by(tanggal) %>% 
+            summarise(odp = sum(odp),
+                      pdp = sum(pdp),
+                      positif = sum(positif),
+                      meninggal = sum(meninggal),
+                      sembuh = sum(sembuh))
+        
+        chart_1 = 
+            data_new %>% 
+            ggplot(aes(x = tanggal,
+                       y = positif)) +
+            geom_line(color = 'green') +
+            theme_pubclean() +
+            labs(title = 'Tren Total Positif di DKI Jakarta') +
+            theme(axis.title = element_blank()) +
+            geom_smooth(method = 'loess',color = 'gray',fill = 'yellow')
+        
+        chart_2 = 
+            data_new %>% 
+            ggplot(aes(x = tanggal,
+                       y = meninggal)) +
+            geom_line(color = 'red') +
+            theme_pubclean() +
+            labs(title = 'Tren Total Korban Meninggal di DKI Jakarta') +
+            theme(axis.title = element_blank()) +
+            geom_smooth(method = 'loess',color = 'gray',fill = 'yellow')
+        
+        ggarrange(chart_1,chart_2,nrow=2)    
+    })
+    
+    # plot tambah1
+    output$plot_tambah1 <- renderPlot({
+        data_new = 
+            data_jabar %>% 
+            group_by(tanggal) %>% 
+            summarise(meninggal = sum(meninggal),
+                      sembuh = sum(sembuh),
+                      positif = sum(positif),
+                      odp = sum(odp),
+                      pdp = sum(pdp)) 
+        
+        chart_1 = 
+            data_new %>% 
+            ggplot(aes(x = tanggal,
+                       y = odp)) +
+            geom_line(color = 'steelblue') +
+            theme_pubclean() +
+            labs(title = 'Tren Total ODP di Jawa Barat') +
+            theme(axis.title = element_blank()) +
+            geom_smooth(method = 'loess',color = 'gray',fill = 'yellow')
+        
+        chart_2 = 
+            data_new %>% 
+            ggplot(aes(x = tanggal,
+                       y = pdp)) +
+            geom_line(color = 'darkred') +
+            theme_pubclean() +
+            labs(title = 'Tren Total PDP di Jawa Barat') +
+            theme(axis.title = element_blank()) +
+            geom_smooth(method = 'loess',color = 'gray',fill = 'yellow')
+        
+        ggarrange(chart_1,chart_2,nrow=2)   
+    })
+    
+    # plot tambah2
+    output$plot_tambah2 <- renderPlot({
+        data_new = 
+            data_jabar %>% 
+            group_by(tanggal) %>% 
+            summarise(meninggal = sum(meninggal),
+                      sembuh = sum(sembuh),
+                      positif = sum(positif),
+                      odp = sum(odp),
+                      pdp = sum(pdp)) 
+        
+        chart_1 = 
+            data_new %>% 
+            ggplot(aes(x = tanggal,
+                       y = meninggal)) +
+            geom_line(color = 'darkred') +
+            theme_pubclean() +
+            labs(title = 'Tren Total Korban Meninggal di Jawa Barat') +
+            theme(axis.title = element_blank()) +
+            geom_smooth(method = 'loess',color = 'gray',fill = 'yellow')
+        
+        chart_2 = 
+            data_new %>% 
+            ggplot(aes(x = tanggal,
+                       y = positif)) +
+            geom_line(color = 'black') +
+            theme_pubclean() +
+            labs(title = 'Tren Total Positif Covid 19 di Jawa Barat') +
+            theme(axis.title = element_blank()) +
+            geom_smooth(method = 'loess',color = 'gray',fill = 'yellow')
+        
+        ggarrange(chart_1,chart_2,nrow=2)   
     })
 }
 
