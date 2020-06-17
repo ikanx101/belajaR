@@ -19,9 +19,10 @@ library(deSolve)
 
 # ---------------------------------
 # ambil fungsi
-rm(list=ls())
 source('data wikipedia.R')
 source('jabar clean.R')
+source('jakarta clean.R')
+rm(list=ls())
 today = Sys.Date()
 today = as.character(today)
 
@@ -29,6 +30,7 @@ today = as.character(today)
 load('all files.rda')
 provinsi = unique(data_covid_provinsi$province)
 kota_jabar = unique(data_jabar$nama_kab)
+kecamatan_jkt = unique(data_jakarta$kecamatan)
 
 # ---------------------------------
 # ui
@@ -42,7 +44,9 @@ sidebar = dashboardSidebar(width = 350,
                                menuItem(tabName = 'covid_detail',
                                         text = 'Covid Pandemi in Indonesia - Provinsi'),
                                menuItem(tabName = 'jabar',
-                                        text = 'Data Covid 19 Jawa Barat')
+                                        text = 'Data Covid 19 Jawa Barat'),
+                               menuItem(tabName = 'jkt48',
+                                        text = 'Data Covid 19 DKI Jakarta')
                            )
                            )
 
@@ -99,7 +103,8 @@ jabar = tabItem(tabName = 'jabar',
                         column(width = 12,
                                h1('Informasi Covid di Jawa Barat'),
                                h4('Data diambil dari website: https://pikobar.jabarprov.go.id/table-case'),
-                               h5('Silakan pilih nama kabupaten / kota yang diinginkan untuk mengubah grafik yang ada.')
+                               h4('Silakan pilih nama kabupaten / kota yang diinginkan untuk mengubah grafik yang ada.'),
+                               h5(paste0('Update data per: ',today))
                                )
                     ),
                     fluidRow(
@@ -117,8 +122,24 @@ jabar = tabItem(tabName = 'jabar',
                                plotOutput('plot5',height = 300))
                     )
                     )
-    
-body = dashboardBody(tabItems(filterpane,covid_detail,jabar))
+
+jakarta = tabItem(tabName = 'jkt48',
+                  fluidRow(
+                      column(width = 12,
+                             h1('Informasi Covid di DKI Jakarta'),
+                             h4('Data diambil dari website: https://data.jakarta.go.id/dataset/data-odp-pdp-dan-positif-covid-19-dki-jakarta-per-kecamatan'),
+                             h5(paste0('Update data per: ',today)))
+                  ),
+                  fluidRow(
+                      column(width = 6,
+                             plotOutput('plot6',height = 400)),
+                      column(width = 6,
+                             plotOutput('plot7',height = 400))
+                  )
+                  )
+
+
+body = dashboardBody(tabItems(filterpane,covid_detail,jabar,jakarta))
 
 ui = dashboardPage(skin = "red",header,sidebar,body)
 
@@ -308,6 +329,11 @@ server <- function(input, output) {
             labs(title = 'Tren Total Korban Jiwa Akibat Covid 19',
                  subtitle = 'Selected kota kabupaten dengan total korban terbanyak di Jawa Barat',
                  color = 'Kota / Kabupaten')
+    })
+    
+    # plot 5
+    output$plot5 <- renderPlot({
+        
     })
 }
 
