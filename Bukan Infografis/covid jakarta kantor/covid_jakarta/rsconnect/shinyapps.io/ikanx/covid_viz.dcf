@@ -1,0 +1,13 @@
+name: covid_viz
+title: covid_viz
+username:
+account: ikanx
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2465455
+bundleId: 3280182
+url: https://ikanx.shinyapps.io/covid_viz/
+when: 1592361080.04493
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: .~lock.Data_covid_TBC_Jabodetabek_plus.xlsx#|API_SH.TBS.CURE.ZS_DS2_en_excel_v2_1124043.xls|API_SH.TBS.DTEC.ZS_DS2_en_excel_v2_1125691.xls|API_SH.TBS.INCD_DS2_en_excel_v2_1123224.xls|Data COVID-19 Jawa Barat.csv|data wikipedia.R|Data_covid_TBC_Jabodetabek_plus.xlsx|graph.R|jabar clean.R

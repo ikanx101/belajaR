@@ -20,24 +20,20 @@ library(deSolve)
 # ---------------------------------
 # ambil fungsi
 rm(list=ls())
-today = Sys.time()
+source('data wikipedia.R')
+source('jabar clean.R')
+today = Sys.Date()
 today = as.character(today)
-
-# untuk spread R0
-dise = c('Covid 19','TBC')
-r0_min = c(1.4,1.19)
-r0_max = c(4,3.33)
-
-spread = data.frame(dise,r0_min,r0_max)
 
 # ambil data
 load('all files.rda')
 provinsi = unique(data_covid_provinsi$province)
+kota_jabar = unique(data_jabar$nama_kab)
 
 # ---------------------------------
 # ui
 
-header = dashboardHeader(title = "COVID 19 vs TBC di Indonesia",
+header = dashboardHeader(title = "COVID 19 di Indonesia",
                          titleWidth = 350)
 sidebar = dashboardSidebar(width = 350,
                            sidebarMenu(
@@ -45,8 +41,8 @@ sidebar = dashboardSidebar(width = 350,
                                         text = 'Read Me'),
                                menuItem(tabName = 'covid_detail',
                                         text = 'Covid Pandemi in Indonesia - Provinsi'),
-                               menuItem(tabName = 'tbc',
-                                        text = 'Data TBC di Indonesia')
+                               menuItem(tabName = 'jabar',
+                                        text = 'Data Covid 19 Jawa Barat')
                            )
                            )
 
@@ -80,7 +76,7 @@ covid_detail = tabItem(tabName = 'covid_detail',
                        fluidRow(
                            column(width = 12,
                                   h2('Data Detail Sebaran COVID-19 per Provinsi'),
-                                  h4('Update tanggal 15 Juni 2020, pukul 23.59'),
+                                  h4(paste0('Update data per: ',today)),
                                   DT::dataTableOutput("tabel1"))
                        ),
                        br(),
@@ -98,20 +94,31 @@ covid_detail = tabItem(tabName = 'covid_detail',
                        )
                        )
 
-tbc = tabItem(tabName = 'tbc',
+jabar = tabItem(tabName = 'jabar',
                     fluidRow(
                         column(width = 12,
-                               h1('Informasi Terkait Tuberculosis'),
-                               h4('Various sources')
+                               h1('Informasi Covid di Jawa Barat'),
+                               h4('Data diambil dari website: https://pikobar.jabarprov.go.id/table-case'),
+                               h5('Silakan pilih nama kabupaten / kota yang diinginkan untuk mengubah grafik yang ada.')
                                )
                     ),
                     fluidRow(
-                        column(width = 4,
-                               plotOutput('plot4',height = 350))
+                        column(width = 2,
+                               checkboxGroupInput('kota_jabar','Pilih kota / kabupaten di Jawa Barat',
+                                                  sort(kota_jabar),selected = c('Kabupaten Bekasi',
+                                                                                'Kota Bekasi',
+                                                                                'Kabupaten Bogor',
+                                                                                'Kota Bogor')
+                                                  )
+                               ),
+                        column(width = 10,
+                               plotOutput('plot4',height = 400),
+                               br(),
+                               plotOutput('plot5',height = 300))
                     )
                     )
     
-body = dashboardBody(tabItems(filterpane,covid_detail,tbc))
+body = dashboardBody(tabItems(filterpane,covid_detail,jabar))
 
 ui = dashboardPage(skin = "red",header,sidebar,body)
 
@@ -138,7 +145,7 @@ server <- function(input, output) {
         data_covid_provinsi %>%
             ggplot(aes(x=recovery_rate,
                        y=fatality_rate)) +
-            geom_point(color = 'black',aes(size = confirmed)) +
+            geom_point(aes(size = confirmed,color = confirmed)) +
             geom_text_repel(aes(label = province,alpha = confirmed)) +
             theme_pubclean() +
             labs(x = 'Recovery Rate',
@@ -162,10 +169,10 @@ server <- function(input, output) {
             mutate(variable = ifelse(variable == 'confirmed',
                                      'Confirmed Cases',
                                      'Cases per Million Population')) %>%
-            ggplot(aes(x = province,
+            ggplot(aes(x = reorder(province,-value),
                        y = value)) +
-            geom_col(color = 'black',fill = 'blue', alpha = .25) + 
-            geom_label(aes(label = value),size=3) +
+            geom_col(color = 'black',fill = 'darkred', alpha = .25) + 
+            geom_label(aes(label = value),size=2.5) +
             facet_wrap(~variable,nrow = 2,scales = 'free_y') +
             theme_pubclean() +
             theme(axis.text.x = element_text(angle=90),
@@ -202,20 +209,105 @@ server <- function(input, output) {
         ggplotly(chart, tooltip = "text")
     })
     
-    
-    # plot 4
-    output$plot4 <- renderPlot({
-       spread %>% 
-            ggplot(aes(x = dise)) +
-            geom_errorbar(aes(ymin = r0_min,
-                              ymax = r0_max),
-                          size=1,
-                          width=.1) +
-            labs(title = 'Perbandingan R0\nCovid 19 dan TBC') +
+    #plot 4
+    output$plot4 = renderPlot({
+        data_new = 
+            data_jabar %>% 
+            filter(nama_kab %in% input$kota_jabar) %>% 
+            group_by(nama_kab) %>% 
+            summarise(meninggal = sum(meninggal),
+                      sembuh = sum(sembuh),
+                      positif = sum(positif),
+                      odp = sum(odp),
+                      pdp = sum(pdp))
+        
+        head_odp = 
+            data_new %>% 
+            arrange(desc(odp)) %>% 
+            head(5)
+        head_odp = head_odp$nama_kab
+        
+        head_pdp = 
+            data_new %>% 
+            arrange(desc(pdp)) %>% 
+            head(5)
+        head_pdp = head_pdp$nama_kab
+        
+        chart_1 = 
+            data_new %>% 
+            ggplot(aes(x = reorder(nama_kab,positif),
+                       y = positif)) +
+            geom_col(aes(fill = positif),color = 'black',size = 1.25) +
+            geom_label(aes(label = positif),size = 2.5) +
+            coord_flip() +
             theme_pubclean() +
+            labs(title = 'Berapa banyak total\nkasus positif di\nkota / kabupaten di\nJawa Barat?') +
             theme(axis.title = element_blank(),
-                  axis.text = element_text(size=15)) +
-            coord_flip()
+                  axis.ticks = element_blank(),
+                  legend.position = 'none',
+                  axis.text.x = element_blank())
+        
+        chart_2 = 
+            data_jabar %>% 
+            filter(nama_kab %in% head_odp) %>%
+            filter(nama_kab %in% input$kota_jabar) %>% 
+            ggplot(aes(x = tanggal,
+                       y = odp)) + 
+            geom_line(aes(color = nama_kab)) +
+            theme_pubclean() +
+            labs(title = "   Tren Total Orang Dalam Pengawasan (ODP)",
+                 subtitle = '   Selected kota kabupaten dengan total ODP terbanyak di Jawa Barat',
+                 color = 'Kota / Kabupaten') +
+            theme(axis.title = element_blank())
+        
+        chart_3 = 
+            data_jabar %>% 
+            filter(nama_kab %in% head_pdp) %>%
+            filter(nama_kab %in% input$kota_jabar) %>% 
+            ggplot(aes(x = tanggal,
+                       y = pdp)) + 
+            geom_line(aes(color = nama_kab)) +
+            theme_pubclean() +
+            labs(title = "   Tren Total Pasien Dalam Pengawasan (PDP)",
+                 subtitle = '   Selected kota kabupaten dengan total PDP terbanyak di Jawa Barat',
+                 color = 'Kota / Kabupaten') +
+            theme(axis.title = element_blank())
+        
+        item_1 = ggarrange(chart_2,chart_3,ncol=1,nrow=2,heights = c(1,1))
+        ggarrange(chart_1,item_1,ncol=2,nrow=1,widths = c(1,2.5))
+            
+    })
+    
+    # plot 5
+    output$plot5 <- renderPlot({
+        data_new = 
+            data_jabar %>% 
+            filter(nama_kab %in% input$kota_jabar) %>% 
+            group_by(nama_kab) %>% 
+            summarise(meninggal = sum(meninggal),
+                      sembuh = sum(sembuh),
+                      positif = sum(positif),
+                      odp = sum(odp),
+                      pdp = sum(pdp))
+        
+        head_odp = 
+            data_new %>% 
+            arrange(desc(meninggal)) %>% 
+            head(5)
+        head_odp = head_odp$nama_kab
+        
+        data_jabar %>% 
+            filter(nama_kab %in% head_odp) %>%
+            filter(nama_kab %in% input$kota_jabar) %>% 
+            ggplot(aes(x = tanggal,
+                       y = meninggal)) + 
+            geom_line(aes(color = nama_kab)) +
+            theme_pubclean() +
+            theme(legend.position = 'right',
+                  axis.title = element_blank()) +
+            labs(title = 'Tren Total Korban Jiwa Akibat Covid 19',
+                 subtitle = 'Selected kota kabupaten dengan total korban terbanyak di Jawa Barat',
+                 color = 'Kota / Kabupaten')
     })
 }
 
