@@ -20,6 +20,8 @@ library(deSolve)
 # ---------------------------------
 # ambil fungsi
 rm(list=ls())
+today = Sys.time()
+today = as.character(today)
 
 # untuk spread R0
 dise = c('Covid 19','TBC')
@@ -35,13 +37,14 @@ provinsi = unique(data_covid_provinsi$province)
 # ---------------------------------
 # ui
 
-header = dashboardHeader(title = "COVID 19 vs TBC di Indonesia",titleWidth = 350)
+header = dashboardHeader(title = "COVID 19 vs TBC di Indonesia",
+                         titleWidth = 350)
 sidebar = dashboardSidebar(width = 350,
                            sidebarMenu(
                                menuItem(tabName = 'filterpane',
-                                        text = 'Filter Pane'),
+                                        text = 'Read Me'),
                                menuItem(tabName = 'covid_detail',
-                                        text = 'Covid Pandemi in Indonesia'),
+                                        text = 'Covid Pandemi in Indonesia - Provinsi'),
                                menuItem(tabName = 'tbc',
                                         text = 'Data TBC di Indonesia')
                            )
@@ -50,8 +53,10 @@ sidebar = dashboardSidebar(width = 350,
 filterpane = tabItem(tabName = 'filterpane',
                      fluidRow(
                          column(width = 12,
-                                h1('Filter Pane pada tab Pandemi Covid'),
-                                h3('Silakan pilih filter berikut ini sesuai dengan kebutuhan'))
+                                h1('READ ME'),
+                                h3('Silakan pilih filter berikut ini sesuai dengan kebutuhan'),
+                                h4(paste0('Update data per: ',today))
+                                )
                      ),
                      br(),
                      fluidRow(

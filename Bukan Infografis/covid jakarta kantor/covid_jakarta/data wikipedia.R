@@ -1,3 +1,5 @@
+# Scrape data COVID Indonesia Terakhir
+
 rm(list=ls())
 setwd("~/Documents/belajaR/Bukan Infografis/covid jakarta kantor/covid_jakarta")
 
