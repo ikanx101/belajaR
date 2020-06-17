@@ -126,7 +126,8 @@ jabar = tabItem(tabName = 'jabar',
                     br(),
                 fluidRow(
                     column(width = 12,
-                           h1('Grafik Total Provinsi Jawa Barat'))
+                           h1('Grafik Total Provinsi Jawa Barat'),
+                           h5('Catatan: smooth trendline dibuat dengan metode loess'))
                 ),
                 fluidRow(
                     column(width = 6,
@@ -141,7 +142,9 @@ jakarta = tabItem(tabName = 'jkt48',
                       column(width = 12,
                              h1('Informasi Covid di DKI Jakarta'),
                              h4('Data diambil dari website: https://data.jakarta.go.id/dataset/data-odp-pdp-dan-positif-covid-19-dki-jakarta-per-kecamatan'),
-                             h5(paste0('Update data per: ',today)))
+                             h5('Catatan: smooth trendline dibuat dengan metode loess'),
+                             h5(paste0('Update data per: ',today))
+                             )
                   ),
                   fluidRow(
                       column(width = 6,
@@ -360,21 +363,21 @@ server <- function(input, output) {
         data_new %>% 
             ggplot(aes(x = tanggal,
                        y = odp)) +
+            geom_smooth(method = 'loess',color = 'gray',fill = 'yellow') +
             geom_line(color = 'steelblue') +
             theme_pubclean() +
             labs(title = 'Tren Total ODP di DKI Jakarta') +
-            theme(axis.title = element_blank()) +
-            geom_smooth(method = 'loess',color = 'gray',fill = 'yellow')
+            theme(axis.title = element_blank()) 
         
         chart_2 = 
             data_new %>% 
             ggplot(aes(x = tanggal,
                        y = pdp)) +
+            geom_smooth(method = 'loess',color = 'gray',fill = 'yellow') +
             geom_line(color = 'darkred') +
             theme_pubclean() +
             labs(title = 'Tren Total PDP di DKI Jakarta') +
-            theme(axis.title = element_blank()) +
-            geom_smooth(method = 'loess',color = 'gray',fill = 'yellow')
+            theme(axis.title = element_blank()) 
         
         ggarrange(chart_1,chart_2,nrow=2)    
     })
@@ -395,21 +398,21 @@ server <- function(input, output) {
             data_new %>% 
             ggplot(aes(x = tanggal,
                        y = positif)) +
+            geom_smooth(method = 'loess',color = 'gray',fill = 'yellow') +
             geom_line(color = 'green') +
             theme_pubclean() +
             labs(title = 'Tren Total Positif di DKI Jakarta') +
-            theme(axis.title = element_blank()) +
-            geom_smooth(method = 'loess',color = 'gray',fill = 'yellow')
+            theme(axis.title = element_blank())
         
         chart_2 = 
             data_new %>% 
             ggplot(aes(x = tanggal,
                        y = meninggal)) +
+            geom_smooth(method = 'loess',color = 'gray',fill = 'yellow') +
             geom_line(color = 'red') +
             theme_pubclean() +
             labs(title = 'Tren Total Korban Meninggal di DKI Jakarta') +
-            theme(axis.title = element_blank()) +
-            geom_smooth(method = 'loess',color = 'gray',fill = 'yellow')
+            theme(axis.title = element_blank())
         
         ggarrange(chart_1,chart_2,nrow=2)    
     })
@@ -429,21 +432,21 @@ server <- function(input, output) {
             data_new %>% 
             ggplot(aes(x = tanggal,
                        y = odp)) +
+            geom_smooth(method = 'loess',color = 'gray',fill = 'yellow') +
             geom_line(color = 'steelblue') +
             theme_pubclean() +
             labs(title = 'Tren Total ODP di Jawa Barat') +
-            theme(axis.title = element_blank()) +
-            geom_smooth(method = 'loess',color = 'gray',fill = 'yellow')
+            theme(axis.title = element_blank()) 
         
         chart_2 = 
             data_new %>% 
             ggplot(aes(x = tanggal,
                        y = pdp)) +
+            geom_smooth(method = 'loess',color = 'gray',fill = 'yellow') +
             geom_line(color = 'darkred') +
             theme_pubclean() +
             labs(title = 'Tren Total PDP di Jawa Barat') +
-            theme(axis.title = element_blank()) +
-            geom_smooth(method = 'loess',color = 'gray',fill = 'yellow')
+            theme(axis.title = element_blank()) 
         
         ggarrange(chart_1,chart_2,nrow=2)   
     })
@@ -463,21 +466,22 @@ server <- function(input, output) {
             data_new %>% 
             ggplot(aes(x = tanggal,
                        y = meninggal)) +
+            geom_smooth(method = 'loess',color = 'gray',fill = 'yellow') +
             geom_line(color = 'darkred') +
             theme_pubclean() +
             labs(title = 'Tren Total Korban Meninggal di Jawa Barat') +
-            theme(axis.title = element_blank()) +
-            geom_smooth(method = 'loess',color = 'gray',fill = 'yellow')
+            theme(axis.title = element_blank())
         
         chart_2 = 
             data_new %>% 
             ggplot(aes(x = tanggal,
                        y = positif)) +
+            geom_smooth(method = 'loess',color = 'gray',fill = 'yellow') +
             geom_line(color = 'black') +
             theme_pubclean() +
             labs(title = 'Tren Total Positif Covid 19 di Jawa Barat') +
-            theme(axis.title = element_blank()) +
-            geom_smooth(method = 'loess',color = 'gray',fill = 'yellow')
+            theme(axis.title = element_blank())
+            
         
         ggarrange(chart_1,chart_2,nrow=2)   
     })
