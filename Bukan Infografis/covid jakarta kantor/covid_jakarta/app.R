@@ -54,7 +54,9 @@ filterpane = tabItem(tabName = 'filterpane',
                      fluidRow(
                          column(width = 12,
                                 h1('READ ME'),
-                                h2(paste0('Update data per: ',today))
+                                h3('Dashboard ini akan selalu mengupdate dataset dari sumber-sumber resmi pemerintah pusat / provinsi setiap kali admin melakukan refresh ke server.'),
+                                h5('For further assistance, please let me know.'),
+                                h5(paste0('Update data per: ',today))
                                 )
                      ),
                      br(),
@@ -333,7 +335,9 @@ server <- function(input, output) {
     
     # plot 5
     output$plot5 <- renderPlot({
-        
+        data_jakarta %>% 
+            mutate(tanggal = as.Date(tanggal)) %>% 
+            group_by(tanggal)
     })
 }
 
