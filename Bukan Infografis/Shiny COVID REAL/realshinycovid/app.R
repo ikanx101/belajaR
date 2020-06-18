@@ -1,13 +1,35 @@
 #
-# This is a Shiny web application. You can run the application by clicking
-# the 'Run App' button above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
+#   ikanx101.github.io proudly present
+#   COVID 19 one stop dashboard
 #
 
-library(shiny)
+# ---------------------------------
+# panggil library 
+library(ggplot2)
+library(ggpubr)
+library(shinythemes)
+library(tidyr)
+library(readxl)
+library(dplyr)
+library(shinydashboard)
+library(ggrepel)
+library(plotly)
+# library(shiny)
+
+
+# ---------------------------------
+# ambil data dan semua fungsi
+
+
+
+
+
+
+
+
+
+
+
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
