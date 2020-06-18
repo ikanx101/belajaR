@@ -14,7 +14,6 @@ library(dplyr)
 library(shinydashboard)
 library(ggrepel)
 library(plotly)
-library(deSolve)
 #library(shiny)
 
 # ---------------------------------
@@ -22,6 +21,7 @@ library(deSolve)
 # source('data wikipedia.R')
 # source('jabar clean.R')
 # source('jakarta clean.R')
+# source('dunia dalam data.R')
 rm(list=ls())
 today = Sys.Date() - 1
 today = as.character(today)
@@ -46,7 +46,9 @@ sidebar = dashboardSidebar(width = 350,
                                menuItem(tabName = 'jabar',
                                         text = 'Data Covid 19 Jawa Barat'),
                                menuItem(tabName = 'jkt48',
-                                        text = 'Data Covid 19 DKI Jakarta')
+                                        text = 'Data Covid 19 DKI Jakarta'),
+                               menuItem(tabName = 'dunia',
+                                        text = 'Dunia dalam Covid 19')
                            )
                            )
 
@@ -154,7 +156,7 @@ jakarta = tabItem(tabName = 'jkt48',
                   )
 
 
-body = dashboardBody(tabItems(filterpane,covid_detail,jabar,jakarta))
+body = dashboardBody(tabItems(filterpane,covid_detail,jabar,jakarta,dunia))
 
 ui = dashboardPage(skin = "red",header,sidebar,body)
 
@@ -363,7 +365,7 @@ server <- function(input, output) {
             ggplot(aes(x = tanggal,
                        y = odp)) +
             geom_smooth(method = 'loess',color = 'gray',fill = 'yellow') +
-            geom_line(color = 'steelblue') +
+            geom_line(color = 'steelblue',size=1.25) +
             theme_pubclean() +
             labs(title = 'Total Akumulasi ODP di DKI Jakarta') +
             theme(axis.title = element_blank()) 
@@ -373,7 +375,7 @@ server <- function(input, output) {
             ggplot(aes(x = tanggal,
                        y = pdp)) +
             geom_smooth(method = 'loess',color = 'gray',fill = 'yellow') +
-            geom_line(color = 'darkred') +
+            geom_line(color = 'darkred',size=1.25) +
             theme_pubclean() +
             labs(title = 'Total Akumulasi PDP di DKI Jakarta') +
             theme(axis.title = element_blank()) 
@@ -398,7 +400,7 @@ server <- function(input, output) {
             ggplot(aes(x = tanggal,
                        y = positif)) +
             geom_smooth(method = 'loess',color = 'gray',fill = 'yellow') +
-            geom_line(color = 'green') +
+            geom_line(color = 'green',size=1.25) +
             theme_pubclean() +
             labs(title = 'Total Akumulasi Positif di DKI Jakarta') +
             theme(axis.title = element_blank())
@@ -408,7 +410,7 @@ server <- function(input, output) {
             ggplot(aes(x = tanggal,
                        y = meninggal)) +
             geom_smooth(method = 'loess',color = 'gray',fill = 'yellow') +
-            geom_line(color = 'red') +
+            geom_line(color = 'red',size=1.25) +
             theme_pubclean() +
             labs(title = 'Total Akumulasi Korban Meninggal di DKI Jakarta') +
             theme(axis.title = element_blank())
@@ -432,7 +434,7 @@ server <- function(input, output) {
             ggplot(aes(x = tanggal,
                        y = odp)) +
             geom_smooth(method = 'loess',color = 'gray',fill = 'yellow') +
-            geom_line(color = 'steelblue') +
+            geom_line(color = 'steelblue',size=1.25) +
             theme_pubclean() +
             labs(title = 'Total Akumulasi ODP di Jawa Barat') +
             theme(axis.title = element_blank()) 
@@ -442,7 +444,7 @@ server <- function(input, output) {
             ggplot(aes(x = tanggal,
                        y = pdp)) +
             geom_smooth(method = 'loess',color = 'gray',fill = 'yellow') +
-            geom_line(color = 'darkred') +
+            geom_line(color = 'darkred',size=1.25) +
             theme_pubclean() +
             labs(title = 'Total Akumulasi PDP di Jawa Barat') +
             theme(axis.title = element_blank()) 
@@ -466,7 +468,7 @@ server <- function(input, output) {
             ggplot(aes(x = tanggal,
                        y = meninggal)) +
             geom_smooth(method = 'loess',color = 'gray',fill = 'yellow') +
-            geom_line(color = 'darkred') +
+            geom_line(color = 'darkred',size=1.25) +
             theme_pubclean() +
             labs(title = 'Total Akumulasi Korban Meninggal di Jawa Barat') +
             theme(axis.title = element_blank())
@@ -476,7 +478,7 @@ server <- function(input, output) {
             ggplot(aes(x = tanggal,
                        y = positif)) +
             geom_smooth(method = 'loess',color = 'gray',fill = 'yellow') +
-            geom_line(color = 'black') +
+            geom_line(color = 'black',size=1.25) +
             theme_pubclean() +
             labs(title = 'Total Akumulasi Positif Covid 19 di Jawa Barat') +
             theme(axis.title = element_blank())

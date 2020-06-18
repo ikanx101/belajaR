@@ -9,7 +9,7 @@ library(rvest)
 
 url = 'https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Indonesia'
 data = read_html(url) %>% html_table(fill=T)
-data = data[[5]]
+data = data[[6]]
 
 data = janitor::clean_names(data)
 data = data[-1,]
