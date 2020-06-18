@@ -21,6 +21,7 @@ library(plotly)
 # ambil data dan semua fungsi
 rm(list=ls())
 load('all files.rda')
+benua = unique(data_dunia$continent)
 
 # tanggal
 tanggal = Sys.Date()
@@ -85,6 +86,7 @@ ui = dashboardPage(skin = "red",header,sidebar,body)
 
 
 server <- function(input, output, session) {
+  
 }
 
 
