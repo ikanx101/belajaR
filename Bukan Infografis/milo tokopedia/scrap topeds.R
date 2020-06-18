@@ -35,7 +35,7 @@ for(i in 130:length(url)){
   data = rbind(data,temp)
 }
 
-data$waktu.scrape = Sys.Date()
+data$waktu.scrape = Sys.time()
 raw = data
 
 # proses perapihan 
