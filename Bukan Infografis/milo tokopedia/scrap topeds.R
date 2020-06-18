@@ -5,15 +5,14 @@ library(dplyr)
 
 # ambil dbase links 
 link = readLines('~/Documents/belajaR/Bukan Infografis/milo tokopedia/links dbase/links.txt')
+link = unique(link)
+dummy = data.frame(id = c(1:length(link)),
+                   url = link)
 
-
-link = 
-data %>% mutate_if(is.factor,as.character) %>% 
-  filter(grepl('tropicana',Anchor.Text,ignore.case = T)) %>%
-  distinct() %>%
-  select(Link)
-
-url = link$Link
+dummy = 
+  dummy %>% 
+  filter(!grepl('promo/v1/clicks',url))
+url = dummy$url
 
 scrap = function(url){
   data = 
@@ -31,10 +30,19 @@ scrap = function(url){
 i = 1
 data = scrap(url[i])
 
-for(i in 2:length(url)){
+for(i in 130:length(url)){
   temp = scrap(url[i])
   data = rbind(data,temp)
 }
 
-data %>% select(-terjual) %>% write.csv('tropicana slim tokopedia.csv')
-data %>% write.csv('tropicana slim tokopedia complete.csv')
+data$waktu.scrape = Sys.Date()
+raw = data
+
+# proses perapihan 
+head(data)
+
+data = data %>% filter(grepl('terjual',terjual,ignore.case = T)) %>%
+  mutate(terjual = gsub('Terjual ','',terjual,fixed = T))
+
+save(data,raw,file = 'hasil scrape.rda')
+data %>% openxlsx::write.xlsx('milo tokopedia.xlsx')
