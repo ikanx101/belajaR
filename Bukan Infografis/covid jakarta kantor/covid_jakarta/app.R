@@ -23,7 +23,7 @@ library(deSolve)
 # source('jabar clean.R')
 # source('jakarta clean.R')
 rm(list=ls())
-today = Sys.Date()
+today = Sys.Date() - 1
 today = as.character(today)
 
 # ambil data
@@ -54,30 +54,27 @@ filterpane = tabItem(tabName = 'filterpane',
                      fluidRow(
                          column(width = 12,
                                 h1('READ ME'),
-                                h3('Dashboard ini akan selalu mengupdate dataset dari sumber-sumber resmi pemerintah pusat / provinsi setiap kali admin melakukan refresh ke server.'),
+                                h3('Dashboard ini akan selalu mengupdate dataset dari sumber-sumber resmi pemerintah pusat / provinsi setiap kali admin melakukan refresh ke server. Sebagaimana kita tahu, Pak Yuri akan update di sore hari jadi data akan saya refresh jam 17:00.'),
                                 h5('For further assistance, please let me know.'),
-                                h5(paste0('Update data per: ',today))
+                                h5(paste0('Update data per: ',today, 'pukul 17.00'))
                                 )
-                     ),
-                     br(),
-                     fluidRow(
-                         column(width = 12,
-                                h3('Silakan pilih filter berikut ini sesuai dengan kebutuhan'),
-                                checkboxGroupInput('prop','Provinsi di Indonesia',
-                                                   sort(provinsi),selected = provinsi))
                      )
                      )
     
 covid_detail = tabItem(tabName = 'covid_detail',
                        fluidRow(
-                           column(width = 12,
+                           column(width = 10,
                                   h1('COVID-19 pandemic in Indonesia'),
                                   h4('The COVID-19 pandemic in Indonesia is part of the ongoing worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). It was confirmed to have spread to Indonesia on 2 March 2020, after a dance instructor and her mother tested positive for the virus. Both were infected from a Japanese national.'),
                                   h4('By 9 April, the pandemic had spread to all 34 provinces in the country as Gorontalo confirmed its first case, with Jakarta, East Java, and South Sulawesi being the worst-hit. The largest increase of new cases in a single day occurred on 10 June, when 1,241 cases were announced. On 14 June, for the first time ever, there were more than 750 recoveries recorded and 18,000 samples tested just within a span of 24 hours.'),
                                   h4('As of 15 June, Indonesia has reported 39,294 cases, the second highest in Southeast Asia, behind Singapore. In terms of death numbers, Indonesia ranks sixth in Asia with 2,198 deaths. Review of data, however, indicated that the number of deaths may be much higher than what has been reported as those who died with acute COVID-19 symptoms but had not been confirmed or tested were not counted in the official death figure.'),
                                   h4('Indonesia has conducted 523,063 tests against its 273 million population so far, or around 1,915 tests per million, making it one of the worst testing rates in the world. As a comparison, it is lower than Suriname which has only around 586 thousand population, yet has conducted 1,987 tests per million.'),
                                   h5('source: wikipedia')
-                                  )
+                                  ),
+                           column(width = 2,
+                                  h3('Silakan pilih filter berikut ini sesuai dengan kebutuhan'),
+                                  checkboxGroupInput('prop','Provinsi di Indonesia',
+                                                     sort(provinsi),selected = provinsi))
                        ),
                        fluidRow(
                            column(width = 12,
@@ -143,6 +140,7 @@ jakarta = tabItem(tabName = 'jkt48',
                       column(width = 12,
                              h1('Informasi Covid di DKI Jakarta'),
                              h4('Data diambil dari website: https://data.jakarta.go.id/dataset/data-odp-pdp-dan-positif-covid-19-dki-jakarta-per-kecamatan'),
+                             h4('Data dari open data Jakarta hanay sampai tanggal 2 Juni 2020.'),
                              h5('Catatan: smooth trendline dibuat dengan metode loess'),
                              h5(paste0('Update data per: ',today))
                              )
