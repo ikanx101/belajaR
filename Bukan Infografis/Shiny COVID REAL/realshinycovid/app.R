@@ -60,7 +60,7 @@ filterpane = tabItem(tabName = 'filterpane',
                                 h3('Dashboard visualisasi ini berisi updated data dari kasus Covid 19 di Indonesia dan dunia. Sebagaimana yang kita ketahui bersama, gugus tugas percepatan penanganan Covid 19 selalu mengupdate informasi setiap sore. Oleh karena itu, data pada dashboard ini juga akan di-update pada pukul 18.00 WIB setiap harinya.'),
                                 h5(paste0('Last update: ',tanggal)),
                                 br(),
-                                h3('Bagi yang kangen dengan Pak Yuri, silakan tonton dulu press conference hari ini:'),
+                                h4('Bagi yang kangen dengan Pak Yuri, silakan tonton dulu press conference hari ini:'),
                                 tags$iframe(width="560", height="315", src=paste0("https://www.youtube.com/embed/",url), frameborder="0", allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture", allowfullscreen=NA),
                                 h5('courtesy: youtube.com media indonesia')
                                 )
@@ -73,6 +73,12 @@ dunia = tabItem(tabName = 'dunia',
                                 h3('Covid 19 menjadi pandemi global. Mari kita lihat bagaimana kondisi terupdate dari negara lain.'),
                                 h4('Sumber data: ourworld in data'),
                                 h5(paste0('Last update: ',tanggal)))
+                         ),
+                br(),
+                fluidRow(column(width = 2,
+                                checkboxGroupInput('benua','Silakan pilih benua',benua,selected = benua)),
+                         column(width = 10,
+                                plotOutput('dunia_plot1',height = 250))
                          )
                 )
 
@@ -87,6 +93,15 @@ ui = dashboardPage(skin = "red",header,sidebar,body)
 
 server <- function(input, output, session) {
   
+  # plot dunia 1
+  output$dunia_plot1 = renderPlot({
+    
+    data_new = 
+      data_dunia %>% group_by(location) %>% filter(date == max(date)) %>% ungroup()
+    
+    data_new %>% arrange(desc(total_cases)) %>% head(10) %>% 
+      ggplot(aes(x = reorder(location,-total_cases),y = total_cases)) + geom_col()
+  })
 }
 
 
