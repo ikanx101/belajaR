@@ -1,5 +1,5 @@
 #
-# Perbandingan TB dengan COVID19
+# Data COVID19 Indonesia
 # ikanx101.github.io
 #
 
@@ -115,7 +115,8 @@ jabar = tabItem(tabName = 'jabar',
                                                   sort(kota_jabar),selected = c('Kabupaten Bekasi',
                                                                                 'Kota Bekasi',
                                                                                 'Kabupaten Bogor',
-                                                                                'Kota Bogor')
+                                                                                'Kota Bogor',
+                                                                                'Kota Depok')
                                                   )
                                ),
                         column(width = 10,
@@ -126,7 +127,7 @@ jabar = tabItem(tabName = 'jabar',
                     br(),
                 fluidRow(
                     column(width = 12,
-                           h1('Grafik Total Provinsi Jawa Barat'),
+                           h1('Grafik Total Akumulasi Provinsi Jawa Barat'),
                            h5('Catatan: smooth trendline dibuat dengan metode loess'))
                 ),
                 fluidRow(
@@ -292,8 +293,8 @@ server <- function(input, output) {
                        y = odp)) + 
             geom_line(aes(color = nama_kab)) +
             theme_pubclean() +
-            labs(title = "   Tren Total Orang Dalam Pengawasan (ODP)",
-                 subtitle = '   Selected kota kabupaten dengan total ODP terbanyak di Jawa Barat',
+            labs(title = "   Total Akumulasi Orang Dalam Pengawasan (ODP)",
+                 subtitle = '   Selected kota kabupaten di Jawa Barat',
                  color = 'Kota / Kabupaten') +
             theme(axis.title = element_blank())
         
@@ -305,8 +306,8 @@ server <- function(input, output) {
                        y = pdp)) + 
             geom_line(aes(color = nama_kab)) +
             theme_pubclean() +
-            labs(title = "   Tren Total Pasien Dalam Pengawasan (PDP)",
-                 subtitle = '   Selected kota kabupaten dengan total PDP terbanyak di Jawa Barat',
+            labs(title = "   Total Akumulasi Pasien Dalam Pengawasan (PDP)",
+                 subtitle = '   Selected kota kabupaten di Jawa Barat',
                  color = 'Kota / Kabupaten') +
             theme(axis.title = element_blank())
         
@@ -342,8 +343,8 @@ server <- function(input, output) {
             theme_pubclean() +
             theme(legend.position = 'right',
                   axis.title = element_blank()) +
-            labs(title = 'Tren Total Korban Jiwa Akibat Covid 19',
-                 subtitle = 'Selected kota kabupaten dengan total korban terbanyak di Jawa Barat',
+            labs(title = 'Total Akumulasi Korban Jiwa Akibat Covid 19',
+                 subtitle = 'Selected kota kabupaten di Jawa Barat',
                  color = 'Kota / Kabupaten')
     })
     
@@ -366,7 +367,7 @@ server <- function(input, output) {
             geom_smooth(method = 'loess',color = 'gray',fill = 'yellow') +
             geom_line(color = 'steelblue') +
             theme_pubclean() +
-            labs(title = 'Tren Total ODP di DKI Jakarta') +
+            labs(title = 'Total Akumulasi ODP di DKI Jakarta') +
             theme(axis.title = element_blank()) 
         
         chart_2 = 
@@ -376,7 +377,7 @@ server <- function(input, output) {
             geom_smooth(method = 'loess',color = 'gray',fill = 'yellow') +
             geom_line(color = 'darkred') +
             theme_pubclean() +
-            labs(title = 'Tren Total PDP di DKI Jakarta') +
+            labs(title = 'Total Akumulasi PDP di DKI Jakarta') +
             theme(axis.title = element_blank()) 
         
         ggarrange(chart_1,chart_2,nrow=2)    
@@ -401,7 +402,7 @@ server <- function(input, output) {
             geom_smooth(method = 'loess',color = 'gray',fill = 'yellow') +
             geom_line(color = 'green') +
             theme_pubclean() +
-            labs(title = 'Tren Total Positif di DKI Jakarta') +
+            labs(title = 'Total Akumulasi Positif di DKI Jakarta') +
             theme(axis.title = element_blank())
         
         chart_2 = 
@@ -411,7 +412,7 @@ server <- function(input, output) {
             geom_smooth(method = 'loess',color = 'gray',fill = 'yellow') +
             geom_line(color = 'red') +
             theme_pubclean() +
-            labs(title = 'Tren Total Korban Meninggal di DKI Jakarta') +
+            labs(title = 'Total Akumulasi Korban Meninggal di DKI Jakarta') +
             theme(axis.title = element_blank())
         
         ggarrange(chart_1,chart_2,nrow=2)    
@@ -435,7 +436,7 @@ server <- function(input, output) {
             geom_smooth(method = 'loess',color = 'gray',fill = 'yellow') +
             geom_line(color = 'steelblue') +
             theme_pubclean() +
-            labs(title = 'Tren Total ODP di Jawa Barat') +
+            labs(title = 'Total Akumulasi ODP di Jawa Barat') +
             theme(axis.title = element_blank()) 
         
         chart_2 = 
@@ -445,7 +446,7 @@ server <- function(input, output) {
             geom_smooth(method = 'loess',color = 'gray',fill = 'yellow') +
             geom_line(color = 'darkred') +
             theme_pubclean() +
-            labs(title = 'Tren Total PDP di Jawa Barat') +
+            labs(title = 'Total Akumulasi PDP di Jawa Barat') +
             theme(axis.title = element_blank()) 
         
         ggarrange(chart_1,chart_2,nrow=2)   
@@ -469,7 +470,7 @@ server <- function(input, output) {
             geom_smooth(method = 'loess',color = 'gray',fill = 'yellow') +
             geom_line(color = 'darkred') +
             theme_pubclean() +
-            labs(title = 'Tren Total Korban Meninggal di Jawa Barat') +
+            labs(title = 'Total Akumulasi Korban Meninggal di Jawa Barat') +
             theme(axis.title = element_blank())
         
         chart_2 = 
@@ -479,7 +480,7 @@ server <- function(input, output) {
             geom_smooth(method = 'loess',color = 'gray',fill = 'yellow') +
             geom_line(color = 'black') +
             theme_pubclean() +
-            labs(title = 'Tren Total Positif Covid 19 di Jawa Barat') +
+            labs(title = 'Total Akumulasi Positif Covid 19 di Jawa Barat') +
             theme(axis.title = element_blank())
             
         
