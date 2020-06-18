@@ -5,9 +5,9 @@ account: ikanx
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 2465455
-bundleId: 3280182
+bundleId: 3280983
 url: https://ikanx.shinyapps.io/covid_viz/
-when: 1592361080.04493
+when: 1592378398.91903
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: .~lock.Data_covid_TBC_Jabodetabek_plus.xlsx#|API_SH.TBS.CURE.ZS_DS2_en_excel_v2_1124043.xls|API_SH.TBS.DTEC.ZS_DS2_en_excel_v2_1125691.xls|API_SH.TBS.INCD_DS2_en_excel_v2_1123224.xls|Data COVID-19 Jawa Barat.csv|data wikipedia.R|Data_covid_TBC_Jabodetabek_plus.xlsx|graph.R|jabar clean.R
+ignoredFiles: .~lock.Data_covid_TBC_Jabodetabek_plus.xlsx#|API_SH.TBS.CURE.ZS_DS2_en_excel_v2_1124043.xls|API_SH.TBS.DTEC.ZS_DS2_en_excel_v2_1125691.xls|API_SH.TBS.INCD_DS2_en_excel_v2_1123224.xls|Data COVID-19 Jawa Barat.csv|data wikipedia.R|Data_covid_TBC_Jabodetabek_plus.xlsx|Data-ODP-PDP-dan-Positif-Covid-19-DKI-Jakarta-Per-Kecamatan-Bulan-April-2020.csv|Data-ODP-PDP-dan-Positif-Covid-19-DKI-Jakarta-Per-Kecamatan-Bulan-Juni-2020.csv|Data-ODP-PDP-dan-Positif-Covid-19-DKI-Jakarta-Per-Kecamatan-Bulan-Maret-2020.csv|Data-ODP-PDP-dan-Positif-Covid-19-DKI-Jakarta-Per-Kecamatan-Bulan-Mei-2020.csv|jabar clean.R|jakarta clean.R
