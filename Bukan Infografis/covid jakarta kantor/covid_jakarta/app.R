@@ -28,9 +28,11 @@ today = as.character(today)
 
 # ambil data
 load('all files.rda')
+data_dunia[is.na(data_dunia)] = 0
 provinsi = unique(data_covid_provinsi$province)
 kota_jabar = unique(data_jabar$nama_kab)
 kecamatan_jkt = unique(data_jakarta$kecamatan)
+negara = unique(data_dunia$location)
 
 # ---------------------------------
 # ui
@@ -155,6 +157,22 @@ jakarta = tabItem(tabName = 'jkt48',
                   )
                   )
 
+dunia = tabItem(tabName = 'dunia',
+                fluidRow(
+                    column(width = 12,
+                           h1('Data Covid 19 di dunia'),
+                           h4('Berikut adalah analisa data Covid 19 yang terjadi di seluruh dunia'),
+                           h5('sumber data: ourworld in data'),
+                           h5(paste0('Update data per: ',today))
+                    )
+                ),
+                fluidRow(
+                    column(width = 6,
+                           plotlyOutput('plot8',height = 450)),
+                    column(width = 6,
+                           plotOutput('plot9',height = 450))
+                )
+                )
 
 body = dashboardBody(tabItems(filterpane,covid_detail,jabar,jakarta,dunia))
 
@@ -485,6 +503,49 @@ server <- function(input, output) {
             
         
         ggarrange(chart_1,chart_2,nrow=2)   
+    })
+    
+    # plot 8
+    output$plot8 <- renderPlotly({
+        chart = 
+        data_dunia %>% 
+            group_by(location) %>% 
+            summarise(cases = max(total_cases),
+                      deaths = max(total_deaths),
+                      test = max(total_tests),
+                      population = max(population)) %>% 
+            filter(test > 0) %>% 
+            ggplot(aes(x = test,
+                       y = cases)) +
+            geom_point(aes(color = deaths,
+                           size = population,
+                           text = location)) +
+            theme(legend.position = 'none') +
+            labs(x = 'Test conducted',
+                 y = 'Cases confirmed',
+                 title = 'Cases vs Test Conducted\nAll available data')
+        
+        ggplotly(chart)
+    })
+    
+    # plot 9
+    output$plot9 = renderPlot({
+        data_dunia %>% 
+            group_by(location) %>% 
+            summarise(cases = max(total_cases),
+                      deaths = max(total_deaths),
+                      test = max(total_tests),
+                      population = max(population)) %>% 
+            ungroup() %>% 
+            filter(test > 0) %>%
+            mutate(rate = cases/test,
+                   rate = rate*100,
+                   rate = round(rate,1)) %>% View() 
+            ggplot(aes(x = reorder(location,-rate),
+                       y = rate)) +
+            geom_col(fill = 'blue') +
+            theme(axis.text.x = element_text(angle=90,size=8))
+        
     })
 }
 
