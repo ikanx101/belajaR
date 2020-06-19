@@ -46,7 +46,7 @@ data_1 = read_excel('~/Documents/belajaR/Bukan Infografis/Shiny COVID REAL/reals
 data_1 = janitor::clean_names(data_1)
 data_1 = 
   data_1 %>% 
-  select(x1,kasus_baru,dalam_perawatan,sembuh,meninggal_dunia,pdp,odp,jumlah_orang_diperiksa,
+  select(x1,kasus_baru,total_kasus,sembuh,meninggal_dunia,pdp,odp,jumlah_orang_diperiksa,
          negatif,positif_c) %>% 
   rename(tanggal = x1)
 
@@ -80,5 +80,5 @@ data_1 = read_excel("Bukan Infografis/Cawal Kovid/CawalKovid/COVID-19 di Indones
 
 
 # simpan semua datasets yang ada
-save(data_dunia,data_jabar,
+save(data_dunia,data_jabar,data_nasional_harian,
      file = '~/Documents/belajaR/Bukan Infografis/Shiny COVID REAL/realshinycovid/all files.rda')

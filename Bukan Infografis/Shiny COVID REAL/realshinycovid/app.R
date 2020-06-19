@@ -52,7 +52,9 @@ sidebar = dashboardSidebar(width = 300,
                                menuItem(tabName = 'dunia',
                                         text = 'Data Dunia'),
                                menuItem(tabName = 'jabar',
-                                        text = 'Data Covid 19 Jawa Barat')
+                                        text = 'Data Covid 19 Jawa Barat'),
+                               menuItem(tabName = 'indo_harian',
+                                        text = 'Data Covid 19 Harian Indonesia')
                                        )
             )
 
@@ -66,11 +68,14 @@ filterpane = tabItem(tabName = 'filterpane',
                                 br(),
                                 h4('Bagi yang kangen dengan Pak Yuri, silakan tonton dulu press conference hari ini:'),
                                 tags$iframe(width="560", height="315", src=paste0("https://www.youtube.com/embed/",url), frameborder="0", allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture", allowfullscreen=NA),
-                                h5('courtesy: youtube.com media indonesia')
+                                h5('courtesy: youtube.com media indonesia'),
+                                br(),
+                                h5('Sumber data yang digunakan tertulis di masing-masing tabs.')
                                 )
                      )
                      )
 
+# tab dunia
 dunia = tabItem(tabName = 'dunia',
                 fluidRow(column(width = 12,
                                 h1('Data Covid 19 Dunia'),
@@ -99,6 +104,7 @@ dunia = tabItem(tabName = 'dunia',
                          column(width = 8,plotOutput('dunia_plot_final_2',height = 450)))
                 )
 
+# tab jabar
 jabar = tabItem(tabName = 'jabar',
                 fluidRow(
                   column(width = 12,
@@ -135,11 +141,19 @@ jabar = tabItem(tabName = 'jabar',
                   column(width = 6,
                          plotOutput('plotjabar2',height = 400))
                 )
-)
+          )
 
+# tab indo harian
+indo_harian = tabItem(tabName = 'indo_harian',
+                      fluidRow(column = 12,
+                               h1('Data Harian Covid di Indonesia'),
+                               h4('Data diambil dari website: https://kawalcovid19.id/'),
+                               h5(paste0('Last update: ',tanggal))
+                               )
+                      )
 
 # body
-body = dashboardBody(tabItems(filterpane,dunia,jabar))
+body = dashboardBody(tabItems(filterpane,dunia,indo_harian,jabar))
 
 # ui all
 ui = dashboardPage(skin = "red",header,sidebar,body)
