@@ -26,7 +26,8 @@ load('all files.rda')
 benua = unique(data_dunia$continent)
 data_dunia[is.na(data_dunia)] = 0
 kota_jabar = unique(data_jabar$nama_kab)
-
+data_prov_total$latitude = as.numeric(data_prov_total$latitude)
+data_prov_total$longitude = as.numeric(data_prov_total$longitude)
 
 # tanggal
 tanggal = Sys.Date() - 1
@@ -177,7 +178,20 @@ indo_harian = tabItem(tabName = 'indo_harian',
 
 # tab provinsi 
 prov = tabItem(tabName = 'prov',
-                      fluidRow())
+               fluidRow(column(width = 12,
+                                      h1('Data Covid per Provinsi di Indonesia'),
+                                      h4('Data diambil dari website: https://kawalcovid19.id/'),
+                                      h5(paste0('Last update: ',tanggal))
+                              )
+                      ),
+               fluidRow(column(width = 7,
+                               leafletOutput('peta_ind',height = 550)
+                               ),
+                        column(width = 5,
+                               plotOutput('plot_prov1',height = 550))
+                 
+               )
+               )
 
 # body
 body = dashboardBody(tabItems(filterpane,dunia,indo_harian,jabar,prov))
@@ -568,6 +582,29 @@ server <- function(input, output, session) {
            x = 'Tanggal',
            y = 'Rasio') +
       theme(axis.text.y = element_blank())
+  })
+  
+  # plot indonesia
+  output$peta_ind = renderLeaflet({
+    
+    leaflet() %>% addTiles() %>% addCircles(data_prov_total$longitude,
+                                            data_prov_total$latitude,
+                                            popup = paste0(data_prov_total$provinsi_asal_2,
+                                                           '<br/>Total cases: ',round(data_prov_total$kasus/1000,2),' ribu',
+                                                           '<br/>Total deaths: ', round(data_prov_total$kematian/1000,2),' ribu',
+                                                           '<br/>Total recovered: ', round(data_prov_total$sembuh/1000,2),' ribu'),
+                                            radius = data_prov_total$kasus*10)
+    
+  })
+  
+  # Plot prov
+  output$plot_prov1 = renderPlot({
+    new = 
+      data_prov_total %>% 
+      mutate(ratio = (sembuh-kematian)/kasus,
+             rata = mean(ratio))
+    rata = mean(new$ratio)
+    
   })
 }
 
