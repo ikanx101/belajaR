@@ -21,6 +21,7 @@ library(leaflet)
 # ---------------------------------
 # ambil data dan semua fungsi
 rm(list=ls())
+options(scipen = 123)
 load('all files.rda')
 benua = unique(data_dunia$continent)
 data_dunia[is.na(data_dunia)] = 0
@@ -101,7 +102,7 @@ dunia = tabItem(tabName = 'dunia',
                         ),
                 br(),
                 fluidRow(column(width = 4,plotOutput('dunia_plot_final_1',height = 450)),
-                         column(width = 8,plotOutput('dunia_plot_final_2',height = 450)))
+                         column(width = 8,plotlyOutput('dunia_plot_final_2',height = 450)))
                 )
 
 # tab jabar
@@ -145,15 +146,36 @@ jabar = tabItem(tabName = 'jabar',
 
 # tab indo harian
 indo_harian = tabItem(tabName = 'indo_harian',
-                      fluidRow(column = 12,
-                               h1('Data Harian Covid di Indonesia'),
-                               h4('Data diambil dari website: https://kawalcovid19.id/'),
-                               h5(paste0('Last update: ',tanggal))
-                               )
+                      fluidRow(column(width = 9,
+                                      h1('Data Harian Covid di Indonesia'),
+                                      h4('Data diambil dari website: https://kawalcovid19.id/'),
+                                      h5(paste0('Last update: ',tanggal))
+                                      ),
+                               column(width = 3,
+                                      h5('Masukkan rentang tanggal yang diinginkan:'),
+                                      dateRangeInput('tanggal_indo',
+                                                     label = 'Tanggal',
+                                                     min = min(data_nasional_harian$tanggal),
+                                                     max = max(data_nasional_harian$tanggal),
+                                                     start = min(data_nasional_harian$tanggal),
+                                                     end = max(data_nasional_harian$tanggal))
+                                      )
+                               ),
+                      fluidRow(
+                        column(width = 6,
+                               plotOutput('indo_plot1',height = 450)),
+                        column(width = 6,
+                               plotOutput('indo_plot2',height = 450))
+                      ),
+                      br(),
+                      fluidRow(column(width = 12,
+                                      plotOutput('indo_plot3',height = 450)))
                       )
 
+
+
 # body
-body = dashboardBody(tabItems(filterpane,dunia,indo_harian,jabar))
+body = dashboardBody(tabItems(filterpane,dunia,indo_harian,jabar,prov))
 
 # ui all
 ui = dashboardPage(skin = "red",header,sidebar,body)
@@ -175,7 +197,7 @@ server <- function(input, output, session) {
     data_new %>% arrange(desc(total_cases)) %>% head(15) %>% 
       ggplot(aes(x = reorder(location,-total_cases),y = total_cases)) + 
       geom_col(color = 'darkred',size=1.25,fill = 'white') +
-      geom_label(aes(label = paste0(round(total_cases/1000,1),'rb')),size=3) +
+      geom_label(aes(label = paste0(round(total_cases/1000,2),'rb')),size=3) +
       scale_x_discrete(guide = guide_axis(n.dodge=3)) +
       theme_minimal() +
       labs(title = 'Top 15 Negara dengan Jumlah Kasus Covid 19 Terbanyak',
@@ -215,10 +237,10 @@ server <- function(input, output, session) {
     data_new %>% arrange(desc(total_tests_per_thousand)) %>% head(15) %>% 
       ggplot(aes(x = reorder(location,total_tests_per_thousand),y = total_tests_per_thousand)) + 
       geom_col(color = 'darkgreen',size=1.25,fill = 'green', alpha = .5) +
-      geom_label(aes(label = round(total_tests_per_thousand,1)),size=3) +
+      geom_label(aes(label = round(total_tests_per_thousand,2)),size=3) +
       theme_minimal() +
       labs(title = 'Top 15 Negara dengan Jumlah Tes per 1000 Orang Terbanyak',
-           subtitle = 'Negara yang melaporkan banyaknya tes',
+           subtitle = 'Catatan: hanya negara-negara yang melaporkan banyaknya tes',
            x = 'Negara',
            y = 'Jumlah Tes per 1000 orang') +
       theme(axis.text.x = element_blank(),
@@ -237,7 +259,7 @@ server <- function(input, output, session) {
     data_new %>% arrange(desc(total_deaths)) %>% head(15) %>% 
       ggplot(aes(x = reorder(location,-total_deaths),y = total_deaths)) + 
       geom_col(color = 'darkred',size=1.25,fill = 'red', alpha = .5) +
-      geom_label(aes(label = paste0(round(total_deaths/1000,1),'rb')),size=3) +
+      geom_label(aes(label = paste0(round(total_deaths/1000,2),'rb')),size=3) +
       scale_x_discrete(guide = guide_axis(n.dodge=3)) +
       theme_minimal() +
       labs(title = 'Top 15 Negara dengan Jumlah Kematian Covid 19 Terbanyak',
@@ -284,10 +306,10 @@ server <- function(input, output, session) {
       arrange(desc(new_var)) %>% head(15) %>% 
       ggplot(aes(x = reorder(location,new_var),y = new_var)) + 
       geom_col(color = 'orange',size=1.25,fill = 'yellow', alpha = .5) +
-      geom_label(aes(label = paste0(round(new_var*100,1),'%')),size=3) +
+      geom_label(aes(label = paste0(round(new_var*100,2),'%')),size=3) +
       theme_minimal() +
-      labs(title = 'Top 15 Negara dengan Ratio Cases per Test Terbanyak',
-           subtitle = 'Negara yang melaporkan banyaknya tes',
+      labs(title = 'Top 15 Negara dengan Ratio\nCases per Test Terbanyak',
+           subtitle = 'Catatan: hanya negara-negara yang\nmelaporkan banyaknya tes',
            x = 'Negara',
            y = 'Ratio cases per test') +
       theme(axis.text.x = element_blank(),
@@ -296,7 +318,7 @@ server <- function(input, output, session) {
   })
   
   # plot dunia final 1
-  output$dunia_plot_final_2 = renderPlot({
+  output$dunia_plot_final_2 = renderPlotly({
     data_new = 
       data_dunia %>%
       filter(continent %in% input$benua)
@@ -305,6 +327,7 @@ server <- function(input, output, session) {
       head(10)
     negara = negara$location
     
+    chart = 
     data_new %>%
       filter(location %in% negara) %>% 
       ggplot(aes(x = date,
@@ -318,6 +341,8 @@ server <- function(input, output, session) {
            color = 'Negara') +
       theme(axis.text.y = element_blank(),
             legend.position = 'bottom')
+    
+    ggplotly(chart)
   })
   
   
@@ -490,7 +515,55 @@ server <- function(input, output, session) {
     
     ggarrange(chart_1,chart_2,nrow=2)   
   })
-   
+ 
+  # indo plot 1
+  output$indo_plot1 = renderPlot({
+    data_nasional_harian %>% 
+      filter(tanggal >= input$tanggal_indo[1], tanggal <= input$tanggal_indo[2]) %>% 
+      ggplot(aes(x = tanggal,
+                 y = kasus_baru)) +
+      geom_smooth(method = 'loess',color = 'darkred',fill = 'red',alpha=.5) +
+      geom_col(alpha=.45) +
+      geom_text(aes(y = kasus_baru+50,label = kasus_baru),angle=90,size=3,color = 'steelblue') +
+      theme_minimal() +
+      labs(title = 'Tren Penambahan Kasus Baru Harian Indonesia',
+           x = 'Tanggal',
+           y = 'Penambahan Kasus Baru',
+           subtitle = 'Trendline menggunakan metode Loess')
+  })
+    
+  # indo plot 2
+  output$indo_plot2 = renderPlot({
+    data_nasional_harian %>% 
+      filter(tanggal >= input$tanggal_indo[1], tanggal <= input$tanggal_indo[2]) %>% 
+      ggplot(aes(x = tanggal,
+                 y = jumlah_orang_diperiksa)) +
+      geom_smooth(method = 'loess',color = 'darkred',fill = 'red',alpha=.5) +
+      geom_col(alpha = .45) +
+      geom_text(aes(y = jumlah_orang_diperiksa+50,label = jumlah_orang_diperiksa),angle=90,size=3,color = 'steelblue') +
+      theme_minimal() +
+      labs(title = 'Akumulasi Pemeriksaan Orang Indonesia',
+           x = 'Tanggal',
+           y = 'Akumulasi Pemeriksaan',
+           subtitle = 'Trendline menggunakan metode Loess')
+  })
+  
+  # indo plot 3
+  output$indo_plot3 = renderPlot({
+    data_nasional_harian %>% 
+      filter(tanggal >= input$tanggal_indo[1], tanggal <= input$tanggal_indo[2]) %>% 
+      mutate(ratio = total_kasus/jumlah_orang_diperiksa,
+             ratio = round(ratio*100,2)) %>% 
+      ggplot(aes(tanggal,ratio)) +
+      geom_line(color = 'darkred',size=2) +
+      geom_text_repel(aes(label = paste0(ratio,'%')),alpha=.5) +
+      theme_minimal() +
+      labs(title = 'Berapa rasio orang yang positif dari total semua orang yang diperiksa?',
+           subtitle = 'Data yang digunakan adalah akumulasi positif dan akumulasi tes harian',
+           x = 'Tanggal',
+           y = 'Rasio') +
+      theme(axis.text.y = element_blank())
+  })
 }
 
 

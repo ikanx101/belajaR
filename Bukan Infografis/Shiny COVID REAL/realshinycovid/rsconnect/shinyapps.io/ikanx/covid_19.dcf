@@ -5,9 +5,9 @@ account: ikanx
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 2476044
-bundleId: 3290295
+bundleId: 3290718
 url: https://ikanx.shinyapps.io/covid_19/
-when: 1592538347.80969
+when: 1592550820.38965
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: DaMen/COVID-19 di Indonesia @kawalcovid19.xlsx|DaMen/Data COVID-19 Jawa Barat.csv|DaMen/owid-covid-data.csv|preparation/All Prep.R
