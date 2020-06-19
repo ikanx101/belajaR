@@ -184,10 +184,10 @@ prov = tabItem(tabName = 'prov',
                                       h5(paste0('Last update: ',tanggal))
                               )
                       ),
-               fluidRow(column(width = 7,
+               fluidRow(column(width = 4,
                                leafletOutput('peta_ind',height = 550)
                                ),
-                        column(width = 5,
+                        column(width = 8,
                                plotOutput('plot_prov1',height = 550))
                  
                )
@@ -601,10 +601,28 @@ server <- function(input, output, session) {
   output$plot_prov1 = renderPlot({
     new = 
       data_prov_total %>% 
-      mutate(ratio = (sembuh-kematian)/kasus,
-             rata = mean(ratio))
-    rata = mean(new$ratio)
+      mutate(ratio_sembuh = sembuh/kasus,
+             ratio_mati = kematian/kasus,
+             ratio_fin = ratio_sembuh - ratio_mati,
+             ratio_fin = round(ratio_fin*100,2))
+    rata = mean(new$ratio_fin)
     
+    new %>% 
+      mutate(penanda = ifelse(ratio_fin<=rata,'red','blue')) %>% 
+      ggplot(aes(x = reorder(provinsi_asal_2,ratio_fin),
+                 y = ratio_fin)) +
+      geom_col(aes(fill = penanda),color = 'black',size=.75) +
+      scale_fill_brewer(palette = 'Set2') +
+      geom_hline(yintercept = rata,color = 'darkgreen',size=1.25) +
+      geom_label(aes(color = penanda,label = paste0(ratio_fin,'%')),size = 3) +
+      coord_flip() +
+      theme_minimal() +
+      theme(axis.text.x = element_blank(),
+            axis.title.y = element_blank(),
+            legend.position = 'none') +
+      labs(y = 'Rasio Sembuh dan Meninggal',
+           title = 'Dari kasus yang ada, berapa selisih rasio kesembuhan dan rasio korban jiwa per provinsi?',
+           subtitle = 'Lebih banyak penderita yang sembuh atau penderita yang meninggal?')
   })
 }
 
