@@ -70,21 +70,6 @@ data_prov_total = data_1
 data_prov_total = merge(data_prov_total,dbase_provinsi,all=T)
 
 
-# sheet ketiga
-data_1 = read_excel('~/Documents/belajaR/Bukan Infografis/Shiny COVID REAL/realshinycovid/DaMen/COVID-19 di Indonesia @kawalcovid19.xlsx',
-                    sheet = 'Timeline')
-
-data_1 = read_excel("Bukan Infografis/Cawal Kovid/CawalKovid/COVID-19 di Indonesia @kawalcovid19.xlsx", 
-                    sheet = "Timeline", col_types = c("date", 
-                                                      "numeric", "text", "text", "text", "text", 
-                                                      "text", "text", "text", "text", "text", 
-                                                      "text", "text", "text", "text", "text", 
-                                                      "text", "text", "text", "text", "text", 
-                                                      "text", "text", "text", "text", "text", 
-                                                      "text", "text", "text", "text", "text", 
-                                                      "text", "text", "text", "text", "text"))
-
-
 # simpan semua datasets yang ada
 save(data_dunia,data_jabar,data_nasional_harian,data_prov_total,
      file = '~/Documents/belajaR/Bukan Infografis/Shiny COVID REAL/realshinycovid/all files.rda')

@@ -30,11 +30,11 @@ data_prov_total$latitude = as.numeric(data_prov_total$latitude)
 data_prov_total$longitude = as.numeric(data_prov_total$longitude)
 
 # tanggal
-tanggal = Sys.Date() - 1
+tanggal = Sys.Date()
 tanggal = as.character(tanggal)
 
 # video update youtube masuk ke sini yah
-url = 'https://www.youtube.com/watch?v=WaF_YcKMF6A'
+url = 'https://www.youtube.com/watch?v=f4BAkKzLlLo'
 url = gsub('https://www.youtube.com/watch?v=','',url,fixed = T)
 url
 
