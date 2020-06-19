@@ -4,6 +4,7 @@ setwd("~/Documents/belajaR/Bukan Infografis/Shiny COVID REAL/realshinycovid")
 # panggil library
 library(readxl)
 library(dplyr)
+library(rvest)
 
 # data dunia
 # sumber url
@@ -18,6 +19,12 @@ data_dunia =
          location != 'International') %>% 
   select(date,continent,location,new_cases,total_cases,new_deaths,total_deaths,total_cases_per_million,total_tests,total_tests_per_thousand,population,
          median_age,gdp_per_capita,diabetes_prevalence)
+
+url = 'https://developers.google.com/public-data/docs/canonical/countries_csv'
+longlat = read_html(url) %>% html_table(fill=T)
+longlat = longlat[[1]]
+longlat = longlat %>% select(name,longitude,latitude) %>% rename(location = name)
+data_dunia = merge(data_dunia,longlat)
 
 # data pikobar
 # sumber url
@@ -73,5 +80,5 @@ data_1 = read_excel("Bukan Infografis/Cawal Kovid/CawalKovid/COVID-19 di Indones
 
 
 # simpan semua datasets yang ada
-save(data_dunia,
+save(data_dunia,data_jabar,
      file = '~/Documents/belajaR/Bukan Infografis/Shiny COVID REAL/realshinycovid/all files.rda')
