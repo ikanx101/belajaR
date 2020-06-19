@@ -49,13 +49,15 @@ header = dashboardHeader(title = "COVID 19 Viz for All",
 sidebar = dashboardSidebar(width = 300,
                            sidebarMenu(
                                menuItem(tabName = 'filterpane',
-                                        text = 'Read Me'),
+                                        text = 'Read Me',icon = icon('check')),
                                menuItem(tabName = 'dunia',
-                                        text = 'Data Dunia'),
+                                        text = 'Data Dunia',icon = icon('area-chart')),
                                menuItem(tabName = 'jabar',
-                                        text = 'Data Covid 19 Jawa Barat'),
+                                        text = 'Data Covid 19 Jawa Barat',icon = icon('newspaper-o')),
                                menuItem(tabName = 'indo_harian',
-                                        text = 'Data Covid 19 Harian Indonesia')
+                                        text = 'Data Covid 19 Harian Indonesia',icon = icon('bar-chart')),
+                               menuItem(tabName = 'prov',
+                                        text = 'Data Provinsi Indonesia',icon = icon('line-chart'))
                                        )
             )
 
@@ -173,6 +175,9 @@ indo_harian = tabItem(tabName = 'indo_harian',
                       )
 
 
+# tab provinsi 
+prov = tabItem(tabName = 'prov',
+                      fluidRow())
 
 # body
 body = dashboardBody(tabItems(filterpane,dunia,indo_harian,jabar,prov))
