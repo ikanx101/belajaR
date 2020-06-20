@@ -10,7 +10,7 @@ library(dplyr)
 # sumber url
 # https://ourworldindata.org/coronavirus
 
-data_dunia = read.csv('~/Documents/belajaR/Bukan Infografis/Shiny COVID REAL/realshinycovid/DaMen/owid-covid-data.csv')
+data_dunia = read.csv('https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv')
 
 data_dunia =
   data_dunia %>% 
