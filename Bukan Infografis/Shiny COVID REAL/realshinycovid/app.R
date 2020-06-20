@@ -317,7 +317,7 @@ server <- function(input, output, session) {
       data_dunia %>%
       filter(continent %in% input$benua) %>% 
       group_by(location) %>% 
-      filter(date == max(date)) %>% ungroup()
+      filter(date == max(date)-1) %>% ungroup()
     
     data_new %>% 
       filter(total_tests>0) %>% 
