@@ -34,7 +34,7 @@ tanggal = Sys.Date()
 tanggal = as.character(tanggal)
 
 # video update youtube masuk ke sini yah
-url = 'https://www.youtube.com/watch?v=f4BAkKzLlLo'
+url = 'https://www.youtube.com/watch?v=vcpo-fR3ZW8'
 url = gsub('https://www.youtube.com/watch?v=','',url,fixed = T)
 url
 
@@ -72,7 +72,7 @@ filterpane = tabItem(tabName = 'filterpane',
                                 br(),
                                 h4('Bagi yang kangen dengan Pak Yuri, silakan tonton dulu press conference hari ini:'),
                                 tags$iframe(width="560", height="315", src=paste0("https://www.youtube.com/embed/",url), frameborder="0", allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture", allowfullscreen=NA),
-                                h5('courtesy: youtube.com media indonesia'),
+                                h5('courtesy: youtube.com KOMPAS TV'),
                                 br(),
                                 h5('Sumber data yang digunakan tertulis di masing-masing tabs.')
                                 )
