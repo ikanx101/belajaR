@@ -30,13 +30,12 @@ scrap = function(url){
 i = 1
 data = scrap(url[i])
 
-for(i in 130:length(url)){
+for(i in 2:length(url)){
   temp = scrap(url[i])
   data = rbind(data,temp)
 }
 
 data$waktu.scrape = Sys.time()
-raw = data
 
 # proses perapihan 
 head(data)
@@ -44,5 +43,9 @@ head(data)
 data = data %>% filter(grepl('terjual',terjual,ignore.case = T)) %>%
   mutate(terjual = gsub('Terjual ','',terjual,fixed = T))
 
-save(data,raw,file = 'hasil scrape.rda')
+new = data
+load('hasil scrape.rda')
+data = rbind(data,new)
+
+save(data,file = 'hasil scrape.rda')
 data %>% openxlsx::write.xlsx('milo tokopedia.xlsx')
