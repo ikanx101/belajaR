@@ -1,0 +1,22 @@
+---
+title: "FAEDAH TIDYTEXT di R: Screening Peserta Webinar"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+setwd("~/Documents/belajaR/Bukan Infografis/Matchmaking Event")
+library(nomnoml)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# _Prelude_
+
+Di suatu pagi yang cerah, sebelum memulai WFH, HP saya berdering. Muncul pesan masuk dari kawan lama saya. Kalau dipikir-pikir lagi, dunia saya dan dirinya sangat berbeda jauh. Hampir tidak ada irisannya sama sekali. Dirinya bergerak di bidang event organizer khusus training webinar yang lagi naik daun di masa WFH sekarangdan saya bergerak di bidang data.
+
+> Saya dengar dirimu ngasih training R yah? Kata si xxx, dirimu bisa melakukan filtering macem-macem di excel yah? Si xxx bilang ke saya, kayaknya dirimu bisa menyelesaikan masalah saya!
+
+Pertama agak kaget dan tersanjung atas kalimat yang dilontarkan rekan saya tersebut. Kaget karena saya sebenarnya juga gak kenal dengan si __xxx__ dan tersanjung karena dari cerita singkatnya, _It is sounds like I am a magician_.
+
+Ceritanya, teman saya tersebut membuat scheduled webinar untuk targeted and selected person. Sebenarnya yang ditarget adalah 
+
+Catatan: untuk merahasiakan identitas pihak-pihak terkait, cerita ini didramatisir secukupnya.
