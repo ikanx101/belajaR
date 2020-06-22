@@ -1,0 +1,29 @@
+---
+title: "Mencoba SHINYAPPS: Visualisasi COVID19"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+setwd("~/Documents/belajaR/Bukan Infografis/Shiny COVID REAL")
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Shiny Web App
+
+Banyak orang bilang bahwa R tidak _powerful enough_ untuk dijadikan basis suatu aplikasi. Memang benar adanya, karena awalnya R digunakan sebagai _data analisys tools_. Namun, dengan perkembangan yang ada, kini R bisa digunakan untuk membuat suatu aplikasi _web-based_ seperti __Shiny Apps__.
+
+Awalnya saya agak malas untuk mempelajari hal ini. _Rmarkdown Xaringan_ menurut saya sudah cukup untuk pekerjaan sehari-hari membuat _report_ market riset dan _data science_ di kantor. Untuk urusan _dashboard_, saya sudah fasih menggunakan __Qlik Sense__ [sejak lama](https://passingthroughresearcher.wordpress.com/2015/06/22/big-data-series-your-big-data-project-starts-with-your-own-data/) dan kini kantor memilih untuk _deploy_ __Tableau__.
+
+> Buat apa saya harus belajar Shiny lagi?
+
+Begitu pikir saya.
+
+Namun minggu lalu, saat saya dihadapkan untuk membuat _dashboard_ hasil riset di __Tableau__, saya menemukan kesulitan saat membuat struktur data dari _multiple answer questions_. Susah banget ternyata. Tidak semudah Qlik Sense. 
+
+Dengan metode pivot sampai _export pre-processed data_ ke format __.json__ sudah saya lakukan. Belum ada satupun yang memuaskan saya.
+
+Sampai akhirnya saya mencoba si Shiny.
+
+Ternyata cukup mudah yah. Jika kalian sudah terbiasa membuat Rmarkdown dan memang menyimpan functions visualisasi, ini adalah cara yang termudah dalam membuat Shiny.
+
+Singkat cerita, dalam sehari saya bisa membuat semacam mini _dashboard_ visualisasi untuk [Covid 19](https://ikanx.shinyapps.io/covid_19/). Bukan hanya visualisasi, tapi saya meng- _embed_ algoritma _scraping_ data otomatis setiap kali saya _republish to server_.
