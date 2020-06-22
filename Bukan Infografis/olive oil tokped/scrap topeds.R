@@ -4,15 +4,7 @@ library(rvest)
 library(dplyr)
 
 # ambil dbase links 
-link = readLines('~/Documents/belajaR/Bukan Infografis/olive oil tokped/all available links.txt')
-link = unique(link)
-dummy = data.frame(id = c(1:length(link)),
-                   url = link)
-
-dummy = 
-  dummy %>% 
-  filter(!grepl('promo/v1/clicks',url))
-url = dummy$url
+load('all data.rda')
 
 scrap = function(url){
   data = 
@@ -33,19 +25,13 @@ data = scrap(url[i])
 for(i in 2:length(url)){
   temp = scrap(url[i])
   data = rbind(data,temp)
+  print(paste0('ambil data ke ',
+               i,
+               'done - alhamdulillah'))
 }
 
 data$waktu.scrape = Sys.time()
 
-# proses perapihan 
-head(data)
+raw = data
 
-data = data %>% filter(grepl('terjual',terjual,ignore.case = T)) %>%
-  mutate(terjual = gsub('Terjual ','',terjual,fixed = T))
-
-new = data
-load('hasil scrape.rda')
-data = rbind(data,new)
-
-save(data,file = 'hasil scrape.rda')
-data %>% openxlsx::write.xlsx('milo tokopedia.xlsx')
+save(raw,url,file = 'hasil scrape.rda')
