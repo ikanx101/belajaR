@@ -25,12 +25,34 @@ Teman saya tersebut membuat _scheduled webinar_ untuk _targeted and selected per
 
 Begitu keluh kesahnya.
 
-Usut punya usut, ternyata _event_ tersebut akan diadakan esok pagi. Nah lho...!
+Usut punya usut, ternyata _event_ tersebut akan diadakan esok pagi. _Nah lho...!_
 
 # _Challenge_
 
 Tanpa berjanji yang muluk-muluk, saya sampaikan kepada kawan saya tersebut untuk memberikan daftar perusahaan target dan data pendaftar _webinar_ yang dia miliki.
 
-Dalam sekejap, email tersebut masuk dan saya coba lihat sekilas.
+Dalam sekejap, _email_ tersebut masuk dan saya coba lihat sekilas.
 
-Catatan: untuk merahasiakan identitas pihak-pihak terkait, cerita ini didramatisir secukupnya.
+Ternyata benar, _input text_ `nama perusahaan` dari data pendaftar lumayan rumit.
+
+> Gak bisa manual nih.
+
+Pikir saya.
+
+Jadi, kira-kira beginilah algoritma simpel yang saya kerjakan:
+
+```{r echo=FALSE}
+nomnoml('[Data Target] -> [Nama perusahaan target]
+        [Nama perusahaan target] -- [Bigrams|dipecah menjadi bigrams]
+        [Data Pendaftar] -> [Nama Perusahaan Pendaftar]
+        [Bigrams] --> [Regex|menggunakan grepl]
+        [Regex] <-- [Nama Perusahaan Pendaftar]')
+```
+
+Jadi dengan memanfaatkan _function_ `unnest_tokens()` di `library(tidytext)`, saya memisahkan pasangan kata yang mungkin ada dari nama perusahaan target. Lalu dengan memanfaatkan _reguler expression_ `grepl()` saya mengecek apakah pasangan kata tersebut muncul di penulisan pendaftar.
+
+# _Final_
+
+Setelah saya berikan hasilnya dan diskusi lebih lanjut, kawan saya tersebut puas dengan hasilnya. _Alhamdulillah_.
+
+Catatan: untuk merahasiakan identitas pihak-pihak terkait, cerita ini didramatisir secukupnya dan datanya tidak bisa saya sampaikan seutuhnya.
