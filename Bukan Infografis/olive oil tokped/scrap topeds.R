@@ -13,7 +13,8 @@ scrap = function(url){
         nama = html_nodes(.,'.css-x7lc0h') %>% html_text(),
         harga = html_nodes(.,".css-c820vl") %>% html_text(),
         seller = html_nodes(.,'.css-xmjuvc') %>% html_text(),
-        terjual = html_nodes(.,'b') %>% html_text()
+        terjual = html_nodes(.,'b') %>% html_text(),
+        link = url
         )
     }
   return(data)
@@ -22,7 +23,7 @@ scrap = function(url){
 i = 1
 data = scrap(url[i])
 
-for(i in 2:length(url)){
+for(i in 446:length(url)){
   temp = scrap(url[i])
   data = rbind(data,temp)
   print(paste0('ambil data ke ',
