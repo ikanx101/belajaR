@@ -60,8 +60,46 @@ Dengan membandingkan data tes dan data kenaikan kasus positif, kita bisa
 mendapatkan gambaran yang lebih baik mengenai kondisi terkini di
 Indonesia.
 
-    ## New names:
-    ## * `` -> ...1
-    ## * `` -> ...29
+<img src="2020-06-22-covid-bersinar_files/figure-gfm/unnamed-chunk-1-1.png" width="960" />
 
-![](2020-06-22-covid-bersinar_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
+Secara visual, dapat dilihat bahwa kedua data ini **pasti** berkorelasi
+kuat *yah*. Jadi ya memang kenaikan kasus yang tinggi adalah wajar
+karena angka pemeriksaan yang dilakukan juga tinggi.
+
+Kalau dihitung korelasinya, maka:
+
+``` r
+cor.test(data_1$total_kasus,data_1$jumlah_orang_diperiksa)
+```
+
+    ## 
+    ##  Pearson's product-moment correlation
+    ## 
+    ## data:  data_1$total_kasus and data_1$jumlah_orang_diperiksa
+    ## t = 197.61, df = 110, p-value < 0.00000000000000022
+    ## alternative hypothesis: true correlation is not equal to 0
+    ## 95 percent confidence interval:
+    ##  0.9979548 0.9990343
+    ## sample estimates:
+    ##       cor 
+    ## 0.9985946
+
+Sekarang, saya akan hitung rasio positif per pemeriksaan, yakni berapa
+persen orang yang positif dari semua orang yang diperiksa terkait Covid
+19.
+
+<img src="2020-06-22-covid-bersinar_files/figure-gfm/unnamed-chunk-3-1.png" width="960" />
+
+Berdasarkan grafik di atas, tampaknya rasio positif per pemeriksaan di
+Indonesia sudah relatif *stabil* di angka `~12%`. Saya tidak
+menyimpulkan bahwa angka ini bagus ya\! Saya akan sangat *happy* jika
+rasio ini semakin turun hingga di bawah `5%`.
+
+### Lalu bagaimana cara menurunkan rasio ini?
+
+Simpel:
+
+1.  Menaikkan angka pemeriksaan: Pemerintah harus lebih gencar dan rajin
+    melakukan banyak pemeriksaan secara masif kepada masyarakat.
+2.  Menurunkan angka positif: Masyarakat juga harus sadar dengan
+    protokol kesehatan.

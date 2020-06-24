@@ -5,6 +5,7 @@ output: github_document
 
 ```{r setup, include=FALSE}
 setwd("~/Documents/belajaR/Bukan Infografis/Shiny COVID REAL")
+options(scipen = 123)
 library(dplyr)
 library(ggplot2)
 knitr::opts_chunk$set(echo = TRUE)
@@ -44,7 +45,7 @@ Namun, perlu diperhatikan. Data kenaikan kasus positif adalah data akibat. Lalu 
 
 Dengan membandingkan data tes dan data kenaikan kasus positif, kita bisa mendapatkan gambaran yang lebih baik mengenai kondisi terkini di Indonesia.
 
-```{r,echo=FALSE}
+```{r,echo=FALSE,fig.retina=10,fig.width=10,warning=FALSE,message=FALSE}
 data_1 = readxl::read_excel('/home/ikanx101githubio/Documents/belajaR/Bukan Infografis/Shiny COVID REAL/realshinycovid/DaMen/COVID-19 di Indonesia @kawalcovid19.xlsx',
                           sheet = 'Statistik Harian')
 
@@ -64,8 +65,8 @@ c1 =
 data_1 %>% 
   ggplot(aes(x = tanggal,
              y = total_kasus)) +
-  geom_line(color = 'darkred') +
-  labs(title = 'Akumulasi Kasus Covid 19 di Indonesia') +
+  geom_line(color = 'darkred',size=1.25) +
+  labs(title = 'Akumulasi Kasus Covid 19\ndi Indonesia') +
   theme_minimal() +
   theme(axis.title = element_blank())
 
@@ -73,10 +74,47 @@ c2 =
 data_1 %>% 
   ggplot(aes(x = tanggal,
              y = jumlah_orang_diperiksa)) +
-  geom_line(color = 'darkred') +
-  labs(title = 'Akumulasi Orang yang Diperiksa Terkait Covid 19 di Indonesia') +
+  geom_line(color = 'steelblue',size=1.25) +
+  labs(title = 'Akumulasi Orang yang Diperiksa\nTerkait Covid 19 di Indonesia') +
   theme_minimal() +
   theme(axis.title = element_blank())
 
 ggarrange(c1,c2,ncol = 2,nrow = 1)
 ```
+
+Secara visual, dapat dilihat bahwa kedua data ini __pasti__ berkorelasi kuat _yah_. Jadi ya memang kenaikan kasus yang tinggi adalah wajar karena angka pemeriksaan yang dilakukan juga tinggi.
+
+Kalau dihitung korelasinya, maka:
+
+```{r}
+cor.test(data_1$total_kasus,data_1$jumlah_orang_diperiksa)
+```
+
+Sekarang, saya akan hitung rasio positif per pemeriksaan, yakni berapa persen orang yang positif dari semua orang yang diperiksa terkait Covid 19.
+
+```{r,echo=FALSE,fig.retina=10,fig.width=10}
+data_1 %>% 
+  mutate(rasio = total_kasus/jumlah_orang_diperiksa,
+         rasio = rasio*100,
+         rasio = round(rasio,2)) %>% 
+  ggplot(aes(x = tanggal,
+             y = rasio)) +
+  geom_line(color = 'orange',size=1.5) +
+  ggrepel::geom_text_repel(aes(label = paste0(rasio,'%')),size=2.5,alpha=.4) +
+  ggthemes::theme_wsj() +
+  labs(title = 'Rasio Akumulasi Kasus Positif Covid 19 per Akumulasi Pemeriksaan Harian',
+       caption = 'ikanx101.github.io',
+       y = "Rasio") +
+  theme(plot.title = element_text(size=14),
+        axis.text.y = element_text(size=5),
+        plot.caption = element_text(size=10))
+```
+
+Berdasarkan grafik di atas, tampaknya rasio positif per pemeriksaan di Indonesia sudah relatif _stabil_ di angka `~12%`. Saya tidak menyimpulkan bahwa angka ini bagus ya! Saya akan sangat _happy_ jika rasio ini semakin turun hingga di bawah `5%`.
+
+### Lalu bagaimana cara menurunkan rasio ini?
+
+Simpel:
+
+1. Menaikkan angka pemeriksaan: Pemerintah harus lebih gencar dan rajin melakukan banyak pemeriksaan secara masif kepada masyarakat.
+2. Menurunkan angka positif: Masyarakat juga harus sadar dengan protokol kesehatan.
