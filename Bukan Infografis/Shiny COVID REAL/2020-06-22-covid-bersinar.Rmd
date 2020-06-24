@@ -5,6 +5,8 @@ output: github_document
 
 ```{r setup, include=FALSE}
 setwd("~/Documents/belajaR/Bukan Infografis/Shiny COVID REAL")
+library(dplyr)
+library(ggplot2)
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -22,8 +24,59 @@ Namun minggu lalu, saat saya dihadapkan untuk membuat _dashboard_ hasil riset di
 
 Dengan metode pivot sampai _export pre-processed data_ ke format __.json__ sudah saya lakukan. Belum ada satupun yang memuaskan saya.
 
-Sampai akhirnya saya mencoba si Shiny.
+Sampai akhirnya saya mencoba si _Shiny_.
 
-Ternyata cukup mudah yah. Jika kalian sudah terbiasa membuat Rmarkdown dan memang menyimpan functions visualisasi, ini adalah cara yang termudah dalam membuat Shiny.
+Ternyata cukup mudah yah. Jika kalian sudah terbiasa membuat _Rmarkdown_ dan memang menyimpan _functions_ visualisasi, ini adalah cara yang termudah dalam membuat _Shiny_.
 
 Singkat cerita, dalam sehari saya bisa membuat semacam mini _dashboard_ visualisasi untuk [Covid 19](https://ikanx.shinyapps.io/covid_19/). Bukan hanya visualisasi, tapi saya meng- _embed_ algoritma _scraping_ data otomatis setiap kali saya _republish to server_.
+
+## Analisa yang Dilakukan
+
+Salah satu pertanyaan yang sering muncul adalah:
+
+> Kapan pandemi ini berakhir?
+
+Jika pada tulisan sebelumnya, saya banyak membahas mengenai _math modelling_, sekarang saya akan coba melihat dari data yang ada.
+
+Dua minggu pasca lebaran, jika kita perhatikan angka kenaikan kasus positif Covid 19 di Indonesia perharinya mencapai angka sekitar 1.000 orang. Ini membuat sebagian dari kita bertanya-tanya.
+
+Namun, perlu diperhatikan. Data kenaikan kasus positif adalah data akibat. Lalu apa data sebabnya? Yaitu adalah data banyaknya tes yang dijalankan.
+
+Dengan membandingkan data tes dan data kenaikan kasus positif, kita bisa mendapatkan gambaran yang lebih baik mengenai kondisi terkini di Indonesia.
+
+```{r,echo=FALSE}
+data_1 = readxl::read_excel('/home/ikanx101githubio/Documents/belajaR/Bukan Infografis/Shiny COVID REAL/realshinycovid/DaMen/COVID-19 di Indonesia @kawalcovid19.xlsx',
+                          sheet = 'Statistik Harian')
+
+data_1 = janitor::clean_names(data_1)
+data_1 = 
+  data_1 %>% 
+  select(x1,kasus_baru,total_kasus,sembuh,meninggal_dunia,pdp,odp,jumlah_orang_diperiksa,
+         negatif,positif_c) %>% 
+  rename(tanggal = x1) %>% 
+  mutate(tanggal = as.Date(tanggal))
+
+data_1[is.na(data_1)] = 0
+
+library(ggpubr)
+
+c1 = 
+data_1 %>% 
+  ggplot(aes(x = tanggal,
+             y = total_kasus)) +
+  geom_line(color = 'darkred') +
+  labs(title = 'Akumulasi Kasus Covid 19 di Indonesia') +
+  theme_minimal() +
+  theme(axis.title = element_blank())
+
+c2 = 
+data_1 %>% 
+  ggplot(aes(x = tanggal,
+             y = jumlah_orang_diperiksa)) +
+  geom_line(color = 'darkred') +
+  labs(title = 'Akumulasi Orang yang Diperiksa Terkait Covid 19 di Indonesia') +
+  theme_minimal() +
+  theme(axis.title = element_blank())
+
+ggarrange(c1,c2,ncol = 2,nrow = 1)
+```
