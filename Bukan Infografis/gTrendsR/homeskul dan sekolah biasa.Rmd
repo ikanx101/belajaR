@@ -1,0 +1,43 @@
+---
+title: "Akhir Saga Sekolah Si Sulung"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("~/Documents/belajaR/Bukan Infografis/gTrendsR")
+library(dplyr)
+library(gtrendsR)
+library(ggplot2)
+library(ggthemes)
+```
+
+Pada awal tahun ini, saya dan istri sudah berencana untuk [memindahkan sekolah si sulung](https://ikanx101.github.io/blog/sekolah-cula/). _Qodarullah_, selama wabah ini beberapa kali terjadi konflik antara wali murid dan pihak sekolah. Puncaknya sampai kami berpikir bahwa keputusan di awal tahun sudah benar.
+
+> Iya, kami sudah capek membahas hal-hal tak esensial yang tidak sepatutnya menjadi masalah besar.
+
+Namun demikian, karena tidak ada yang tahu kapan pandemi ini selesai, kami sempat berpikir untuk meng- _homeschooling_-kan si sulung. Alasannya jelas yah! Kesehatan nomor satu.
+
+Setelah mencari-cari beberapa informasi yang ada, tampaknya istilah _homeschooling_ memang lagi naik daun yah. Ini tergambar dari tren pencarian _term_ `homeschooling` di Google. 
+
+
+```{r,echo=FALSE,fig.retina=10,warning=FALSE,message=FALSE}
+load('hasil homeskul.rda')
+
+interest = data[[1]]
+interest %>% 
+  mutate(date = as.Date(date)) %>% 
+  ggplot(aes(x = date,
+             y = hits)) +
+  geom_line(color = 'steelblue') +
+  geom_smooth(method = 'loess', color = 'darkred',fill = 'red') +
+  theme_economist_white() +
+  labs(title = 'Google Trends: Homeschooling',
+       subtitle = 'di Indonesia',
+       x = 'Timeframe',
+       y = 'Relative hits')
+  
+```
+
+Kami sempat mengikuti beberapa webinar terkait _homeschooling_, ada yang diselenggarakan oleh rumah inspirasi dan sekolahmu. Sebenarnya ini bukan yang pertama bagi kami karena di 2018 lalu saat mencari sekolah untuk si Sulung, kami sempat mempertimbangkan opsi ini. 
+
