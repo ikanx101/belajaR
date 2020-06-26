@@ -1,0 +1,35 @@
+---
+title: "Beli Laptop Murah Untuk Data Science"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+setwd("~/Documents/belajaR/Bukan Infografis/Chromium OS")
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Selama beberapa tahun ini saya menggunakan Galaxy Tab A berukuran 10 inch sebagai second _daily driver_ saya. Alasannya simpel: layar besar dan bisa digunakan untuk melakukan _analytics on the go_ (menggunakan [_cloud_](https://ikanx101.github.io/blog/r-cloud/) atau [_hard install_](https://passingthroughresearcher.wordpress.com/2019/06/12/analytics-on-the-go-cara-install-r-ke-gadget-android/)).
+
+Jadi saya bukan gaya-gayaan pake tablet segede talenan yah. Tapi memang ada alasan kuat dibalik itu.
+
+Sepanjang perjalanannya, ternyata saya butuh sesuatu yang lebih powerful tapi tidak juga menepikan unsur mobilitas. Saya diberikan laptop kantor yang sangat powerful tapi bobotnya lumayan berat.
+
+> Harus ada laptop lain berukuran kecil yang bisa digunakan untuk pekerjaan saya sehari-hari menggunakan __R__.
+
+Setelah cek sana-sini, pilihan jatuh pada laptop _Axioo Mybook 11 lite_. Kebetulan juga, sedang ada [_flash sale_ di __jd.id__](https://www.jd.id/product/axioo-mybook-11-lite-4gb-online-deal-silver_603033132/603034079.html). Tanpa pikir panjang, maka saya beli saja langsung laptop tersebut.
+
+```{r,fig.width=10}
+knitr::include_graphics('axioo.png')
+```
+
+> Kenapa sih pilihnya Axioo?
+
+Saya dan istri punya sejarah panjang dengan merek ini.
+
+Dulu waktu kuliah, saya menggunakan laptop Axioo sejak semester III sampai kerja. Alhamdulillah Allah mengizinkan saya lulus kuliah menggunakan laptop tersebut.
+
+Pun demikian dengan istri saya saat kuliah dulu. Saya berhasil meracuninya agar membeli laptop merek sama. Laptop tersebut menemani dia dan adiknya saat kuliah dulu. Bahkan laptop tersebut masih hidup sampai sekarang dan masih digunakan oleh mertua saya.
+
+Kembali ke topik, jika dilihat dari speknya yang pas-pasan, maka dari awal memang saya akan memasang __OS__ non _Windows_ ke dalam laptop tersebut.
+
+> Pasang Ubuntu juga nih. Biar greget!
