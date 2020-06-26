@@ -10,28 +10,34 @@ setwd("~/Documents/belajaR/Bukan Infografis/Al Quran")
 library(dplyr)
 library(katadasaR)
 library(tidytext)
+library(NLP)
+library(tm)
+library(topicmodels)
 
-load(file = 'alquran.rda')  
+load(file = 'alquran.rda')
+stop_wot = readLines('https://raw.githubusercontent.com/stopwords-iso/stopwords-id/master/stopwords-id.txt')
+
+final = 
+  data_new %>% 
+  select(surah.id,ayat,stem) %>% 
+  filter(!stem %in% stop_wot) %>% 
+  group_by(surah.id,ayat) %>% 
+  summarize(gabung = stringr::str_c(stem,collapse=' ')) %>% 
+  filter(surah.id %in% c(2:5))
+
+NAME = final$gabung
+NAME = Corpus(VectorSource(NAME))
+tdm = TermDocumentMatrix(NAME)
+dtm = as.DocumentTermMatrix(tdm) 
+rowTotals = apply(dtm , 1, sum) 
+dtm = dtm[rowTotals> 0, ]         
+
+library(topicmodels)
+lda = LDA(dtm, k = 5)  
+term = terms(lda, 10)  
+term = apply(term, MARGIN = 2, paste, collapse = ", ")
+cbind(term)
+
+
+findAssocs(tdm, "kafir", 0.25)
 ```
-
-## GitHub Documents
-
-This is an R Markdown format used for publishing markdown documents to GitHub. When you click the **Knit** button all R code chunks are run and a markdown file (.md) suitable for publishing to GitHub is generated.
-
-## Including Code
-
-You can include R code in the document as follows:
-
-```{r cars}
-summary(cars)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
