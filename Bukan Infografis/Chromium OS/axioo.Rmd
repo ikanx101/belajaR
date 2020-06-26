@@ -22,7 +22,9 @@ Setelah cek sana-sini, pilihan jatuh pada laptop _Axioo Mybook 11 lite_. Kebetul
 knitr::include_graphics('axioo.png')
 ```
 
-> Kenapa sih pilihnya Axioo?
+____
+
+## Kenapa sih pilihnya Axioo?
 
 Saya dan istri punya sejarah panjang dengan merek ini.
 
@@ -33,3 +35,25 @@ Pun demikian dengan istri saya saat kuliah dulu. Saya berhasil meracuninya agar 
 Kembali ke topik, jika dilihat dari speknya yang pas-pasan, maka dari awal memang saya akan memasang __OS__ non _Windows_ ke dalam laptop tersebut.
 
 > Pasang Ubuntu juga nih. Biar greget!
+
+Seketika saya unboxing laptop tersebut, saya langsung install Ubuntu dengan protokol yang sama dengan yang saya lakukan sebelumnya ke laptop kantor.
+
+Ternyata tidak secepat laptop kantor yah. Butuh waktu beberapa jam hingga semua tools yang saya butuhkan terinstall di sana.
+
+Setelah dipakai 2 minggu, saya belum puas maksimal dengan kinerjanya. Jika diberikan skor, keandalannya dan kecepatan (reaktif) saya berikan skor 75 (dibandingkan laptop kantor yang 100).
+
+Tapi kalau dinilai wajar sih, saya memang menggunakan beberapa libraries dan functions yang memakan kinerja laptop. Oh iya, si Shinyapps Covid itu saya finalisasi dan maintain dengan si Axioo ini lho.
+
+> Harus ada cara lain agar laptop ini berfungsi seutuhnya.
+
+Maka saya beralih ke Chromium OS dari CloudReady. Ini juga bukan yang pertama saya menggunakan Chromium OS yah. Saya pernah menginstallnya ke raspberry Pi saya dan mencobanya dengan live usb ke laptop kantor. 
+
+> Sangat ringan.
+
+Begitu impresinya.
+
+Maka saya coba install Chromium OS ke sana. Caranya gimana? Bisa liat langsung tutorial di situs resminya yah.
+
+Sekarang saya akan berikan step by step untuk bisa menginstall R versi terbaru (R 4.0.2) dan RStudio terbaru.
+
+# Install R
