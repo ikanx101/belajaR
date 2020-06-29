@@ -1,8 +1,9 @@
 ---
 title: "Analisa dan Forecast Harga Gula"
-author: "@mr.ikanx"
-date: "January 23, 2020"
+author: "ikanx101.github.io"
+date: "June 29, 2020"
 output:
+  github_document
   html_document:
     toc: true
     toc_depth: 2
@@ -16,11 +17,9 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-```
-
-```{r,include=FALSE,warning=FALSE,message=FALSE}
 rm(list=ls())
-setwd('D:/Project_R/Harga Gula')
+
+# libraries
 library(dplyr)
 library(forecast)
 library(TTR)
@@ -31,34 +30,14 @@ library(TSstudio)
 library(ggplot2)
 library(padr)
 library(tidyverse)
+
+# load data
 load('data_gula.rda')
-data_harga_gula_final$`ISA Daily Price *`[299] = 12.56
 ```
 
 ```{r,include=FALSE}
-train_data = data_harga_gula_final
-colnames(train_data) = janitor::make_clean_names(colnames(train_data))
-id = rep(c(1:365),3)
-train_data = train_data %>% separate(date,into = c('tgl','bln','thn'),sep=' ') %>%
-  separate(isa_daily_price,into = c('harga','unit'),sep=' ') %>%
-  select(tgl,bln,thn,harga) %>%
-  mutate(bln = case_when(bln == 'Jan' ~ 1,
-                         bln == 'Feb' ~ 2,
-                         bln == 'Mar' ~ 3,
-                         bln == 'Apr' ~ 4,
-                         bln == 'May' ~ 5,
-                         bln == 'Jun' ~ 6,
-                         bln == 'Jul' ~ 7,
-                         bln == 'Aug' ~ 8,
-                         bln == 'Sep' ~ 9,
-                         bln == 'Oct' ~ 10,
-                         bln == 'Nov' ~ 11,
-                         bln == 'Dec' ~ 12)) %>%
-  mutate(new_tanggal = paste(bln,tgl,thn,sep='/'),
-         new_tanggal = lubridate::mdy(new_tanggal)) %>%
-  arrange(new_tanggal)
+train_data = data
 
-# rentang waktu
 rentang = range(train_data$new_tanggal)
 ```
 
@@ -72,18 +51,19 @@ Apakah bisa kita membuat model _time series_ untuk melakukan _forecast_ data har
 
 ## Data yang dipakai
 
-Data yang digunakan diambil dari situs [isosugar.org](https://www.isosugar.org/prices.php?pricerange=currentmonth). Data yang tersedia adalah data harga gula harian sejak dari `Januari 2017` hingga `Januari 2020`.
+Data yang digunakan diambil dari situs [isosugar.org](https://www.isosugar.org/prices.php?pricerange=currentmonth). Data yang tersedia adalah data harga gula harian sejak dari `r rentang[1]` hingga `r rentang[2]`.
 
 Data diambil dengan cara _web scrap_.
 
-Kita hanya akan membuat model berdasarkan data `Januari 2017` hingga `Desember 2019` sedangkan data `Januari 2020` akan digunakan untuk validasi model _forecast_.
+Kita hanya akan membuat model berdasarkan data `Januari 2017` hingga `Desember 2019` sedangkan data pada tahun `2020` akan digunakan untuk validasi model _forecast_.
 
 ## _Missing data_ `NA`
 
 Dari data harian yang ada, ternyata pada saat hari libur datanya kosong (`NA`). Data kosong ini akan diisi harga pada hari sebelumnya (misal: _closing_ harga Jumat atau kondisi lainnya).
 
 ```{r,include=FALSE}
-train_data = train_data %>% pad(start_val = lubridate::mdy('1/1/2017'),end_val = rentang[2])
+train_data = train_data %>% pad(start_val = lubridate::mdy('1/1/2017'),
+                                end_val = lubridate::mdy('12/31/2019'))
 
 # isi harga pada tanggal 1-2 Januari 2017 berdasarkan info di
 # https://www.isosugar.org/prices.php?pricerange=2016-12-01

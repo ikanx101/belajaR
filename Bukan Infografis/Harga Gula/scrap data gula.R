@@ -53,4 +53,31 @@ tambahan_url = 'https://www.isosugar.org/prices.php?pricerange=currentmonth'
 data_last = gula(tambahan_url)
 data_harga_gula_final = rbind(data_harga_gula,data_last)
 
-save(data_harga_gula,data_harga_gula_final,file = 'data_gula.rda')
+data = 
+  data_harga_gula_final %>% 
+  janitor::clean_names() %>% 
+  tidyr::separate(isa_daily_price,
+                  into = c('harga','unit'),
+                  sep = '\\ ') %>% 
+  mutate(harga = as.numeric(harga),
+         harga = ifelse(harga == 0, 12.56, harga)) %>% 
+  tidyr::separate(date,into = c('tgl','bln','thn'),sep='\\ ') %>% 
+  select(tgl,bln,thn,harga) %>%
+  mutate(bln = case_when(bln == 'Jan' ~ 1,
+                         bln == 'Feb' ~ 2,
+                         bln == 'Mar' ~ 3,
+                         bln == 'Apr' ~ 4,
+                         bln == 'May' ~ 5,
+                         bln == 'Jun' ~ 6,
+                         bln == 'Jul' ~ 7,
+                         bln == 'Aug' ~ 8,
+                         bln == 'Sep' ~ 9,
+                         bln == 'Oct' ~ 10,
+                         bln == 'Nov' ~ 11,
+                         bln == 'Dec' ~ 12)) %>%
+  mutate(new_tanggal = paste(bln,tgl,thn,sep='/'),
+         new_tanggal = lubridate::mdy(new_tanggal)) %>%
+  arrange(new_tanggal) %>% 
+  select(new_tanggal,harga)
+
+save(data,file = 'data_gula.rda')
