@@ -3,7 +3,6 @@ title: "Analisa dan Forecast Harga Gula"
 author: "ikanx101.github.io"
 date: "June 29, 2020"
 output:
-  github_document
   html_document:
     toc: true
     toc_depth: 2
@@ -55,7 +54,7 @@ Data yang digunakan diambil dari situs [isosugar.org](https://www.isosugar.org/p
 
 Data diambil dengan cara _web scrap_.
 
-Kita hanya akan membuat model berdasarkan data `Januari 2017` hingga `Desember 2019` sedangkan data pada tahun `2020` akan digunakan untuk validasi model _forecast_.
+Kita hanya akan membuat model berdasarkan data `Januari 2017` hingga `Mei 2020` sedangkan data pada `Juni 2020` akan digunakan untuk validasi model _forecast_.
 
 ## _Missing data_ `NA`
 
@@ -63,7 +62,7 @@ Dari data harian yang ada, ternyata pada saat hari libur datanya kosong (`NA`). 
 
 ```{r,include=FALSE}
 train_data = train_data %>% pad(start_val = lubridate::mdy('1/1/2017'),
-                                end_val = lubridate::mdy('12/31/2019'))
+                                end_val = lubridate::mdy('6/25/2020'))
 
 # isi harga pada tanggal 1-2 Januari 2017 berdasarkan info di
 # https://www.isosugar.org/prices.php?pricerange=2016-12-01
@@ -76,12 +75,10 @@ for(i in 1:length(train_data$new_tanggal)){
   train_data$harga[i] = ifelse(is.na(train_data$harga[i]),train_data$harga[i-1],train_data$harga[i])
 }
 
-train_data = train_data %>% mutate(tanggal = new_tanggal,
-                                   harga = as.numeric(harga)) %>%
-  select(new_tanggal,harga)
-
 # kita mulai state variabel time series ts di sini:
-ts = ts(train_data$harga,start=c(2017,1,1),frequency=366)
+ts = ts(train_data$harga,
+        start=c(2017,1,1),
+        frequency=365)
 ```
 
 ## Bagaimana visualisasi datanya?
@@ -113,13 +110,15 @@ Ternyata datanya tidak stasioner sehingga perlu ada transformasi agar menjadi st
 
 > Bagaimana mencari nilai `n`?
 
-```{r,echo=FALSE,message=FALSE,warning=FALSE}
+```{r,echo=TRUE,message=FALSE,warning=FALSE}
 ndiffs(ts, alpha=0.05, test=c('kpss'))
 ```
 
 Sehingga didapat `lag = 1` hari. 
 
 > `new_time_series = current_time_series[i+1] - current_time_series[i]`
+
+Yakni: data esok dikurang data sekarang.
 
 Bagaimana hasil transformasinya?
 
@@ -158,8 +157,8 @@ Kita akan membuat model untuk _forecast_ harga gula. Agar bisa melakukan _cross 
 2. `test` _dataset_, yakni data harga gula pada Januari 2020 agar kita bisa menilai _performance_ dari model yang kita buat.
 
 ```{r,echo=FALSE,message=FALSE,warning=FALSE}
-test = tail(ts_transformed,22)
-train = head(ts_transformed,(1116-22))
+test = tail(ts_transformed,25)
+train = head(ts_transformed,(1271-25))
 
 ts_plot(train)
 ts_plot(test)
@@ -172,7 +171,7 @@ Kita akan membuat beberapa model _time series_, model yang terbaik akan dipilih 
 
 ```{r,echo=FALSE,message=FALSE,warning=FALSE}
 model.test <- stlm(train, method = "arima")
-fc.test <- forecast(model.test, h = 22)
+fc.test <- forecast(model.test, h = 25)
 
 test_forecast(actual = ts_transformed,
               forecast.obj = fc.test, 
@@ -185,7 +184,7 @@ accuracy(fc.test, test)
 
 ```{r,echo=FALSE,message=FALSE,warning=FALSE}
 model.test <- stlm(train, method = "ets")
-fc.test <- forecast(model.test, h = 22)
+fc.test <- forecast(model.test, h = 25)
 
 test_forecast(actual = ts_transformed,
               forecast.obj = fc.test, 
@@ -198,7 +197,7 @@ accuracy(fc.test, test)
 
 ```{r,echo=FALSE,message=FALSE,warning=FALSE}
 model.test <- auto.arima(train)
-fc.test <- forecast(model.test, h = 22)
+fc.test <- forecast(model.test, h = 25)
 
 test_forecast(actual = ts_transformed,
               forecast.obj = fc.test, 
@@ -211,7 +210,7 @@ accuracy(fc.test, test)
 
 ```{r,echo=FALSE,message=FALSE,warning=FALSE}
 model.test <- HoltWinters(train)
-fc.test <- forecast(model.test, h = 22)
+fc.test <- forecast(model.test, h = 25)
 
 test_forecast(actual = ts_transformed,
               forecast.obj = fc.test, 
@@ -224,7 +223,7 @@ accuracy(fc.test, test)
 ## Model V: NAIVE
 
 ```{r,echo=FALSE,message=FALSE,warning=FALSE}
-fc.test <- naive(train, h = 22)
+fc.test <- naive(train, h = 25)
 
 test_forecast(actual = ts_transformed,
               forecast.obj = fc.test, 
@@ -237,7 +236,7 @@ accuracy(fc.test, test)
 
 ```{r,echo=FALSE,message=FALSE,warning=FALSE}
 model.test <- tbats(train)
-fc.test <- forecast(model.test, h = 22)
+fc.test <- forecast(model.test, h = 25)
 
 test_forecast(actual = ts_transformed,
               forecast.obj = fc.test, 
