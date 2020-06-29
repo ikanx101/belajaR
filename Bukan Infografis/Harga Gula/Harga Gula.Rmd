@@ -249,4 +249,16 @@ _____
 
 # Model yang Dipilih
 
-Jika hanya melihat dari __MAE__, model `TBATS` dan `Auto ARIMA` memberikan nilai terkecil untuk validasi terhadap `test` _dataset_.
+```{r,echo=FALSE}
+hasil = data.frame(
+  Metode = c('ARIMA','Exponential Smoothing','Auto ARIMA','Holtwinter','Naive','TBATS'),
+  MAE = c(0.1472824,0.1472419,0.1132000,0.1431988,0.1132000,0.1161518)
+)
+
+hasil = hasil %>% arrange(MAE) %>% mutate(MAE = round(MAE,4))
+
+knitr::kable(hasil,
+             row.names = FALSE,
+             caption = 'Rangkuman Akurasi Model',
+             format = "html")
+```
