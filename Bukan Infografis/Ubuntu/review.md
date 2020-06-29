@@ -1,4 +1,4 @@
-Review: UBUNTU 20.04 LTS after 2 weeks as daily driver
+UPDATE\!\!\! Review: UBUNTU 20.04 LTS as daily driver
 ================
 
 <img src="https://computerscience.id/wp-content/uploads/2015/08/ubuntu-logo.png" width="50%" />
@@ -135,6 +135,19 @@ berikut ini:
 # sudo journalctl --rotate --vacuum-size=1M
 ```
 
+### Update 26 Juni 2020:
+
+*Nah* setelah hampir dua bulan pemakaian, ternyata penggunaan aplikasi
+*Spotify* kadang membuat *logfiles* naik menggila dengan cepat. Oleh
+karena itu, kita bisa menggunakan skrip berikut untuk membersihkannya:
+
+``` r
+# cd /var/log
+# sudo rm -f messages.*
+# sudo rm -v /var/log/*.gz
+# sudo rm *log*
+```
+
 ## Instalasi `Chromium` *Web Browser*
 
 Ubuntu secara default memiliki *browser Firefox* dan *Mail Client
@@ -230,6 +243,16 @@ cara masuk ke dalam folder `Downloads` dan mengeksekusinya.
 # sudo gdebi <nama file .deb>
 ```
 
+### Update 26 Juni 2020
+
+Agar performa **RStudio** lebih stabil, ada baiknya kita mematikan *GPU*
+dengan skrip berikut:
+
+``` r
+# export RSTUDIO_CHROMIUM_ARGUMENTS="--disable-gpu"
+# /usr/lib/rstudio/bin/rstudio
+```
+
 Tahap akhir, karena saya biasa menggunakan `library(rvest)`, maka saya
 perlu meng-*install* *dependencies* berikut ini:
 
@@ -239,7 +262,22 @@ perlu meng-*install* *dependencies* berikut ini:
 # sudo apt install libxml2-dev
 ```
 
-# Review Setelah 2 Minggu Pemakaian
+# Global Protect
+
+Setiap kantor biasanya memiliki VPN tersendiri. Nah, VPN yang dipakai
+oleh kantor saya ternyata mendukung Ubuntu juga. Proses instalasinya
+juga mudah. Cukup mengekstrak *file installer* yang diberikan oleh tim
+IT dan menginstallnya.
+
+``` r
+# tar -xvf PanGPLinux-5.0.8-c6.tgz
+# sudo dpkg -i GlobalProtect_deb-5.0.8.0-6.deb
+# globalprotect connect --portal ***.co.id 
+```
+
+Justru VPN ini jauh lebih stabil dibandingkan versi *Windows*-nya.
+
+# Review Selama ini
 
 ## PLUS
 

@@ -34,10 +34,36 @@ interest %>%
   theme_economist_white() +
   labs(title = 'Google Trends: Homeschooling',
        subtitle = 'di Indonesia',
-       x = 'Timeframe',
-       y = 'Relative hits')
+       x = '\nTimeframe',
+       y = 'Relative hits') +
+  theme(axis.text = element_text(size=7),
+        axis.title = element_text(size=12))
   
 ```
 
-Kami sempat mengikuti beberapa webinar terkait _homeschooling_, ada yang diselenggarakan oleh rumah inspirasi dan sekolahmu. Sebenarnya ini bukan yang pertama bagi kami karena di 2018 lalu saat mencari sekolah untuk si Sulung, kami sempat mempertimbangkan opsi ini. 
+Kami sempat mengikuti beberapa webinar terkait _homeschooling_, ada yang diselenggarakan oleh [rumah inspirasi](https://rumahinspirasi.com/) dan [sekolahmu](https://www.sekolah.mu/ikutprogram?id=kelasmu). Sebenarnya ini bukan yang pertama bagi kami karena di 2018 lalu saat mencari sekolah untuk si Sulung, kami sempat mempertimbangkan opsi ini.
+
+Beberapa waktu lalu, [Mendikbud](https://www.kompas.com/edu/read/2020/05/28/173439171/kemendikbud-tahun-ajaran-baru-2020-2021-dimulai-tanggal-13-juli-2020) mengumumkan bahwa tahun ajaran baru dimulai pada 13 Junli 2020 tapi tidak ada kewajiban bagi sekolah untuk membuka kelasnya secara tatap muka. Ortu diperbolehkan menolak adanya tatap muka jika kondisinya memang tidak memungkinkan.
+
+Berdasarkan klaim ini, kami kembali menghubungi calon sekolah si Sulung. Ternyata, sekolah ini relatif adaptif dan cukup sigap mengubah cara mereka belajar mengajar.
+
+_Bismillah_, akhirnya diputuskan untuk memasukkan si Sulung ke sana dengan mengkombinasikan metode _homeschooling_ selama metode pembelajaran jarak jauh.
+
+```{r,echo=FALSE,fig.retina=10,warning=FALSE,message=FALSE}
+region = data[[3]]
+
+region %>% filter(!is.na(hits)) %>% 
+  ggplot(aes(x = reorder(location,-hits),y = hits)) +
+  geom_col(color = 'black',fill = 'white') +
+  geom_label(aes(label = hits),size=2) +
+  theme_economist_white() +
+  labs(title = 'Google Trends: Homeschooling - Detail Region',
+       subtitle = 'di Indonesia',
+       x = '\nRegion',
+       y = 'Relative hits\n') +
+  theme(axis.text.x = element_text(size=7,angle=90),
+        axis.text.y = element_blank(),
+        axis.title = element_text(size=12))
+```
+
 
