@@ -1,0 +1,358 @@
+---
+title: "FORECAST HARGA GULA"
+subtitle: "Sebuah Analisa Time Series"
+author: "Dept. Market Research"
+institute: "@nutrifoodID"
+date: "Juni 30, 2020"
+output:
+  xaringan::moon_reader:
+    mathjax: default
+    lib_dir: libs
+    css: [default, rutgers, rutgers-fonts]
+    seal: true
+    nature:
+      ratio: '18:10'
+      slideNumberFormat: '%current%' 
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+rm(list=ls())
+setwd("~/Documents/belajaR/Bukan Infografis/Harga Gula")
+
+# libraries
+library(dplyr)
+library(forecast)
+library(TTR)
+library(MLmetrics)
+library(tseries)
+library(fpp)
+library(TSstudio)
+library(ggplot2)
+library(padr)
+library(tidyverse)
+
+# load data
+load('data_gula.rda')
+train_data = data
+rentang = range(train_data$new_tanggal)
+
+train_data = train_data %>% pad(start_val = lubridate::mdy('1/1/2017'),
+                                end_val = lubridate::mdy('6/25/2020'))
+
+# isi harga pada tanggal 1-2 Januari 2017 berdasarkan info di
+# https://www.isosugar.org/prices.php?pricerange=2016-12-01
+
+train_data$harga[1:2] = 19.2
+
+# kita akan isi yang kosong
+
+for(i in 1:length(train_data$new_tanggal)){
+  train_data$harga[i] = ifelse(is.na(train_data$harga[i]),train_data$harga[i-1],train_data$harga[i])
+}
+
+# kita mulai state variabel time series ts di sini:
+ts = ts(train_data$harga,
+        start=c(2017,1,1),
+        frequency=365)
+```
+class: middle,center
+
+# Pendahuluan
+
+---
+
+# Pendahuluan
+
+## Latar Belakang
+
+### Perubahan Harga Bahan Baku
+
+Salah satu bahan baku yang digunakan oleh Nutrifood adalah gula. Jika diperhatikan, harga gula dunia selalu berubah setiap harinya.
+
+Perkembangan teknologi dan metodologi _data science_ saat ini memungkinkan kita untuk bisa mengambil data historikal secara _real time_ dan membuat model prediksi dari data tersebut.
+
+## Tujuan
+
+Apakah bisa kita memodelkan dan memprediksi perubahan harga gula di masa yang akan datang?
+
+---
+
+# Pendahuluan
+
+## Landasan Teori
+
+### Mengenal _Time Series_
+
+Setiap data yang berkaitan dengan waktu, dapat digolongkan menjadi deret waktu (_time series_).
+
+Biasa dinotasikan sebagai $Y_t$.
+
+Ada dua analisa yang sangat populer terkait dengan _time series_:
+
+- _Forecasting_ model, seperti: _Exponential smoothing_, _ARIMA_, dll.
+- _Decomposition_.
+
+---
+class: middle,center
+
+# Metodologi
+
+---
+
+# Metodologi
+
+## Data dan Analisa
+
+Data yang digunakan diambil dari situs [isosugar](https://www.isosugar.org/prices.php?pricerange=currentmonth). Harga yang diambil adalah dalam kurs _dollar_, yakni: __cts/lb__. Data yang tersedia adalah data harga gula harian sejak dari `Januari 2017` hingga `Juni 2020`. Data diambil dengan cara _web scraping_.
+
+Data akan dibagi dua, yakni `train dataset` untuk membuat model _forecast_ (data `Januari 2017` hingga `Mei 2020`) dan `test dataset` (data `Juni 2020`) untuk melakukan validasi model. Semuanya dilakukan dengan _tools_ __R__.
+
+```{r,echo=FALSE,fig.retina=10,fig.width=12,fig.height=4}
+nomnoml::nomnoml('[Source data|isosugar.org] -> [Data Scraping|Real Time]
+                 [Data Scraping] -> [Data Preprocessing|Checking & Cleaning]
+                 [Data Preprocessing] -> [Time Series]
+                 [Stationary Check] <- [Time Series] 
+                 [Forecast] <- [Stationary Check|Requirement]
+                 [Validity Check|Using test dataset] <- [Forecast|Using train dataset]')
+```
+---
+
+# Metodologi
+
+## _Missing data_ `NA`
+
+Dari data harian yang ada tersebut, ternyata pada saat hari libur (termasuk sabtu dan minggu) tidak ada data harga (kosong atau `NA`). 
+
+Oleh karena itu, data kosong ini akan diisi harga pada hari sebelumnya (misal: _closing_ harga Jumat atau kondisi lainnya).
+
+---
+class: middle,center
+
+# Analisa _Time Series_
+
+---
+#  Analisa _Time Series_
+
+## Tren Harga Gula
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.retina=10,fig.width=14,fig.height=5.5}
+ts_plot(train_data)
+```
+---
+
+#  Analisa _Time Series_
+
+## _Stationary Checking_
+
+Salah satu syarat agar kita bisa membangun model _forecast_ dari data _time series_ adalah:
+
+> Data yang digunakan harus __stationary__.
+
+Bagaimana cara mengeceknya?
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+hasil = adf.test(ts)
+hasil
+# kita cek dulu
+ifelse(hasil$p.value<0.05,hasil$alternative,"Tidak stationary")
+```
+
+---
+
+#  Analisa _Time Series_
+
+## _Stationary Checking_
+
+Ternyata data yang kita miliki tidak stasioner sehingga perlu ada transformasi agar menjadi stasioner. Caranya adalah dengan membuat data _time series_ baru dengan membuat data baru, yakni data selisih harga dengan `lag = n hari`.
+
+Bagaimana mencari nilai `n`?
+
+Kita bisa melakukan analisa `ndiffs` sehingga mendapatkan nilai `lag` terbaik.
+
+```{r,echo=TRUE,message=FALSE,warning=FALSE}
+ndiffs(ts, alpha=0.05, test=c('kpss'))
+```
+
+Sehingga didapat `lag = 1` hari.
+
+---
+
+#  Analisa _Time Series_
+
+## Membuat Data Baru
+
+Setelah mengetahui `lag`, maka kita akan membuat data baru sebagai berikut:
+
+$$Y_t' = Y_{t(i+1)} - Y_t $$
+
+Yakni: data esok dikurang data sekarang.
+
+Bagaimana hasil transformasinya?
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.retina=10,fig.width=14,fig.height=3.5}
+ts_transformed = diff(ts)
+ts_plot(ts_transformed)
+```
+
+---
+
+#  Analisa _Time Series_
+
+## _Stationary Checking_ untuk Data Baru
+
+Mari kita cek apakah data hasil transformasinya sudah stasioner atau belum!
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+hasil = adf.test(ts_transformed)
+hasil
+# kita cek dulu
+ifelse(hasil$p.value<0.05,hasil$alternative,"Tidak stationary")
+```
+
+Ternyata hasilnya stasioner. Berarti kita bisa membuat model _forecast_ berdasarkan data hasil transformasi ini.
+
+---
+# Analisa _Time Series_
+## _Decomposition_
+
+Mari kita lihat dulu bagaimana jika data ini kita dekomposisi menggunakan metode [STL](https://otexts.com/fpp2/stl.html#ref-Cleveland1990).
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.retina=10,fig.width=14,fig.height=4.5}
+decompose = stl(ts_transformed,s.window='periodic')
+plot(decompose)
+```
+
+---
+class:middle,center
+# _Forecast_ Model
+---
+# _Forecast_ Model
+
+Kita akan membuat model untuk _forecast_ harga gula. Agar bisa melakukan _cross validation_, data akan kita pecah menjadi dua, yakni:
+
+1. `train` _dataset_, yakni berisi data selisih harga gula `Januari 2017` - `Mei 2020`.
+2. `test` _dataset_, yakni data harga gula pada `Maret 2020` agar kita bisa menilai _performance_ dari model yang kita buat.
+
+### _Train dataset_
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.retina=10,fig.width=14,fig.height=3}
+test = tail(ts_transformed,25)
+train = head(ts_transformed,(1271-25))
+
+ts_plot(train)
+```
+
+---
+# _Forecast_ Model
+### _Test dataset_
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.retina=10,fig.width=14,fig.height=4}
+ts_plot(test)
+```
+
+Kita akan membuat beberapa model _time series_, model yang terbaik akan dipilih berdasarkan validasi dengan `test` _dataset_.
+
+---
+# _Forecast_ Model
+## Model I: ARIMA
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.retina=10,fig.width=14,fig.height=4}
+model.test <- stlm(train, method = "arima")
+fc.test <- forecast(model.test, h = 25)
+
+test_forecast(actual = ts_transformed,
+              forecast.obj = fc.test, 
+              train = train,
+              test = test)
+accuracy(fc.test, test)
+```
+---
+# _Forecast_ Model
+## Model II: Exponential Smoothing
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.retina=10,fig.width=14,fig.height=4}
+model.test <- stlm(train, method = "ets")
+fc.test <- forecast(model.test, h = 25)
+
+test_forecast(actual = ts_transformed,
+              forecast.obj = fc.test, 
+              train = train,
+              test = test)
+accuracy(fc.test, test)
+```
+---
+# _Forecast_ Model
+## Model III: Auto ARIMA
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.retina=10,fig.width=14,fig.height=4}
+model.test <- auto.arima(train)
+fc.test <- forecast(model.test, h = 25)
+
+test_forecast(actual = ts_transformed,
+              forecast.obj = fc.test, 
+              train = train,
+              test = test)
+accuracy(fc.test, test)
+```
+---
+# _Forecast_ Model
+## Model IV: HOLTWINTER
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.retina=10,fig.width=14,fig.height=4}
+model.test <- HoltWinters(train)
+fc.test <- forecast(model.test, h = 25)
+
+test_forecast(actual = ts_transformed,
+              forecast.obj = fc.test, 
+              train = train,
+              test = test)
+accuracy(fc.test, test)
+```
+---
+# _Forecast_ Model
+## Model V: NAIVE
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.retina=10,fig.width=14,fig.height=4}
+fc.test <- naive(train, h = 25)
+
+test_forecast(actual = ts_transformed,
+              forecast.obj = fc.test, 
+              train = train,
+              test = test)
+accuracy(fc.test, test)
+```
+---
+# _Forecast_ Model
+## Model VI: TBATS
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.retina=10,fig.width=14,fig.height=4}
+model.test <- tbats(train)
+fc.test <- forecast(model.test, h = 25)
+
+test_forecast(actual = ts_transformed,
+              forecast.obj = fc.test, 
+              train = train,
+              test = test)
+accuracy(fc.test, test)
+```
+---
+# _Forecast_ Model
+## Model yang Dipilih
+
+```{r,echo=FALSE}
+hasil = data.frame(
+  Metode = c('ARIMA','Exponential Smoothing','Auto ARIMA','Holtwinter','Naive','TBATS'),
+  MAE = c(0.1472824,0.1472419,0.1132000,0.1431988,0.1132000,0.1161518)
+)
+
+hasil = hasil %>% arrange(MAE) %>% mutate(MAE = round(MAE,4))
+
+knitr::kable(hasil,
+             row.names = FALSE,
+             caption = 'Rangkuman Akurasi Model',
+             format = "html")
+```
