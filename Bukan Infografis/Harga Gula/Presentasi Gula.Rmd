@@ -187,7 +187,7 @@ Sehingga didapat `lag = 1` hari.
 
 Setelah mengetahui `lag`, maka kita akan membuat data baru sebagai berikut:
 
-$$Y_t' = Y_{t(i+1)} - Y_t $$
+$$Y_t' = Y_{t(i+1)} - Y_t$$
 
 Yakni: data esok dikurang data sekarang.
 
@@ -255,6 +255,32 @@ ts_plot(test)
 ```
 
 Kita akan membuat beberapa model _time series_, model yang terbaik akan dipilih berdasarkan validasi dengan `test` _dataset_.
+
+---
+# _Forecast_ Model
+## Metode yang Digunakan
+
+Dalam melakukan _forecast time series_ kita bisa menggunakan beberapa metode yang ada. Pada kasus kali ini, kita membuat model berdasarkan metode sebagai berikut:
+
+1. ARIMA.
+2. Exponential Smoothing
+3. Auto ARIMA
+4. Holtwinter
+5. Naive
+6. TBATS
+
+Model terbaik akan dipilih berdasarkan parameter _goodness of fit model_. Parameter yang dipilih adalah `MAE` (_Mean Absolute Error_).
+
+$$MAE = \frac{1}{n}  \sum_{n=1}^{n} |predict_i - actual_i|$$
+---
+---
+# _Forecast_ Model
+## _Goodness of Fit Parameter_: __MAE__
+
+$$MAE = \frac{1}{n}  \sum_{n=1}^{n} |predict_i - actual_i|$$
+`MAE` menandakan nilai mutlak dari kesalahan (_error_) antara nilai prediksi dengan nilai aktual.
+
+Semakin kecil `MAE` yang didapatkan, maka akan semakin bagus prediksi dari model tersebut. 
 
 ---
 # _Forecast_ Model
@@ -356,3 +382,5 @@ knitr::kable(hasil,
              caption = 'Rangkuman Akurasi Model',
              format = "html")
 ```
+
+Dibandingkan dengan metode lain yang memiliki MAE rendah, metode Holtwinter memberikan prediksi yang tak singular.
