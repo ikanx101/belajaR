@@ -1,0 +1,46 @@
+---
+title: "Google Mobility Report"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+rm(list=ls())
+
+library(dplyr)
+library(ggplot2)
+
+data = read.csv('Global_Mobility_Report.csv')
+```
+
+> Kita dimata-matai!
+
+Begitu kata rekan saya saat saya _share_ _Google Mobility Report_ ke salah satu grup WA yang saya ikuti.
+
+## Apa itu _Google Mobility Report_ ?
+
+Google sebagai pemegang _market share_ nomor satu untuk _mobile device_ OS
+
+```{r,echo=FALSE,fig.retina=10}
+data.frame(
+  os = c('Android','iOS','Windows','BlackBerryOS','Symbian','Others'),
+  share = c(76.24,22.48,.17,.02,.02,1.07)
+) %>% 
+  mutate(label = paste0(os,': ',share,'%'),
+         label = ifelse(share>20,label,NA)) %>% 
+  ggplot(aes(x = '',
+             y = share,
+             fill = os,
+             label = label)) + 
+  geom_bar(stat = 'identity',color = 'black') + 
+  geom_label(position = position_stack(vjust = 0.5)) +
+  coord_polar(theta = 'y') +
+  theme_void() +
+  labs(title = 'Market Share Smartphone OS',
+       subtitle = "StatCounter Global Stats: Top 8 Mobile Operating Systems on September 2019") +
+  theme(legend.position = 'none')
+```
+
+
+Google LLC "Google COVID-19 Community Mobility Reports".
+https://www.google.com/covid19/mobility/ Accessed: 30 Jun 2020 16:10 WIB.
