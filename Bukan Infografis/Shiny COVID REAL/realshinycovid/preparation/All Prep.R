@@ -1,5 +1,5 @@
 rm(list=ls())
-setwd("~/Documents/belajaR/Bukan Infografis/Shiny COVID REAL/realshinycovid")
+setwd("~/belajaR/Bukan Infografis/Shiny COVID REAL/realshinycovid")
 
 # panggil library
 library(readxl)
@@ -31,7 +31,7 @@ data_dunia = merge(data_dunia,longlat)
 # sumber url
 # https://pikobar.jabarprov.go.id/table-case
 
-data_jabar = readr::read_csv('~/Documents/belajaR/Bukan Infografis/Shiny COVID REAL/realshinycovid/DaMen/Data COVID-19 Jawa Barat.csv')
+data_jabar = readr::read_csv('~/belajaR/Bukan Infografis/Shiny COVID REAL/realshinycovid/DaMen/Data COVID-19 Jawa Barat.csv')
 data_jabar$X15 = NULL
 
 data_jabar = 
@@ -42,7 +42,7 @@ data_jabar =
 # sumber url
 # http://sinta.ristekbrin.go.id/covid/datasets
 # sheet pertama
-data_1 = read_excel('~/Documents/belajaR/Bukan Infografis/Shiny COVID REAL/realshinycovid/DaMen/COVID-19 di Indonesia @kawalcovid19.xlsx',
+data_1 = read_excel('~/belajaR/Bukan Infografis/Shiny COVID REAL/realshinycovid/DaMen/COVID-19 di Indonesia @kawalcovid19.xlsx',
                     sheet = 'Statistik Harian')
 data_1 = janitor::clean_names(data_1)
 data_1 = 
@@ -56,7 +56,7 @@ data_1[is.na(data_1)] = 0
 data_nasional_harian = data_1
 
 # sheet kedua
-data_1 = read_excel('~/Documents/belajaR/Bukan Infografis/Shiny COVID REAL/realshinycovid/DaMen/COVID-19 di Indonesia @kawalcovid19.xlsx',
+data_1 = read_excel('~/belajaR/Bukan Infografis/Shiny COVID REAL/realshinycovid/DaMen/COVID-19 di Indonesia @kawalcovid19.xlsx',
                     sheet = 'Kasus per Provinsi',
                     skip = 1)
 data_1 = janitor::clean_names(data_1)
@@ -72,4 +72,4 @@ data_prov_total = merge(data_prov_total,dbase_provinsi,all=T)
 
 # simpan semua datasets yang ada
 save(data_dunia,data_jabar,data_nasional_harian,data_prov_total,
-     file = '~/Documents/belajaR/Bukan Infografis/Shiny COVID REAL/realshinycovid/all files.rda')
+     file = '~/belajaR/Bukan Infografis/Shiny COVID REAL/realshinycovid/all files.rda')
