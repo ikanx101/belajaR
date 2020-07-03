@@ -58,7 +58,9 @@ sidebar = dashboardSidebar(width = 300,
                                menuItem(tabName = 'indo_harian',
                                         text = 'Data Covid 19 Harian Indonesia',icon = icon('bar-chart')),
                                menuItem(tabName = 'prov',
-                                        text = 'Data Provinsi Indonesia',icon = icon('line-chart'))
+                                        text = 'Data Provinsi Indonesia',icon = icon('line-chart')),
+                               menuItem(tabName = 'simu',
+                                        text = 'Simulasi Test Covid 19', icon = icon('gamepad'))
                                        )
             )
 
@@ -193,8 +195,31 @@ prov = tabItem(tabName = 'prov',
                )
                )
 
+# tab simulasi
+simulasi = tabItem(tabName = 'simu',
+                   fluidRow(
+                     column(width = 12,
+                            h1('Simulasi Test Covid 19'),
+                            h2('Skenario Simulasi Monte Carlo'),
+                            h5('Simulasi ini dilakukan dengan menggunakan prinsip simulasi Monte Carlo, yakni dengan men-generate 80 puluh ribu kombinasi yang mungkin terjadi.'),
+                            h2('Bagaimana cara kerjanya?'),
+                            h5('Misalkan dalam suatu area kerja ada `N` banyak orang. Diduga ada `x` orang yang positif Covid 19.'),
+                            h2('Problem statement:'),
+                            h5('Perusahaan bisa saja melakukan test ke semua karyawan yang ada di area kerja tersebut, tapi apakah ada jumlah minimal karyawan yang bisa ditest? Sehingga walaupun dengan jumlah yang minimal, perusahaan tersebut masih dapat menangkap minimal seorang karyawan yang positif Covid 19.'))
+                     ),
+                   fluidRow(
+                     column(width = 2,
+                            numericInput('populasi','Banyak karyawan di area kerja:',value = 200,
+                                         min = 50, max = 500),
+                            numericInput('sakit','Banyak karyawan yang diduga positif Covid 19:',value = 15,
+                                         min = 5, max = 50)),
+                     column(width = 10,
+                            plotOutput('simulasi_plot',height = 450))
+                   )
+                   )
+
 # body
-body = dashboardBody(tabItems(filterpane,dunia,indo_harian,jabar,prov))
+body = dashboardBody(tabItems(filterpane,dunia,indo_harian,jabar,prov,simulasi))
 
 # ui all
 ui = dashboardPage(skin = "red",header,sidebar,body)
@@ -623,6 +648,43 @@ server <- function(input, output, session) {
       labs(y = 'Rasio Sembuh dan Meninggal',
            title = 'Dari kasus yang ada, berapa selisih rasio kesembuhan dan rasio korban jiwa per provinsi?',
            subtitle = 'Lebih banyak penderita yang sembuh atau penderita yang meninggal?')
+  })
+  
+  output$simulasi_plot = renderPlot({
+    simulasi = function(n_tes){
+      n = 200 #pengulangan
+      n_sakit = input$sakit #banyak orang sakit 
+      total = input$populasi # total karyawan
+      temp = c(0)
+      for(i in 1:n){
+        karyawan = sample(c(1,0),total,prob = c(n_sakit/total,(total-n_sakit)/total),replace = T)
+        tes = sample(karyawan,n_tes)
+        hasil = sum(tes)
+        hasil = ifelse(hasil>1,1,0)
+        temp = c(temp,hasil)
+      }
+      sum(temp)/n*100
+    }
+    
+    data = data.frame(n_tes = c(1:input$populasi))
+    data$sensitivity = sapply(data$n_tes,simulasi)
+    n_min = data %>% filter(sensitivity > 98) %>% select(n_tes)
+    n_min = min(n_min$n_tes)
+    
+    subjudul = paste0('\nDi suatu pabrik berisi ',input$populasi,' orang. Diduga ada ',input$sakit,' orang yang terpapar Covid 19.\nMonteCarlo Simulation 80.000 times.')
+    data %>% 
+      ggplot(aes(x = n_tes,
+                 y = sensitivity)) +
+      geom_smooth(method = 'loess') +
+      geom_line(color = 'black') +
+      labs(title = paste0('Berapa banyak karyawan yang harus dites?\nJawab: Pilih ',n_min,' orang secara acak!'),
+           subtitle = subjudul,
+           caption = 'Simulated and Visualized\nusing R',
+           x = 'Banyak tes',
+           y = 'Peluang mendapat karyawan yang positif\n') +
+      ggthemes::theme_economist() +
+      theme(axis.text = element_text(size=10))
+    
   })
 }
 

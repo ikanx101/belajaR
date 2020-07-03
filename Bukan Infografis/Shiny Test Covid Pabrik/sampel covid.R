@@ -5,7 +5,7 @@ library(dplyr)
 simulasi = function(n_tes){
   n = 200 #pengulangan
   n_sakit = 15 #banyak orang sakit 
-  total = 400 # total karyawan
+  total = 200 # total karyawan
   temp = c(0)
   for(i in 1:n){
     karyawan = sample(c(1,0),total,prob = c(n_sakit/total,(total-n_sakit)/total),replace = T)
@@ -17,11 +17,13 @@ simulasi = function(n_tes){
   sum(temp)/n*100
 }
 
-data = data.frame(n_tes = c(1:400))
+data = data.frame(n_tes = c(1:200))
 
 data$sensitivity = sapply(data$n_tes,simulasi)
 
 library(ggplot2)
+
+
 data %>% 
   ggplot(aes(x = n_tes,
              y = sensitivity)) +
