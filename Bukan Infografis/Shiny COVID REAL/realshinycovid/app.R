@@ -36,7 +36,6 @@ tanggal = as.character(tanggal)
 # video update youtube masuk ke sini yah
 url = 'https://www.youtube.com/watch?v=YgFsZITZopk'
 url = gsub('https://www.youtube.com/watch?v=','',url,fixed = T)
-url
 
 
 # ---------------------------------
