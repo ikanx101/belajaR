@@ -239,7 +239,7 @@ simulasi = tabItem(tabName = 'simu',
                             h5('2. Dugaan berapa banyak orang betawi yang ada di komplek saya.'),
                             h4('Jadi:'),
                             h5('Simulasi ini memperhitungkan semua kombinasi urutan orang yang akan dites dan murni bertujuan untuk mengetahui apakah benar-benar ada orang betawi di komplek saya tanpa harus menghitung ada berapa banyak (secara total) orang betawi yang ada.'),
-                            h5('Jika tujuannya adalah menghitung berapa banyak orang betawi di komplek saya'))
+                            h5('Jika tujuannya adalah menghitung berapa banyak orang betawi di komplek saya, maka lebih baik melakukan sensus saja.'))
                    )
                    )
 
