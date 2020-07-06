@@ -59,7 +59,9 @@ sidebar = dashboardSidebar(width = 300,
                                menuItem(tabName = 'prov',
                                         text = 'Data Provinsi Indonesia',icon = icon('line-chart')),
                                menuItem(tabName = 'simu',
-                                        text = 'Simulasi Test Covid 19', icon = icon('gamepad'))
+                                        text = 'Simulasi Test Covid 19', icon = icon('gamepad')),
+                               menuItem(tabName = 'simu_2',
+                                        text = 'Simulasi Test Covid 19 versi II', icon = icon('steam'))
                                        )
             )
 
@@ -213,10 +215,10 @@ simulasi = tabItem(tabName = 'simu',
                      ),
                    fluidRow(
                      column(width = 2,
-                            numericInput('populasi','Banyak karyawan di area kerja:',value = 200,
-                                         min = 50, max = 500),
-                            sliderInput('sakit','Banyak karyawan yang diduga positif Covid 19:',value = 19,
-                                         min = 7, max = 50)),
+                            sliderInput('populasi','Banyak karyawan di area kerja:',value = 200,
+                                         min = 50, max = 800),
+                            sliderInput('sakit','Banyak karyawan yang diduga positif Covid 19:',value = 20,
+                                         min = 7, max = 70)),
                      column(width = 10,
                             plotOutput('simulasi_plot',height = 450))
                    ),
@@ -243,8 +245,37 @@ simulasi = tabItem(tabName = 'simu',
                    )
                    )
 
+
+# tab simulasi II
+simulasi_2 = tabItem(tabName = 'simu_2',
+                   fluidRow(
+                     column(width = 12,
+                            h1('Simulasi Test Covid 19'),
+                            br(),
+                            h2('Problem Statement:'),
+                            h5('Suatu perusahaan hendak melakukan pengecekan Covid 19 kepada karyawannya secara rapid test. Ada N orang karyawan yang bekerja di lokasi tersebut. Perusahaan bisa saja mengecek keseluruhan karyawan tapi effort yang dilakukan akan semakin besar dan tidak efektif secara waktu dan biaya. Oleh karena itu, apakah bisa ditentukan n orang yang seminimal mungkin tapi tetap memberikan akurasi terbaik:'),
+                            h4('Ditemukan adanya karyawan yang positif Covid 19 di perusahaan tersebut!'),
+                            br(),
+                            h3('Pilihan solusi yang ada:'),
+                            h4('1. Perhitungan sampel menggunakan seperti biasa'),
+                            h5('Kita bisa menghitung banyaknya sampel yang representatif untuk kasus ini dengan menggunakan tiga informasi dasar: banyak orang di populasi, margin of error, dan confidence interval. Cara menghitungnya bisa menggunakan sample size calculator online.'),
+                            h4('2. Menggunakan metode simulasi Monte Carlo'),
+                            h5('Kita bisa menghitung banyaknya sampel terkecil yang dibutuhkan agar bisa mendeteksi ada karyawan yang positif Covid 19. Informasi yang dibutuhkan adalah banyak orang di populasi dan asumsi berapa banyak karyawan yang sudah terpapar oleh Covid 19 (atau informasi prevalensi hasil positif dari tested sample). Simulasi ini akan menghitung 80 ribu kemungkinan (kombinasi) yang mungkin muncul dari kondisi yang ada.')
+                     )
+                   ),
+                   fluidRow(
+                     column(width = 2,
+                            sliderInput('populasi_2','Banyak karyawan di area kerja:',value = 200,
+                                        min = 50, max = 800),
+                            sliderInput('persen_sakit','Persentase positif Covid 19 dari 100 orang yang dites:',value = 12,
+                                        min = 1, max = 100)),
+                     column(width = 10,
+                            plotOutput('simulasi_plot_2',height = 450))
+                   )
+)
+
 # body
-body = dashboardBody(tabItems(filterpane,dunia,indo_harian,jabar,prov,simulasi))
+body = dashboardBody(tabItems(filterpane,dunia,indo_harian,jabar,prov,simulasi,simulasi_2))
 
 # ui all
 ui = dashboardPage(skin = "red",header,sidebar,body)
@@ -675,6 +706,8 @@ server <- function(input, output, session) {
            subtitle = 'Lebih banyak penderita yang sembuh atau penderita yang meninggal?')
   })
   
+  # simulasi 1
+  
   output$simulasi_plot = renderPlot({
     simulasi = function(n_tes){
       n = 400 #pengulangan
@@ -711,6 +744,47 @@ server <- function(input, output, session) {
       theme(axis.text = element_text(size=10))
     
   })
+  
+  # simulasi 2
+  
+  output$simulasi_plot_2 = renderPlot({
+    simulasi = function(n_tes){
+      n = 400 #pengulangan
+      n_sakit = input$persen_sakit #banyak orang sakit 
+      total = input$populasi_2 # total karyawan
+      temp = c(0)
+      for(i in 1:n){
+        karyawan = sample(c(1,0),total,prob = c(n_sakit/100,1-(n_sakit/100)),replace = T)
+        tes = sample(karyawan,n_tes)
+        hasil = sum(tes)
+        hasil = ifelse(hasil>1,1,0)
+        temp = c(temp,hasil)
+      }
+      sum(temp)/n*100
+    }
+    
+    data = data.frame(n_tes = c(1:input$populasi))
+    data$sensitivity = sapply(data$n_tes,simulasi)
+    n_min = data %>% filter(sensitivity > 98) %>% select(n_tes)
+    n_min = min(n_min$n_tes)
+    
+    subjudul = paste0('\nDi suatu pabrik berisi ',input$populasi,' orang.\nMonteCarlo Simulation 80.000 times.')
+    data %>% 
+      ggplot(aes(x = n_tes,
+                 y = sensitivity)) +
+      geom_smooth(method = 'loess') +
+      geom_line(color = 'black') +
+      labs(title = paste0('Berapa banyak karyawan yang harus dites?\nJawab: Pilih ',n_min,' orang secara acak!'),
+           subtitle = subjudul,
+           caption = 'Simulated and Visualized\nusing R',
+           x = 'Banyak tes',
+           y = 'Peluang mendapat karyawan yang positif\n') +
+      ggthemes::theme_economist() +
+      theme(axis.text = element_text(size=10))
+    
+  })
+  
+  
 }
 
 
