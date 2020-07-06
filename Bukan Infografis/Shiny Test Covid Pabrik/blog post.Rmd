@@ -2,7 +2,7 @@
 title: "Berapa Banyak Tes?"
 author: "ikanx"
 date: "7/6/2020"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
