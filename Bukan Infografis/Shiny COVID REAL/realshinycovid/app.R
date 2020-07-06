@@ -199,19 +199,24 @@ simulasi = tabItem(tabName = 'simu',
                    fluidRow(
                      column(width = 12,
                             h1('Simulasi Test Covid 19'),
-                            h2('Skenario Simulasi Monte Carlo'),
-                            h5('Simulasi ini dilakukan dengan menggunakan prinsip simulasi Monte Carlo, yakni dengan men-generate 80 puluh ribu kombinasi yang mungkin terjadi.'),
-                            h2('Bagaimana cara kerjanya?'),
-                            h5('Misalkan dalam suatu area kerja ada `N` banyak orang. Diduga ada `x` orang yang positif Covid 19.'),
-                            h2('Problem statement:'),
-                            h5('Perusahaan bisa saja melakukan test ke semua karyawan yang ada di area kerja tersebut, tapi apakah ada jumlah minimal karyawan yang bisa ditest? Sehingga walaupun dengan jumlah yang minimal, perusahaan tersebut masih dapat menangkap minimal seorang karyawan yang positif Covid 19.'))
+                            br(),
+                            h2('Problem Statement:'),
+                            h5('Suatu perusahaan hendak melakukan pengecekan Covid 19 kepada karyawannya secara rapid test. Ada N orang karyawan yang bekerja di lokasi tersebut. Perusahaan bisa saja mengecek keseluruhan karyawan tapi effort yang dilakukan akan semakin besar dan tidak efektif secara waktu dan biaya. Oleh karena itu, apakah bisa ditentukan n orang yang seminimal mungkin tapi tetap memberikan akurasi terbaik:'),
+                            h4('Ditemukan adanya karyawan yang positif Covid 19 di perusahaan tersebut!'),
+                            br(),
+                            h3('Pilihan solusi yang ada:'),
+                            h4('1. Perhitungan sampel menggunakan seperti biasa'),
+                            h5('Kita bisa menghitung banyaknya sampel yang representatif untuk kasus ini dengan menggunakan tiga informasi dasar: banyak orang di populasi, margin of error, dan confidence interval. Cara menghitungnya bisa menggunakan sample size calculator online.'),
+                            h4('2. Menggunakan metode simulasi Monte Carlo'),
+                            h5('Kita bisa menghitung banyaknya sampel terkecil yang dibutuhkan agar bisa mendeteksi ada karyawan yang positif Covid 19. Informasi yang dibutuhkan adalah banyak orang di populasi dan asumsi berapa banyak karyawan yang sudah terpapar oleh Covid 19 (atau informasi prevalensi hasil positif dari tested sample). Simulasi ini akan menghitung 80 ribu kemungkinan (kombinasi) yang mungkin muncul dari kondisi yang ada.')
+                            )
                      ),
                    fluidRow(
                      column(width = 2,
                             numericInput('populasi','Banyak karyawan di area kerja:',value = 200,
                                          min = 50, max = 500),
-                            numericInput('sakit','Banyak karyawan yang diduga positif Covid 19:',value = 15,
-                                         min = 5, max = 50)),
+                            sliderInput('sakit','Banyak karyawan yang diduga positif Covid 19:',value = 19,
+                                         min = 7, max = 50)),
                      column(width = 10,
                             plotOutput('simulasi_plot',height = 450))
                    )
