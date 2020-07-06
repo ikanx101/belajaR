@@ -214,25 +214,10 @@ simulasi = tabItem(tabName = 'simu',
                             )
                      ),
                    fluidRow(
-                     column(width = 2,
-<<<<<<< HEAD
-                            sliderInput('populasi','Banyak karyawan di area kerja:',value = 200,
-                                         min = 50, max = 800),
-                            sliderInput('sakit','Banyak karyawan yang diduga positif Covid 19:',value = 20,
-                                         min = 7, max = 70)),
-=======
-<<<<<<< HEAD
-                            sliderInput('populasi','Banyak karyawan di area kerja:',value = 200,
+                     column(width = 2,sliderInput('populasi','Banyak karyawan di area kerja:',value = 200,
                                          min = 70, max = 800),
                             sliderInput('sakit','Banyak karyawan yang diduga positif Covid 19:',value = 19,
                                          min = 7, max = 60)),
-=======
-                            numericInput('populasi','Banyak karyawan di area kerja:',value = 200,
-                                         min = 50, max = 500),
-                            sliderInput('sakit','Banyak karyawan yang diduga positif Covid 19:',value = 19,
-                                         min = 7, max = 50)),
->>>>>>> 554243878705492aaecea6c2dc7c0c198d2a0d15
->>>>>>> a969a89ff12d99eeb8ab3182ff373f98e5800670
                      column(width = 10,
                             plotOutput('simulasi_plot',height = 450))
                    ),
