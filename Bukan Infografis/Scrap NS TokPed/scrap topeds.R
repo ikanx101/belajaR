@@ -1,5 +1,4 @@
 rm(list=ls())
-#setwd("~/Documents/belajaR/Bukan Infografis/olive oil tokped")
 library(rvest)
 library(dplyr)
 
@@ -23,7 +22,7 @@ scrap = function(url){
 i = 1
 data = scrap(url[i])
 
-for(i in 2:length(url)){
+for(i in 474:length(url)){
   temp = scrap(url[i])
   data = rbind(data,temp)
   print(paste0('ambil data ke ',
@@ -33,7 +32,6 @@ for(i in 2:length(url)){
 
 data$waktu.scrape = Sys.time()
 data = distinct(data)
-
 raw = rbind(raw,data)
 
 save(raw,url,file = 'hasil scrape.rda')
