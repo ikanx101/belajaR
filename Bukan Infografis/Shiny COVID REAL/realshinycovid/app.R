@@ -209,12 +209,33 @@ simulasi = tabItem(tabName = 'simu',
                      ),
                    fluidRow(
                      column(width = 2,
-                            numericInput('populasi','Banyak karyawan di area kerja:',value = 200,
-                                         min = 50, max = 500),
-                            numericInput('sakit','Banyak karyawan yang diduga positif Covid 19:',value = 15,
-                                         min = 5, max = 50)),
+                            sliderInput('populasi','Banyak karyawan di area kerja:',value = 200,
+                                         min = 70, max = 800),
+                            sliderInput('sakit','Banyak karyawan yang diduga positif Covid 19:',value = 19,
+                                         min = 7, max = 60)),
                      column(width = 10,
                             plotOutput('simulasi_plot',height = 450))
+                   ),
+                   br(),
+                   fluidRow(
+                     column(width = 12,
+                            h1('Further Explanation:'),
+                            h5('Kalau masih ada yang belum paham, saya coba bantu dengan analogi sebagai berikut ya:'),
+                            h5('Misal, di komplek perumahan saya tinggal 200 orang. Saya penasaran, apakah ada orang dari suku betawi yang hidup bersama saya di komplek ini. Cara paling berat untuk membuktikannya adalah dengan bertanya satu-satu ke semua orang yang ada lalu menanyakan suku mereka apa.'),
+                            h5('Cara berikutnya adalah dengan menggunakan perhitungan sample size yang biasa kita gunakan utk riset. Ada 3 info yang jadi pertimbangan:'),
+                            h5('1. N populasi'),
+                            h5('2. Margin or error'),
+                            h5('3. Confidence level.'),
+                            h5('Cara hitungnya bisa dengan calculator online yang ada d mana2. Contohnya, bisa pakai http://www.raosoft.com/samplesize.html. Contohnya jika dari 200 orang, saya pilih MoE 5% dan CL 95% didapatkan sampel saya sebesar 132 orang.'),
+                            h5('Nah, misalkan saya hendak bertanya ke 132 orang secara acak. Bisa jadi pada saat saya bertanya ke orang pertama saya sudah mendapatkan orang betawi. Bisa jadi saya baru mendapatkan orang betawi pada saat bertanya ke orang ke-90. Bisa jadi pada saat orang ke-130.'),
+                            h5('Lalu pertanyaannya, apakah kita bisa menghitung peluang kita mendapatkan orang betawi pada saat orang ke berapa? Apakah mungkin kita menghitung sampel size lebih efisien lagi?'),
+                            h5('Nah, di sini saya mencoba menghitungnya dengan menggunakan simulasi montecarlo sebanyak 80 rb kali. Kenapa 80 rb kali? Karena saya taruh algoritmanya di awan, jadi 80 rb sudah cukup banyak tanpa harus membebani server gratisan yang dikasih.'),
+                            h5('Jadi utk melakukan simulasinya, saya cuma butuh 2 hal:'),
+                            h5('1. N populasi,'),
+                            h5('2. Dugaan berapa banyak orang betawi yang ada di komplek saya.'),
+                            h4('Jadi:'),
+                            h5('Simulasi ini memperhitungkan semua kombinasi urutan orang yang akan dites dan murni bertujuan untuk mengetahui apakah benar-benar ada orang betawi di komplek saya tanpa harus menghitung ada berapa banyak (secara total) orang betawi yang ada.'),
+                            h5('Jika tujuannya adalah menghitung berapa banyak orang betawi di komplek saya'))
                    )
                    )
 
@@ -652,7 +673,7 @@ server <- function(input, output, session) {
   
   output$simulasi_plot = renderPlot({
     simulasi = function(n_tes){
-      n = 200 #pengulangan
+      n = 400 #pengulangan
       n_sakit = input$sakit #banyak orang sakit 
       total = input$populasi # total karyawan
       temp = c(0)
