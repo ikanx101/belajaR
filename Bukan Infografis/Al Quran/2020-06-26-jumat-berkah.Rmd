@@ -1,0 +1,43 @@
+---
+title: "Perniagaan yang Tidak Akan Pernah Rugi"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+rm(list=ls())
+setwd("~/Documents/belajaR/Bukan Infografis/Al Quran")
+library(dplyr)
+library(katadasaR)
+library(tidytext)
+library(NLP)
+library(tm)
+library(topicmodels)
+
+load(file = 'alquran.rda')
+stop_wot = readLines('https://raw.githubusercontent.com/stopwords-iso/stopwords-id/master/stopwords-id.txt')
+
+final = 
+  data_new %>% 
+  select(surah.id,ayat,stem) %>% 
+  filter(!stem %in% stop_wot) %>% 
+  group_by(surah.id,ayat) %>% 
+  summarize(gabung = stringr::str_c(stem,collapse=' ')) %>% 
+  filter(surah.id %in% c(2:5))
+
+NAME = final$gabung
+NAME = Corpus(VectorSource(NAME))
+tdm = TermDocumentMatrix(NAME)
+dtm = as.DocumentTermMatrix(tdm) 
+rowTotals = apply(dtm , 1, sum) 
+dtm = dtm[rowTotals> 0, ]         
+
+library(topicmodels)
+lda = LDA(dtm, k = 5)  
+term = terms(lda, 10)  
+term = apply(term, MARGIN = 2, paste, collapse = ", ")
+cbind(term)
+
+
+findAssocs(tdm, "kafir", 0.25)
+```

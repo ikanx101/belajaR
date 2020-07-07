@@ -34,9 +34,8 @@ tanggal = Sys.Date()
 tanggal = as.character(tanggal)
 
 # video update youtube masuk ke sini yah
-url = "https://www.youtube.com/watch?v=hzuMGUvkBfE"
+url = 'https://www.youtube.com/watch?v=YgFsZITZopk'
 url = gsub('https://www.youtube.com/watch?v=','',url,fixed = T)
-url
 
 
 # ---------------------------------
@@ -58,7 +57,11 @@ sidebar = dashboardSidebar(width = 300,
                                menuItem(tabName = 'indo_harian',
                                         text = 'Data Covid 19 Harian Indonesia',icon = icon('bar-chart')),
                                menuItem(tabName = 'prov',
-                                        text = 'Data Provinsi Indonesia',icon = icon('line-chart'))
+                                        text = 'Data Provinsi Indonesia',icon = icon('line-chart')),
+                               menuItem(tabName = 'simu',
+                                        text = 'Simulasi Test Covid 19', icon = icon('gamepad')),
+                               menuItem(tabName = 'simu_2',
+                                        text = 'Simulasi Test Covid 19 versi II', icon = icon('steam'))
                                        )
             )
 
@@ -72,7 +75,7 @@ filterpane = tabItem(tabName = 'filterpane',
                                 br(),
                                 h4('Bagi yang kangen dengan Pak Yuri, silakan tonton dulu press conference hari ini:'),
                                 tags$iframe(width="560", height="315", src=paste0("https://www.youtube.com/embed/",url), frameborder="0", allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture", allowfullscreen=NA),
-                                h5('courtesy: youtube.com KOMPAS TV'),
+                                h5('courtesy: youtube.com MEDCOM'),
                                 br(),
                                 h5('Sumber data yang digunakan tertulis di masing-masing tabs.')
                                 )
@@ -193,8 +196,85 @@ prov = tabItem(tabName = 'prov',
                )
                )
 
+# tab simulasi
+simulasi = tabItem(tabName = 'simu',
+                   fluidRow(
+                     column(width = 12,
+                            h1('Simulasi Test Covid 19'),
+                            br(),
+                            h2('Problem Statement:'),
+                            h5('Suatu perusahaan hendak melakukan pengecekan Covid 19 kepada karyawannya secara rapid test. Ada N orang karyawan yang bekerja di lokasi tersebut. Perusahaan bisa saja mengecek keseluruhan karyawan tapi effort yang dilakukan akan semakin besar dan tidak efektif secara waktu dan biaya. Oleh karena itu, apakah bisa ditentukan n orang yang seminimal mungkin tapi tetap memberikan akurasi terbaik:'),
+                            h4('Ditemukan adanya karyawan yang positif Covid 19 di perusahaan tersebut!'),
+                            br(),
+                            h3('Pilihan solusi yang ada:'),
+                            h4('1. Perhitungan sampel menggunakan seperti biasa'),
+                            h5('Kita bisa menghitung banyaknya sampel yang representatif untuk kasus ini dengan menggunakan tiga informasi dasar: banyak orang di populasi, margin of error, dan confidence interval. Cara menghitungnya bisa menggunakan sample size calculator online.'),
+                            h4('2. Menggunakan metode simulasi Monte Carlo'),
+                            h5('Kita bisa menghitung banyaknya sampel terkecil yang dibutuhkan agar bisa mendeteksi ada karyawan yang positif Covid 19. Informasi yang dibutuhkan adalah banyak orang di populasi dan asumsi berapa banyak karyawan yang sudah terpapar oleh Covid 19 (atau informasi prevalensi hasil positif dari tested sample). Simulasi ini akan menghitung 80 ribu kemungkinan (kombinasi) yang mungkin muncul dari kondisi yang ada.')
+                            )
+                     ),
+                   fluidRow(
+                     column(width = 2,sliderInput('populasi','Banyak karyawan di area kerja:',value = 200,
+                                         min = 70, max = 800),
+                            sliderInput('sakit','Banyak karyawan yang diduga positif Covid 19:',value = 19,
+                                         min = 7, max = 60)),
+                     column(width = 10,
+                            plotOutput('simulasi_plot',height = 450))
+                   ),
+                   br(),
+                   fluidRow(
+                     column(width = 12,
+                            h1('Further Explanation:'),
+                            h5('Kalau masih ada yang belum paham, saya coba bantu dengan analogi sebagai berikut ya:'),
+                            h5('Misal, di komplek perumahan saya tinggal 200 orang. Saya penasaran, apakah ada orang dari suku betawi yang hidup bersama saya di komplek ini. Cara paling berat untuk membuktikannya adalah dengan bertanya satu-satu ke semua orang yang ada lalu menanyakan suku mereka apa.'),
+                            h5('Cara berikutnya adalah dengan menggunakan perhitungan sample size yang biasa kita gunakan utk riset. Ada 3 info yang jadi pertimbangan:'),
+                            h5('1. N populasi'),
+                            h5('2. Margin or error'),
+                            h5('3. Confidence level.'),
+                            h5('Cara hitungnya bisa dengan calculator online yang ada d mana2. Contohnya, bisa pakai http://www.raosoft.com/samplesize.html. Contohnya jika dari 200 orang, saya pilih MoE 5% dan CL 95% didapatkan sampel saya sebesar 132 orang.'),
+                            h5('Nah, misalkan saya hendak bertanya ke 132 orang secara acak. Bisa jadi pada saat saya bertanya ke orang pertama saya sudah mendapatkan orang betawi. Bisa jadi saya baru mendapatkan orang betawi pada saat bertanya ke orang ke-90. Bisa jadi pada saat orang ke-130.'),
+                            h5('Lalu pertanyaannya, apakah kita bisa menghitung peluang kita mendapatkan orang betawi pada saat orang ke berapa? Apakah mungkin kita menghitung sampel size lebih efisien lagi?'),
+                            h5('Nah, di sini saya mencoba menghitungnya dengan menggunakan simulasi montecarlo sebanyak 80 rb kali. Kenapa 80 rb kali? Karena saya taruh algoritmanya di awan, jadi 80 rb sudah cukup banyak tanpa harus membebani server gratisan yang dikasih.'),
+                            h5('Jadi utk melakukan simulasinya, saya cuma butuh 2 hal:'),
+                            h5('1. N populasi,'),
+                            h5('2. Dugaan berapa banyak orang betawi yang ada di komplek saya.'),
+                            h4('Jadi:'),
+                            h5('Simulasi ini memperhitungkan semua kombinasi urutan orang yang akan dites dan murni bertujuan untuk mengetahui apakah benar-benar ada orang betawi di komplek saya tanpa harus menghitung ada berapa banyak (secara total) orang betawi yang ada.'),
+                            h5('Jika tujuannya adalah menghitung berapa banyak orang betawi di komplek saya, maka lebih baik melakukan sensus saja.'))
+                   )
+                   )
+
+
+# tab simulasi II
+simulasi_2 = tabItem(tabName = 'simu_2',
+                   fluidRow(
+                     column(width = 12,
+                            h1('Simulasi Test Covid 19'),
+                            br(),
+                            h2('Problem Statement:'),
+                            h5('Suatu perusahaan hendak melakukan pengecekan Covid 19 kepada karyawannya secara rapid test. Ada N orang karyawan yang bekerja di lokasi tersebut. Perusahaan bisa saja mengecek keseluruhan karyawan tapi effort yang dilakukan akan semakin besar dan tidak efektif secara waktu dan biaya. Oleh karena itu, apakah bisa ditentukan n orang yang seminimal mungkin tapi tetap memberikan akurasi terbaik:'),
+                            h4('Ditemukan adanya karyawan yang positif Covid 19 di perusahaan tersebut!'),
+                            br(),
+                            h3('Pilihan solusi yang ada:'),
+                            h4('1. Perhitungan sampel menggunakan seperti biasa'),
+                            h5('Kita bisa menghitung banyaknya sampel yang representatif untuk kasus ini dengan menggunakan tiga informasi dasar: banyak orang di populasi, margin of error, dan confidence interval. Cara menghitungnya bisa menggunakan sample size calculator online.'),
+                            h4('2. Menggunakan metode simulasi Monte Carlo'),
+                            h5('Kita bisa menghitung banyaknya sampel terkecil yang dibutuhkan agar bisa mendeteksi ada karyawan yang positif Covid 19. Informasi yang dibutuhkan adalah banyak orang di populasi dan asumsi berapa banyak karyawan yang sudah terpapar oleh Covid 19 (atau informasi prevalensi hasil positif dari tested sample). Simulasi ini akan menghitung 80 ribu kemungkinan (kombinasi) yang mungkin muncul dari kondisi yang ada.')
+                     )
+                   ),
+                   fluidRow(
+                     column(width = 2,
+                            sliderInput('populasi_2','Banyak karyawan di area kerja:',value = 200,
+                                        min = 50, max = 800),
+                            sliderInput('persen_sakit','Persentase positif Covid 19 dari 100 orang yang dites:',value = 12,
+                                        min = 1, max = 100)),
+                     column(width = 10,
+                            plotOutput('simulasi_plot_2',height = 450))
+                   )
+)
+
 # body
-body = dashboardBody(tabItems(filterpane,dunia,indo_harian,jabar,prov))
+body = dashboardBody(tabItems(filterpane,dunia,indo_harian,jabar,prov,simulasi,simulasi_2))
 
 # ui all
 ui = dashboardPage(skin = "red",header,sidebar,body)
@@ -624,6 +704,86 @@ server <- function(input, output, session) {
            title = 'Dari kasus yang ada, berapa selisih rasio kesembuhan dan rasio korban jiwa per provinsi?',
            subtitle = 'Lebih banyak penderita yang sembuh atau penderita yang meninggal?')
   })
+  
+  # simulasi 1
+  
+  output$simulasi_plot = renderPlot({
+    simulasi = function(n_tes){
+      n = 400 #pengulangan
+      n_sakit = input$sakit #banyak orang sakit 
+      total = input$populasi # total karyawan
+      temp = c(0)
+      for(i in 1:n){
+        karyawan = sample(c(1,0),total,prob = c(n_sakit/total,(total-n_sakit)/total),replace = T)
+        tes = sample(karyawan,n_tes)
+        hasil = sum(tes)
+        hasil = ifelse(hasil>1,1,0)
+        temp = c(temp,hasil)
+      }
+      sum(temp)/n*100
+    }
+    
+    data = data.frame(n_tes = c(1:input$populasi))
+    data$sensitivity = sapply(data$n_tes,simulasi)
+    n_min = data %>% filter(sensitivity > 98) %>% select(n_tes)
+    n_min = min(n_min$n_tes)
+    
+    subjudul = paste0('\nDi suatu pabrik berisi ',input$populasi,' orang. Diduga ada ',input$sakit,' orang yang terpapar Covid 19.\nMonteCarlo Simulation 80.000 times.')
+    data %>% 
+      ggplot(aes(x = n_tes,
+                 y = sensitivity)) +
+      geom_smooth(method = 'loess') +
+      geom_line(color = 'black') +
+      labs(title = paste0('Berapa banyak karyawan yang harus dites?\nJawab: Pilih ',n_min,' orang secara acak!'),
+           subtitle = subjudul,
+           caption = 'Simulated and Visualized\nusing R',
+           x = 'Banyak tes',
+           y = 'Peluang mendapat karyawan yang positif\n') +
+      ggthemes::theme_economist() +
+      theme(axis.text = element_text(size=10))
+    
+  })
+  
+  # simulasi 2
+  
+  output$simulasi_plot_2 = renderPlot({
+    simulasi = function(n_tes){
+      n = 400 #pengulangan
+      n_sakit = input$persen_sakit #banyak orang sakit 
+      total = input$populasi_2 # total karyawan
+      temp = c(0)
+      for(i in 1:n){
+        karyawan = sample(c(1,0),total,prob = c(n_sakit/100,1-(n_sakit/100)),replace = T)
+        tes = sample(karyawan,n_tes)
+        hasil = sum(tes)
+        hasil = ifelse(hasil>1,1,0)
+        temp = c(temp,hasil)
+      }
+      sum(temp)/n*100
+    }
+    
+    data = data.frame(n_tes = c(1:input$populasi))
+    data$sensitivity = sapply(data$n_tes,simulasi)
+    n_min = data %>% filter(sensitivity > 98) %>% select(n_tes)
+    n_min = min(n_min$n_tes)
+    
+    subjudul = paste0('\nDi suatu pabrik berisi ',input$populasi,' orang.\nMonteCarlo Simulation 80.000 times.')
+    data %>% 
+      ggplot(aes(x = n_tes,
+                 y = sensitivity)) +
+      geom_smooth(method = 'loess') +
+      geom_line(color = 'black') +
+      labs(title = paste0('Berapa banyak karyawan yang harus dites?\nJawab: Pilih ',n_min,' orang secara acak!'),
+           subtitle = subjudul,
+           caption = 'Simulated and Visualized\nusing R',
+           x = 'Banyak tes',
+           y = 'Peluang mendapat karyawan yang positif\n') +
+      ggthemes::theme_economist() +
+      theme(axis.text = element_text(size=10))
+    
+  })
+  
+  
 }
 
 

@@ -1,4 +1,4 @@
-setwd("~/Documents/belajaR/Bukan Infografis/gTrendsR")
+setwd("~/belajaR/Bukan Infografis/gTrendsR")
 
 rm(list = ls())
 

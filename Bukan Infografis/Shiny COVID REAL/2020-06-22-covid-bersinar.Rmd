@@ -4,7 +4,7 @@ output: github_document
 ---
 
 ```{r setup, include=FALSE}
-setwd("~/Documents/belajaR/Bukan Infografis/Shiny COVID REAL")
+setwd("~/belajaR/Bukan Infografis/Shiny COVID REAL")
 options(scipen = 123)
 library(dplyr)
 library(ggplot2)
