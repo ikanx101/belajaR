@@ -20,7 +20,7 @@ scrap = function(url){
   return(data)
 }
 
-i = 1
+i = 601
 data = scrap(url[i])
 
 for(i in 2:length(url)){
