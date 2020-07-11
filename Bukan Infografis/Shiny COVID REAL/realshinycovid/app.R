@@ -34,7 +34,7 @@ tanggal = Sys.Date()
 tanggal = as.character(tanggal)
 
 # video update youtube masuk ke sini yah
-url = 'https://www.youtube.com/watch?v=YgFsZITZopk'
+url = 'https://www.youtube.com/watch?v=BMSYSkiq68c'
 url = gsub('https://www.youtube.com/watch?v=','',url,fixed = T)
 
 
@@ -70,12 +70,12 @@ filterpane = tabItem(tabName = 'filterpane',
                      fluidRow(
                          column(width = 12,
                                 h1('Read Me'),
-                                h3('Dashboard visualisasi ini berisi updated data dari kasus Covid 19 di Indonesia dan dunia. Sebagaimana yang kita ketahui bersama, gugus tugas percepatan penanganan Covid 19 selalu mengupdate informasi setiap sore. Oleh karena itu, data pada dashboard ini juga akan di-update pada pukul 18.00 WIB setiap harinya.'),
+                                h3('Dashboard visualisasi ini berisi updated data dari kasus Covid 19 di Jawa Barat, Indonesia dan dunia. Sebagaimana yang kita ketahui bersama, gugus tugas percepatan penanganan Covid 19 selalu mengupdate informasi setiap sore. Oleh karena itu, data pada dashboard ini juga akan di-update pada pukul 18.00 WIB setiap harinya.'),
                                 h5(paste0('Last update: ',tanggal)),
                                 br(),
                                 h4('Bagi yang kangen dengan Pak Yuri, silakan tonton dulu press conference hari ini:'),
                                 tags$iframe(width="560", height="315", src=paste0("https://www.youtube.com/embed/",url), frameborder="0", allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture", allowfullscreen=NA),
-                                h5('courtesy: youtube.com MEDCOM'),
+                                h5('courtesy: youtube.com KompasTV'),
                                 br(),
                                 h5('Sumber data yang digunakan tertulis di masing-masing tabs.')
                                 )
