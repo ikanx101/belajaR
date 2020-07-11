@@ -1,5 +1,5 @@
 rm(list=ls())
-setwd('D:/Project_R/Kamis Data/TSP Jarak')
+setwd("~/Documents/belajaR/Experienced/TSP")
 
 #ambil libraries
 library(rvest)
@@ -9,15 +9,16 @@ library(tidytext)
 library(ggplot2)
 library(googleway)
 library(ggmap)
+library(readxl)
 
 #key
-key = 'AIzaSyBN5lDKQnqlt6cBt0JpOXhP4fV6LSDUync'
+key = 'AIzaSyCsO-V8lUNJHhnkGJaPA5XsHkEu-j8wbQo'
 
 #alamat
 init_data = read_excel('Raw Tempat.xlsx')
 init_data = init_data %>% mutate(id = c(1:length(alamat)),
                                  alamat = paste(alamat,
-                                                'Kuala Lumpur, Malaysia',
+                                                'Indonesia',
                                                 sep=','))
 alamat = init_data$alamat
 
@@ -34,7 +35,7 @@ init_data$latlon = paste(init_data$lat,init_data$long,sep='+')
 
 #hitung jarak dengan gmapsdistance
 library(gmapsdistance)
-set.api.key("AIzaSyBRGZiPPLb_PD3ohlfqN_VGnethK30Qpxs")
+set.api.key("AIzaSyAL7i6KJQT-azyrpvhZuMRwFhyHWWQIxYk")
 jarak = gmapsdistance(origin = init_data$latlon,
                       destination = init_data$latlon,
                       combinations = 'all',
@@ -51,8 +52,8 @@ jarak = read.csv('hasil jarak google maps.csv')
 
 #bikin matrix jarak
 distances = as.matrix(jarak) / 1000
-colnames(distances) = init_data$id
-rownames(distances) = init_data$id
+colnames(distances) = c(1:length(alamat)) #ganti aja ya
+rownames(distances) = c(1:length(alamat)) #ganti aja ya
 distances <- as.dist(distances)
 
 library(TSP)
