@@ -5,21 +5,9 @@ account: ikanx
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 2481945
-<<<<<<< HEAD
-bundleId: 3355991
+bundleId: 3381180
 url: https://ikanx.shinyapps.io/covid_19/
-when: 1594001410.88206
-=======
-<<<<<<< HEAD
-bundleId: 3355869
-url: https://ikanx.shinyapps.io/covid_19/
-when: 1593997881.40677
-=======
-bundleId: 3354263
-url: https://ikanx.shinyapps.io/covid_19/
-when: 1593956885.74557
->>>>>>> 554243878705492aaecea6c2dc7c0c198d2a0d15
->>>>>>> a969a89ff12d99eeb8ab3182ff373f98e5800670
+when: 1594514270.83945
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: longlat dunia.rda|DaMen/COVID-19 di Indonesia @kawalcovid19.xlsx|DaMen/Data COVID-19 Jawa Barat.csv|preparation/All Prep.R
