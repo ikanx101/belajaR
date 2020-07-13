@@ -34,7 +34,7 @@ tanggal = Sys.Date()
 tanggal = as.character(tanggal)
 
 # video update youtube masuk ke sini yah
-url = 'https://www.youtube.com/watch?v=BMSYSkiq68c'
+url = 'https://www.youtube.com/watch?v=OMu6ongFpJY'
 url = gsub('https://www.youtube.com/watch?v=','',url,fixed = T)
 
 
