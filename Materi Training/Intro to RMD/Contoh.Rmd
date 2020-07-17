@@ -1,0 +1,54 @@
+---
+title: "Report Market Share"
+subtitle: "Dipersiapkan untuk Sales"
+author: "@mr.ikanx"
+date: "July 17, 2020"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float: 
+        collapsed: false
+    number_sections: false
+    theme: flatly
+    highlight: tango
+    fig_caption: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+rm(list=ls())
+setwd("~/Documents/belajaR/Materi Training/Intro to RMD")
+load('data contoh.rda')
+
+library(dplyr)
+library(ggplot2)
+library(ggpubr)
+
+data$value = ifelse(is.na(data$value),0,data$value)
+```
+
+# Total Market Size Per Tahun
+
+Berikut adalah market size dari masing-masing parent:
+
+```{r,echo=FALSE}
+data %>% 
+  group_by(parent,tahun) %>% 
+  summarise(market_size = sum(value)) %>% 
+  ungroup() %>% 
+  mutate(label = market_size/1000000000,
+         label = round(label,2),
+         label = paste0(label,'Miliar')) %>% 
+  ggplot(aes(x = tahun,
+             y = market_size)) +
+  geom_line(aes(color = parent)) +
+  geom_label(aes(label = label,color = parent),size=2.5) +
+  ggthemes::theme_economist() +
+  labs(title = 'Market Size per Parent',
+       subtitle = 'sumber data: tim sales') +
+  theme(legend.position = 'bottom',
+        axis.text.y = element_blank(),
+        axis.title = element_blank())
+```
+
