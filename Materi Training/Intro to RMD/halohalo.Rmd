@@ -1,0 +1,22 @@
+---
+title: "Report Tentang Market Share"
+author: "Ikang"
+date: "7/17/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Contoh header yang bisa digunakan:
+
+# header 1
+# header 2
+# header 3
+
+bentuk chunk
+
+```{r}
+10+4
+```
