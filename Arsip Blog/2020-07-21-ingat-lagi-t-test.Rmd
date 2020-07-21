@@ -1,0 +1,199 @@
+---
+title: "Mengingat Kembali Uji Hipotesis"
+output: 
+  github_document:
+    pandoc_args: --webtex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+rm(list=ls())
+library(dplyr)
+library(ggplot2)
+```
+
+Di suatu sore yang cerah, tiba-tiba salah satu aplikasi _messaging_ saya berbunyi. Notifikasi tersebut mengantarkan saya pada seorang teman yang bertanya tentang suatu hal yang sudah lama tidak saya sentuh.
+
+> Mas, saya ceritanya saya punya tiga vendor: A, B, dan C. Saya ingin menentukan siapa yang terbaik di antara ketiganya.
+
+Begitu masalah yang ia ingin selesaikan.
+
+Ia bekerja di departemen _procurement_ di salah satu perusahaan __FMCG__ besar di Indonesia.
+
+Lantas saya bertanya:
+
+> Apa definisi __vendor terbaik__?
+
+Ia menjelaskan bahwa definisi vendor terbaik adalah vendor yang memiliki _service level_ paling rendah. _Service level_ adalah banyaknya hari yang dibutuhkan oleh vendor untuk _fulfill_ transaksi yang dijanjikan kepadanya (misalkan lama hari mengirimkan barang kepada perusahaan teman saya).
+
+Jadi teman saya memiliki 200 data _service level_ dari masing-masing vendor tersebut.
+
+```{r,echo=FALSE}
+data = data.frame(
+  service.level.a = sample(10,200,replace = T),
+  service.level.b = sample(c(4:10),200,replace = T),
+  service.level.c = sample(c(6:12),200,replace = T)
+)
+knitr::kable(data,caption = 'Data Service Level Vendor A, B, dan C')
+```
+
+Bagaimana cara kita menyelesaikan permasalahan teman saya tersebut?
+
+## Statistika Deskripsi
+
+Mari kita lihat terlebih dahulu statistika deskripsi dari data di atas:
+
+```{r,echo=FALSE}
+summary(data)
+
+data %>% 
+  mutate(id = c(1:200)) %>% 
+  reshape2::melt(id.vars = 'id') %>% 
+  ggplot(aes(value)) +
+  geom_density(aes(color = variable)) +
+  labs(title = 'Density Plot dari Masing-Masing Vendor',
+       subtitle = 'Data Tiga Vendor',
+       x = 'Service Level',
+       y = 'Density',
+       color = 'Nama Vendor') +
+  theme_classic()
+
+data %>% 
+  mutate(id = c(1:200)) %>% 
+  reshape2::melt(id.vars = 'id') %>% 
+  ggplot(aes(value)) +
+  geom_boxplot(aes(color = variable)) +
+  labs(title = 'Box Plot dari Masing-Masing Vendor',
+       subtitle = 'Data Tiga Vendor',
+       x = 'Service Level',
+       color = 'Nama Vendor') +
+  theme_classic() +
+  theme(axis.text.y = element_blank(),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank())
+```
+
+Jika dilihat secara visual, sudah bisa dipastikan bahwa vendor A memiliki nilai rata-rata _service level_ yang paling rendah. Namun perlu dibuktikan, apakah nilai yang rendah tersebut benar-benar __signifikan__ terhadap nilai rata-rata vendor lainnya (B dan C).
+
+Maka yang perlu dicek adalah pasangan data sebagai berikut:
+
+1. A vs B
+1. A vs C
+1. B vs C
+
+_____
+
+## Uji Hipotesis
+
+Kita bisa melakukan uji hipotesis untuk mengecek apakah ada perbedaan yang signifikan dari nilai rata-rata tersebut. Langkah-langkah dalam uji hipotesis adalah:
+
+1. Tentukan hipotesis nol dan hipotesis tandingan.
+  - Notasi: $H_0$ dan $H_1$
+  - Hipotesis nol adalah hipotesis yang mengandung unsur sama dengan.
+2. Hitung statistik uji atau _p-value_.
+3. Kesimpulan: Tolak $H_0$ jika _p-value_ < 0.05.
+4. Tuliskan kesimpulan dengan kalimat non matematis.
+
+Dalam statistika inferensi, ada dua pendekatan yang bisa ditempuh, yakni:
+
+1. Statistika parametrik. Syarat: data harus berdistribusi normal.
+1. Statistika non parametrik. Syarat: data tidak harus berdistribusi normal.
+
+Untuk kasus ini, kita akan menggunakan `T-Test` (jika parametrik) atau `Wilcox Test` (jika non parametrik). Oleh karena itu, langkah pertama yang harus ditempuh adalah dengan mengecek normalitas dari ketiga data tersebut.
+
+### Cek Normalitas dari Data
+
+Beberapa literatur menyebutkan bahwa _normality check_ adalah hal yang wajib dilakukan sebelum kita hendak melakukan uji parametrik. Namun, beberapa literatur lainnya tidak mewajibkan hal tersebut jika _dataset_ yang kita miliki sudah relatif banyak sehingga cukup dengan [_Central Limit Theorem_](https://en.wikipedia.org/wiki/Central_limit_theorem), _dataset_ yang kita miliki sudah bisa diasumsikan normal.
+
+Sebenarnya untuk urusan begini, saya agak _males_ _yah._ _Hahaha_. Tapi _yuk_ kita coba cek normalitas dari ketiga data tersebut.
+
+Sesuai dengan [_post_ saya sebelumnya](https://passingthroughresearcher.wordpress.com/2019/11/12/oleh-oleh-pelatihan-di-telkom-university/), saya akan menggunakan uji kenormalan _Kolmogorov-Smirnov_.
+
+_Oh iya_, cek normalitas juga merupakan uji hipotesis, maka langkah-langkah yang harus ditempuh:
+
+1. Tentukan hipotesis nol dan tandingan:
+  - $H_0$: Data berdistribusi normal.
+  - $H_1$: Data tidak berdistribusi normal.
+2. Hitung _p-value_ dan lihat bagaimana hasilnya. 
+
+```{r,echo=TRUE,warning=FALSE,message=FALSE}
+test.a = ks.test(data$service.level.a,'pnorm')
+test.b = ks.test(data$service.level.b,'pnorm')
+test.c = ks.test(data$service.level.c,'pnorm')
+
+hasil = data.frame(
+  vendor = c('A','B','C'),
+  p_value = c(test.a$p.value,test.b$p.value,test.c$p.value)
+) %>% 
+  mutate(kesimpulan = ifelse(p_value < 0.05,'Tolak H0','H0 diterima'),
+         hasil_akhir = ifelse(p_value < 0.05,'Tidak berdistribusi normal','Berdistribusi Normal'))
+
+knitr::kable(hasil)
+```
+
+Ternyata didapatkan bahwa ketiga data vendor tersebut __tidak berdistribusi normal__. Oleh karena itu, saya akan menggunakan uji non parametrik untuk menyelesaikan permasalahan ini. 
+
+### Wilcoxx Tes dari Pasangan Data Vendor
+
+Sebagaimana yang telah saya infokan, saya akan melakukan tiga kali tes dari pasangan data yang ada. Mari kita lakukan langkah-langkah uji hipotesis berikut ini:
+
+1. Tentukan hipotesis nol dan tandingan:
+  - $H_0$: Rata-rata _service level_ $vendor_1$ = rata-rata _service level_ $vendor_2$
+  - $H_1$: Rata-rata _service level_ $vendor_1$ $\neq$ rata-rata _service level_ $vendor_2$
+2. Hitung _p-value_ dan lihat bagaimana hasilnya. 
+
+```{r,echo=TRUE,warning=FALSE,message=FALSE}
+test_1 = wilcox.test(data$service.level.a,data$service.level.b)
+test_2 = wilcox.test(data$service.level.a,data$service.level.c)
+test_3 = wilcox.test(data$service.level.b,data$service.level.c)
+
+hasil = data.frame(
+  vendor_1 = c('A','A','B'),
+  vendor_2 = c('B','C','C'),
+  p_value = c(test_1$p.value,test_2$p.value,test_3$p.value)
+) %>% 
+  mutate(kesimpulan = ifelse(p_value < 0.05,'Tolak H0','H0 diterima'),
+         hasil_akhir = ifelse(p_value < 0.05,
+                              paste0(vendor_1,' tidak sama dengan ',vendor_2),
+                              paste0(vendor_1,'=',vendor_2)))
+
+knitr::kable(hasil)
+```
+
+## Kesimpulan
+
+Dari hasil diatas, kita telah mendapati bahwa:
+
+1. A $\neq$ B
+1. A $\neq$ C
+1. B $\neq$ C
+
+Jika dilihat kembali dari grafik _boxplot_ sebelumnya, kita bisa simpulkan bahwa:
+
+$$A<B<C$$
+
+_____
+
+# Masalah Belum Selesai
+
+Setelah saya sampaikan temuan saya ini, teman saya lantas berkata:
+
+> Jika Vendor A adalah yang terbaik, apakah vendor tersebut sudah memenuhi standar _service level_ perusahaan saya?
+
+Teman saya menginformasikan bahwa standar _service level_ perusahaannya adalah `4 hari`. Jadi sekarang tugas kita adalah mengecek apakah `mean(service.level.a) < 5`.
+
+Berhubung datanya tidak normal, saya akan tetap menggunakan _Wilcox Test_ untuk satu sampel. Mari kita lakukan langkah-langkah uji hipotesis berikut ini:
+
+1. Tentukan hipotesis nol dan tandingan:
+  - $H_0$: Rata-rata _service level_ vendor A $\geq$ 5 hari
+  - $H_1$: Rata-rata _service level_ vendor A < 5 hari
+2. Hitung _p-value_ dan lihat bagaimana hasilnya. 
+
+```{r}
+test = wilcox.test(data$service.level.a, mu = 5, alternative = "less")
+test
+```
+
+Ternyata didapatkan hasil _p-value_ = `r test$p.value`.
+
+Kesimpulan: `r ifelse(test$p.value < 0.05,'Tolak H0','H0 diterima')` alias Vendor A masih berada di atas standar perusahaan teman saya.
