@@ -1,5 +1,4 @@
 rm(list=ls())
-#setwd('D:/Project_R/Kamis Data/Nutrimart')
 
 #panggil libs
 if(!require(dplyr)){
@@ -26,12 +25,15 @@ if(!require(reshape2)){
   install.packages("reshape2")
   library(reshape2)
 }
+
 print('Proses sedang berjalan... Harap sabar yah...')
+
+# tulis semua pages yang mungkin
 url = c('https://www.hemat.id/katalog/makanan-minuman/',
         paste('https://www.hemat.id/katalog/makanan-minuman/?page=',
               c(2:30),sep=''))
 
-#bikin fungsi scrap link produk
+# bikin fungsi
 scrap_links = function(url){
   link = read_html(url) %>% html_nodes('a') %>% html_attr('href')
   data = tibble(
@@ -41,20 +43,23 @@ scrap_links = function(url){
   return(data)
 }
 
-#mulai iterasi
+# bikin looping
 i=1
 data = scrap_links(url[i])
 for(i in 2:30){
   temp = scrap_links(url[i])
   data = rbind(data,temp)
+  kata = paste0('Scrape link dari page ke-',i)
+  print(kata)
 }
 
-#hasil finalnya adalah
-data = data %>% mutate(url_produk = paste('https://www.hemat.id',
-                                          url_produk,
-                                          sep=''))
+#ditambahkan alamat site awal
+data = data %>% 
+  mutate(url_produk = paste('https://www.hemat.id',
+                            url_produk,
+                            sep=''))
 
-#kita bikin fungsi scrap per url_produk
+# fungsi berikutnya
 scrap_info_produk = function(url_dummy){
   new.data = read_html(url_dummy) %>% {
     tibble(
@@ -69,15 +74,18 @@ scrap_info_produk = function(url_dummy){
   return(new.data)
 }
 
-#mulai iterasi untuk url produk
+# Looping All
 i = 1
 data_produk = scrap_info_produk(data$url_produk[i])
 data_produk$id = i
-
+data_produk$url_ref = data$url_produk[i]
 for(i in 2:length(data$url_produk)){
   temp_produk = scrap_info_produk(data$url_produk[i])
   temp_produk$id = i
+  temp_produk$url_ref = data$url_produk[i]
   data_produk = rbind(data_produk,temp_produk)
+  kata = paste0('Ambil data detail dari link produk ke-',i)
+  print(kata)
 }
 
 #kita unmelt manual yah
