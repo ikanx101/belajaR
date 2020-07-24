@@ -1,0 +1,204 @@
+---
+title: "Data Science di Bidang Kesehatan"
+output: 
+  github_document:
+    pandoc_args: --webtex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("~/Documents/ikanx101.github.io/_posts/kesehatan ROC")
+
+rm(list=ls())
+source('~/Documents/All Func.R')
+data = import.data.spss.saya.donk('~/Documents/Antara/Pekerjaan Sebelumnya/dikha ayu/Test Kanker Kolon.sav')
+data = janitor::clean_names(data)
+
+library(ROCit)
+```
+
+# 12 July 2020
+
+Saat mengisi webinar di @urun.id, ada salah seorang peserta yang bertanya mengenai aplikasi _data science_ di bidang kesehatan. Saya menjawab dengan beberapa contoh yang saya ketahui dari artikel, jurnal, dan tulisan rekan-rekan _data scientist_ lainnya.
+
+> Mmh, kalau dipikir-pikir, baru sekali saya bersinggungan dengan data kesehatan. Itu pun hanya terkait perapihan data saja. Tanpa analisa apa-apa.
+
+# 22 July 2020
+
+Mendekati adzan maghrib, muncul notifikasi di WhatsApp saya dari nomor yang tidak dikenal. Nomor ini beririsan dengan saya di grup alumni SMA.
+
+> Wah, teman SMA nih.
+
+Sang pengirim pesan memperkenalkan dirinya (sebut saja Mawar). Dia sekarang bekerja di bidang kesehatan dan sedang melakukan penelitian terkait biomarker untuk mendeteksi suatu penyakit. Entah kenapa saya yang dihubungi oleh dirinya.
+
+Saya sempat bertanya ke nyonya (kebetulan saya dan nyonya dulu satu SMA juga). Ternyata nyonya gak kenal juga ama Mawar ini. _Hahaha_.
+
+Mawar bercerita, bahwa saat ini dia sedang mengembangkan dua biomarker. Apa sih biomarker itu?
+
+> Biomarker is a measurable substance in an organism whose presence is indicative of some phenomenon such as disease, infection, or enviromental exposure.
+
+Diharapkan salah satu dari kedua biomarker tersebut bisa dengan akurat memprediksi seseorang terkena suatu penyakit atau tidak. Konon katanya pengukuran biomarker ini jauh lebih mudah, murah, dan cepat dibandingkan diagnosis pada umumnya.
+
+## Ini menguji atau murni bertanya?
+
+Mengingat latar belakang dari teman saya ini, lantas saya bertanya dalam hati. 
+
+> Jangan-jangan teman saya ini hanya menguji saya aja nih... _Hahaha_
+
+Singkat cerita, dia memberikan saya data seperti ini:
+
+```{r,echo=FALSE}
+id_n = sample(data$id,10)
+new = 
+  data %>% filter(id %in% id_n) %>% mutate(id = NULL)
+knitr::kable(head(new,10),row.names = FALSE,caption = 'Contoh Data Biomarker (10 Data Teratas)',align = 'c')
+```
+Kemudian dia memberikan pertanyaan:
+
+> Kalau pakai analisa __ROC__, berapa _cut off points_ dari masing-masing biomarker? Biomarker mana yang lebih bagus? Apakah biomarker ini sudah baik untuk menggantikan diagnosis yang sebelumnya dilakukan?
+
+## Analisa ROC
+
+Menarik bahwa yang dilakukan adalah _straight to the point_ langsung ke __ROC__. Awalnya saya membayangkan untuk membuat model terlebih dahulu yang menggambarkan hubungan antara `biomarker ~ diagnosis` dengan _loglinear regression_ atau model lainnya.
+
+Tapi karena pertanyaannya adalah langsung menusuk menuju __ROC__ yasudahlah.
+
+### Apa sih [ROC](https://en.wikipedia.org/wiki/Receiver_operating_characteristic) itu?
+
+> A receiver operating characteristic curve, or ROC curve, is a graphical plot that illustrates the diagnostic ability of a binary classifier system as its discrimination threshold is varied.
+
+Contoh: 
+
+```{r,echo=FALSE}
+knitr::include_graphics('https://upload.wikimedia.org/wikipedia/commons/6/6b/Roccurves.png')
+```
+
+# Bahasa Manusianya Gimana?
+
+Oke, mungkin penjelasan saya sebelumnya agak sulit untuk dimengerti. Saya coba jelaskan dengan simpel _yah_:
+
+Jadi coba kita lagi datanya:
+
+```{r,echo=FALSE}
+knitr::kable(head(new,10),row.names = FALSE,caption = 'Contoh Data Biomarker (10 Data Teratas)',align = 'c')
+```
+
+Menggunakan analisa __ROC__, tujuan analisa ini adalah:
+
+1. Bagaimana caranya dari data numerik berupa kadar `biomarker1` dan `biomarker2` bisa digunakan untuk menebak diagnosis penyakit?
+2. Pada kadar berapa `biomarker1` dan `biomarker2` bisa untuk memisahkan pasien tersebut `sakit` atau `tidak`?
+
+## Oke, saya coba jawab yah!
+
+Hal pertama yang akan saya lakukan adalah membuat __ROC Curve__ lalu menghitung _Area Under Curve_ (AUC). __AUC__ ini adalah nilai yang memberikan indikasi _goodness of fit__ apakah suatu variabel bisa digunakan untuk menebak variabel lain. __AUC__ ini juga yang biasa dijadikan acuan dalam setiap kompetisi _data science_. Semakin nilainya menuju `1`, maka akan semakin bagus hasil prediksinya.
+
+### `Biomarker1`
+
+```{r,echo=FALSE}
+roc_empirical <- rocit(score=data$biomarker1,class=data$diagnosis)
+summary(roc_empirical)
+plot(roc_empirical)
+```
+
+### `Biomarker2`
+
+```{r,echo=FALSE}
+roc_empirical <- rocit(score=data$biomarker2,class=data$diagnosis)
+summary(roc_empirical)
+plot(roc_empirical)
+```
+
+#### Kesimpulan dari nilai AUC
+
+Dari nilai `AUC` kedua __ROC Curve__ di atas, `biomarker2` menunjukkan angka yang terbaik dibandingkan `biomarker1`. Oleh karena itu, dugaan saya: `biomarker2` memiliki kemampuan lebih baik untuk mendiagnosis penyakit dibandingkan `biomarker1`.
+
+### _Cut Off Points_
+
+Dari data numerik `biomarker1` dan `biomarker2`, saya akan menentukan batas berapa kadar bisa dibilang `sakit` dan `tidak sakit`. Untuk itu, saya akan menggunakan [Youden's J statsitic](https://en.wikipedia.org/wiki/Youden%27s_J_statistic), yakni:
+
+$$J=sensitivity+specificity-1$$
+
+_Cut off points_ akan dipilih saat nilai $J$ mencapai maksimum.
+
+### Biomarker1
+
+```{r,echo=FALSE}
+roc_empirical <- rocit(score=data$biomarker1,class=data$diagnosis)
+summary(roc_empirical)
+
+hasil = data.frame(Cutoff=roc_empirical$Cutoff, 
+                 TPR=roc_empirical$TPR, 
+                 FPR=roc_empirical$FPR) %>% 
+  mutate(youden_index = TPR - FPR)
+#rmarkdown::paged_table(hasil)
+
+new = hasil %>% filter(youden_index == max(youden_index))
+
+cut_bio1 = new$Cutoff
+```
+
+_Cut off points_ untuk `biomarker1` terjadi pada `r round(new$Cutoff,3)`, saat __TPR__ = `r new$TPR`; __FPR__ = `r new$FPR` sehingga menghasilkan $J=$ `r round(new$youden_index,4)`.
+
+### Biomarker2
+
+```{r,echo=FALSE}
+roc_empirical <- rocit(score=data$biomarker2,class=data$diagnosis)
+summary(roc_empirical)
+
+hasil = data.frame(Cutoff=roc_empirical$Cutoff, 
+                 TPR=roc_empirical$TPR, 
+                 FPR=roc_empirical$FPR) %>% 
+  mutate(youden_index = TPR - FPR)
+#rmarkdown::paged_table(hasil)
+
+new = hasil %>% filter(youden_index == max(youden_index))
+
+cut_bio2 = new$Cutoff
+```
+
+_Cut off points_ untuk `biomarker2` terjadi pada `r round(new$Cutoff,3)`, saat __TPR__ = `r new$TPR`; __FPR__ = `r new$FPR` sehingga menghasilkan $J=$ `r round(new$youden_index,4)`.
+
+Dari _cut off points_ tersebut, saya membuat _rules_ yakni jika kadar `biomarker` $\geq$ _cut off points_ maka akan ditulis `sakit`. Sedangkan jika kadar `biomarker` < _cut off points_ maka akan ditulis `tidak sakit`.
+
+## _Confusion Matrix_
+
+Sekarang saya akan buat _confusion matrix_ dari hasil transformasi tersebut lalu kita komparasi nilai $precision$ dan $recall$.
+
+Misalkan $precision$ saya definisikan sebagai:
+
+$$precision=\frac{jumlah.pasien.diprediksi.sakit.benar}{jumlah.pasien.diprediksi.sakit}$$
+
+Sedangkan $recall$ saya definisikan sebagai:
+
+$$recall=\frac{jumlah.pasien.diprediksi.sakit.benar}{jumlah.pasien.sakit}$$
+
+### `Biomarker1`
+
+```{r,echo=FALSE}
+data =
+  data %>% 
+  mutate(bio1 = ifelse(biomarker1>=cut_bio1,'Ya','Tidak'),
+         bio2 = ifelse(biomarker2>=cut_bio2,'Ya','Tidak'),
+         bio1 = factor(bio1),
+         bio2 = factor(bio2))
+
+caret::confusionMatrix(reference = data$diagnosis,data = data$bio1)
+```
+
+### `Biomarker2`
+
+```{r,echo=FALSE}
+caret::confusionMatrix(reference = data$diagnosis,data = data$bio2)
+```
+
+#### Kesimpulan _Confusion Matrix_
+
+`Biomarker1` memberikan $precision=$ `r round(187/(185+187)*100,2)` dan $recall=$ `r round(187/(42+187)*100,2)`.
+
+`Biomarker2` memberikan $precision=$ `r round(172/(172+100)*100,2)` dan $recall=$ `r round(172/(172+57)*100,2)`.
+
+# Opini Final
+
+Melihat dari __AUC__, sebenarnya `biomarker2` cukup bagus dibandingkan dengan `biomarker1`. Tapi dari nilai _precision_ dan _recall_ saya tidak merekomendasikan sama sekali kedua `biomarker` untuk digunakan.
+
+> Saya gak mau ada misklasifikasi dari hasil `biomarker` ini. Kalau cuma sakit panu sih gapapa, tapi untuk __penyakit__ yang satu ini, _enggak lah yah_.

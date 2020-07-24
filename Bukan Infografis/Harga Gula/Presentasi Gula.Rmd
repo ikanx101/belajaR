@@ -1,8 +1,8 @@
 ---
 title: "FORECAST HARGA GULA"
 subtitle: "Sebuah Analisa Time Series"
-author: "Dept. Market Research"
-institute: "@nutrifoodID"
+author: "ikanx101.github.io"
+institute: "@mr.ikanx"
 date: "Juni 30, 2020"
 output:
   xaringan::moon_reader:
