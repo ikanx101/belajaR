@@ -1,5 +1,4 @@
 rm(list=ls())
-#setwd("~/Documents/belajaR/Bukan Infografis/olive oil tokped")
 library(rvest)
 library(dplyr)
 
