@@ -1,4 +1,4 @@
-setwd("~/Documents/belajaR/Bukan Infografis/olive oil tokped/Shopee")
+# setwd("~/Documents/belajaR/Bukan Infografis/olive oil tokped/Shopee")
 rm(list=ls())
 library(dplyr)
 
