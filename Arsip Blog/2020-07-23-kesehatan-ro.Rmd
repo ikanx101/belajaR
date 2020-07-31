@@ -11,7 +11,7 @@ setwd("~/Documents/ikanx101.github.io/_posts/kesehatan ROC")
 
 rm(list=ls())
 source('~/Documents/All Func.R')
-data = import.data.spss.saya.donk('~/Documents/Antara/Pekerjaan Sebelumnya/dikha ayu/Test Kanker Kolon.sav')
+data = Sebelumnya')
 data = janitor::clean_names(data)
 
 library(ROCit)
