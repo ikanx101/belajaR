@@ -3,6 +3,15 @@ title: "Intro to R - Volume 2"
 subtitle: "Edisi Revisi"
 author: "ikanx101.github.io"
 date: "Agustus 4, 2020"
+header-includes:
+- \usepackage{titling}
+- \pretitle{\begin{center}\LARGE\includegraphics[width=12cm]{logo R.png}\\[\bigskipamount]}
+- \posttitle{\end{center}}
+- \usepackage{fancyhdr}
+- \pagestyle{fancy}
+- \fancyhead[CO,CE]{ikanx101.github.io}
+- \fancyfoot[CO,CE]{Intro to R - Volume 2}
+- \fancyfoot[LE,RO]{hal \thepage}
 output:
   pdf_document:
     toc: true
@@ -10,8 +19,10 @@ output:
     fig_width: 7
     fig_height: 4
     fig_caption: true
-    highlight: tango
+    highlight: pygments
 ---
+
+\newpage
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -24,6 +35,10 @@ setwd("~/Documents/belajaR/Materi Training/Day 1 - R Series")
 ```{r out.width = '80%',echo=FALSE, fig.align='center'}
 knitr::include_graphics('logo R.png')
 ```
+
+__Bayangkan Anda berada di restoran _all you can eat_ dimana semua makanan yang Anda mau ada semua di sana__
+
+Ikang
 
 \newpage
 
@@ -40,7 +55,7 @@ __R__ tidak sendirian, ada juga _software_ lain bernama __Python__. Keduanya dig
 
 \newpage
 
-# 1. Pendahuluan
+# Pendahuluan
 
 **R** merupakan salah satu bahasa pemrograman yang biasa digunakan untuk
 menyelesaikan permasalahan terkait dengan data. Kita bisa membuat model
@@ -69,11 +84,11 @@ Berbeda dengan __R__ yang memang dibangun untuk kebutuhan _data science_, __Pyth
 Materi _training_ ini saya kumpulkan dari berbagai sumber dan saya _customize_ sesuai dengan kebutuhan __Nutrifood__ berdasarkan pengalaman selama ini berkutat dengan data yang ada (dari mulai data pabrik hingga _finance_). Semoga menjadi manfaat bagi _Nutrifooders_ semua. 
 
 
-## 1.1 Sejarah
+## Sejarah
 
 __R__ Merupakan bahasa yang digunakan dalam komputasi statistik yang pertama kali dikembangkan oleh _Ross Ihaka_ dan _Robert Gentlement_ di _University of Auckland New Zealand_ yang merupakan akronim dari nama depan kedua pembuatnya. Sebelum __R__ dikenal ada __S__ yang dikembangkan oleh _John Chambers_ dan rekan-rekan dari _Bell Laboratories_ yang memiliki fungsi yang sama untuk komputasi statistik. Hal yang membedakan antara keduanya adalah __R__ merupakan sistem komputasi yang bersifat gratis.
 
-## 1.2 Fitur dan Karakteristik
+## Fitur dan Karakteristik
 
 Sama halnya dengan bahasa pemograman lainnya. Berbeda bahasa berarti berbeda peraturan / cara menulis _code_ (algoritma). Tapi jangan khawatir, dengan memanfaatkan _tidy principle_ di __R__, kita bisa menulis algoritma dengan mudah (bagi kita dan pembaca algoritmanya).
 
@@ -87,6 +102,9 @@ x = 'Nutrifood'
 y = 'nutrifood'
 x == y
 ```
+
+\newpage
+
 2. Segala sesuatu yang ada pada program __R__ akan diangap sebagai objek. konsep objek ini sama dengan bahasa pemrograman berbasis objek yang lain seperti _Java_, _C++_, _Python_, dll. Perbedaannya adalah bahasa __R__ relatif lebih sederhana dibandingkan bahasa pemrograman berbasis objek yang lain.
 3. _Interpreted language_ atau _script_. Bahasa __R__ memungkinkan pengguna untuk melakukan kerja pada __R__ tanpa perlu melakukan _compile_ menjadi _executionable_ file (.exe).
 4. Mendukung proses _loop_, _decision making_, dan menyediakan berbagai jenis operator (aritmatika, logika, dll).
@@ -94,7 +112,7 @@ x == y
 6. Mudah ditingkatkan melalui penambahan fungsi atau _library_. Penambahan ini dapat dilakukan secara _online_ melalui __CRAN__ atau melalui sumber seperti __github__.
 7. Menyedikan berbagai fungsi untuk keperluan visualisasi data. Visualisasi data pada __R__ dapat menggunakan _library_ bawaan atau lainnya seperti `ggplot2`, `ggvis`, `plotly`, dll.
 
-## 1.3 Kelebihan dan Kekurangan __R__
+## Kelebihan dan Kekurangan __R__
 
 Selain karena __R__ dapat digunakan secara gratis terdapat kelebihan lain yang ditawarkan, antara lain:
 
@@ -107,7 +125,7 @@ Adapun kekurangan dari R antara lain:
 
 * _Point and Click GUI_, interaksi utama dengan __R__ bersifat __CLI__ (_Command Line Interface_), walaupun saat ini telah dikembangkan _library_ yang memungkinkan kita berinteraksi dengan __R__ menggunakan __GUI__ (_Graphical User Interface_) sederhana menggunakan `library(R-Commander)` yang memiliki fungsi yang terbatas.
 
-## 1.4 R vs R Studio
+## R vs R Studio
 
 Pada dasarnya, _software_ __R__ bisa di-_download_ dan di-_install_ langsung dari situs [CRAN](https://cran.r-project.org/bin/windows/base/). _Software_ __R__ ini bersifat __CLI__.
 
@@ -117,12 +135,15 @@ Seperti itulah _software_ __R__.
 Bagi Kamu yang kaget dan tidak terbiasa melihat tampilan yang _intimidating_ seperti itu, Kamu bisa meng-_install software_ __R Studio__. Sebuah _software_ GUI yang bisa membuat __R__ terlihat lebih _user friendly_. __R Studio__ bisa di-_download_ [di sini](https://rstudio.com/products/rstudio/download/). 
 
 > Tapi tolong diperhatikan bahwa __R Studio__ hanya tambahan tampilan dari __R__ standar. Jadi Kamu tetap harus meng- _install_ __R__ yah!
+
+\newpage
+
 Kelebihan R Studio antara lain:
 
 1. _Free_, kita bisa memilih versi gratis dari __R Studio__ tanpa ada pengurangan fitur dasar dari __R__.
 2. _R Studio Cloud_, tersedia layanan _cloud_ sehingga bisa diakses dan digunakan menggunakan _browser_ di _gadget_ manapun. Layanan _cloud_ ini bisa diakses [di sini](https://rstudio.cloud) dan dikoneksikan ke akun __github__ Kamu. Kira-kira seperti ini tampilannya jika dibuka di _Chrome for Android_:
 
-```{r out.width = '60%',echo=FALSE}
+```{r out.width = '40%',echo=FALSE,fig.align='center'}
 knitr::include_graphics('Skrinsut 1.jpg')
 ```
 
@@ -133,7 +154,9 @@ Jadi, setelah membaca bagian ini pastikan Kamu sudah meng- _install_ __R__ dan _
 
 > Jangan sampai terbalik urutan instalasinya!
 
-## 1.5 Mengenal operator dasar
+\newpage
+
+## Mengenal operator dasar
 
 Beberapa operator dasar di __R__ antara lain:
 
@@ -164,7 +187,9 @@ a > b
 a = 5;b = 3;a*b
 ```
 
-## 1.6 Working Directory
+\newpage
+
+## Working Directory
 
 Apa itu _working directory_?
 
@@ -177,7 +202,7 @@ getwd()
 
 Secara _default_, __R__ menggunakan `C:\\My Documents` sebagai _working directory_.
 
-### 1.6.1 Bagaimana mengubah _working directory_?
+### Bagaimana mengubah _working directory_?
 
 _Working directory_ bisa diubah sesuai kemauan kita memanfaatkan perintah `setwd()`, tanda dalam kurung diisi dengan _folder path_ yang diinginkan.
 
@@ -185,11 +210,11 @@ _Working directory_ bisa diubah sesuai kemauan kita memanfaatkan perintah `setwd
 setwd("~/Documents/belajaR/Materi Training/Day 1 - R Series")
 ```
 
-### 1.6.2 Apa keuntungan mengubah-ubah _working directory_?
+### Apa keuntungan mengubah-ubah _working directory_?
 
 Perubahan _working directory_ akan sangat berguna saat kita ingin memgambil data dari _folder path_ tertentu dan menyimpan hasil analisa kita ke _folder path_ yang berbeda.
 
-## 1.7 Mengenal _packages_ atau _library_
+## Mengenal _packages_ atau _library_
 
 `packages` atau `library` adalah sekumpulan fungsi yang telah dibuat dan dibakukan untuk kemudian disertakan di halaman _web_ CRAN atau github. `library` bisa kita _install_ dan gunakan dengan mudah.
 
@@ -207,7 +232,7 @@ Beberapa contoh `library` yang sering saya gunakan:
 8. `expss`: __SPSS__ di __R__.
 8. `xaringan`: membuat _file_ presentasi berformat `html`.
 
-### 1.7.1 Instalasi _Packages_
+### Instalasi _Packages_
 
 `library` di __R__ bisa di-_install_ dengan mudah dengan menggunakan perintah `install.packages('nama packages')`. Tanda dalam kurung diisi `character` nama `library`. Bisa menggunakan `" "` atau `' '`. 
 
@@ -219,7 +244,7 @@ Contoh:
 
 `install.packages("rvest")`
 
-### 1.7.2 Mengaktifkan _Packages_
+### Mengaktifkan _Packages_
 
 `library` yang sudah di-_install_ bisa diaktifkan dengan menggunakan perintah `library(nama packages)` tanpa menggunakan tanda `" "` atau `' '`.
 
@@ -229,11 +254,15 @@ Pengaktifan `library` cukup dilakukan sekali saja di awal pengerjaan _project_ (
 library(dplyr)
 ```
 
-### 1.7.3 Serba-Serbi Tentang _Packages_
+Beberapa `library` saat diaktifkan akan menghasilkan pesan tertentu seperti di atas ini. Hal ini merupakan sesuatu yang __normal__ terjadi.
+
+### Serba-Serbi Tentang _Packages_
 
 Untuk beberapa `library` ada kemungkinan (kecil) ditemukan kasus saat mereka tidak kompatibel. Akibatnya beberapa fungsi perintah di `library` tersebut akan menjadi kacau.
 
 Misalnya pada saat kita memanggil `library(tidyverse)` dan `library(plyr)`, maka perintah `filter()` yang dimiliki `tidyverse` akan tidak berjalan dengan baik. 
+
+\newpage
 
 Ada beberapa solusi yang bisa kita lakukan:
 
@@ -246,7 +275,7 @@ Ada beberapa solusi yang bisa kita lakukan:
 
 `reshape2::melt(data)`
 
-### 1.7.4 _Help_
+### _Help_
 
 Setiap `library` yang telah di-_install_ dan aktif disertai dengan fitur _help_ yang berfungsi sebagai informasi kepada _user_. Jika kita ingin mengetahui bagaimana isi dari perintah suatu fungsi, kita bisa gunakan perintah `help(nama fungsi)` atau `?nama fungsi`. _Help_ akan muncul pada tab _help_ di __R Studio__. Contoh:
 
@@ -260,7 +289,7 @@ atau
 ?sum
 ```
 
-### 1.7.5 _Example_
+### _Example_
 
 Selain _help_, kita bisa melihat contoh pemakaian dari suatu fungsi di __R__ dengan menggunakan perintah `example()`. Contoh:
 
@@ -268,19 +297,20 @@ Selain _help_, kita bisa melihat contoh pemakaian dari suatu fungsi di __R__ den
 example(sum)
 ```
 
-______
+\newpage
 
-# 2. Mulai Bekerja dengan __R__
 
-## 2.1 Mengenal Data
+# Mulai Bekerja dengan __R__
+
+## Mengenal Data
 
 Sebelum memulai bekerja dengan __R__, ada baiknya saya jelaskan dan ingatkan kembali beberapa hal penting terkait data. Dengan demikian, kita bisa memilih jenis analisa statistika apa yang tepat untuk tipe-tipe data yang berbeda.
 
-### 2.1.1 Tipe Data (statistika)
+### Tipe Data (statistika)
 
 Secara statistika, berikut adalah pembagian data berdasarkan tipenya:
 
-```{r,echo=FALSE}
+```{r out.width = '60%',echo=FALSE,fig.align='center'}
 knitr::include_graphics('tipe data.png')
 ```
 
@@ -291,7 +321,7 @@ knitr::include_graphics('tipe data.png')
   * __Diskrit__; bilangan bulat (_integer_). 
   * __Kontinu__; bilangan _real_ (mengandung koma).
 
-### 2.1.2 Tipe Data di __R__
+### Tipe Data di __R__
 
 Di __R__ ada beberapa tipe data yang sering digunakan. Secara hierarki, bisa diurutkan sebagai berikut:
 
@@ -305,7 +335,7 @@ Oke, saya coba jelaskan satu persatu yah:
 4. `logical`: merupakan tipe data _boolean_. Hanya berisi `TRUE` atau `FALSE`. Tipe data ini sangat berguna saat kita melakukan _if conditional_, _looping_, atau membuat _regex_ (_reguler expression_).
 
 
-### 2.1.3 Struktur Data di __R__
+### Struktur Data di __R__
 
 Ada beberapa bentuk struktur data di __R__, yakni: 
 
@@ -314,7 +344,7 @@ Ada beberapa bentuk struktur data di __R__, yakni:
 3. _Data frame_ atau _tibble_; merupakan kumpulan dari beberapa _vectors_ yang memiliki ukuran sama. Bayangkan sebagai satu tabel di _Ms. Excel_ yang banyaknya baris di setiap kolom sama.
 4. _List_; merupakan bentuk struktur data yang sangat kompleks. Berisi _multiple data_ dengan struktur bermacam-macam.
 
-### 2.1.4 Apa gunanya kita mengetahui jenis dan struktur data di __R__?
+### Apa gunanya kita mengetahui jenis dan struktur data di __R__?
 
 Beberapa algoritma yang tersedia di _library_ mengharuskan kita memiliki _input_ yang ter-standar, baik dari segi jenis dan strukturnya.
 
@@ -324,7 +354,7 @@ Contoh:
 
 > Algoritma analisa _simple linear regression_ (`lm()`) memerlukan input berupa `data.frame()` dengan masing-masing _variables_ yang ada di dalamnya berjenis _numeric_.
 
-## 2.2 Tata Cara Memberikan Nama _Object_ atau Variabel
+## Tata Cara Memberikan Nama _Object_ atau Variabel
 
 Setiap _object_ atau variabel di __R__ bisa diberikan nama sesuai dengan keinginan kita. Tidak ada aturan baku dalam memberikan nama. 
 
@@ -334,17 +364,17 @@ Berikut adalah tata cara pemberian nama yang akan membuat pekerjaan kita lebih e
 1. Seragamkan kapital atau non kapital dari nama variabel kita. Jika menggunakan _lowercase_, maka harus konsisten di setiap data yang ada di _environment_ __R__. 
 2. Hindari penggunaan spasi " ". Jika memang tidak bisa dihindari, gunakan tanda "." atau "_". 
   * Contoh: variabel `tinggi badan` akan lebih baik ditulis dalam bentuk `tinggi.badan` atau `tinggi_badan`.
-Jika sudah terlanjur memiliki nama variabel yang tidak seragam atau mengandung spasi (biasanya terjadi saat kita meng- _import_ data dari sumber lain seperti: _excel_), kita bisa merapikannya dengan otomatis dengan memanfaatkan `library(janitor)` fungsi `make_clean_names()`.
+Jika sudah terlanjur memiliki nama variabel yang tidak seragam atau mengandung spasi (biasanya terjadi saat kita meng- _import_ data dari sumber lain seperti: _excel_), kita bisa merapikannya dengan otomatis dengan memanfaatkan `library(janitor)` fungsi `make_clean_names()` atau `clean_names()`.
 
-____
+\newpage
 
-# 3. Memulai dengan __R__
+# Memulai dengan __R__
 
 Oke, kita akan memulai bekerja dengan __R__, dimulai dari fungsi-fungsi awal sebagai berikut:
 
-## 3.1 Fungsi Awal
+## Fungsi Awal
 
-### 3.1.1 Pendefinisian _object_
+### Pendefinisian _object_
 
 Setiap data yang akan kita masukkan ke dalam memori __R__, akan saya sebut sebagai _object_. Setiap _object_ yang ingin dimasukkan ke dalam memori perlu didefinisikan terlebih dahulu menggunakan perintah `=` atau `<-`.
 
