@@ -1,3 +1,5 @@
-# ini belum selesai yah
+# Catatan
 
-Doakan bisa diselesaikan di akhir bulan Jan 2020 ini.
+Bagian pertama buku ini sudah selesai.
+
+Sekarang saya sedang memasukkan contoh-contoh kasus.

@@ -1,33 +1,44 @@
 ---
-title: "Training R-Series: Day 1"
-output: github_document
+title: "Intro to R - Volume 2"
+subtitle: "Edisi Revisi"
+author: "ikanx101.github.io"
+date: "Agustus 4, 2020"
+output:
+  pdf_document:
+    toc: true
+    number_sections: true
+    fig_width: 7
+    fig_height: 4
+    fig_caption: true
+    highlight: tango
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-```
-
-```{r,echo=FALSE}
-setwd("/cloud/project/Materi Training/Day 1 - R Series") 
 rm(list=ls())
+setwd("~/Documents/belajaR/Materi Training/Day 1 - R Series")
 ```
 
-```{r out.width = '20%',echo=FALSE}
-knitr::include_graphics('https://bookdown.org/moh_rosidi2610/Metode_Numerik/images/r-icon.png')
+\newpage
+
+```{r out.width = '80%',echo=FALSE, fig.align='center'}
+knitr::include_graphics('logo R.png')
 ```
 
-# Untuk apa saya belajar __R__?
+\newpage
+
+# Untuk apa saya belajar __R__? {-}
 
 Di era digitalisasi ini, disadari atau tidak data tersebar di mana-mana. Data juga dihasilkan dengan _volume_ yang besar dalam waktu singkat. 
 
 > _Analoginya seperti ada sungai yang memiliki arus yang deras dan kencang._
-
 Seperti itulah kondisi saat ini.
 
 _Tools_ analisa data klasik seperti __Ms. Excel__ dan __SPSS__ sudah tidak mampu lagi melakukan analisa _big data_ yang seringkali berbentuk _unstructured data_.
 
 __R__ tidak sendirian, ada juga _software_ lain bernama __Python__. Keduanya digunakan untuk membuat algoritma _artificial intelligence_ (bahasa keren dari _machine learning_. Bahasa kerennya dari _computational science_).
 
+\newpage
 
 # 1. Pendahuluan
 
@@ -37,11 +48,9 @@ prediksi (*machine learning*, *artificial intelligence*, dan *deep
 learning*) sampai membuat algoritma automasi menggunakan **R**.
 
 > Apa perbedaan R dan Python?
-
 Salah satu kelebihan **R** adalah:
 
 > R is made by statistician for statistician.
-
 Setiap *package* atau *library* yang di-*launching* di **R** biasanya
 disertakan dengan jurnal ilmiah sehingga kita bisa dengan yakin
 memakainya.
@@ -54,8 +63,7 @@ setiap saat.
 
 Bagaimana dengan __Python__?
 
-> Sejatinya Python digunakan untuk membangun aplikasi. Namun, belakangan ini ternayta Pyhton disadari bisa untuk melakukan pengolahan data.
-
+> Sejatinya Python digunakan untuk membangun aplikasi. Namun, belakangan ini ternyata Python disadari bisa untuk melakukan pengolahan data.
 Berbeda dengan __R__ yang memang dibangun untuk kebutuhan _data science_, __Python__ membutuhkan _libraries_ setiap kali melakukan pengolahan data.
 
 Materi _training_ ini saya kumpulkan dari berbagai sumber dan saya _customize_ sesuai dengan kebutuhan __Nutrifood__ berdasarkan pengalaman selama ini berkutat dengan data yang ada (dari mulai data pabrik hingga _finance_). Semoga menjadi manfaat bagi _Nutrifooders_ semua. 
@@ -70,7 +78,6 @@ __R__ Merupakan bahasa yang digunakan dalam komputasi statistik yang pertama kal
 Sama halnya dengan bahasa pemograman lainnya. Berbeda bahasa berarti berbeda peraturan / cara menulis _code_ (algoritma). Tapi jangan khawatir, dengan memanfaatkan _tidy principle_ di __R__, kita bisa menulis algoritma dengan mudah (bagi kita dan pembaca algoritmanya).
 
 > Oleh karena itu, menurut saya __R__ menawarkan _learning curve_ yang jauh lebih baik dibandingkan _Python_.
-
 Beberapa karakter dari __R__ adalah sebagai berikut:
 
 1. Bahasa __R__ bersifat _case sensitive_. Setiap perbedaan cara penulisan (kapital vs non kapital) akan membedakan suatu objek. Contoh:
@@ -105,20 +112,18 @@ Adapun kekurangan dari R antara lain:
 Pada dasarnya, _software_ __R__ bisa di-_download_ dan di-_install_ langsung dari situs [CRAN](https://cran.r-project.org/bin/windows/base/). _Software_ __R__ ini bersifat __CLI__.
 
 > Bayangkan Anda membuka aplikasi __notepad__. Putih dan bersih kan? 
-
 Seperti itulah _software_ __R__.
 
 Bagi Kamu yang kaget dan tidak terbiasa melihat tampilan yang _intimidating_ seperti itu, Kamu bisa meng-_install software_ __R Studio__. Sebuah _software_ GUI yang bisa membuat __R__ terlihat lebih _user friendly_. __R Studio__ bisa di-_download_ [di sini](https://rstudio.com/products/rstudio/download/). 
 
 > Tapi tolong diperhatikan bahwa __R Studio__ hanya tambahan tampilan dari __R__ standar. Jadi Kamu tetap harus meng- _install_ __R__ yah!
-
 Kelebihan R Studio antara lain:
 
 1. _Free_, kita bisa memilih versi gratis dari __R Studio__ tanpa ada pengurangan fitur dasar dari __R__.
 2. _R Studio Cloud_, tersedia layanan _cloud_ sehingga bisa diakses dan digunakan menggunakan _browser_ di _gadget_ manapun. Layanan _cloud_ ini bisa diakses [di sini](https://rstudio.cloud) dan dikoneksikan ke akun __github__ Kamu. Kira-kira seperti ini tampilannya jika dibuka di _Chrome for Android_:
 
 ```{r out.width = '60%',echo=FALSE}
-knitr::include_graphics('https://passingthroughresearcher.files.wordpress.com/2019/11/screenshot_20191113-045720_chrome8061063824617160210.jpg')
+knitr::include_graphics('Skrinsut 1.jpg')
 ```
 
 3. _Shiny Apps_, kita bisa membuat _apps_ berbasis _web_ dari __R__. _Apps_ ini bisa dijadikan _dashboard_ atau mesin kalkulasi otomatis. Tergantung seberapa jauh Kamu membuat _coding_ algoritmanya.
@@ -164,7 +169,6 @@ a = 5;b = 3;a*b
 Apa itu _working directory_?
 
 > _Working directory_ adalah _folder path default_ untuk __R__ melakukan _import_ dan _export_ data.
-
 Untuk mengetahui di mana _working directory_ kita, bisa digunakan perintah:
 
 ```{r}
@@ -178,7 +182,7 @@ Secara _default_, __R__ menggunakan `C:\\My Documents` sebagai _working director
 _Working directory_ bisa diubah sesuai kemauan kita memanfaatkan perintah `setwd()`, tanda dalam kurung diisi dengan _folder path_ yang diinginkan.
 
 ```{r}
-setwd('/cloud/project/Materi Training/Day 1 - R Series')
+setwd("~/Documents/belajaR/Materi Training/Day 1 - R Series")
 ```
 
 ### 1.6.2 Apa keuntungan mengubah-ubah _working directory_?
@@ -276,7 +280,9 @@ Sebelum memulai bekerja dengan __R__, ada baiknya saya jelaskan dan ingatkan kem
 
 Secara statistika, berikut adalah pembagian data berdasarkan tipenya:
 
-![alt text](https://raw.githubusercontent.com/ikanx101/belajaR/master/Materi%20Training/Day%201%20-%20R%20Series/tipe%20data.png "tipe")
+```{r,echo=FALSE}
+knitr::include_graphics('tipe data.png')
+```
 
 1. Data kualitatif: adalah data yang tidak bisa dilakukan operasi aritmatika (penjumlahan, pengurangan, pembagian, dan perkalian). Data seperti ini, kita akan sebut sebagai __data kategorik__. 
   * __Nominal__; Representasi dari sesuatu. Contoh: `gender`, `1` saya tulis sebagai `pria` dan `2` saya tulis sebagai `wanita`. 
@@ -318,19 +324,16 @@ Contoh:
 
 > Algoritma analisa _simple linear regression_ (`lm()`) memerlukan input berupa `data.frame()` dengan masing-masing _variables_ yang ada di dalamnya berjenis _numeric_.
 
-
 ## 2.2 Tata Cara Memberikan Nama _Object_ atau Variabel
 
 Setiap _object_ atau variabel di __R__ bisa diberikan nama sesuai dengan keinginan kita. Tidak ada aturan baku dalam memberikan nama. 
 
 > Tapi, dengan memberikan nama yang __tepat__ kita bisa bekerja dengan ebih cepat dan efisien.
-
 Berikut adalah tata cara pemberian nama yang akan membuat pekerjaan kita lebih efisien:
 
 1. Seragamkan kapital atau non kapital dari nama variabel kita. Jika menggunakan _lowercase_, maka harus konsisten di setiap data yang ada di _environment_ __R__. 
 2. Hindari penggunaan spasi " ". Jika memang tidak bisa dihindari, gunakan tanda "." atau "_". 
   * Contoh: variabel `tinggi badan` akan lebih baik ditulis dalam bentuk `tinggi.badan` atau `tinggi_badan`.
-
 Jika sudah terlanjur memiliki nama variabel yang tidak seragam atau mengandung spasi (biasanya terjadi saat kita meng- _import_ data dari sumber lain seperti: _excel_), kita bisa merapikannya dengan otomatis dengan memanfaatkan `library(janitor)` fungsi `make_clean_names()`.
 
 ____
@@ -350,7 +353,6 @@ Contoh:
 ```{r}
 a = 6
 b <- 8
-
 a
 b
 ```
@@ -390,7 +392,6 @@ Contoh:
 ```{r}
 pernyataan_1 = T
 pernyataan_2 = F
-
 !pernyataan_1
 pernyataan_1 & pernyataan_2
 pernyataan_1 | pernyataan_2
@@ -401,7 +402,6 @@ pernyataan_1 | pernyataan_2
 Mungkin teman-teman bertanya-tanya:
 
 > Apa sih gunanya _logical value_ dan _logical operator_?
-
 _Logical value_ merupakan unsur utama saat kita hendak membuat fungsi _conditional_ dan _looping_. Masih ingat fungsi di __Ms. Excel__ untuk membuat _conditional_? _Nah_, mirip pengerjaannya di __R__.
 
 Setidaknya ada tiga fungsi _conditional_ di __R__, yakni:
@@ -417,7 +417,6 @@ Apa perbedaan ketiganya?
 Sedangkan `case_when()` digunakan bersamaan dengan _pipe_ `%>%` pada saat _tidying data_. Berguna saat kita hendak mem- _vector_-kan _conditional_.
 
 > Masih bingung?
-
 Saya akan bahas fungsi `ifelse()` dulu _yah_. Pembahasan mengenai `case_when()` akan saya jelaskan pada _section_ khusus mengenai `tidyverse`.
 
 Contoh paling mudah untuk _conditional_ seperti ini:
@@ -425,9 +424,7 @@ Contoh paling mudah untuk _conditional_ seperti ini:
 ```{r}
 a = 10
 b = 10 + sin(pi/3)
-
 ifelse(a < b, 'hari ini cerah','hari ini mendung')
-
 ifelse(a == b, 'sama-sama','tidak bersama')
 ```
 
@@ -516,16 +513,13 @@ Contoh:
 ```{r}
 nomor_1 = c(1:10)
 nomor_1
-
 # perintah untuk menghitun gcumulative sum
 cumsum(nomor_1)
-
 nomor_2 = seq(1,10,0.4) # generating sequence dari 1 hingga 10 dengan jeda 0.4
 nomor_2
 ```
 
 > Apa sih gunanya deret?
-
 Percayalah, suatu saat nanti deret bisa digunakan untuk membantu perhitungan atau analisa kita. Seolah-olah berperan sebagai __katalis__ pada reaksi kimia.
 
 
@@ -540,7 +534,6 @@ Kita memiliki data variabel `nama_orang` berisi 20 nama orang. Kita hanya ingin 
 ```{r}
 nama_orang = randomNames::randomNames(20)
 nama_orang
-
 sample(nama_orang,3,replace = F)
 ```
 
@@ -555,7 +548,6 @@ Adakalanya kita hendak melakukan pengulangan yang simpel. _Instead of using loop
 ```{r}
 rep('belajar R',3)
 rep(c(4:8),10)
-
 tinggi_badan = c(120,132,142,90)
 rep(mean(tinggi_badan),4)
 ```
@@ -574,7 +566,6 @@ _Data frame_ bisa dibentuk dari beberapa _vector_ yang memiliki `length()` yang 
 id = c(1:10)
 nama = randomNames::randomNames(10,gender = 0,which.names = 'first')
 tinggi_badan = sample(c(150:199),10,replace = F)
-
 absensi = data.frame(id,nama,tinggi_badan)
 absensi
 ```
@@ -586,7 +577,6 @@ Bentuk _data frame_ kelak akan menjadi primadona dalam setiap analisa yang digun
 _Missing values_ adalah suatu nilai yang kosong pada suatu data. Kosong berarti tidak berisi data apapun. Bedakan dengan nilai `0` yah!
 
 > `NA` tidak akan diikutsertakan dalam perhitungan sedangkan `0` diikutsertakan. 
-
 Di __R__, nilai `NA` pada data numerik akan membuat _error_ setiap kali dihitung.
 
 Contoh:
@@ -594,7 +584,6 @@ Contoh:
 ```{r}
 data_1 = c(3,5,0,6,8,3)
 mean(data_1)
-
 data_2 = c(3,5,NA,6,8,3)
 mean(data_2)
 ```
@@ -610,7 +599,6 @@ is.na(data_2)
 table(is.na(data_2))
 # menghitung TRUE)
 sum(is.na(data_2))
-
 # mengecek apakah ada data yang TIDAK NA di data_2
 !is.na(data_2)
 ```
@@ -620,7 +608,6 @@ sum(is.na(data_2))
 ### 3.3.1 _Paste_
 
 > Apakah kalian mengetahui fungsi bernama __CONCATENATE__ di __Ms. Excel__?
-
 Fungsi `paste()` mirip penggunaannya dengan perintah __CONCATENATE__, yakni menggabungkan beberapa data menjadi satu.
 
 Contoh:
@@ -628,7 +615,6 @@ Contoh:
 ```{r}
 nama_toko = paste('toko ke',c(1:10),sep='-')
 nama_toko
-
 nama_toko = paste(nama_toko,rep(c('Bandung','Bekasi'),5))
 nama_toko
 ```
@@ -702,7 +688,6 @@ while(orang>0){
   orang = orang - n
   i = i+1
 }
-
 # berapa kali iterasi?
 i
 ```
@@ -723,11 +708,11 @@ Perbedaan cara penulisan (kapital atau _lower_) bisa kita pertimbangkan untuk di
 Berikut ini adalah _syntaxes_ yang ada dan digunakan untuk mencari apa:
 
 ```{r out.width = '30%',echo=FALSE}
-knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Materi%20Training/Day%201%20-%20R%20Series/regex%201.PNG')
+knitr::include_graphics('regex 1.PNG')
 ```
 
 ```{r out.width = '80%',echo=FALSE}
-knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Materi%20Training/Day%201%20-%20R%20Series/regex%202.PNG')
+knitr::include_graphics('regex 2.PNG')
 ```
 
 ### 3.5.1 _Pattern Matching_
@@ -817,7 +802,7 @@ ___
 __R__ memungkinkan kita untuk membuat fungsi yang _custom_ secara mandiri. Jika kita sering menggunakan perintah-perintah tertentu dan ingin menghemat penulisan algoritma, kita bisa membuat _custom_ `function()` sendiri.
 
 ```{r out.width = '80%',echo=FALSE}
-knitr::include_graphics('https://raw.githubusercontent.com/ikanx101/belajaR/master/Materi%20Training/Day%201%20-%20R%20Series/function.png')
+knitr::include_graphics('function.png')
 ```
 
 `function()` bisa memerlukan _entry variable_ atau tidak memerlukan _entry variable_ sama sekali.
@@ -841,7 +826,6 @@ demografi = function(){
   data = c(nama,umur,tinggi,berat)
   return(data)
 }
-
 demografi()
 ```
 
@@ -857,7 +841,6 @@ modus = function(x) {
   tab = tabulate(match(x, ux))
   ux[tab == max(tab)]
 }
-
 nama = c('a','b','a','c','d')
 modus(nama)
 ```
@@ -928,10 +911,8 @@ Misalkan kita hendak melakukan filter untuk beberapa `dept` tertentu, kita bisa 
 
 ```{r}
 dept_filter = c('JES','ELL','OSH')
-
 # melakukan filter untuk dept tersebut
 data %>% filter(dept %in% dept_filter)
-
 # melakukan filter untuk BUKAN dept tersebut
 data %>% filter(!dept %in% dept_filter)
 ```
@@ -944,7 +925,6 @@ Digunakan untuk melakukan _sort_ pada data dengan menggunakan _piping_.
 # kita akan sort berdasarkan angka tardines tersebut
 # descending
 data %>% filter(tardines.frequency>10, bulan == 'Jan') %>% arrange(desc(tardines.frequency))
-
 # ascending
 data %>% filter(tardines.frequency>10, bulan == 'Jan') %>% arrange(tardines.frequency)
 ```
@@ -998,9 +978,171 @@ Untuk melakukan _vectorize_ dari _conditional_ `ifelse()`, kita bisa menggunakan
 
 Digunakan untuk melakukan pengelompokkan serta membuat dan menghitung variabel baru atau _existing_ berdasarkan pengelompokkan tersebut.
 
+Contoh:
+
+Menghitung berapa banyak karyawan setiap bulannya:
+
+```{r}
+data %>% 
+  group_by(bulan) %>% 
+  summarise(number_of_employee = length(unique(nama.karyawan)))
+```
+
+Menghitung berapa banyak karyawan yang sakit setiap bulannya:
+
+```{r}
+data %>% 
+  filter(sick.frequency > 0) %>%
+  group_by(bulan) %>% 
+  summarise(number_of_sick_employee = length(unique(nama.karyawan)))
+```
+
+Menghitung berapa rata-rata frekuensi cuti dari karyawan setiap bulannya:
+
+```{r}
+data %>% 
+  filter(leave.frequency > 0) %>%
+  group_by(bulan) %>% 
+  summarise(leave_avg = mean(leave.frequency))
+```
+
 ## 6.6 `separate()`
 
 Digunakan untuk memecah satu variabel ke dua atau lebih variabel.
+
+___
+
+# 7 Beberapa Fungsi Statistik 
+
+Beberapa fungsi statistik yang kita ketahui di __Ms. Excel__ juga memiliki nama yang sama di __R__ 
+
+Biasanya, yang sering kita gunakan itu adalah:
+
+## 7.1 `sum()`
+
+Menghitung _sum_ dari data berupa _vector_.
+
+## 7.2 `mean()`
+
+Menghitung _mean_ dari data berupa _vector_.
+
+## 7.3 `median()`
+
+Menghitung _median_ dari data berupa _vector_.
+
+## 7.4 `sd()`
+
+Menghitung _standar deviasi_ dari data berupa _vector_.
+
+___
+
+# 8 Menggabungkan Data 
+
+Seringkali kita berurusan dengan beberapa _datasets_ dan mengharuskan kita untuk menggabungkan beberapa _datasets_ tersebut.
+
+Contoh paling sederhana adalah melakukan _vlookup_ seperti yang biasa kita lakukan pada Ms. Excel.
+
+Di __R__, kita tidak hanya bisa melakukan _vlookup_ saja tapi bisa juga teknik penggabungan data yang lain.
+
+## 8.1 `merge()`
+
+`merge()` biasa digunakan untuk menggabungkan dua data dengan prinsip yang sama dengan _vlookup_, yakni harus ada _key id_ variabel yang sama antara dua data tersebut.
+
+Misalkan saya punya _dataset_ pertama (`data_1`) sebagai berikut:
+
+
+```{r,echo=FALSE}
+data_1=
+  data %>% 
+  group_by(bulan) %>% 
+  summarise(number_of_employee = length(unique(nama.karyawan)))
+data_1
+```
+
+Saya ingin menggabungkan _dataset_ di atas dengan _dataset_ kedua (`data_2`) berikut ini:
+
+```{r,echo=FALSE}
+data_2 = data.frame(
+  bulan = c('Jan','Feb','Mar','Apr','Mei'),
+  number_of_chairs = sample(c(640:700),5)
+)
+data_2
+```
+
+Jika kita hendak melakukan `merge()`, kita bisa lakukan dengan dua cara:
+
+### 8.1.1 Cara Klasik
+
+```{r}
+merge(data_1,data_2)
+```
+
+### 8.1.2 Menggunakan `Tidyverse`
+
+```{r}
+data_1 %>% merge(data_2)
+```
+
+Perintah `merge()` ini juga memiliki banyak fitur lainnya. Coba kalian cek dengan perintah `?merge` untuk melihat apa saja yang bisa dilakukan. 
+
+## 8.2 `rbind()`
+
+`rbind()` dilakukan jika kita hendak menggabungkan dua _datasets_ yang memiliki _variable names_ yang sama. Berbeda dengan prinsip _vlookup_, penggabungan ini adalah hanya menaruh data kedua dibawah urutan data pertama.
+
+Contohnya, saya punya dataset pertama (`data_3`) sebagai berikut:
+
+```{r,echo=FALSE}
+data_3 = data %>% 
+  filter(sick.frequency > 0) %>%
+  group_by(bulan) %>% 
+  summarise(number_of_sick_employee = length(unique(nama.karyawan)))
+data_3
+```
+
+Lalu kita hendak menggabungkannya dengan _dataset_ kedua (`data_4`) berikut ini:
+
+```{r,echo=FALSE}
+data_4 = data.frame(
+  bulan = c('Jun','Jul','Agu','Sep','Okt'),
+  number_of_sick_employee = sample(c(150:220),5)
+)
+data_4
+```
+
+Maka caranya adalah:
+
+### 8.2.1 Cara Klasik
+
+```{r}
+rbind(data_3,data_4)
+```
+
+### 8.2.2 Menggunakan `Tidyverse`
+
+```{r}
+data_3 %>% rbind(data_4)
+```
+
+Perintah `rbind()` ini juga bisa dilakukan untuk menggabungkan dua _datasets_ yang _variable names_-nya ada yang berbeda. Jadi tidak harus sama, tapi minimal ada satu yang sama.
+
+Misalkan dua _datasets_ ini:
+
+```{r,include=FALSE}
+data_new_1 = data_1 %>% merge(data_2)
+data_new_2 = data_3 %>% rbind(data_4)
+```
+
+```{r}
+data_new_1
+data_new_2
+
+data_new_1[setdiff(names(data_new_2), names(data_new_1))] <- NA
+data_new_2[setdiff(names(data_new_1), names(data_new_2))] <- NA
+rbind(data_new_1,data_new_2)
+```
+
+Ingat yah, hanya menaruh data kedua secara berurut ada di bawah data pertama.
+
 ___
 
 # Referensi
