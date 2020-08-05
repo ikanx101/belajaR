@@ -1,12 +1,12 @@
 ---
-title: "Intro to R - Volume 2 - Draft"
+title: "Intro to R - Volume 2.0"
 subtitle: "Edisi Revisi"
 author: "ikanx101.github.io"
-date: "Agustus 4, 2020"
+date: "Agustus 5, 2020"
 fontsize: 10pt
 header-includes:
 - \usepackage{titling}
-- \pretitle{\begin{center}\includegraphics[width=4in,height=4in]{logo R.png}\LARGE\\}
+- \pretitle{\begin{center}\includegraphics[width=5in,height=5in]{logo R.png}\LARGE\\}
 - \posttitle{\end{center}}
 - \usepackage{fancyhdr}
 - \pagestyle{fancy}
@@ -31,19 +31,25 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 rm(list=ls())
 setwd("~/Documents/belajaR/Materi Training/Day 1 - R Series")
+library(dplyr)
+library(tidyr)
 ```
 
 \newpage
+&nbsp;
+\pagebreak
 
 ```{r out.width = '80%',echo=FALSE, fig.align='center'}
 knitr::include_graphics('logo R.png')
 ```
 
-__Bayangkan Anda berada di restoran _all you can eat_ dimana semua makanan yang Anda mau ada semua di sana__
+__Bayangkan Anda berada di restoran _all you can eat_ dimana semua makanan yang Anda mau ada semua di sana...__
 
 __Ikang__
 
 \newpage
+&nbsp;
+\pagebreak
 
 # Untuk apa saya belajar __R__? {-}
 
@@ -58,6 +64,8 @@ __R__ tidak sendirian, ada juga _software_ lain bernama __Python__. Keduanya dig
 
 
 \newpage
+&nbsp;
+\pagebreak
 
 # Pendahuluan
 
@@ -302,7 +310,8 @@ example(sum)
 ```
 
 \newpage
-
+&nbsp;
+\pagebreak
 
 # Mulai Bekerja dengan __R__
 
@@ -371,6 +380,8 @@ Berikut adalah tata cara pemberian nama yang akan membuat pekerjaan kita lebih e
 Jika sudah terlanjur memiliki nama variabel yang tidak seragam atau mengandung spasi (biasanya terjadi saat kita meng- _import_ data dari sumber lain seperti: _excel_), kita bisa merapikannya dengan otomatis dengan memanfaatkan `library(janitor)` fungsi `make_clean_names()` atau `clean_names()`.
 
 \newpage
+&nbsp;
+\pagebreak
 
 # Memulai dengan __R__
 
@@ -490,7 +501,7 @@ Pada _section_ `2.1.2` telah dijelaskan beberapa struktur data di __R__, sekaran
 
 Untuk data berbentuk `list`, akan saya jelaskan sekalian bersamaan dengan materi `tidyverse` _yah_.
 
-### 3.2.1 Single Value
+### _Single Value_
 
 Contoh:
 
@@ -500,9 +511,9 @@ x = 50
 z = 'Indonesia'
 ```
 
-### 3.2.2 _Vector_
+### _Vector_
 
-_Vector_ didefinisikan dengan menggunakan perintah `c()`.
+_Vector_ didefinisikan dengan menggunakan perintah `c()`; merupakan
 
 Contoh:
 
@@ -511,7 +522,7 @@ tinggi_badan = c(164,149,180,184,153,90,139,199,186,158,197)
 tinggi_badan
 ```
 
-#### 3.2.2.1 Elemen _Vector_
+#### Elemen _Vector_
 
 Ada yang sadar _gak_ dengan tanda `[1]` setiap kali kita _running_ suatu skrip di __R__.
 
@@ -530,7 +541,7 @@ tinggi_badan[c(1,7,10)]
 tinggi_badan[-c(1,7,10)] #pengeculian
 ```
 
-#### 3.2.2.2 Operasi Aritmatika Pada _Vector_
+#### Operasi Aritmatika Pada _Vector_
 
 _Vector_ yang berupa numerik bisa dilakukan operasi aritmatik.
 
@@ -541,7 +552,7 @@ status = (tinggi_badan - 100)/50
 status
 ```
 
-#### 3.2.2.3 Fungsi Pada _Vector_
+#### Fungsi Pada _Vector_
 
 _Vector_ berupa numerik juga bisa dikenakan fungsi perhitungan seperti:
 
@@ -557,7 +568,7 @@ var(tinggi_badan) # varian vektor x
 sort(tinggi_badan) # mengurutkan elemen vektor x dari yang terbesar
 ```
 
-#### 3.2.2.4 _Generating Sequences_
+#### _Generating Sequences_
 
 _Sequences_ atau deret bisa kita bangun menggunakan __R__ dengan dua cara:
 
@@ -579,9 +590,11 @@ nomor_2
 Percayalah, suatu saat nanti deret bisa digunakan untuk membantu perhitungan atau analisa kita. Seolah-olah berperan sebagai __katalis__ pada reaksi kimia.
 
 
-#### 3.2.2.5 _Random sampling_ dari suatu _vector_
+#### _Random sampling_ dari suatu _vector_
 
 Ada suatu masa saat kita membutuhkan untuk mengambil sampel (mengambil subset) dari suatu _vector_ secara acak. Kita bisa menggunakan fungsi `sample()`.
+
+\newpage
 
 Contoh:
 
@@ -597,7 +610,7 @@ sample(nama_orang,3,replace = F)
 
 Perintah `sample()` ini akan sangat berguna saat kita hendak menggunakan prinsip simulasi [__Monte Carlo__](https://ikanx101.github.io/tags/#monte-carlo).
 
-#### 3.2.2.6 _Repeat_ 
+#### _Repeat_ 
 
 Adakalanya kita hendak melakukan pengulangan yang simpel. _Instead of using looping_, kita bisa menggunakan perintah `rep()`. Misalkan:
 
@@ -612,23 +625,30 @@ Jadi perintah `rep()` tidak hanya bisa untuk mengulang suatu single variabel ata
 
 Apa perbedaan dengan fungsi `repeat()`? Fungsi `repeat()` biasanya digunakan dalam _looping_ dan baru akan berhenti saat diberikan perintah `break`.
 
-### 3.2.3 Tibble atau Data Frame
+### _Tibble_ atau _Data Frame_
 
 _Tibble_ atau _data frame_ adalah struktur data di __R__ berupa tabel. Analogi sederhananya adalah mirip dengan tabel di __Ms. Excel__ _files_.
 
-_Data frame_ bisa dibentuk dari beberapa _vector_ yang memiliki `length()` yang sama. Contohnya:
+_Data frame_ bisa dibentuk dari beberapa _vector_ yang memiliki `length()` yang sama. Contohnya berikut ini:
+
+Kita akan membuat _data frame_ dari `4` buah _vector_, yakni: `id`, `nama`, dan `tinggi_badan`.
 
 ```{r}
 id = c(1:10)
 nama = randomNames::randomNames(10,gender = 0,which.names = 'first')
 tinggi_badan = sample(c(150:199),10,replace = F)
 absensi = data.frame(id,nama,tinggi_badan)
+```
+
+Hasilnya seperti ini:
+
+```{r}
 absensi
 ```
 
 Bentuk _data frame_ kelak akan menjadi primadona dalam setiap analisa yang digunakan di __R__. Nanti saat kita belajar _data carpentry_ menggunakan `tidyverse`, struktur _data frame_ mudah dimanipulasi dengan _piping operator_: `%>%`.
 
-### 3.2.4 _Missing values_ `NA`
+### _Missing values_ `NA`
 
 _Missing values_ adalah suatu nilai yang kosong pada suatu data. Kosong berarti tidak berisi data apapun. Bedakan dengan nilai `0` yah!
 
@@ -640,6 +660,13 @@ Contoh:
 ```{r}
 data_1 = c(3,5,0,6,8,3)
 mean(data_1)
+```
+
+\newpage
+
+Berikut adalah contoh saat ada data berisi `NA`, maka data tersebut tidak akan bisa dihitung:
+
+```{r}
 data_2 = c(3,5,NA,6,8,3)
 mean(data_2)
 ```
@@ -648,29 +675,49 @@ Bagaimana cara mengecek keberadaan `NA` di data kita?
 
 Kita bisa menggunakan fungsi `is.na()`. _Output_ dari fungsi ini adalah _boolean variable_ berupa `TRUE` atau `FALSE`.
 
+Contoh: mengecek apakah ada `NA` di `data_2`.
+
 ```{r}
-# mengecek apakah ada NA di data_2
 is.na(data_2)
-# membuat tabulasi dari is.na()
+```
+
+Contoh: membuat tabulasi dari _function_ `is.na()`.
+
+```{r}
 table(is.na(data_2))
-# menghitung TRUE)
+```
+
+Contoh: menghitung seberapa banyak yang `TRUE`.
+
+```{r}
 sum(is.na(data_2))
-# mengecek apakah ada data yang TIDAK NA di data_2
+```
+
+Contoh: mengecek apakah ada data yang __TIDAK__ `NA` di `data_2`.
+
+```{r}
 !is.na(data_2)
 ```
 
-## 3.3 Beberapa Fungsi yang Berguna
+\newpage
 
-### 3.3.1 _Paste_
+## Beberapa Fungsi yang Berguna
+
+### _Paste_
 
 > Apakah kalian mengetahui fungsi bernama __CONCATENATE__ di __Ms. Excel__?
 Fungsi `paste()` mirip penggunaannya dengan perintah __CONCATENATE__, yakni menggabungkan beberapa data menjadi satu.
 
-Contoh:
+Contoh: membuat _vector_ berisi `nama_toko` yang berisi urutan nama toko.
 
 ```{r}
 nama_toko = paste('toko ke',c(1:10),sep='-')
 nama_toko
+```
+
+Contoh: membuat _vector_ dari `nama_toko` yang sudah pernah dibuat sebelumnya dengan _rules_ `5` toko pertama dari Bandung dan `5` toko selanjutnya dari Bekasi.
+
+```{r}
 nama_toko = paste(nama_toko,rep(c('Bandung','Bekasi'),5))
 nama_toko
 ```
@@ -679,7 +726,7 @@ nama_toko
 
 Coba kalian ganti sendiri bagian _separator_-nya.
 
-### 3.3.2 _Print_
+### _Print_
 
 Fungsi `print()` digunakan untuk menampilkan data ke layar. Biasanya digunakan pada proses _looping_ agar hasil iterasi dapat tampil ke layar.
 
@@ -687,7 +734,9 @@ Fungsi `print()` digunakan untuk menampilkan data ke layar. Biasanya digunakan p
 print(nama_toko)
 ```
 
-### 3.3.3 _str_
+\newpage
+
+### _str_
 
 Fungsi `str()` digunakan untuk melihat tipe dan struktur _object_ yang ada di __R__. Sebagai contoh, kita akan pakai data `absensi` dari _section_ __3.2.3__.
 
@@ -697,7 +746,7 @@ str(absensi)
 
 Terlihat bahwa data `absensi` memiliki struktur __data.frame__ dengan ada `3` _variables_ dan `10` _observations_ (baris data).
 
-### 3.3.4 _Summary_
+### _Summary_
 
 Fungsi `summary()` digunakan untuk melihat statistik deskriptif dari suatu data (tergantung dari tipe datanya). Contoh:
 
@@ -705,7 +754,7 @@ Fungsi `summary()` digunakan untuk melihat statistik deskriptif dari suatu data 
 summary(absensi$tinggi_badan)
 ```
 
-### 3.3.5 _Class_
+### _Class_
 
 Fungsi `class()` digunakan untuk melihat tipe atau struktur dari suatu data. Mirip dengan fungsi `str()`, tapi tidak sampai menampilkan dengan detail. Contoh:
 
@@ -714,17 +763,21 @@ class(absensi)
 class(absensi$tinggi_badan)
 ```
 
-### 3.3.5 _View_
+### _View_
 
 Fungsi `View()` (dengan huruf __V__ kapital) digunakan untuk menampilkan `dataset` dalam _pop-up windows_.
 
-## 3.4 _Looping_
+\newpage
+
+## _Looping_
 
 _Looping_ berarti pengulangan namun berbeda dengan _repeat_ yang pernah kita bahas sebelumnya. Ada dua fungsi _looping_ yang biasa digunakan, yakni: `for()` dan `while()`. Keduanya memiliki manfaat yang berbeda.
 
-### 3.4.1 _For_
+### _For_
 
-Fungsi `for()` biasa dilakukan untuk melakukan _looping_ dengan syarat iterasi yang didefinisikan terlebih dahulu. Jadi kita sudah mengetahui terlebih dahulu berapa kali kita akan melakukan _looping_. Contoh:
+Fungsi `for()` biasa dilakukan untuk melakukan _looping_ dengan syarat iterasi yang didefinisikan terlebih dahulu. Jadi kita sudah mengetahui terlebih dahulu berapa kali kita akan melakukan _looping_. 
+
+Contoh:
 
 ```{r}
 for(i in 1:10){
@@ -732,23 +785,47 @@ for(i in 1:10){
 }
 ```
 
-### 3.4.2 _While_
-
-Fungsi `while()` digunakan untuk melakukan _looping_ dengan sampai syarat iterasi terpenuhi. Jadi kita belum mengetahui berapa kali kita akan melakukan _looping_. Contoh:
+Contoh:
 
 ```{r}
-orang = 1000
-i = 0
+for(i in 1:10){
+  i = 1/i
+  print(round(i,3))
+}
+```
+
+\newpage
+
+### _While_
+
+Fungsi `while()` digunakan untuk melakukan _looping_ dengan sampai syarat iterasi terpenuhi. Jadi kita belum mengetahui berapa kali kita akan melakukan _looping_. 
+
+Contoh: misalkan dalam satu ruangan ada `100` orang. Saya akan membagi mereka menjadi kelompok - kelompok berisi `1` sampai `5` orang. Kira - kira ada berapa banyak kelompok yang bisa saya dapatkan? 
+
+Caranya, kita set dulu kondisi awalnya.
+
+```{r}
+orang = 100
+i = 0 # berapa banyak kelompok? awalnya nol dulu
+```
+
+Lalu kita buat iterasi dengan `while()`. Yakni mengurangi secara berkala `100` orang dengan kelompok berisi `1` - `3` orang lalu menghitung ada berapa banyak iterasi yang terjadi.
+
+```{r}
 while(orang>0){
-  n = sample(c(2:10),1)
+  n = sample(c(1:5),1)
   orang = orang - n
   i = i+1
 }
-# berapa kali iterasi?
+```
+
+Berapa banyak iterasi (kelompok) yang mungkin muncul:
+
+```{r}
 i
 ```
 
-## 3.5 _Regex_
+## _Regex_
 
 _Regex_ adalah kepanjangan dari _reguler expression_, yakni mencari _pattern_ dari data berupa string. _Cheatsheet_ untuk _regex_ bisa dilihat di [sini](https://rstudio.com/wp-content/uploads/2016/09/RegExCheatsheet.pdf).
 
@@ -761,46 +838,69 @@ Setidaknya ada dua manfaat utama dari _regular expression_, yakni:
 
 Perbedaan cara penulisan (kapital atau _lower_) bisa kita pertimbangkan untuk dijadikan syarat pencarian atau tidak, yakni dengan penambahan `ignore.case = T` atau `ignore.case = F`.
 
+\newpage
+
 Berikut ini adalah _syntaxes_ yang ada dan digunakan untuk mencari apa:
 
-```{r out.width = '30%',echo=FALSE}
+```{r out.width = '40%',echo=FALSE}
 knitr::include_graphics('regex 1.PNG')
 ```
 
-```{r out.width = '80%',echo=FALSE}
+```{r out.width = '85%',echo=FALSE}
 knitr::include_graphics('regex 2.PNG')
 ```
 
-### 3.5.1 _Pattern Matching_
+### _Pattern Matching_
 
 Sebagai contoh, saya akan gunakan data berikut ini:
 
+Variabel _string_ yang diketahui:
 ```{r}
 string = c('Market Research','market riset','survey','responden','mickey mouse')
+```
+
+Berikut _pattern_ yang diinginkan:
+
+```{r}
 pattern = 'm..ke'
 ```
 
 Berikut adalah beberapa fungsi yang sering digunakan.
 
-#### 3.5.1.1 Fungsi `grep()`
+\newpage
 
-Perhatikan output dari masing-masing perintah sebagai berikut:
+`function` `grep()`
+
+Perhatikan _output_ dari masing-masing perintah sebagai berikut:
 
 ```{r}
 grep(pattern,string)
+```
+
+_Output_ `function` ini adalah nomor urut / elemen dari _vector_ yang sesuai dengan _pattern_ yang diinginkan.
+
+```{r}
 grep(pattern,string,value = T)
+```
+
+_Output_ `function` ini adalah isi elemen dari _vector_ yang sesuai dengan _pattern_ yang diinginkan.
+
+```{r}
 grep(pattern,string,ignore.case = T)
 ```
 
-#### 3.5.1.2 Fungsi `grepl()`
+_Output_ `function` ini adalah isi elemen dari _vector_ yang sesuai dengan _pattern_ yang diinginkan dengan menghiraukan _uppercase_ atau _lowercase_.
 
-Output dari fungsi ini berupa _logic_ (_boolean_):
+
+`function` `grepl()`
+
+_Output_ dari fungsi ini berupa _logic_ (_boolean_):
 
 ```{r}
 grepl(pattern,string,ignore.case = T)
 ```
 
-#### 3.5.1.3 Fungsi menggunakan `stringr::` dan fungsi `str_detect()`
+`function` menggunakan `stringr::` dan fungsi `str_detect()`
 
 Output dari fungsi ini berupa _logic_ (_boolean_):
 
@@ -808,7 +908,7 @@ Output dari fungsi ini berupa _logic_ (_boolean_):
 stringr::str_detect(string,pattern)
 ```
 
-#### 3.5.1.4 Fungsi menggunakan `stringr::` dan fungsi `str_locate()`
+`function` menggunakan `stringr::` dan fungsi `str_locate()`
 
 _Find starting and end position of all matches_.
 
@@ -816,7 +916,9 @@ _Find starting and end position of all matches_.
 stringr::str_locate(string, pattern)
 ```
 
-#### 3.5.1.4 Fungsi menggunakan `stringr::` dan fungsi `str_extract()`
+\newpage
+
+`function`  menggunakan `stringr::` dan fungsi `str_extract()`
 
 _Extract first match_. 
 
@@ -824,36 +926,46 @@ _Extract first match_.
 stringr::str_extract(string, pattern)
 ```
 
-### 3.5.2 _Replace Pattern_
+### _Replace Pattern_
 
 Kita akan gunakan contoh data berikut ini:
+
+Ini adalah `string` yang digunakan:
 
 ```{r}
 string = c("This is a sentence about axis",
            "A second pattern is also listed here")
+```
+
+Berikut adalah `pattern` dan `replacement` yang hendak dilakukan:
+
+```{r}
 pattern = 'is'
 replace = 'XY'
 ```
 
-Berikut adalah beberapa fungsi yang sering digunakan.
+Berikut adalah beberapa fungsi yang sering digunakan:
 
-#### 3.5.2.1 Fungsi `sub()`
+`function` `sub()`
 
 ```{r}
 sub(pattern, replace, string)
 sub(pattern, replace, string, ignore.case = T)
 ```
 
-#### 3.5.2.2 Fungsi `gsub()`
+
+`function` `gsub()`
 
 ```{r}
 gsub(pattern, replace, string)
 gsub(pattern, replace, string, ignore.case = T)
 ```
 
-___
+\newpage
+&nbsp;
+\pagebreak
 
-# 4. Membuat _function_ di __R__.
+# Membuat _function_ di __R__.
 
 __R__ memungkinkan kita untuk membuat fungsi yang _custom_ secara mandiri. Jika kita sering menggunakan perintah-perintah tertentu dan ingin menghemat penulisan algoritma, kita bisa membuat _custom_ `function()` sendiri.
 
@@ -863,11 +975,11 @@ knitr::include_graphics('function.png')
 
 `function()` bisa memerlukan _entry variable_ atau tidak memerlukan _entry variable_ sama sekali.
 
-## 4.1 `function()` tanpa _entry variable_
+## `function()` tanpa _entry variable_
 
 Ada kalanya kita membuat `function()` tanpa ada _entry variable_. _Lho kok gitu?_
 
-Tergantung dari kebutuhan kita _yah_.
+> Tergantung dari kebutuhan kita _yah_.
 
 Sebagai contoh, kita akan membuat `function()` yang akan men- _generate_ nama orang, umur, tinggi, dan berat badan:
 
@@ -885,7 +997,9 @@ demografi = function(){
 demografi()
 ```
 
-## 4.2 `function()` dengan _entry variable_
+\newpage
+
+## `function()` dengan _entry variable_
 
 _Entry variable_ yang digunakan bisa berbentuk macam-macam dan bisa lebih dari satu.
 
@@ -897,22 +1011,36 @@ modus = function(x) {
   tab = tabulate(match(x, ux))
   ux[tab == max(tab)]
 }
+```
+
+Mari kita cek apakah `function`-nya berhasil atau tidak:
+
+```{r}
 nama = c('a','b','a','c','d')
 modus(nama)
 ```
 
-Contoh, kita akan buat `function()` untuk menghitung rumus pitagoras dengan dua _entry variables_, yakni `a` dan `b` sebagai berikut:
+Contoh berikutnya kita akan buat `function()` untuk menghitung rumus pitagoras dengan dua _entry variables_, yakni `a` dan `b` sebagai berikut:
+
+Ini adalah rumusnya:
 
 ```{r}
 pytagoras = function(a,b){
   sqrt((a^2) + (b^2))
 }
+```
+
+Mari kita hitung pitagoras dengan `a = 3` dan `b = 4`, yakni:
+
+```{r}
 pytagoras(3,4)
 ```
 
-___
+\newpage
+&nbsp;
+\pagebreak
 
-# 5. Membaca Data dari __Excel__
+# Membaca Data dari __Excel__
 
 Data yang kita temui sehari-hari biasanya memiliki format `.xlsx` atau `.xls`. Sekarang kita  akan _import_ data dari __Excel__ untuk masuk ke dalam __R__.
 
@@ -926,15 +1054,18 @@ data = read_excel('Contoh_Data.xlsx')
 head(data)
 ```
 
-## 5.1 Membaca Data dari Format File Lain
+## Membaca Data dari Format File Lain
 
 __R__ memiliki kemampuan untuk membaca data dalam format lain seperti `csv`, `sav` (SPSS), `txt`, dan lainnya. Secara _default_, __R__ bisa membaca file dalam bentuk `csv` dan `txt` tanpa menggunakan `library()` lainnya.
 
 Gunakan fungsi `read.csv()` untuk membaca file `csv` dan `readLines()` untuk file `txt`.
 
-___
 
-# 6. Berkenalan dengan `Tidyverse`
+\newpage
+&nbsp;
+\pagebreak
+
+# Berkenalan dengan `Tidyverse`
 
 Salah satu fungsi utama __R__ adalah kemampuannya melakukan _data carpentry_ untuk _dataset_ berukuran besar dengan cepat. Salah satu `library` yang sering digunakan untuk melkukan _data carpentry_ adalah `tidyverse`.
 
@@ -948,7 +1079,7 @@ Beberapa fungsi yang sering digunakan antara lain:
 4. `group_by()` dan `summarise()`
 5. `separate()`
 
-## 6.1 `filter()`
+## `filter()`
 
 Digunakan untuk melakukan filter pada data. Kita bisa menggunakan tanda `==`, `>`, `>=`, `<`, `<=`, atau `!=`. 
 
@@ -963,29 +1094,54 @@ Kita hendak melakukan _filter_ terhadap karyawan yang telat (_tardines_) lebih d
 data %>% filter(tardines.frequency>10, bulan == 'Jan')
 ```
 
-Misalkan kita hendak melakukan filter untuk beberapa `dept` tertentu, kita bisa melakukan cara berikut:
+\newpage
+
+Misalkan kita hendak melakukan _filter_ untuk beberapa `dept` tertentu, kita bisa melakukan cara berikut:
 
 ```{r}
 dept_filter = c('JES','ELL','OSH')
-# melakukan filter untuk dept tersebut
+```
+
+Melakukan _filter_ untuk `dept` tersebut:
+
+```{r}
 data %>% filter(dept %in% dept_filter)
-# melakukan filter untuk BUKAN dept tersebut
+```
+
+Melakukan _filter_ untuk __BUKAN__ `dept` tersebut:
+
+```{r}
 data %>% filter(!dept %in% dept_filter)
 ```
 
-## 6.2 `arrange()`
+Perhatikan penggunaan tanda seru `!` pada skrip untuk mengaktifkan __NOT__ sebelum `grepl()`.
 
-Digunakan untuk melakukan _sort_ pada data dengan menggunakan _piping_.
+\newpage
+
+## `arrange()`
+
+Digunakan untuk melakukan _sort_ pada data dengan menggunakan _piping_. Kita akan _sort_ berdasarkan angka `tardines` tersebut.
+
+
+### _Descending_
 
 ```{r}
-# kita akan sort berdasarkan angka tardines tersebut
-# descending
-data %>% filter(tardines.frequency>10, bulan == 'Jan') %>% arrange(desc(tardines.frequency))
-# ascending
-data %>% filter(tardines.frequency>10, bulan == 'Jan') %>% arrange(tardines.frequency)
+data %>% 
+  filter(tardines.frequency>10, bulan == 'Jan') %>% 
+  arrange(desc(tardines.frequency))
 ```
 
-## 6.3 `select()`
+### _Ascending_
+
+```{r}
+data %>% 
+  filter(tardines.frequency>10, bulan == 'Jan') %>% 
+  arrange(tardines.frequency)
+```
+
+\newpage
+
+## `select()`
 
 Digunakan untuk memilih variabel dari _dataset_. Jika `filter()` dilakukan untuk melakukan pemilihan atas variabel tertentu, sedangkan `select()` digunakan untuk memilih variabel yang akan digunakan.
 
@@ -1003,7 +1159,9 @@ Misalkan kita hendak memilih semua variabel yang mengandung kata _frequency_, ki
 data %>% select(contains('frequency'))
 ```
 
-## 6.4 `mutate()`
+\newpage
+
+## `mutate()`
 
 Digunakan untuk membuat dan menghitung variabel baru atau _existing_. 
 
@@ -1030,7 +1188,9 @@ data %>%
 Fungsi `cut()` membagi data numerik menjadi kelas-kelas tertentu
 Untuk melakukan _vectorize_ dari _conditional_ `ifelse()`, kita bisa menggunakan fungsi `case_when()`.
 
-## 6.5 `group_by()` dan `summarise()`
+\newpage
+
+## `group_by()` dan `summarise()`
 
 Digunakan untuk melakukan pengelompokkan serta membuat dan menghitung variabel baru atau _existing_ berdasarkan pengelompokkan tersebut.
 
@@ -1038,7 +1198,7 @@ Contoh:
 
 Menghitung berapa banyak karyawan setiap bulannya:
 
-```{r}
+```{r,message=FALSE,warning=FALSE}
 data %>% 
   group_by(bulan) %>% 
   summarise(number_of_employee = length(unique(nama.karyawan)))
@@ -1046,53 +1206,82 @@ data %>%
 
 Menghitung berapa banyak karyawan yang sakit setiap bulannya:
 
-```{r}
+```{r,message=FALSE,warning=FALSE}
 data %>% 
   filter(sick.frequency > 0) %>%
   group_by(bulan) %>% 
   summarise(number_of_sick_employee = length(unique(nama.karyawan)))
 ```
 
+\newpage
+
 Menghitung berapa rata-rata frekuensi cuti dari karyawan setiap bulannya:
 
-```{r}
+```{r,message=FALSE,warning=FALSE}
 data %>% 
   filter(leave.frequency > 0) %>%
   group_by(bulan) %>% 
   summarise(leave_avg = mean(leave.frequency))
 ```
 
-## 6.6 `separate()`
+## `separate()`
 
 Digunakan untuk memecah satu variabel ke dua atau lebih variabel.
 
-___
+Contoh: misalkan kita memiliki data sebagai berikut:
 
-# 7 Beberapa Fungsi Statistik 
+```{r,echo=FALSE}
+nama = randomNames::randomNames(10)
+id = c(1:10)
+
+data_new = data.frame(id,nama)
+knitr::kable(data_new,caption = 'Absensi Karyawan')
+```
+
+\newpage
+
+Kita hendak memisahkan antara `first.name` dan `last.name` berdasarkan koma (`,`).
+
+```{r}
+data_new %>% 
+  separate(nama,
+           into = c('first.name','last.name'),
+           sep = '\\,')
+```
+
+Jika diperhatikan ada penggunaan `\\` pada saat _separate_ (`sep = `). Ini artinya kita hanya ingin menggunakan simbol setelah penggunaan `\\` yakni (`,`) .
+
+\newpage
+&nbsp;
+\pagebreak
+
+# Beberapa Fungsi Statistik 
 
 Beberapa fungsi statistik yang kita ketahui di __Ms. Excel__ juga memiliki nama yang sama di __R__ 
 
 Biasanya, yang sering kita gunakan itu adalah:
 
-## 7.1 `sum()`
+## `sum()`
 
 Menghitung _sum_ dari data berupa _vector_.
 
-## 7.2 `mean()`
+## `mean()`
 
 Menghitung _mean_ dari data berupa _vector_.
 
-## 7.3 `median()`
+## `median()`
 
 Menghitung _median_ dari data berupa _vector_.
 
-## 7.4 `sd()`
+## `sd()`
 
 Menghitung _standar deviasi_ dari data berupa _vector_.
 
-___
+\newpage
+&nbsp;
+\pagebreak
 
-# 8 Menggabungkan Data 
+# Menggabungkan Data 
 
 Seringkali kita berurusan dengan beberapa _datasets_ dan mengharuskan kita untuk menggabungkan beberapa _datasets_ tersebut.
 
@@ -1100,14 +1289,13 @@ Contoh paling sederhana adalah melakukan _vlookup_ seperti yang biasa kita lakuk
 
 Di __R__, kita tidak hanya bisa melakukan _vlookup_ saja tapi bisa juga teknik penggabungan data yang lain.
 
-## 8.1 `merge()`
+## `merge()`
 
 `merge()` biasa digunakan untuk menggabungkan dua data dengan prinsip yang sama dengan _vlookup_, yakni harus ada _key id_ variabel yang sama antara dua data tersebut.
 
 Misalkan saya punya _dataset_ pertama (`data_1`) sebagai berikut:
 
-
-```{r,echo=FALSE}
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
 data_1=
   data %>% 
   group_by(bulan) %>% 
@@ -1117,7 +1305,7 @@ data_1
 
 Saya ingin menggabungkan _dataset_ di atas dengan _dataset_ kedua (`data_2`) berikut ini:
 
-```{r,echo=FALSE}
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
 data_2 = data.frame(
   bulan = c('Jan','Feb','Mar','Apr','Mei'),
   number_of_chairs = sample(c(640:700),5)
@@ -1127,13 +1315,15 @@ data_2
 
 Jika kita hendak melakukan `merge()`, kita bisa lakukan dengan dua cara:
 
-### 8.1.1 Cara Klasik
+### Cara Klasik
 
 ```{r}
 merge(data_1,data_2)
 ```
 
-### 8.1.2 Menggunakan `Tidyverse`
+\newpage
+
+### Menggunakan `Tidyverse`
 
 ```{r}
 data_1 %>% merge(data_2)
@@ -1141,13 +1331,13 @@ data_1 %>% merge(data_2)
 
 Perintah `merge()` ini juga memiliki banyak fitur lainnya. Coba kalian cek dengan perintah `?merge` untuk melihat apa saja yang bisa dilakukan. 
 
-## 8.2 `rbind()`
+## `rbind()`
 
 `rbind()` dilakukan jika kita hendak menggabungkan dua _datasets_ yang memiliki _variable names_ yang sama. Berbeda dengan prinsip _vlookup_, penggabungan ini adalah hanya menaruh data kedua dibawah urutan data pertama.
 
 Contohnya, saya punya dataset pertama (`data_3`) sebagai berikut:
 
-```{r,echo=FALSE}
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
 data_3 = data %>% 
   filter(sick.frequency > 0) %>%
   group_by(bulan) %>% 
@@ -1157,7 +1347,7 @@ data_3
 
 Lalu kita hendak menggabungkannya dengan _dataset_ kedua (`data_4`) berikut ini:
 
-```{r,echo=FALSE}
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
 data_4 = data.frame(
   bulan = c('Jun','Jul','Agu','Sep','Okt'),
   number_of_sick_employee = sample(c(150:220),5)
@@ -1167,13 +1357,15 @@ data_4
 
 Maka caranya adalah:
 
-### 8.2.1 Cara Klasik
+\newpage
+
+### Cara Klasik
 
 ```{r}
 rbind(data_3,data_4)
 ```
 
-### 8.2.2 Menggunakan `Tidyverse`
+### Menggunakan `Tidyverse`
 
 ```{r}
 data_3 %>% rbind(data_4)
@@ -1190,6 +1382,11 @@ data_new_2 = data_3 %>% rbind(data_4)
 
 ```{r}
 data_new_1
+```
+
+\newpage
+
+```{r}
 data_new_2
 
 data_new_1[setdiff(names(data_new_2), names(data_new_1))] <- NA
@@ -1197,9 +1394,11 @@ data_new_2[setdiff(names(data_new_1), names(data_new_2))] <- NA
 rbind(data_new_1,data_new_2)
 ```
 
-Ingat yah, hanya menaruh data kedua secara berurut ada di bawah data pertama.
+Ingat _yah_, hanya menaruh _dataset_ kedua secara berurut ada di bawah _dataset_ pertama.
 
-___
+\newpage
+&nbsp;
+\pagebreak
 
 # Referensi
 
