@@ -1,11 +1,12 @@
 ---
-title: "Intro to R - Volume 2"
+title: "Intro to R - Volume 2 - Draft"
 subtitle: "Edisi Revisi"
 author: "ikanx101.github.io"
 date: "Agustus 4, 2020"
+fontsize: 10pt
 header-includes:
 - \usepackage{titling}
-- \pretitle{\begin{center}\LARGE\includegraphics[width=12cm]{logo R.png}\\[\bigskipamount]}
+- \pretitle{\begin{center}\includegraphics[width=4in,height=4in]{logo R.png}\LARGE\\}
 - \posttitle{\end{center}}
 - \usepackage{fancyhdr}
 - \pagestyle{fancy}
@@ -14,15 +15,17 @@ header-includes:
 - \fancyfoot[LE,RO]{hal \thepage}
 output:
   pdf_document:
-    toc: true
+    toc: false
+    toc_depth: 3
     number_sections: true
     fig_width: 7
     fig_height: 4
     fig_caption: true
-    highlight: pygments
+    highlight: zenburn
 ---
 
 \newpage
+\tableofcontents
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -38,7 +41,7 @@ knitr::include_graphics('logo R.png')
 
 __Bayangkan Anda berada di restoran _all you can eat_ dimana semua makanan yang Anda mau ada semua di sana__
 
-Ikang
+__Ikang__
 
 \newpage
 
@@ -52,6 +55,7 @@ Seperti itulah kondisi saat ini.
 _Tools_ analisa data klasik seperti __Ms. Excel__ dan __SPSS__ sudah tidak mampu lagi melakukan analisa _big data_ yang seringkali berbentuk _unstructured data_.
 
 __R__ tidak sendirian, ada juga _software_ lain bernama __Python__. Keduanya digunakan untuk membuat algoritma _artificial intelligence_ (bahasa keren dari _machine learning_. Bahasa kerennya dari _computational science_).
+
 
 \newpage
 
@@ -380,14 +384,20 @@ Setiap data yang akan kita masukkan ke dalam memori __R__, akan saya sebut sebag
 
 Contoh:
 
+Jika saya ingin mendefinisikan dua buah _objects_, yakni `a` dan `b` sebagai berikut:
 ```{r}
 a = 6
 b <- 8
+```
+
+Maka: 
+
+```{r}
 a
 b
 ```
 
-### 3.1.2 Operasi Aritmatika dan Matematika
+### Operasi Aritmatika dan Matematika
 
 Setiap _object_ yang sudah masuk ke dalam memori __R__ sudah bisa dilakukan analisa atau dilakukan operasi aritmatika: `+`, `-`, `/`, dan `*` ATAU diberikan fungsi matematika seperti __trigonometri__, __logaritmik__, dan lain-lain.
 
@@ -402,9 +412,9 @@ sin(c)
 log(a+b/c)
 ```
 
-### 3.1.3 Operasi Relasi dan _Logical_ (_Boolean_)
+### Operasi Relasi dan _Logical_ (_Boolean_)
 
-Pada _section_ __1.5__ poin 3, kita telah mengetahui operator relasi seperti `==`, `>`, `<`, `<=`, `>=`, dan `!=`. Hasil dari operator relasi ini adalah _logical value_ (__TRUE__ atau __FALSE__).
+Pada _section_ `1.5` poin 3, kita telah mengetahui operator relasi seperti `==`, `>`, `<`, `<=`, `>=`, dan `!=`. Hasil dari operator relasi ini adalah _logical value_ (__TRUE__ atau __FALSE__).
 
 _Logical value_ yang dihasilkan memiliki sifat sebagai berikut:
 
@@ -413,21 +423,28 @@ _Logical value_ yang dihasilkan memiliki sifat sebagai berikut:
 
 _Operator logical_ yang biasa digunakan di __R__ antara lain:
 
-1. `&`: __AND__
-2. `|`: __OR__
-3. `!`: __NOT__
+1. `&` menandakan __AND__
+2. `|` menandakan __OR__
+3. `!` menandakan __NOT__
 
 Contoh:
+
+Misalkan saya memiliki dua pernyataan sebagai berikut:
 
 ```{r}
 pernyataan_1 = T
 pernyataan_2 = F
+```
+
+Maka:
+
+```{r}
 !pernyataan_1
 pernyataan_1 & pernyataan_2
 pernyataan_1 | pernyataan_2
 ```
 
-### 3.1.4 _If Conditional_
+### _If Conditional_
 
 Mungkin teman-teman bertanya-tanya:
 
@@ -451,14 +468,23 @@ Saya akan bahas fungsi `ifelse()` dulu _yah_. Pembahasan mengenai `case_when()` 
 
 Contoh paling mudah untuk _conditional_ seperti ini:
 
+Misalkan saya memiliki dua buah _objects_, yakni `a` dan `b`.
+
 ```{r}
 a = 10
 b = 10 + sin(pi/3)
+```
+
+Maka:
+
+```{r}
 ifelse(a < b, 'hari ini cerah','hari ini mendung')
 ifelse(a == b, 'sama-sama','tidak bersama')
 ```
 
-## 3.2 Bekerja dengan data
+\newpage
+
+## Bekerja dengan data
 
 Pada _section_ `2.1.2` telah dijelaskan beberapa struktur data di __R__, sekarang kita akan melihat bagaimana bentuk _real_-nya di __R__.
 
