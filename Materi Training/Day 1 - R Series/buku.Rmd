@@ -1,5 +1,5 @@
 ---
-title: "Intro to R - Volume 2.0"
+title: "Intro to R - Volume 2.1"
 subtitle: "Edisi Revisi"
 author: "ikanx101.github.io"
 date: "Agustus 5, 2020"
@@ -43,9 +43,9 @@ library(tidyr)
 knitr::include_graphics('logo R.png')
 ```
 
-__Bayangkan Anda berada di restoran _all you can eat_ dimana semua makanan yang Anda mau ada semua di sana...__
+__Bayangkan Anda berada di restoran _all you can eat_ dimana semua makanan yang Anda mau ada semua di sana... Ikang__
 
-__Ikang__
+____
 
 \newpage
 &nbsp;
@@ -62,6 +62,7 @@ _Tools_ analisa data klasik seperti __Ms. Excel__ dan __SPSS__ sudah tidak mampu
 
 __R__ tidak sendirian, ada juga _software_ lain bernama __Python__. Keduanya digunakan untuk membuat algoritma _artificial intelligence_ (bahasa keren dari _machine learning_. Bahasa kerennya dari _computational science_).
 
+____
 
 \newpage
 &nbsp;
@@ -378,6 +379,8 @@ Berikut adalah tata cara pemberian nama yang akan membuat pekerjaan kita lebih e
 2. Hindari penggunaan spasi " ". Jika memang tidak bisa dihindari, gunakan tanda "." atau "_". 
   * Contoh: variabel `tinggi badan` akan lebih baik ditulis dalam bentuk `tinggi.badan` atau `tinggi_badan`.
 Jika sudah terlanjur memiliki nama variabel yang tidak seragam atau mengandung spasi (biasanya terjadi saat kita meng- _import_ data dari sumber lain seperti: _excel_), kita bisa merapikannya dengan otomatis dengan memanfaatkan `library(janitor)` fungsi `make_clean_names()` atau `clean_names()`.
+
+____
 
 \newpage
 &nbsp;
@@ -827,7 +830,7 @@ i
 
 ## _Regex_
 
-_Regex_ adalah kepanjangan dari _reguler expression_, yakni mencari _pattern_ dari data berupa string. _Cheatsheet_ untuk _regex_ bisa dilihat di [sini](https://rstudio.com/wp-content/uploads/2016/09/RegExCheatsheet.pdf).
+_Regex_ adalah kepanjangan dari _reguler expression_, yakni mencari _pattern_ dari data berupa _string_. _Cheatsheet_ untuk _regex_ bisa dilihat di [sini](https://rstudio.com/wp-content/uploads/2016/09/RegExCheatsheet.pdf).
 
 Selain mengandalkan __base__ dari __R__, kita juga bisa menggunakan `library(stringr)`.
 
@@ -869,7 +872,7 @@ Berikut adalah beberapa fungsi yang sering digunakan.
 
 \newpage
 
-`function` `grep()`
+- _Function_ `grep()`
 
 Perhatikan _output_ dari masing-masing perintah sebagai berikut:
 
@@ -892,7 +895,7 @@ grep(pattern,string,ignore.case = T)
 _Output_ `function` ini adalah isi elemen dari _vector_ yang sesuai dengan _pattern_ yang diinginkan dengan menghiraukan _uppercase_ atau _lowercase_.
 
 
-`function` `grepl()`
+- _Function_ `grepl()`
 
 _Output_ dari fungsi ini berupa _logic_ (_boolean_):
 
@@ -900,7 +903,7 @@ _Output_ dari fungsi ini berupa _logic_ (_boolean_):
 grepl(pattern,string,ignore.case = T)
 ```
 
-`function` menggunakan `stringr::` dan fungsi `str_detect()`
+- _Function_ menggunakan `stringr::` dan fungsi `str_detect()`
 
 Output dari fungsi ini berupa _logic_ (_boolean_):
 
@@ -908,7 +911,7 @@ Output dari fungsi ini berupa _logic_ (_boolean_):
 stringr::str_detect(string,pattern)
 ```
 
-`function` menggunakan `stringr::` dan fungsi `str_locate()`
+- _Function_ menggunakan `stringr::` dan fungsi `str_locate()`
 
 _Find starting and end position of all matches_.
 
@@ -918,7 +921,7 @@ stringr::str_locate(string, pattern)
 
 \newpage
 
-`function`  menggunakan `stringr::` dan fungsi `str_extract()`
+- _Function_  menggunakan `stringr::` dan fungsi `str_extract()`
 
 _Extract first match_. 
 
@@ -960,6 +963,8 @@ sub(pattern, replace, string, ignore.case = T)
 gsub(pattern, replace, string)
 gsub(pattern, replace, string, ignore.case = T)
 ```
+
+____
 
 \newpage
 &nbsp;
@@ -1064,6 +1069,8 @@ Gunakan fungsi `read.csv()` untuk membaca file `csv` dan `readLines()` untuk fil
 \newpage
 &nbsp;
 \pagebreak
+
+____
 
 # Berkenalan dengan `Tidyverse`
 
@@ -1389,18 +1396,108 @@ data_new_1
 ```{r}
 data_new_2
 
-data_new_1[setdiff(names(data_new_2), names(data_new_1))] <- NA
-data_new_2[setdiff(names(data_new_1), names(data_new_2))] <- NA
+data_new_1[setdiff(names(data_new_2), names(data_new_1))] = NA
+data_new_2[setdiff(names(data_new_1), names(data_new_2))] = NA
 rbind(data_new_1,data_new_2)
 ```
 
 Ingat _yah_, hanya menaruh _dataset_ kedua secara berurut ada di bawah _dataset_ pertama.
 
+____
+
 \newpage
 &nbsp;
 \pagebreak
 
-# Referensi
+# _Libraries_ yang Berguna
+
+Pada _section_ `1.7` saya sempat menyebutkan beberapa _libraries_ yang berguna. Faedah dari `library(dplyr)` sudah termasuk dalam pembahasan `library(tidyverse)`. Oleh karena itu, saya akan coba bahas _libraries_ lainnya satu- persatu.
+
+## `library(janitor)`
+
+Pada _section_ `2.2` saya telah menyebutkan _library_ yang satu ini. Salah satu faedahnya yang sering saya pakai adalah untuk membersihkan nama variabel (`colnames()`) dari suatu `data.frame`. Tapi tidak menutup kemungkinan digunakan juga untuk membersihkan _text_ pada saat kita hendak melakukan _text analysis_.
+
+### _Function_ `make_clean_names()`
+
+_Function_ ini berguna untuk membuat membersihkan data berbentuk _character_ dengan cara:
+
+1. Membuat _character_ menjadi _lowercase_.
+1. Mengubah spasi menjadi _underscore_ `_`.
+1. Menghilangkan tanda baca dan _non alpha numeric character_.
+
+Contohnya: misalkan saya memiliki _vector_ berisi _string_ sebagai berikut:
+
+```{r}
+kata = c('Pulang pergi','Selamat Pagi','kamu siapa?','Nama (lengkap...)','Bersiap! 1,2,3!')
+kata
+```
+
+Perhatikan _output_ dari _function_ ini:
+
+```{r}
+library(janitor)
+make_clean_names(kata)
+```
+\newpage
+
+### _Function_ `clean_names()`
+
+_Function_ ini digunakan untuk membersihkan `colnames()` dari suatu `data.frame`.
+
+Misalkan: saya memiliki data seperti ini:
+
+```{r,include=FALSE}
+rm(list=ls())
+library(readxl)
+data = read_excel('/home/ikanx101githubio/Documents/belajaR/Materi Training/Day 1 - R Series/Data Utk Buku/COVID.xlsx')
+colnames(data)[1] = 'Tanggal Lapor'
+data = data[1:7]
+```
+
+```{r,echo=FALSE}
+knitr::kable(head(data,10),caption = 'Data Harian COVID-19')
+```
+
+Seperti yang telah disebutkan sebelumnya, penamaan variabel sebisa mungkin dibuat simpel agar penulisan _script_ menjadi lebih cepat dan mudah. Berikut adalah nama variabel (`colnames()`) dari `data.frame` tersebut:
+
+```{r}
+colnames(data)
+```
+
+Untuk mengubahnya, kita bisa menggunakan salah satu dari dua cara berikut ini:
+
+- Cara `tidyverse`
+
+```{r}
+data_new_1 = data %>% clean_names()
+head(data_new_1,10)
+```
+
+\newpage
+
+- Cara `klasik`
+
+```{r}
+data_new_2 = clean_names(data)
+head(data_new_2,10)
+```
+
+## `library(reshape2)`
+
+## `library(lubridate)`
+
+## `library(ggplot2)`
+
+## `library(tidytext)`
+
+## `library(rvest)`
+
+
+\newpage
+&nbsp;
+\pagebreak
+
+# Referensi {-}
 
 1. [Metode Numerik Menggunakan R Untuk Teknik Lingkungan](https://bookdown.org/moh_rosidi2610/Metode_Numerik/), Mohammad Rosidi: R bookdown.
 2. [Cara Install R di Android](https://passingthroughresearcher.wordpress.com/2019/07/30/install-r-3-5-2-di-android/).
