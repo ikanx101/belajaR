@@ -1648,12 +1648,33 @@ data = janitor::clean_names(data)
 data = 
   data %>% 
   mutate(biomarker1 = log(biomarker1)*5,
-         biomarker2 = log(biomarker2)*5)
+         biomarker2 = log(biomarker2)*5,
+         biomarker1 = round(biomarker1,3),
+         biomarker2 = round(biomarker2,3),
+         id = 1:length(biomarker1))
+
+id_target = sample(c(1:683),15)
 
 library(ROCit)
 ```
 
-Beberapa orang peneliti sedang 
+Beberapa orang peneliti sedang mengembangkan dua alat pendeteksi cepat COVID-19. Cara kerja alat ini adalah untuk mendeteksi kadar _biomarker_ dalam darah.
+
+Apa sih _biomarker_ itu?
+
+> _Biomarker is a measurable substance in an organism whose presence is indicative of some phenomenon such as disease, infection, or enviromental exposure._
+
+Diharapkan salah satu dari kedua _biomarker_ tersebut bisa dengan akurat menentukan seseorang terkena COVID-19. 
+
+Berikut adalah datanya:
+
+```{r,echo=FALSE}
+data %>% 
+  filter(id %in% id_target) %>% 
+  mutate(id = c(1:15)) %>% 
+  knitr::kable(caption = '15 Data Pertama dari Data Biomarker')
+```
+
 
 \newpage
 &nbsp;
