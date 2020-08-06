@@ -10,8 +10,8 @@ header-includes:
 - \posttitle{\end{center}}
 - \usepackage{fancyhdr}
 - \pagestyle{fancy}
-- \fancyhead[CO,CE]{ikanx101.github.io}
-- \fancyfoot[CO,CE]{Intro to R - Volume 2}
+- \fancyhead[CO,CE]{R}
+- \fancyfoot[CO,CE]{ikanx101.github.io}
 - \fancyfoot[LE,RO]{hal \thepage}
 output:
   pdf_document:
@@ -1638,7 +1638,7 @@ data_baru %>%
 
 Berikut akan saya sampaikan beberapa contoh kasus yang diselesaikan menggunakan R.
 
-## Membuat Alat Deteksi Cepat COVID-19
+## Membuat Alat Rapid Test COVID-19
 
 ```{r,include=FALSE}
 rm(list=ls())
@@ -1674,6 +1674,137 @@ data %>%
   mutate(id = c(1:15)) %>% 
   knitr::kable(caption = '15 Data Pertama dari Data Biomarker')
 ```
+
+### _Problem Statements_ {-}
+
+1. Berapa _cut off points_ dari masing-masing _biomarker_? Maksudnya pada level berapa kadar _biomarker_ bisa mengatakan positif COVID-19? Pada level berapa kadar _biomarker_ bisa mengatakan negatif COVID-19? Misalkan jika kadar `biomarker1` $\geq 10$ maka pasien disebut positif COVID-19 sedangkan kebalikannya negatif.
+1. _Biomarker_ mana yang lebih bagus? 
+1. Apakah kedua atau salah satu _biomarker_ ini sudah baik untuk menggantikan diagnosis yang sebelumnya dilakukan?
+
+Untuk semua pertanyaan di atas, mari kita lakukan analisa berikut ini:
+
+### Analisa ROC {-}
+
+Definisi [ROC](https://en.wikipedia.org/wiki/Receiver_operating_characteristic) itu?
+
+> _A receiver operating characteristic curve, or ROC curve, is a graphical plot that illustrates the diagnostic ability of a binary classifier system as its discrimination threshold is varied._
+
+
+Menggunakan ROC ini, ada dua informasi yang bisa saya dapatkan:
+
+1. Menentukan _cut off points_ untuk masing - masing _biomarker_.
+1. Membuat __ROC Curve__ lalu menghitung _Area Under Curve_ (AUC). __AUC__ ini adalah nilai yang memberikan indikasi _goodness of fit_ apakah suatu variabel bisa digunakan untuk menebak variabel lain. __AUC__ ini juga yang biasa dijadikan acuan dalam setiap kompetisi _data science_. Semakin nilainya menuju `1`, maka akan semakin bagus hasil prediksinya.
+
+### `biomarker1` {-}
+
+```{r,echo=FALSE}
+roc_empirical <- rocit(score=data$biomarker1,class=data$diagnosis)
+summary(roc_empirical)
+plot(roc_empirical)
+```
+
+
+### `biomarker2` {-}
+
+```{r,echo=FALSE}
+roc_empirical <- rocit(score=data$biomarker2,class=data$diagnosis)
+summary(roc_empirical)
+plot(roc_empirical)
+```
+
+### Kesimpulan dari nilai AUC {-}
+
+Dari nilai `AUC` kedua __ROC Curve__ di atas, `biomarker2` menunjukkan angka yang terbaik dibandingkan `biomarker1`. Oleh karena itu, dugaan awal saya: `biomarker2` memiliki kemampuan lebih baik untuk mendiagnosis penyakit dibandingkan `biomarker1`.
+
+
+### _Cut Off Points_ {-}
+
+Dari data numerik `biomarker1` dan `biomarker2`, saya akan menentukan batas berapa kadar bisa dibilang `positif` dan `negatif`. Untuk itu, saya akan menggunakan [Youden's J statsitic](https://en.wikipedia.org/wiki/Youden%27s_J_statistic), yakni:
+
+$$J=sensitivity+specificity-1$$
+
+_Cut off points_ akan dipilih saat nilai $J$ mencapai maksimum.
+
+### `biomarker1` {-}
+
+```{r,echo=FALSE}
+roc_empirical <- rocit(score=data$biomarker1,class=data$diagnosis)
+summary(roc_empirical)
+
+hasil = data.frame(Cutoff=roc_empirical$Cutoff, 
+                 TPR=roc_empirical$TPR, 
+                 FPR=roc_empirical$FPR) %>% 
+  mutate(youden_index = TPR - FPR)
+#rmarkdown::paged_table(hasil)
+
+new = hasil %>% filter(youden_index == max(youden_index))
+
+cut_bio1 = new$Cutoff
+```
+
+_Cut off points_ untuk `biomarker1` terjadi pada `r round(new$Cutoff,3)`, saat __TPR__ = `r new$TPR`; __FPR__ = `r new$FPR` sehingga menghasilkan $J=$ `r round(new$youden_index,4)`.
+
+### `biomarker2` {-}
+
+```{r,echo=FALSE}
+roc_empirical <- rocit(score=data$biomarker2,class=data$diagnosis)
+summary(roc_empirical)
+
+hasil = data.frame(Cutoff=roc_empirical$Cutoff, 
+                 TPR=roc_empirical$TPR, 
+                 FPR=roc_empirical$FPR) %>% 
+  mutate(youden_index = TPR - FPR)
+#rmarkdown::paged_table(hasil)
+
+new = hasil %>% filter(youden_index == max(youden_index))
+
+cut_bio2 = new$Cutoff
+```
+
+_Cut off points_ untuk `biomarker2` terjadi pada `r round(new$Cutoff,3)`, saat __TPR__ = `r new$TPR`; __FPR__ = `r new$FPR` sehingga menghasilkan $J=$ `r round(new$youden_index,4)`.
+
+Dari _cut off points_ tersebut, saya membuat _rules_ yakni jika kadar `biomarker` $\geq$ _cut off points_ maka akan ditulis `sakit`. Sedangkan jika kadar `biomarker` < _cut off points_ maka akan ditulis `tidak sakit`.
+
+### _Confusion Matrix_ {-}
+
+Sekarang saya akan buat _confusion matrix_ dari hasil transformasi tersebut lalu kita komparasi nilai $precision$ dan $recall$.
+
+Misalkan $precision$ saya definisikan sebagai:
+
+$$precision=\frac{jumlah.pasien.diprediksi.sakit.benar}{jumlah.pasien.diprediksi.sakit}$$
+
+Sedangkan $recall$ saya definisikan sebagai:
+
+$$recall=\frac{jumlah.pasien.diprediksi.sakit.benar}{jumlah.pasien.sakit}$$
+
+### `biomarker1` {-}
+
+```{r,echo=FALSE}
+data =
+  data %>% 
+  mutate(bio1 = ifelse(biomarker1>=cut_bio1,'Ya','Tidak'),
+         bio2 = ifelse(biomarker2>=cut_bio2,'Ya','Tidak'),
+         bio1 = factor(bio1),
+         bio2 = factor(bio2))
+
+caret::confusionMatrix(reference = data$diagnosis,data = data$bio1)
+```
+
+### `biomarker2` {-}
+
+```{r,echo=FALSE}
+caret::confusionMatrix(reference = data$diagnosis,data = data$bio2)
+```
+
+### Kesimpulan _Confusion Matrix_ {-}
+
+1. `biomarker1` memberikan $precision=$ `r round(187/(185+187)*100,2)` dan $recall=$ `r round(187/(42+187)*100,2)`.
+1. `biomarker2` memberikan $precision=$ `r round(172/(172+100)*100,2)` dan $recall=$ `r round(172/(172+57)*100,2)`.
+
+### KESIMPULAN Final {-}
+
+Melihat dari __AUC__, sebenarnya `biomarker2` cukup bagus dibandingkan dengan `biomarker1`. Tapi dari nilai _precision_ dan _recall_ saya tidak merekomendasikan sama sekali kedua `biomarker` untuk digunakan.
+
 
 
 \newpage
