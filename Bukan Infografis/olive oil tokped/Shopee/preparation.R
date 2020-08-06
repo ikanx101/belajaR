@@ -9,6 +9,7 @@ dummy = data.frame(id = c(1:length(link)),
                    url = link,
                    asli = link) %>% 
   filter(grepl('-i',url)) %>% 
+  filter(grepl('tropicana',url,ignore.case = T)) %>% 
   tidyr::separate(url,into = c('hapus','pakai'),sep = '-i.') %>% 
   tidyr::separate(pakai, into = c('info1','info2'),sep = '\\.') %>%
   mutate(link_final = paste0('https://shopee.co.id/api/v2/item/get?itemid=',
