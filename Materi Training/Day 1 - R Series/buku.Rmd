@@ -1638,6 +1638,71 @@ data_baru %>%
 
 Berikut akan saya sampaikan beberapa contoh kasus yang diselesaikan menggunakan R.
 
+## Mencari Harga Mobil Bekas
+
+```{r,include=FALSE}
+rm(list=ls())
+library(dplyr)
+library(rvest)
+library(tidytext)
+
+url = paste0('https://www.carmudi.co.id/cars/suzuki/ertiga/?page=',
+            c(1:25))
+```
+
+Salah satu keuntungan menggunakan __R__ adalah saya bisa mengambil data dari _web_ (_web scraping_) lalu langsung bisa membuat _report_ nya menggunakan _markdown_. Kali ini saya akan mengambil data mobil __Suzuki Ertiga__ yang di-_listing_ pada situs [carmudi](www.carmudi.co.id).
+
+```{r out.width='70%',echo=FALSE}
+knitr::include_graphics('carmudi.png')
+```
+
+### _Link_ dan _Function_ yang Digunakan {-}
+
+Setelah dicek, ada `25` _pages_ terkait __Suzuki Ertiga__.
+
+```{r,echo=FALSE}
+url
+```
+
+Fungsi _web scrape_ yang saya buat adalah sebagai berikut:
+
+```{r}
+scrap = function(url){
+  data = 
+    read_html(url) %>% {
+      tibble(
+        nama = html_nodes(.,'.title-blue') %>% html_text(),
+        harga = html_nodes(.,'.price a') %>% html_text(),
+        lokasi = html_nodes(.,'.catalog-listing-item-location span') %>%
+          html_text()
+      )
+    }
+  return(data)
+}
+```
+
+Sebagai contoh, jika saya _scrape_ halaman pertama, hasilnya seperti ini:
+
+```{r}
+scrap(url[1])
+```
+
+Jadi setelah saya _scrape_ semua `25` _pages_, hasilnya seperti ini:
+
+```{r,echo=FALSE}
+load('/home/ikanx101githubio/Documents/belajaR/Materi Training/Day 1 - R Series/Data Utk Buku/r3.rda')
+knitr::kable(head(ertiga.data,10),caption = 'Hasil Scrape Ertiga')
+```
+
+```{r}
+str(ertiga.data)
+```
+
+Data ini bisa kalian dapatkan di link berikut dalam format `.rda`.
+____
+
+\newpage
+
 ## Membuat Alat Rapid Test COVID-19
 
 ```{r,include=FALSE}
@@ -1805,7 +1870,7 @@ caret::confusionMatrix(reference = data$diagnosis,data = data$bio2)
 
 Melihat dari __AUC__, sebenarnya `biomarker2` cukup bagus dibandingkan dengan `biomarker1`. Tapi dari nilai _precision_ dan _recall_ saya tidak merekomendasikan sama sekali kedua `biomarker` untuk digunakan.
 
-
+_____
 
 \newpage
 &nbsp;
