@@ -1307,7 +1307,7 @@ data_1=
   data %>% 
   group_by(bulan) %>% 
   summarise(number_of_employee = length(unique(nama.karyawan)))
-data_1
+knitr::kable(data_1,caption = 'Dataset Pertama')
 ```
 
 Saya ingin menggabungkan _dataset_ di atas dengan _dataset_ kedua (`data_2`) berikut ini:
@@ -1317,7 +1317,7 @@ data_2 = data.frame(
   bulan = c('Jan','Feb','Mar','Apr','Mei'),
   number_of_chairs = sample(c(640:700),5)
 )
-data_2
+knitr::kable(data_2,caption = 'Dataset Kedua')
 ```
 
 Jika kita hendak melakukan `merge()`, kita bisa lakukan dengan dua cara:
@@ -1349,7 +1349,7 @@ data_3 = data %>%
   filter(sick.frequency > 0) %>%
   group_by(bulan) %>% 
   summarise(number_of_sick_employee = length(unique(nama.karyawan)))
-data_3
+knitr::kable(data_3,caption = 'Dataset Pertama')
 ```
 
 Lalu kita hendak menggabungkannya dengan _dataset_ kedua (`data_4`) berikut ini:
@@ -1359,7 +1359,7 @@ data_4 = data.frame(
   bulan = c('Jun','Jul','Agu','Sep','Okt'),
   number_of_sick_employee = sample(c(150:220),5)
 )
-data_4
+knitr::kable(data_4,caption = 'Dataset Kedua')
 ```
 
 Maka caranya adalah:
@@ -1569,12 +1569,91 @@ data_new_2 %>%
 
 ## `library(reshape2)`
 
-Seringkali kita berhadapan dengan bentuk data yang menyamping. Bentuk data tersebut tidak tabular dan akan menyulitkan bagi kita untuk melakukan analisa
+Seringkali kita berhadapan dengan bentuk data yang menyamping. Bentuk data tersebut tidak tabular dan akan menyulitkan bagi kita untuk melakukan analisa.
+
+Kali ini saya akan menggunakan data contoh COVID-19 yang saya simpan di [_link_ berikut ini](https://github.com/ikanx101/belajaR/blob/master/Materi%20Training/Day%201%20-%20R%20Series/Data%20Utk%20Buku/Contoh%20data%20non%20tabular.xlsx). Silakan diunduh untuk bisa mencobanya juga bersama-sama.
+
+Mari kita _import_ datanya ke dalam __R__. Berikut tampilannya:
+
+```{r, include=FALSE}
+rm(list=ls())
+data = read_excel('/home/ikanx101githubio/Documents/belajaR/Materi Training/Day 1 - R Series/Data Utk Buku/Contoh data non tabular.xlsx')
+```
+
+```{r,echo=FALSE}
+knitr::kable(data[1:11],caption = 'Contoh Data Tidak Tabular (hanya ditampilkan 10 kolom pertama saja)')
+```
+
+Sebagai informasi, data ini berisi `125` kolom dengan kolom pertama adalah `Total Kasus` sedangkan `124` kolom lainnya adalah tanggal.
+
+```{r,warning=FALSE,message=FALSE}
+library(reshape2)
+colnames(data)[1] = 'provinsi'
+
+data_baru = 
+  data %>% 
+  melt(id.vars = 'provinsi')
+```
+
+```{r,echo=FALSE}
+knitr::kable(head(data_baru,15),caption = '15 Data Teratas dari Hasil Konversi Ke Tabular')
+```
+
+\newpage
+
+Didapatkan `data_baru` berisi `496` baris hasil konversi.
+
+```{r}
+str(data_baru)
+```
+
+Dengan bentuk data seperti ini, kita bisa melakukan analisa _pivot_ berdasarkan provinsi.
+
+```{r,echo=FALSE}
+data_baru %>% 
+  ggplot(aes(x = variable,
+             y = value)) +
+  geom_line(aes(group = provinsi, color = provinsi)) +
+  scale_color_brewer(palette = 'Dark2') +
+  labs(title = 'Penambahan Kasus Baru Per Provinsi',
+       subtitle = "Sumber data: Situs Kawal Covid-19",
+       caption = 'Visualized using R\nikanx101.github.io',
+       color = 'Provinsi') +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90,size=4),
+        axis.title.x = element_blank(),
+        legend.position = 'bottom',
+        axis.title.y = element_blank())
+```
 
 ## `library(tidytext)`
 
 ## `library(rvest)`
 
+\newpage
+&nbsp;
+\pagebreak
+
+# APLIKASI R DI DUNIA REAL
+
+Berikut akan saya sampaikan beberapa contoh kasus yang diselesaikan menggunakan R.
+
+## Membuat Alat Deteksi Cepat COVID-19
+
+```{r,include=FALSE}
+rm(list=ls())
+source('~/Documents/All Func.R')
+data = import.data.spss.saya.donk('/home/ikanx101githubio/Documents/Project R New/dikha ayu/Test Kanker Kolon.sav')
+data = janitor::clean_names(data)
+data = 
+  data %>% 
+  mutate(biomarker1 = log(biomarker1)*5,
+         biomarker2 = log(biomarker2)*5)
+
+library(ROCit)
+```
+
+Beberapa orang peneliti sedang 
 
 \newpage
 &nbsp;
