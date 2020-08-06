@@ -1,5 +1,5 @@
 ---
-title: "Intro to R - Volume 2.2"
+title: "Intro to R - Volume 2.5"
 subtitle: "Edisi Revisi"
 author: "ikanx101.github.io"
 date: "Agustus 6, 2020"
@@ -1758,6 +1758,187 @@ ertiga.data %>% group_by(tahun) %>% summarise(rata = mean(harga),stdev = sd(harg
   theme(axis.title.x = element_blank(),
         plot.title = element_text(size=18,face='bold.italic'))
 ```
+
+____
+
+\newpage
+
+## Model _Price Elasticity_
+
+```{r,echo=FALSE}
+rm(list=ls())
+data = 
+  read.csv('/home/ikanx101githubio/Documents/belajaR/Materi Training/Replikasi GIZ/latihan regresi.csv') %>% 
+  mutate(X = NULL)
+```
+
+Secara logika, semakin tinggi harga suatu barang, semakin sedikit orang yang akan membelinya. Secara simpel kita bisa bilang bahwa `harga` berkorelasi negatif dengan sales `qty`. Tapi untuk mengatakan ada kausalitas antara `harga`dan sales `qty`, kita harus cek dulu model regresinya.
+
+Selain itu, kita ingin menghitung suatu nilai _fixed_ (kita sebut saja suatu _price elasticity index_). Dimana jika `harga` naik sebesar __a %__ maka sales `qty` akan turun sebesar __index %__.
+
+Contoh yah, misalkan saya punya data jualan harian suatu barang beserta harganya di suatu minimarket sebagai berikut:
+
+```{r,echo=FALSE}
+knitr::kable(head(data,10),caption = 'Top 10 Teratas Data Harga dan Jualan Suatu Barang')
+```
+
+Data dalam format `.csv` bisa diambil di [_link_ berikut](https://raw.githubusercontent.com/ikanx101/belajaR/master/Materi%20Training/Replikasi%20GIZ/latihan%20regresi.csv) ini.
+
+Berapa sih nilai kodelasi antara `harga` dan `qty`?
+
+```{r}
+korel = cor(data$harga,data$qty)
+korel
+```
+
+Ternyata angka korelasinya kuat negatif. Artinya, jika kita membuat model regresi linear dari kedua data ini, maka akan didapat __R-Squared__ sebesar kuadrat nilai korelasinya. _Nah_, sekarang kita coba buat model regresinya _yuk_.
+
+```{r}
+model_reg = lm(qty~harga,data = data)
+summary(model_reg)
+```
+
+### Evaluasi model {-}
+
+Sekarang kita lihat _goodness of fit_ dari model regresi di atas. Untuk mengevaluasi apakah suatu model regresi baik, kita bisa lihat dari beberapa hal seperti:
+
+1. __R-squared__
+2. __P-value__
+3. MAE ( _mean absolut error_ )
+4. Lainnya
+
+### _R squared_ {-}
+Nilainya bisa diambil dari nilai __multiple R-squared__ pada model atau bisa juga dihitung menggunakan:
+```{r}
+r_squared = modelr::rsquare(model_reg,data)
+r_squared
+```
+
+Mari kita cek apakah nilai __R-Squared__ sama dengan korelasi yang dikuadratkan yah. Ini sengaja saya _round_ biar memudahkan yah.
+
+```{r}
+round(r_squared,5) == round(korel^2,5)
+```
+
+__R-squared__ bisa diartikan sebagai berapa persen variabel X meng- _explain_ variabel Y.
+
+### _P-value_ {-}
+Nilai __P-value__ didapatkan dari `summary(model_reg)`, yakni mendekati nol (sangat kecil). Oleh karena `p-value < 0.05` bisa diambil kesimpulan bahwa model `harga` berpengaruh terhadap sales `qty`.
+
+### __MAE__ {-}
+_Mean absolut error_ dapat diartikan sebagai rata-rata nilai mutlak _error_ yang dapat kita terima. Tidak ada angka pasti harus berapa, tapi semakin kecil _error_, berarti semakin baik model kita.
+
+Menurut pengetahuan saya, __MAE__ digunakan jika kita memiliki lebih dari satu model regresi yang ingin dibandingkan mana yang terbaik.
+
+```{r}
+mean_absolut_error = modelr::mae(model_reg,data) 
+mean_absolut_error
+```
+
+### Kesimpulan {-}
+Berhubung dari __P-value__ dan __R-squared__ menghasilkan nilai yang baik, dapat disimpulkan bahwa `harga` mempengaruhi dan mengakibatkan perubahan pada sales `qty` secara negatif.
+
+### Cara lain {-}
+Sebenarnya ada cara lain untuk melakukan analisa regresi linear menggunakan __R__, yakni dengan memanfaatkan _library_ `ggplot2` dan `ggpubr`.
+
+```{r}
+library(ggplot2)
+library(ggpubr)
+data %>% ggplot(aes(x=harga,y=qty)) + 
+  geom_point() + 
+  geom_smooth(method='lm') +
+  theme_pubclean() + 
+  stat_regline_equation(label.y = 7,aes(label =  paste(..eq.label.., ..rr.label.., sep = "~~~~"))) +
+  labs(title = 'Model Regresi: Price Elasticity Index',
+                          subtitle = 'Data harga vs sales qty',
+                          caption = 'Created using R',
+                          x = 'Harga produk (dalam ribu rupiah)',
+                          y = 'Sales Qty') +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        plot.title = element_text(size=25,face='bold.italic'),
+        plot.caption = element_text(size=10,face='italic'))
+```
+
+____
+
+\newpage
+
+## _Optimization_ dari Model Regresi
+
+Kita telah mendapatkan model regresi linear yang baik. Kita juga sudah menghitung _price elasticty index_. Pertanyaan selanjutnya adalah: _Apakah kita bisa menghitung harga terbaik untuk produk tersebut?_
+
+Mari kita definisikan terlebih dahulu, apa itu harga terbaik? Harga terbaik adalah harga yang membuat kita mendapatkan omset paling maksimal. 
+
+Bagaimana menghitung omset? 
+
+Omset didefinisikan sebagai: $omset = harga*qty$
+
+Coba kita ingat kembali, kita telah memiliki formula regresi: $qty=m*harga + c$
+
+Jika kita substitusi persamaan `qty` ke persamaan `omset`, maka kita akan dapatkan: 
+
+$$omset = harga*(m*harga + c)$$
+
+$$omset = m*harga^2 + c*harga$$
+
+Berhubung nilai `m` adalah negatif, maka saya bisa tuliskan persamaan finalnya menjadi:
+
+$$omset = -m*harga^2 + c*harga$$
+
+_Oke_, mari kita ingat kuliah kalkulus I dulu. Jika kita punya persamaan kuadrat dengan konstanta depan negatif, apa artinya?
+
+### Ingat Kembali Kalkulus I! {-}
+
+Sebagai _reminder_, coba yah kalau saya buat grafik dari persamaan $y = x^2$ seperti di bawah ini:
+
+```{r,echo=FALSE}
+x = c(-10:10)
+y = x^2
+contoh = data.frame(x,y)
+contoh %>% ggplot(aes(x,y)) + geom_line()
+```
+
+Jika kita punya persamaan kuadrat positif semacam ini, akan selalu ada nilai `x` yang memberikan `y` minimum.
+
+Sekarang jika saya memiliki persamaan kuadrat $y = - x^2$, bentuk grafiknya sebagai berikut:
+
+```{r,echo=FALSE}
+x = c(-10:10)
+y = -x^2
+contoh = data.frame(x,y)
+contoh %>% ggplot(aes(x,y)) + geom_line()
+```
+
+Jadi, jika kita memiliki persamaan kuadrat dengan konstanta negatif, maka akan selalu ada nilai `x` yang memberikan `y` maksimum!
+
+### Kembali ke Model Regresi {-}
+
+Nah, berhubung kita punya formula regresi berupa persamaan kuadrat, maka dipastikan akan selalu ada `harga` yang memberikan `omset` maksimum.
+
+Sekarang mari kita lakukan simulasi untuk mendapatkan `harga` paling optimal.
+
+```{r}
+harga_baru = seq(5,50,.5)
+data_simulasi = data.frame(harga = harga_baru)
+qty_baru = predict(model_reg,
+                   newdata = data_simulasi)
+omset = harga_baru * qty_baru
+hasil = data.frame(omset,harga_baru,qty_baru)
+hasil %>% 
+  ggplot(aes(x=harga_baru,y=omset)) +
+  geom_line()
+```
+
+Secara grafis dapat dilihat bahwa sebenarnya ada satu titik `harga_baru` yang memberikan `omset` paling tinggi. Yakni pada harga:
+
+```{r}
+hasil %>% 
+  filter(omset == max(omset)) %>%
+  select(harga_baru)
+```
+
+_So_, harga optimal sudah kita dapatkan.
 
 ____
 
