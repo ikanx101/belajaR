@@ -1,8 +1,8 @@
 ---
-title: "Intro to R - Volume 2.1"
+title: "Intro to R - Volume 2.2"
 subtitle: "Edisi Revisi"
 author: "ikanx101.github.io"
-date: "Agustus 5, 2020"
+date: "Agustus 6, 2020"
 fontsize: 10pt
 header-includes:
 - \usepackage{titling}
@@ -1482,11 +1482,90 @@ data_new_2 = clean_names(data)
 head(data_new_2,10)
 ```
 
-## `library(reshape2)`
-
 ## `library(lubridate)`
 
+Beberapa kali saya dihadapkan pada data tanggal dan waktu. Untuk itu, saya biasa menggunakan `library(lubridate)` untuk membantu saya untuk melakukannya. Mari kita lihat kembali data COVID-19 yang sudah kita bersihkan sebelumnya:
+
+```{r,echo=FALSE}
+knitr::kable(head(data_new_2,5),caption = '5 Data Teratas dari Data COVID-19 Cleaned')
+```
+
+Kita coba cek tipe data dari masing-masing variabel yang ada pada data tersebut:
+
+```{r}
+str(data_new_2)
+```
+
+\newpage
+
+Ternyata variabel `tanggal_lapor` tidak bertipe `date`. Oleh karena itu, kita akan _convert_ ke tipe `date` dengan _function_ yang ada di `library(lubridate)` yakni `date()`.
+
+```{r,warning=FALSE,message=FALSE}
+library(lubridate)
+
+data_new_2 = 
+  data_new_2 %>% 
+  mutate(tanggal_lapor = date(tanggal_lapor))
+
+str(data_new_2)
+```
+
+Sekarang `tanggal_lapor` sudah bertipe `date`, oleh karena itu kita bisa mengekstrak beberapa informasi lain terkait waktu sebagai berikut:
+
+```{r}
+data_tanggal = 
+  data_new_2 %>% 
+  mutate(
+    bulan = month(tanggal_lapor,label = T),
+    tahun = year(tanggal_lapor),
+    tanggal = day(tanggal_lapor),
+    hari = wday(tanggal_lapor,label = T),
+    total_hari_sebulan = days_in_month(tanggal_lapor),
+    minggu_ke = epiweek(tanggal_lapor)
+  ) %>% 
+  select(tanggal_lapor,bulan,tahun,tanggal,hari,total_hari_sebulan,minggu_ke)
+```
+
+```{r,echo=FALSE}
+knitr::kable(head(data_tanggal,5),caption = 'Hasil Ekstrak Data Tanggal')
+```
+
+Selain _functions_ yang saya gunakan di atas, silakan di-_explore_ _functions_ apalagi yang bisa digunakan dari `library(lubridate)`.
+
+\newpage
+
 ## `library(ggplot2)`
+
+Seringkali kita harus membuat grafik atau visualisasi dari data yang kita olah. Salah satu _library_ yang paling _powerful_ untuk melakukan itu di __R__ adalah `library(ggplot2)`.
+
+Hampir semua elemen dalam grafik bersifat _customize_ dan bisa diubah melalui _script_. Kalian bisa mengecek semua yang bisa dilakukan di situs berikut ini:
+
+1. [_Ggplot2 essential_](http://www.sthda.com/english/wiki/ggplot2-essentials).
+1. [_Top 50 ggplot visualization_](http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html).
+1. [_R graph gallery_](https://www.r-graph-gallery.com/ggplot2-package.html).
+
+Salah satu contohnya dari data COVID-19 di atas adalah sebagai berikut:
+
+```{r,warning=FALSE,message=FALSE}
+library(ggplot2)
+
+data_new_2 %>% 
+  ggplot(aes(x = tanggal_lapor,
+             y = kasus_baru)) +
+  geom_smooth(method = 'loess',
+              color = 'cyan',
+              fill = 'magenta',
+              alpha = .2) +
+  geom_line(color = 'darkred') +
+  labs(x = 'Tanggal',
+       y = 'Kasus Baru',
+       title = 'Tren Penambahan Kasus Baru di Indonesia',
+       subtitle = 'Sumber data: Rekap Situs Kawal Covid 19',
+       caption = 'Visualized using R\nikanx101.github.io') +
+  theme_minimal() 
+```
+
+## `library(reshape2)`
 
 ## `library(tidytext)`
 
