@@ -9,6 +9,12 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# Marvel Cinematics Universe
+## Pendahuluan
+Siapa sih yang gak pernah nonton minimal satu film dari __Marvel Cinematic Universe__?
+
+Dimulai dari film __Iron Man__ pertama dan diakhiri sampai __Spiderman Far From Home__ yang _release_ di tahun ini.
+
 Dari sekian banyak film tersebut, pasti ada sekian film yang menjadi favorit banyak orang. Salah satu parameternya adalah tingginya pendapatan yang diterima oleh film tersebut.
 
 Disadari atau tidak, film yang bagus biasanya dibuat dengan serius juga. Salah satu parameter suatu film digarap dengan serius dapat dilihat dari _budget_ pembuatan film tersebut.
