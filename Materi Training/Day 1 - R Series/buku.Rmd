@@ -1,8 +1,8 @@
 ---
-title: "Intro to R - Volume 2.5"
-subtitle: "Edisi Revisi"
-author: "ikanx101.github.io"
-date: "Agustus 6, 2020"
+title: "Intro to R - Volume 3"
+subtitle: "Sebuah Modul Training"
+author: "ikanx101.com"
+date: "Agustus 12, 2020"
 fontsize: 10pt
 header-includes:
 - \usepackage{titling}
@@ -11,7 +11,7 @@ header-includes:
 - \usepackage{fancyhdr}
 - \pagestyle{fancy}
 - \fancyhead[CO,CE]{R}
-- \fancyfoot[CO,CE]{ikanx101.github.io}
+- \fancyfoot[CO,CE]{ikanx101.com}
 - \fancyfoot[LE,RO]{hal \thepage}
 output:
   pdf_document:
@@ -30,7 +30,7 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 rm(list=ls())
-setwd("~/Documents/belajaR/Materi Training/Day 1 - R Series")
+setwd("~/belajaR/Materi Training/Day 1 - R Series")
 library(dplyr)
 library(tidyr)
 library(ggrepel)
@@ -44,7 +44,7 @@ library(ggrepel)
 knitr::include_graphics('logo R.png')
 ```
 
-__Bayangkan Anda berada di restoran _all you can eat_ dimana semua makanan yang Anda mau ada semua di sana... Ikang__
+__Bayangkan Anda berada di restoran _all you can eat_ dimana semua makanan yang Anda mau ada semua di sana...__
 
 ____
 
@@ -221,7 +221,7 @@ Secara _default_, __R__ menggunakan `C:\\My Documents` sebagai _working director
 _Working directory_ bisa diubah sesuai kemauan kita memanfaatkan perintah `setwd()`, tanda dalam kurung diisi dengan _folder path_ yang diinginkan.
 
 ```{r}
-setwd("~/Documents/belajaR/Materi Training/Day 1 - R Series")
+setwd("~/belajaR/Materi Training/Day 1 - R Series")
 ```
 
 ### Apa keuntungan mengubah-ubah _working directory_?
@@ -1450,7 +1450,7 @@ Misalkan: saya memiliki data seperti ini:
 ```{r,include=FALSE}
 rm(list=ls())
 library(readxl)
-data = read_excel('/home/ikanx101githubio/Documents/belajaR/Materi Training/Day 1 - R Series/Data Utk Buku/COVID.xlsx')
+data = read_excel('~/belajaR/Materi Training/Day 1 - R Series/Data Utk Buku/COVID.xlsx')
 colnames(data)[1] = 'Tanggal Lapor'
 data = data[1:7]
 ```
@@ -1578,7 +1578,7 @@ Mari kita _import_ datanya ke dalam __R__. Berikut tampilannya:
 
 ```{r, include=FALSE}
 rm(list=ls())
-data = read_excel('/home/ikanx101githubio/Documents/belajaR/Materi Training/Day 1 - R Series/Data Utk Buku/Contoh data non tabular.xlsx')
+data = read_excel('~/belajaR/Materi Training/Day 1 - R Series/Data Utk Buku/Contoh data non tabular.xlsx')
 ```
 
 ```{r,echo=FALSE}
@@ -1685,7 +1685,7 @@ scrap = function(url){
 Jadi setelah saya _scrape_ semua `25` _pages_, hasilnya seperti ini:
 
 ```{r,echo=FALSE}
-load('/home/ikanx101githubio/Documents/belajaR/Materi Training/Day 1 - R Series/Data Utk Buku/r3.rda')
+load('~/belajaR/Materi Training/Day 1 - R Series/Data Utk Buku/r3.rda')
 knitr::kable(head(ertiga.data,10),caption = '10 Data Pertama dari Hasil Scrape Ertiga')
 ```
 
@@ -1769,7 +1769,7 @@ ____
 ```{r,echo=FALSE}
 rm(list=ls())
 data = 
-  read.csv('/home/ikanx101githubio/Documents/belajaR/Materi Training/Replikasi GIZ/latihan regresi.csv') %>% 
+  read.csv('~/belajaR/Materi Training/Replikasi GIZ/latihan regresi.csv') %>% 
   mutate(X = NULL)
 ```
 
@@ -1949,7 +1949,7 @@ ____
 
 ```{r,include=FALSE}
 rm(list=ls())
-data = read_excel('/home/ikanx101githubio/Documents/belajaR/Materi Training/Day 1 - R Series/Data Utk Buku/vendor.xlsx')
+data = read_excel('~/belajaR/Materi Training/Day 1 - R Series/Data Utk Buku/vendor.xlsx')
 ```
 
 Suatu ketika, saya memiliki `200` data _service level_ dari tiga perusahaan _supplier_. _Service level_ adalah banyaknya hari yang dibutuhkan oleh _supplier_ untuk _fulfill_ transaksi yang dijanjikan. Data bisa didapatkan di [_link_ ini](https://github.com/ikanx101/belajaR/blob/master/Materi%20Training/Day%201%20-%20R%20Series/Data%20Utk%20Buku/vendor.xlsx).
@@ -2130,7 +2130,7 @@ Suatu ketika saya memiliki data terkait statistik dari `60` orang _TOP goalscore
 
 ```{r,include=FALSE}
 rm(list=ls())
-data = read_excel('/home/ikanx101githubio/Documents/belajaR/Materi Training/Day 1 - R Series/Data Utk Buku/premier league top 60.xlsx')
+data = read_excel('~/belajaR/Materi Training/Day 1 - R Series/Data Utk Buku/premier league top 60.xlsx')
 ```
 
 ```{r}
