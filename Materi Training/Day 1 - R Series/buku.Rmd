@@ -40,8 +40,8 @@ library(ggrepel)
 &nbsp;
 \pagebreak
 
-```{r out.width = '80%',echo=FALSE, fig.align='center'}
-knitr::include_graphics('logo R.png')
+```{r out.width = '60%',echo=FALSE, fig.align='center'}
+knitr::include_graphics('all you can eat.jpg')
 ```
 
 __Bayangkan Anda berada di restoran _all you can eat_ dimana semua makanan yang Anda mau ada semua di sana...__
@@ -2185,6 +2185,67 @@ data %>% mutate(ratio.gol = Goals/Appearances,
         legend.text = element_text(size=5),
         legend.title = element_text(size=7))
 ```
+
+_____
+
+\newpage
+
+## Korelasi Antara _Selling In_ dan _Selling Out_
+
+Suatu ketika, tim _sales_ suatu perusahaan hendak melakukan analisa:
+
+> Apakah bisa kita memprediksi _selling out_ berdasarkan data _selling in_ untuk semua produk yang kita jual?
+
+### Definisi _Selling In_ dan _Selling Out_ {-}
+
+1. _Selling in_ adalah angka jualan perusahaan ke distributor. Data ini secara _real time_ bisa didapatkan oleh perusahaan.
+1. _Selling out_ adalah angka jualan toko ke konsumen. Data ini baru bisa didapatkan setelah _delay_ 3-5 bulan karena alasan teknis pengumpulan.
+
+Oleh karena itu penting bagi tim _sales_ untuk bisa memperkirakan angka jualan langsung ke konsumen dari data jualan ke distributor.
+
+Apakah hal tersebut memungkinkan?
+
+### Membuat Model Prediksi {-}
+
+Salah satu model prediksi yang memungkinkan bisa dibuat adalah dengan mengandalkan model regresi linear:
+
+$$SO = a*SI + C$$
+
+Namun muncul permasalahan: $SI$ yang terjadi pada bulan ini tidak serta merta terkonversi langsung menjadi $SO$ karena distributor bisa saja melakukan _stock_ atau _flush out_ di bulan-bulan tertentu.
+
+Oleh karena itu, pertanyaan yang penting adalah pada jeda berapa bulan kita bisa membuat model regresi yang terbaik?
+
+$$SO_{i+n} = a*SI_i+C$$
+
+### Bagaimana Menentukan Nilai $n$? {-}
+
+Perhatikan bahwa salah satu parameter _goodness of fit_ dari model regresi linear adalah $R^2$ (_R Squared_). Jika kita ingat kembali, jika kita akar kuadratkan nilai _R Squared_:
+
+$$\sqrt(R^2) = R$$
+
+Nilai $R$ adalah nilai korelasi.
+
+> Oleh karena itu, kita akan mencari jeda $n$ yang mengakibatkan $SI$ dan $SO$ memiliki korelasi tinggi.
+
+Semakin tinggi korelasi antara $SO$ dan $SI$ maka jika kita buat model regresinya akan menghasilkan model yang baik.
+
+\newpage
+
+### Lalu Bagaimana Caranya? {-}
+
+Misalkan, data yang akan dianalisa adalah sebagai berikut:
+
+```{r,echo=FALSE}
+rm(list=ls())
+data = read.csv('/home/ikanx101githubio/Documents/belajaR/Materi Training/Day 1 - R Series/Data Utk Buku/data sales.csv')
+data =
+  data %>% 
+  rename(no = X)
+knitr::kable(head(data,15),caption = '15 Data Teratas dari SI dan SO')
+```
+
+Data bisa rekan-rekan ambil di _link_ berikut.
+
 
 _____
 
