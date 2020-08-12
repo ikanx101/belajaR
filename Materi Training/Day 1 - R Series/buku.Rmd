@@ -2241,11 +2241,61 @@ data = read.csv('/home/ikanx101githubio/Documents/belajaR/Materi Training/Day 1 
 data =
   data %>% 
   rename(no = X)
-knitr::kable(head(data,15),caption = '15 Data Teratas dari SI dan SO')
+knitr::kable(data,caption = 'Data dari SI dan SO dari Produk XYZ')
 ```
 
 Data bisa rekan-rekan ambil di _link_ berikut.
 
+Untuk mengatasinya, tidak mungkin kalkulasi ini kita lakukan secara manual karena datanya sangat banyak. Apalagi jika dilakukan untuk banyak produk.
+
+```{r,echo=FALSE}
+nomnoml::nomnoml('[Iterasi|
+                    [n] -> [SI]
+                    [n] -> [SO]
+                    [SI] -> [korelasi]
+                    [SO] -> [korelasi]
+                    ]
+                 [Iterasi] -> [nilai korelasi\nterbaik]
+                 [nilai korelasi\nterbaik] -> [hitung R squared|Menentukan goodness\nof fit model]')
+```
+
+Untuk memudahkan, saya akan menggunakan perhitungan korelasi _Spearman_. Berikut adalah algoritmanya:
+
+```{r}
+seling.in=data$si
+seling.ou=data$so
+
+r=c()
+rsquare=c()
+jeda=c()
+a=c()
+x=1
+
+for (i in 1:18){
+  jeda[x]=i 
+  a[x]=length(seling.in)-jeda[x]
+  sel.out=seling.ou[-c(a[x]+1:length(seling.ou))]
+  sel.in=seling.in[c((jeda[x]+1):length(seling.in))]
+  r[x]=cor(sel.in,sel.out,method = 'spearman')
+  rsquare[x]=r[x]^2
+  x=x+1
+  }
+hasil=data.frame(jeda,r,rsquare)
+```
+
+\newpage
+
+```{r,echo=FALSE}
+knitr::kable(hasil,caption = 'Hasil Perhitungan Jeda dan Korelasi')
+```
+
+$R^2$ tertinggi akan didapatkan pada saat `r max(hasil$rsquare)` di jeda $n=10$.
+
+### Kesimpulan {-}
+
+Proses perhitungan secara otomatis yang saya sampaikan di atas bisa di- _reproducible_ untuk semua produk yang dimiliki oleh perusahaan tersebut. Namun perlu diperhatikan bahwa model regresi yang baik baru bisa terwujud jika nilai $R^2$ berada di kisaran $0.7 > R^2 \geq 1$.
+
+> Oleh karena itu, khusus produk __XYZ__, kita tidak bisa membuat model prediksi $SO =a* SI +C$
 
 _____
 
