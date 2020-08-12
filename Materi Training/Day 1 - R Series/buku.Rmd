@@ -1,6 +1,6 @@
 ---
 title: "Intro to R - Volume 3"
-subtitle: "Sebuah Modul Training"
+subtitle: "Modul Training"
 author: "ikanx101.com"
 date: "Agustus 12, 2020"
 fontsize: 10pt
@@ -30,7 +30,7 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 rm(list=ls())
-setwd("~/belajaR/Materi Training/Day 1 - R Series")
+setwd("~/Documents/belajaR/Materi Training/Day 1 - R Series")
 library(dplyr)
 library(tidyr)
 library(ggrepel)
@@ -221,7 +221,7 @@ Secara _default_, __R__ menggunakan `C:\\My Documents` sebagai _working director
 _Working directory_ bisa diubah sesuai kemauan kita memanfaatkan perintah `setwd()`, tanda dalam kurung diisi dengan _folder path_ yang diinginkan.
 
 ```{r}
-setwd("~/belajaR/Materi Training/Day 1 - R Series")
+setwd("~/Documents/belajaR/Materi Training/Day 1 - R Series")
 ```
 
 ### Apa keuntungan mengubah-ubah _working directory_?
@@ -1450,7 +1450,7 @@ Misalkan: saya memiliki data seperti ini:
 ```{r,include=FALSE}
 rm(list=ls())
 library(readxl)
-data = read_excel('~/belajaR/Materi Training/Day 1 - R Series/Data Utk Buku/COVID.xlsx')
+data = read_excel('~/Documents/belajaR/Materi Training/Day 1 - R Series/Data Utk Buku/COVID.xlsx')
 colnames(data)[1] = 'Tanggal Lapor'
 data = data[1:7]
 ```
@@ -1578,7 +1578,7 @@ Mari kita _import_ datanya ke dalam __R__. Berikut tampilannya:
 
 ```{r, include=FALSE}
 rm(list=ls())
-data = read_excel('~/belajaR/Materi Training/Day 1 - R Series/Data Utk Buku/Contoh data non tabular.xlsx')
+data = read_excel('~/Documents/belajaR/Materi Training/Day 1 - R Series/Data Utk Buku/Contoh data non tabular.xlsx')
 ```
 
 ```{r,echo=FALSE}
@@ -1629,7 +1629,11 @@ data_baru %>%
 
 ## `library(tidytext)`
 
+_Library_ ini sangat berguna untuk memanipulasi _unstructured data_ berbentuk `character` atau `string`. Walau demikian aplikasinya tidak terbatas pada _analyzing text_ saja namun bisa digunakan pada saat data cleaning. Silakan lihat contoh kasus.
+
 ## `library(rvest)`
+
+_Library_ ini adalah salah satu _library_ yang biasa digunakan untuk melakukan _web scraping_ dengan prinsip _pipe_ `%>%`. Cara kerjanya adalah dengan membaca `.html` dari suatu _webpage_ dan menargetkan _item_ atau _value_ dari `css` atau `xpath` yang diinginkan. Silakan lihat contoh kasus.
 
 \newpage
 &nbsp;
@@ -1685,7 +1689,7 @@ scrap = function(url){
 Jadi setelah saya _scrape_ semua `25` _pages_, hasilnya seperti ini:
 
 ```{r,echo=FALSE}
-load('~/belajaR/Materi Training/Day 1 - R Series/Data Utk Buku/r3.rda')
+load('~/Documents/belajaR/Materi Training/Day 1 - R Series/Data Utk Buku/r3.rda')
 knitr::kable(head(ertiga.data,10),caption = '10 Data Pertama dari Hasil Scrape Ertiga')
 ```
 
@@ -1769,7 +1773,7 @@ ____
 ```{r,echo=FALSE}
 rm(list=ls())
 data = 
-  read.csv('~/belajaR/Materi Training/Replikasi GIZ/latihan regresi.csv') %>% 
+  read.csv('~/Documents/belajaR/Materi Training/Replikasi GIZ/latihan regresi.csv') %>% 
   mutate(X = NULL)
 ```
 
@@ -1949,7 +1953,7 @@ ____
 
 ```{r,include=FALSE}
 rm(list=ls())
-data = read_excel('~/belajaR/Materi Training/Day 1 - R Series/Data Utk Buku/vendor.xlsx')
+data = read_excel('~/Documents/belajaR/Materi Training/Day 1 - R Series/Data Utk Buku/vendor.xlsx')
 ```
 
 Suatu ketika, saya memiliki `200` data _service level_ dari tiga perusahaan _supplier_. _Service level_ adalah banyaknya hari yang dibutuhkan oleh _supplier_ untuk _fulfill_ transaksi yang dijanjikan. Data bisa didapatkan di [_link_ ini](https://github.com/ikanx101/belajaR/blob/master/Materi%20Training/Day%201%20-%20R%20Series/Data%20Utk%20Buku/vendor.xlsx).
@@ -2130,7 +2134,7 @@ Suatu ketika saya memiliki data terkait statistik dari `60` orang _TOP goalscore
 
 ```{r,include=FALSE}
 rm(list=ls())
-data = read_excel('~/belajaR/Materi Training/Day 1 - R Series/Data Utk Buku/premier league top 60.xlsx')
+data = read_excel('~/Documents/belajaR/Materi Training/Day 1 - R Series/Data Utk Buku/premier league top 60.xlsx')
 ```
 
 ```{r}
@@ -2139,7 +2143,8 @@ str(data)
 
 ### _Problem Statement_ {-}
 
-Bagaimana cara membuat visualisasi yang bisa melibatkan sebanyak-banyaknya variabel pada data tersebut?
+1. Bagaimana menentukan siapa pemain yang terbaik dengan menggunakan sebanyak-banyaknya variabel yang ada?
+1. Bagaimana bentuk grafiknya?
 
 ### Membuat _Customize Scatterplot_ {-}
 
@@ -2189,23 +2194,12 @@ _____
 
 ```{r,include=FALSE}
 rm(list=ls())
-source('~/Documents/All Func.R')
-data = import.data.spss.saya.donk('/home/ikanx101githubio/Documents/Project R New/dikha ayu/Test Kanker Kolon.sav')
-data = janitor::clean_names(data)
-data = 
-  data %>% 
-  mutate(biomarker1 = log(biomarker1)*5,
-         biomarker2 = log(biomarker2)*5,
-         biomarker1 = round(biomarker1,3),
-         biomarker2 = round(biomarker2,3),
-         id = 1:length(biomarker1))
-
+data = read.csv('/home/ikanx101githubio/Documents/belajaR/Materi Training/Day 1 - R Series/Data Utk Buku/rapid test.csv')
 id_target = sample(c(1:683),15)
-
 library(ROCit)
 ```
 
-Beberapa orang peneliti sedang mengembangkan dua alat pendeteksi cepat COVID-19. Cara kerja alat ini adalah untuk mendeteksi kadar _biomarker_ dalam darah.
+Beberapa orang peneliti sedang mengembangkan dua alat pendeteksi cepat COVID-19. Cara kerja alat ini adalah untuk mendeteksi kadar _biomarker_ dalam darah. Data bisa diambil di [_link_ berikut ini](https://raw.githubusercontent.com/ikanx101/belajaR/master/Materi%20Training/Day%201%20-%20R%20Series/Data%20Utk%20Buku/rapid%20test.csv).
 
 Apa sih _biomarker_ itu?
 
@@ -2332,7 +2326,8 @@ data =
   mutate(bio1 = ifelse(biomarker1>=cut_bio1,'Ya','Tidak'),
          bio2 = ifelse(biomarker2>=cut_bio2,'Ya','Tidak'),
          bio1 = factor(bio1),
-         bio2 = factor(bio2))
+         bio2 = factor(bio2),
+         diagnosis = factor(diagnosis))
 
 caret::confusionMatrix(reference = data$diagnosis,data = data$bio1)
 ```
