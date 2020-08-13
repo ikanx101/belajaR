@@ -2255,11 +2255,10 @@ nomnoml::nomnoml('[Iterasi|
                     [SI] -> [korelasi]
                     [SO] -> [korelasi]
                     ]
-                 [Iterasi] -> [nilai korelasi\nterbaik]
-                 [nilai korelasi\nterbaik] -> [hitung R squared|Menentukan goodness\nof fit model]')
+                 [Iterasi] -> [hitung R squared|Menentukan goodness\nof fit model]')
 ```
 
-Untuk memudahkan, saya akan menggunakan perhitungan korelasi _Spearman_. Berikut adalah algoritmanya:
+Berikut adalah algoritmanya:
 
 ```{r}
 seling.in=data$si
@@ -2271,12 +2270,12 @@ jeda=c()
 a=c()
 x=1
 
-for (i in 1:18){
+for (i in 1:12){
   jeda[x]=i 
   a[x]=length(seling.in)-jeda[x]
   sel.out=seling.ou[-c(a[x]+1:length(seling.ou))]
   sel.in=seling.in[c((jeda[x]+1):length(seling.in))]
-  r[x]=cor(sel.in,sel.out,method = 'spearman')
+  r[x]=cor(sel.in,sel.out,method = 'pearson')
   rsquare[x]=r[x]^2
   x=x+1
   }
