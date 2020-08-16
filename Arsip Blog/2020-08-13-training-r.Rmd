@@ -1,0 +1,52 @@
+---
+title: "Catatan Post Training R"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("~/ikanx101.github.io/_posts/blog training")
+rm(list=ls())
+library(dplyr)
+library(ggplot2)
+```
+
+Tidak terasa _training_ __R__ yang telah saya inisiasi di kantor telah berjalan sebanyak dua _batches_. Sebenarnya bisa dihitung tiga _batches_ (_training_ pertama dilakukan diluar format baru yang disepakati bersama dengan tim Training HR).
+
+Ada beberapa hal yang menarik terkait dengan pelaksanaan _training_ ini:
+
+1. Usia tidak berpengaruh! Ada anggapan bahwa generasi yang lebih muda itu lebih mudah menerima perubahan, adaptif, _agile_, dan mau berinovasi. Dari sekian banyak _trainee_ yang telah berhasil mengarungi _training_ hingga selesai dan mengerjakan _project_, ternyata tidak ada dominasi dari generasi muda. Justru beberapa _trainee_ yang _standout_ berasal dari generasi yang relatif tidak muda lagi $>30$ tahun.
+1. Level jabatan tidak berpengaruh! Awalnya ada anggapan bahwa _managerial up_ tidak perlu mempelajari dan menguasai hal teknis seperti _coding_ ini. Mereka sudah disibukkan dengan pekerjaan manajerial, administratif, dan _strategic_. Namun ternyata beberapa _trainee_ yang memiliki akselerasi pembelajaran tercepat dilakukan oleh level _managerial up_.
+1. Bedakan antara kemauan, kebutuhan, dan kemampuan. Awalnya saya dan tim melakukan segmentasi calon _trainee_ berdasarkan kebutuhan akan __R__ di _roles_ pekerjaan sehari-hari. Semakin dinilai butuh, maka calon _trainee_ akan diprioritaskan ikut _training_. Namun, ternyata hal yang terpenting adalah kemauan! Sayangnya banyak _trainee_ yang hanya mengikuti _training_ karena sekedar _hype_ saja tanpa mau berkomitmen menyelesaikan. Mengenai kemampuan, sebenarnya semua tergantung dari seberapa gigih untuk belajar.
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+data.frame(
+  kemauan = sample(c(1:6),15,replace = T),
+  kemampuan = sample(c(1:6),15,replace = T),
+  kebutuhan = sample(c(1:6),15,replace = T)) %>% 
+  mutate(kebutuhan = cut(kebutuhan,2,labels = c('low','high'))) %>% 
+  ggplot(aes(x = kemauan,
+             y = kemampuan)) +
+  geom_point(aes(size = kebutuhan)) +
+  geom_vline(aes(xintercept = 3)) +
+  geom_hline(aes(yintercept = 3)) +
+  labs(title = 'Trainee Mapping',
+       subtitle = 'Kemauan, Kebutuhan, dan Kemampuan',
+       caption = 'ikanx101.com',
+       size = 'Kebutuhan',
+       x = 'Kemauan',
+       y = 'Kemampuan') +
+  theme_linedraw()
+```
+
+### Bagaimana training _batches_ selanjutnya?
+
+Sebenarnya tidak ada perubahan signifikan terkait _training_ di _batches_ selanjutnya. Hanya ada dua perubahan:
+
+1. [_Updated_ materi](https://github.com/ikanx101/belajaR/blob/master/Materi%20Training/Day%201%20-%20R%20Series/Intro%20to%20R%20Volume%203.pdf) yang lebih lengkap.
+
+```{r out.width = '50%',echo=FALSE}
+knitr::include_graphics('r train.jpg')
+```
+
+2. Seleksi peserta tentang komitmen mereka dalam training ini.
