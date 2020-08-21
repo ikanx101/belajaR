@@ -4,7 +4,7 @@
 Hai selamat datang di repositori __#belajaR__.
 
 Saya dedikasikan repositori ini untuk bisa bertukar algoritma __R__ terkait analisa data, visualisasi data, _web scrap_, dll.
-Silakan kunjungi _blog_ pribadi saya di: __http://passingthroughresearcher.wordpress.com__
+Silakan kunjungi _blog_ pribadi saya di: [__ikanx101.com__](https://ikanx101.com/)
 
 Atau bisa lihat __IG__ saya di: __mr.ikanx__
 
