@@ -49,6 +49,8 @@ new =
   group_by(id) %>% 
   summarise(baca = stringr::str_c(words,collapse = " ")) 
   
+tes = new %>% unnest_tokens("words",baca) %>% group_by(words) %>% summarise(n = n())
+wordcloud2::wordcloud2(tes)
 
 NAME = new$baca
 NAME=gsub("[^\x01-\x7F]", "", NAME) #menghilangkan emoticons
