@@ -1,4 +1,4 @@
-setwd("~/belajaR/Bukan Infografis/HBR")
+# jangan lupa setwd yah
 
 rm(list=ls())
 

@@ -1,7 +1,9 @@
 rm(list=ls())
 
 library(dplyr)
+library(tidyr)
 library(tidytext)
+library(htmlwidgets)
 
 # --------------------------------------------------
 # baca artikel
@@ -50,15 +52,51 @@ new =
   summarise(baca = stringr::str_c(words,collapse = " ")) 
   
 tes = new %>% unnest_tokens("words",baca) %>% group_by(words) %>% summarise(n = n())
-wordcloud2::wordcloud2(tes)
+wc = wordcloud2::wordcloud2(tes)
+
+saveWidget(wc,"1.html",selfcontained = F)
+webshot::webshot("1.html","wordcloud.png",vwidth = 1200, vheight = 1000, delay = 30)
+
+# mulai NLP
+library(NLP)
+library(tm)
 
 NAME = new$baca
-NAME=gsub("[^\x01-\x7F]", "", NAME) #menghilangkan emoticons
-NAME=iconv(NAME, "latin1", "ASCII", sub="") #MENGHILANGKAN karakter non ascii
-NAME=Corpus(VectorSource(NAME))
-NAME = tm_map(NAME, content_transformer(tolower))
-NAME = tm_map(NAME,removePunctuation)
-NAME= tm_map(NAME, stripWhitespace)
-NAME=tm_map(NAME,removeWords, stopwords("en"))
-NAME=tm_map(NAME,removeNumbers)
+NAME = Corpus(VectorSource(NAME))
+tdm = TermDocumentMatrix(NAME)
+
+# bikin fungsi asosiasi
+asosiasi = function(kata,angka){
+  kata_1 = findAssocs(tdm, kata, angka)
+  kata_1 = unlist(kata_1)
+  kata_1 = data.frame(kata.awal = attributes(kata_1)$names,
+                      korel = kata_1) %>% 
+    mutate(kata.awal = as.character(kata.awal)) %>%
+    separate(kata.awal,into=c('word1','word2'),sep='\\.')
+  return(kata_1)
+}
+
+
+kata = tes %>% arrange(desc(n)) %>% head(2)
+kata = kata$words
+i = 1
+data = asosiasi(kata[i],.9501)
+for(i in 2:length(kata)){
+  temp = asosiasi(kata[i],.9501)
+  data = rbind(data,temp)
+}
+
+library(igraph)
+library(ggraph)
+
+data %>% 
+  rename(n = korel) %>% 
+  graph_from_data_frame() %>%
+  ggraph(layout = 'star') +
+  geom_edge_link(aes(edge_alpha=n),
+                show.legend = F,
+                color='darkred') +
+  geom_node_point(size=1,color='steelblue') +
+  geom_node_text(aes(label=name),alpha=0.4,size=3,vjust=1,hjust=1) +
+  theme_void()
 
