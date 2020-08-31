@@ -23,7 +23,7 @@ scrape_shopee = function(url){
 i = 1
 data = scrape_shopee(url[i])
 
-for(i in 728:length(url)){
+for(i in 2:length(url)){
   temp = scrape_shopee(url[i])
   data = rbind(data,temp)
   print(paste0('Alhamdulillah ',i,' sudah didapatkan...'))
