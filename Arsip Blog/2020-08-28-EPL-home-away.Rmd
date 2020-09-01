@@ -1,0 +1,303 @@
+---
+title: "Premier League 2019/2020: Home vs Away"
+output: 
+  github_document:
+    pandoc_args: --webtex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("~/Documents/ikanx101.com/_posts/EPL")
+
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(ggpubr)
+
+data = read.csv("/home/ikanx101githubio/Documents/belajaR/Bukan Infografis/EPL/EPL.csv")
+
+```
+
+Dalam sepakbola, seringkali saya mendengar mitos bahwa laga kandang membawa keberuntungan dan _advantage(s)_ bagi sebuah tim di __Premier League__ dibandingkan berlaga di tandang tim lawan. Dukungan fans yang militan dengan jarak lapangan dengan _bench_ yang relatif kecil membuat tim tandang pastinya _jiper_. 
+
+Berbekal data yang dihimpun dari situs [__football-data__](http://www.football-data.co.uk/englandm.php), saya akan coba ulik datanya untuk membuktikan mitos _home vs away_ tersebut. Setidaknya ada dua cara saya membuktikan mitos tersebut, yakni:
+
+1. Membandingkan berapa banyak kemenangan yang diraih tim kandang vs tim tandang.
+1. Membandingkan goal yang dicetak tim kandang vs tim tandang.
+
+## Data yang Digunakan
+
+Berikut adalah data __English Premier League__ musim 2019/2020:
+
+```{r,echo=FALSE}
+knitr::kable(head(data,5),
+             caption = "Sampel Data EPL musim 2019/2020")
+
+data = janitor::clean_names(data)
+```
+
+
+______
+
+### 1. Membandingkan Kemenangan Tim Kandang vs Tim Tandang
+
+Hasil akhir suatu pertandingan sepak bola adalah kemenangan, kekalahan, atau seri. Dari `380` laga yang terjadi selama musim 2019/2020, mari kita lihat siapa yang menjadi pemenang dari laga home dan away:
+
+```{r,echo=FALSE,fig.retina=10,message=FALSE,warning=FALSE}
+data %>% group_by(ftr) %>% summarise(freq = n()) %>% ungroup() %>% 
+  mutate(hasil_akhir = case_when(ftr == "A" ~ "Away Team menang",
+                                 ftr == "D" ~ "Seri",
+                                 ftr == "H" ~ "Home Team menang"),
+         persen = freq / sum(freq),
+         persen = round(persen*100,1),
+         persen = paste0(persen,"%")
+         ) %>% 
+  ggplot(aes(x = reorder(hasil_akhir,freq),
+             y = freq)) +
+  geom_col(aes(fill = freq),color = "black") +
+  scale_fill_gradient(low="steelblue",high="darkred") +
+  geom_label(aes(label = persen)) +
+  theme_pubclean() +
+  labs(title = "Siapa Pemenang Laga di Premier League?",
+       subtitle = "English Premier League 2019/2020",
+       x = "Pemenang",
+       y = "Frequency") +
+  coord_flip() +
+  theme(legend.position = "none",
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank())
+```
+
+Ternyata `45.3%` dari laga yang ada pada musim lalu dimenangkan oleh tim kandang. Jika kita cek menggunakan _2-proportion test_, maka:
+
+Uji hipotesis:
+
+1. $H_0$: $proporsi_{home} = proporsi_{away}$.
+1. $H_1$: $proporsi_{home} = proporsi_{away}$.
+1. Jika $p_{-value}< 0.05$, tolak $H_0$.
+
+```{r,echo=FALSE,fig.retina=10,message=FALSE,warning=FALSE}
+tes_menang = prop.test(c(172,116),c(380,380))
+tes_menang
+
+ifelse(tes_menang$p.value<0.05,"Tolak H0","Terima H0")
+```
+Didapatkan nilai $p_{-value}$ sebesar `r round(tes_menang$p.value,5)`. Oleh karena $p_{-value}< 0.05$ artinya kita akan tolak $H_0$.
+
+> Kemenangan yang dirain tim kandang lebih banyak signifikan dibandingkan kemenangan yang diraih tim tandang (bahkan jika dibandingkan dengan seri).
+
+______
+
+### 2. Membandingkan Goal yang Dicetak Tim Kandang vs Tim Tandang.
+
+Dari data di atas, jika saya kumpulkan dan hitung berapa banyak gol yang dicetak masing-masing tim saat berlaga kandang dan tandang didapatkan tabel sebagai berikut:
+
+```{r,echo=FALSE,fig.retina=10,message=FALSE,warning=FALSE}
+home = 
+  data %>% 
+  group_by(home_team) %>% 
+  summarise(home_goal = sum(fthg)) %>% 
+  ungroup() %>% 
+  rename(teams = home_team)
+
+away = 
+  data %>% 
+  group_by(away_team) %>% 
+  summarise(away_goal = sum(ftag)) %>% 
+  ungroup() %>% 
+  rename(teams = away_team)
+
+all_goals = merge(home,away) %>% mutate(total_goals = home_goal+away_goal) %>% arrange(desc(total_goals))
+
+knitr::kable(all_goals,
+             caption = "Perbandingan Goal Tim Saat Bermain Kandang dan Tandang")
+```
+
+Tabel di atas jika disajikan dalam bentuk grafik, maka:
+
+```{r,echo=FALSE,fig.retina=10,message=FALSE,warning=FALSE}
+all_goals %>% 
+  select(-total_goals) %>% 
+  reshape2::melt(id.vars = "teams") %>% 
+  mutate(variable = ifelse(variable == "home_goal","Home","Away")) %>% 
+  ggplot(aes(x = reorder(teams,-value),
+             y = value)) +
+  geom_col(aes(fill = value),color = "black") +
+  geom_label(aes(label = value,fill=value),size = 2) +
+  scale_fill_gradient(low="steelblue",high="darkred") +
+  facet_wrap(~variable,scales = "free",ncol = 1,nrow = 2) +
+  scale_x_discrete(guide = guide_axis(n.dodge=3)) +
+  theme_pubclean() +
+  theme(legend.position = "none",
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.text.x = element_text(size = 7,face = "bold"),
+        strip.background = element_rect(colour="black", 
+                                          fill="white",
+                                          size=1, 
+                                          linetype="solid")) +
+  labs(title = "Banyaknya Goal Home vs Away per Tim",
+       subtitle = "English Premier League 2019/2020",
+       x = "Tim",
+       y = "Sum of Goals")
+```
+
+Sekarang kita akan hitung, dari 20 tim liga Inggris tersebut, ada berapa banyak tim yang:
+
+- Memiliki goal kandang lebih banyak daripada goal tandang.
+- Memiliki goal kandang yang lebih sedikit daripada goal tandang.
+- Memiliki goal kandang yang sama dengan goal tandang.
+
+Lalu didapatkan grafik sebagai berikut:
+
+```{r,echo=FALSE,fig.retina=10,message=FALSE,warning=FALSE}
+all_goals %>% 
+  mutate(keterangan = case_when(home_goal == away_goal ~ "Sama",
+                                home_goal > away_goal ~ "Home lebih banyak",
+                                home_goal < away_goal ~ "Away lebih banyak")
+         ) %>% 
+  group_by(keterangan) %>% 
+  summarise(freq = n()) %>% 
+  ungroup() %>% 
+  mutate(persen = freq / sum(freq),
+         persen = persen*100,
+         persen = round(persen,1),
+         persen = paste0(keterangan,": ",persen,"%")) %>% 
+  ggplot(aes(x = "",
+             y = freq,
+             fill = keterangan)) +
+  geom_bar(stat = "identity") +
+  scale_fill_brewer(palette="Set2") +
+  coord_polar("y", start=0) +
+  geom_label(aes(label = persen),position = position_stack(vjust = 0.5),size=4.5) +
+  theme(panel.grid=element_blank(),
+        panel.background = element_blank(),
+        axis.title=element_blank(),
+        legend.position = 'none',
+        axis.text = element_blank(),
+        axis.ticks = element_blank()) +
+  labs(title = "Proporsi Tim dengan Banyak Goal Terbanyak\npada Laga Home vs Away",
+       subtitle = "English Premier League 2019/2020")
+```
+
+Dari proporsi di atas, jika kita uji dengan _2-proportion test_ didapatan kesimpulan bahwa tim yang memiliki goal terbanyak saat laga kandang `lebih banyak signifikan` dibandingkan dengan tim yang memiliki goal terbanyak saat laga tandang. 
+
+> Bisa disimpulkan sementara bahwa mayoritas tim yang berlaga di kandang lebih tajam mencetak goal.
+
+Sekarang mari kita bandingkan sebaran gol semua tim saat laga kandang dan tandang:
+
+```{r,echo=FALSE,fig.retina=10,message=FALSE,warning=FALSE}
+data %>% 
+  mutate(id = c(1:380)) %>% 
+  select(id,fthg,ftag) %>% 
+  reshape2::melt(id.vars = "id") %>% 
+  mutate(variable = ifelse(variable == "fthg","Home","Away")) %>% 
+  ggplot(aes(x = variable,
+             y = value)) +
+  geom_jitter(shape = 5,alpha=.7,color = "steelblue") +
+  geom_boxplot(alpha = .6,aes(fill = variable),color = "darkred") +
+  theme_pubclean() +
+  labs(y = "Goals",
+       title = "Sebaran Goal Tim Pada Laga Kandang dan Laga Tandang",
+       subtitle = "English Premier League 2019/2020") +
+  theme(legend.position = "none",
+        axis.title.x = element_blank())
+
+data %>% 
+  mutate(id = c(1:380)) %>% 
+  select(id,fthg,ftag) %>% 
+  reshape2::melt(id.vars = "id") %>% 
+  mutate(variable = ifelse(variable == "fthg","Home","Away")) %>% 
+  group_by(variable,value) %>% 
+  summarise(freq = n()) %>% 
+  ungroup() %>% 
+  mutate(value = factor(value)) %>% 
+  ggplot(aes(x = value,
+             y = freq)) +
+  geom_col(aes(fill = variable),position = "dodge",color = "black",alpha = .7) +
+  geom_line(aes(group = variable,
+                color = variable),
+            size = 1.5,
+            alpha = .7) +
+  theme_pubclean() +
+  labs(y = "Frekuensi",
+       x = "Berapa banyak goal?",
+       title = "Sebaran Goal Tim Pada Laga Kandang dan Laga Tandang",
+       subtitle = "English Premier League 2019/2020",
+       fill = "Keterangan",
+       color = "Keterangan") +
+  theme(legend.position = "bottom")
+
+perbandingan = 
+  data %>% 
+  mutate(id = c(1:380)) %>% 
+  select(id,fthg,ftag) %>% 
+  reshape2::melt(id.vars = "id") %>% 
+  mutate(variable = ifelse(variable == "fthg","Home","Away")) %>% 
+  group_by(variable) %>% 
+  summarise(rata = mean(value),
+            st_dev = sd(value)) %>% 
+  ungroup() %>% 
+  rename(`Jenis Laga` = variable,
+         `Rata-Rata Goal` = rata,
+         `Standar Deviasi` = st_dev)
+
+knitr::kable(perbandingan,
+             caption = "Perbandingan Goal EPL")
+```
+
+Terlihat bahwa laga kandang memiliki rata-rata goal lebih tinggi. Apakah signifikan? Kita coba cek dengan __t-Test__.
+
+Uji hipotesis:
+
+1. $H_0$: $mean(home) = mean(away)$.
+1. $H_1$: $mean(home) \neq mean(away)$.
+1. Jika $p_{-value}< 0.05$, tolak $H_0$.
+
+```{r,echo=FALSE}
+test = t.test(data$fthg,data$ftag)
+test
+
+hasil = ifelse(test$p.value<0.05,
+               "Tolak H0",
+               "H0 tidak ditolak")
+print(hasil)
+```
+
+Hasil __t-Test__ menunjukkan bahwa rata-rata goal tim kandang lebih besar signifikan dibandingkan rata-rata goal tim tandang.
+
+Dengan adanya dua fakta ini, maka bisa dengan tegas disimpulkan bahwa:
+
+> Tim kandang lebih tajam dibandingkan tim tandang.
+
+______
+
+# Kesimpulan
+
+Dari hasil analisa data yang ada, maka saya bisa simpulkan bahwa mitos tim kandang memiliki performa lebih baik adalah benar.
+
+
+### _Bell Curve_ pada Data Selisih Goal?
+
+_By the way_, ada hal yang menarik _nih_. Jika saya buat selisih antara $\sum{Goals_{Home}} - \sum{Goal_{Away}}$, saya dapatkan grafik seperti ini:
+
+```{r,echo=FALSE,fig.retina=10,message=FALSE,warning=FALSE}
+data %>% 
+  mutate(id = c(1:380),
+         diff = fthg - ftag) %>% 
+  group_by(diff) %>% 
+  summarise(freq = n()) %>% 
+  ggplot(aes(x = diff,
+             y = freq)) +
+  geom_col(aes(fill = freq),color = "black") +
+  theme_pubclean() +
+  labs(y = "Frekuensi",
+       x = "Selisih Gol",
+       title = "Sebaran Selisih Goal yang Terjadi di Semua Pertandingan\nGoal Home minus Goal Away",
+       subtitle = "English Premier League 2019/2020") +
+  theme(legend.position = "none")
+```
+
+> Bentuknya seperti _bell curve_ sempurna _yah_.
+
+Kalau sudah menemukan fakta ini, enaknya diapakan lagi _yah_?
