@@ -56,7 +56,7 @@ new %>%
        caption = paste0("base: ",match_pre," pertandingan"))
 
 new %>% 
-  filter(kondisi == "COVID") %>% 
+  filter(kondisi == "saat COVID") %>% 
   ggplot(aes(x = "",
              y = freq,
              fill = ftr)) +

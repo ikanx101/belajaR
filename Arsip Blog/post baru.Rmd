@@ -1,0 +1,332 @@
+---
+title: "English Premier League: Sebelum dan Saat Pandemi"
+output: 
+  github_document:
+    pandoc_args: --webtex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("~/ikanx101com/_posts/EPL v2")
+
+rm(list=ls())
+library(dplyr)
+library(ggplot2)
+library(ggpubr)
+library(ggthemes)
+
+data = read.csv("~/belajaR/Bukan Infografis/EPL/EPL.csv")
+
+data = janitor::clean_names(data)
+
+data = 
+  data %>% 
+  mutate(date = as.Date(date,format = "%d/%m/%Y"),
+         kondisi = ifelse(date <= "2020-03-09","Pre COVID","Saat COVID"),
+         ftr = case_when(ftr == "A" ~ "Away team menang",
+                         ftr == "D" ~ "Seri",
+                         ftr == "H" ~ "Home team menang"),
+         ftr = factor(ftr, levels = c("Away team menang",
+                                      "Seri",
+                                      "Home team menang")),
+         kondisi = factor(kondisi, levels = c("Pre COVID","Saat COVID")))
+```
+
+Sebagaimana yang kita ketahui bersama, pandemi COVID-19 ini sudah melanda banyak segi dalam kehidupan manusia. Sepakbola pun tak luput dari pengaruhnya. Salah satunya adalah dihentikan sementara semua kompetisi sepakbola di Eropa, baik kompetisi liga lokal hingga kompetisi antar negara di sana.
+
+Salah satunya adalah __English Premier League__ pada musim 2019-2020.
+
+Jika sebelumnya saya menuliskan tentang [mitos __Home vs Away__](https://ikanx101.com/blog/EPL-home-away/), kini dengan data yang sama saya akan melihat apakah ada perbedaan dalam segi pertandingan sebelum dan saat pandemi di liga tersebut.
+
+Setidaknya saya akan mencoba membandingkan dua hal, yakni:
+
+1. Apakah ada perbedaan proporsi tim pemenang pertandingan? Apakah tim kandang menjadi lebih lemah akibat tidak ada penonton saat pandemi? Apakah tim tandang menjadi lebih percaya diri sehingga lebih mudah menang saat berlaga saat pandemi?
+1. Apakah ada perbedaan banyaknya gol yang tercipta pada pertandingan sebelum dan saat pandemi?
+
+Oh iya, mungkin Anda bertanya:
+
+> Kenapa yang dibandingkan dua hal ini saja?
+
+Jawabannya:
+
+1. Karena memang datanya terbatas. Sebenarnya ada data mengenai _shoots_ tapi menurut saya _ending_ pertandingan ada di angka gol dan hasil akhir. Namun jika ada data detail seperti _passes_, _tackles_, _dribbling_, dst mungkin akan lebih asik lagi _ngoprek_-nya.
+1. Hitung-hitung sebagai latihan dan diskusi bagi para pembaca jika ingin mengulang analisa dengan data lain.
+
+Oh iya, sebagai informasi:
+
+- __English Premier League__ musim 2019-2020 pertama bergulir sejak 9 Agustus 2019 dan dihentikan sementara pada 9 Maret 2020.
+- Kemudian dilanjutkan kembali saat pandemi mulai 17 Juni 2020 sampai berakhir di 26 Juli 2020 dengan catatan pertandingan tidak disaksikan penonton di stadiun.
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+data %>% 
+  group_by(kondisi) %>% 
+  summarise(freq = n()) %>% 
+  rename(Kondisi = kondisi,
+         `Banyak pertandingan` = freq) %>% 
+  knitr::kable("html",caption = "Tabel: Berapa banyak pertandingan yang dijalankan?")
+```
+
+
+## Membandingkan Tim Pemenang Laga
+
+Oke, saya mulai perbandingan yang pertama _yah_. Jadi saya akan membandingkan kondisi `pre COVID` dengan kondisi `saat COVID`. Apakah ada perbedaan siapa pemenang laga?
+
+Mari kita lihat kondisi `pre COVID` sebagai berikut:
+
+```{r,fig.retina=10,message=FALSE,warning=FALSE,echo=FALSE}
+new = 
+  data %>% 
+  group_by(kondisi,ftr) %>% 
+  summarise(freq = n()) %>% 
+  ungroup() %>% 
+  group_by(kondisi) %>% 
+  mutate(all_matches = sum(freq),
+         persen = freq/all_matches*100,
+         persen = round(persen,1),
+         persen = paste0(persen,"%"))
+
+match_pre = max(new$all_matches)
+match_cov = min(new$all_matches)
+
+new %>% 
+  filter(kondisi == "Pre COVID") %>% 
+  ggplot(aes(x = "",
+             y = freq,
+             fill = ftr)) +
+  geom_bar(stat = "identity") +
+  scale_fill_brewer(palette="Set2") +
+  coord_polar("y", start=0) +
+  ggrepel::geom_label_repel(aes(label = paste(ftr,persen,sep = "\n")),position = position_stack(vjust = 0.5)) +
+  theme_pubclean() +
+  theme(panel.grid=element_blank(),
+        panel.background = element_blank(),
+        axis.title=element_blank(),
+        legend.position = 'none',
+        axis.text = element_blank(),
+        axis.ticks = element_blank()) +
+  labs(title = "Kondisi Pertandingan Sebelum COVID",
+       subtitle = "Data English Premier League 2019/2020",
+       caption = paste0("base: ",match_pre," pertandingan"))
+```
+
+Sekarang kita lihat data `saat COVID`:
+
+```{r,fig.retina=10,message=FALSE,warning=FALSE,echo=FALSE}
+new %>% 
+  filter(kondisi == "Saat COVID") %>% 
+  ggplot(aes(x = "",
+             y = freq,
+             fill = ftr)) +
+  geom_bar(stat = "identity") +
+  scale_fill_brewer(palette="Set2") +
+  coord_polar("y", start=0) +
+  ggrepel::geom_label_repel(aes(label = paste(ftr,persen,sep = "\n")),position = position_stack(vjust = 0.5)) +
+  theme_pubclean() +
+  theme(panel.grid=element_blank(),
+        panel.background = element_blank(),
+        axis.title=element_blank(),
+        legend.position = 'none',
+        axis.text = element_blank(),
+        axis.ticks = element_blank()) +
+  labs(title = "Kondisi Pertandingan Saat COVID",
+       subtitle = "Data English Premier League 2019/2020",
+       caption = paste0("base: ",match_cov," pertandingan"))
+```
+
+Oke, sekarang saya sandingkan kedua _pie charts_ di atas menjadi satu sebagai berikut:
+
+```{r,fig.retina=10,message=FALSE,warning=FALSE,echo=FALSE}
+new %>% 
+  ggplot(aes(x = ftr,
+             y = freq)) +
+  geom_col(aes(fill = freq)) + 
+  geom_label(aes(label = paste0("n: ",freq,"\nPercent: ",persen),
+                 fill = freq),
+             color = "white",
+             size = 2.5) +
+  scale_fill_gradient(low = "steelblue",high = "darkred") +
+  facet_wrap(~kondisi) +
+  theme_wsj() +
+  theme(axis.text.y = element_blank(),
+        legend.position = "none",
+        plot.title = element_text(size = 18),
+        plot.subtitle = element_text(size = 12),
+        axis.text.x = element_text(size=8)) +
+  labs(title = "Perbandingan Pemenang Laga\nSebelum dan Saat COVID",
+       subtitle = "Data English Premier League 2019/2020")
+```
+
+Sekarang saya akan melakukan __tiga__ uji hipotesis:
+
+1. Apakah proporsi _home team_ menang `saat COVID` berbeda dibandingkan `pre COVID`?
+1. Apakah proporsi _away team_ menang `saat COVID` berbeda dibandingkan `pre COVID`?
+1. Apakah proporsi seri `saat COVID` berbeda dibandingkan `pre COVID`?
+
+Ingat kembali bahwa langkah-langkah uji hipotesis adalah:
+
+1. $H_0$: $proporsi_{preCOVID} = proporsi_{saatCOVID}$.
+1. $H_1$: $proporsi_{preCOVID} \neq proporsi_{saatCOVID}$.
+1. Jika $p_{-value}< 0.05$, tolak $H_0$.
+
+### Uji pertama: _home team menang_
+
+```{r,echo=FALSE}
+hasil = prop.test(c(43,129),c(92,288))
+hasil
+ifelse(hasil$p.value<0.05,"Tolak H0","H0 tidak ditolak")
+```
+
+Oleh karena nilai $p_{-value} =$ `r hasil$p.value` $>0.05$, kita bisa ambil kesimpulan bahwa $H_0$ tidak ditolak.
+
+> Proporsi _home team_ menang sebelum dan saat COVID sama!
+
+### Uji kedua: _away team menang_
+
+```{r,echo=FALSE}
+hasil = prop.test(c(29,87),c(92,288))
+hasil
+ifelse(hasil$p.value<0.05,"Tolak H0","H0 tidak ditolak")
+```
+
+Oleh karena nilai $p_{-value} =$ `r hasil$p.value` $>0.05$, kita bisa ambil kesimpulan bahwa $H_0$ tidak ditolak.
+
+> Proporsi _away team_ menang sebelum dan saat COVID sama!
+
+### Uji ketiga: _seri_
+
+```{r,echo=FALSE}
+hasil = prop.test(c(20,72),c(92,288))
+hasil
+ifelse(hasil$p.value<0.05,"Tolak H0","H0 tidak ditolak")
+```
+
+Oleh karena nilai $p_{-value} =$ `r hasil$p.value` $>0.05$, kita bisa ambil kesimpulan bahwa $H_0$ tidak ditolak.
+
+> Proporsi seri sebelum dan saat COVID sama!
+
+### Kesimpulan PERTAMA:
+
+Dari hasil uji perbedaan proporsi tim pemenang laga, bisa saya simpulkan bahwa: __tidak ada perbedaan atau perubahan dari sebelum dan saat COVID di EPL 2019-2020__. 
+
+Jika saya cek lagi, _home team_ menjadi tim yang paling sering menang pertandingan sebelum dan saat COVID.
+
+______
+
+## Membandingkan Banyaknya _Goals_ yang Tercipta
+
+Sekarang saya akan coba membandingkan banyaknya _goals_ yang tercipta pada `pre COVID` dan `saat COVID`.
+
+Pertama-tama, kita lihat perbandingan _goals_ yang dicetak oleh _home team_:
+
+```{r,fig.retina=10,message=FALSE,warning=FALSE,echo=FALSE}
+data %>% 
+  group_by(kondisi) %>% 
+  summarise(gol_home = mean(fthg),
+            sd_home = sd(fthg),
+            gol_away = mean(ftag),
+            sd_away = sd(ftag)) %>% 
+  ggplot() +
+  geom_col(aes(x = kondisi,
+               y = gol_home,
+               fill = kondisi),
+           color = "black") +
+  geom_errorbar(aes(x = kondisi,
+                    ymin = gol_home - sd_home,
+                    ymax = gol_home + sd_home),width = .1,
+                color = "steelblue") +
+  theme_wsj() +
+  labs(title = "Perbandingan Goal yang Diciptakan oleh\nHome Team",
+       subtitle = "Data English Premier League 2019/2020") +
+  theme(legend.position = "none",
+        plot.title = element_text(size = 18),
+        plot.subtitle = element_text(size = 12))
+
+```
+
+
+Kita lihat juga perbandingan _goals_ yang dicetak oleh _away team_:
+
+```{r,fig.retina=10,message=FALSE,warning=FALSE,echo=FALSE}
+data %>% 
+  group_by(kondisi) %>% 
+  summarise(gol_home = mean(fthg),
+            sd_home = sd(fthg),
+            gol_away = mean(ftag),
+            sd_away = sd(ftag)) %>% 
+  ggplot() +
+  geom_col(aes(x = kondisi,
+               y = gol_away,
+               fill = kondisi),
+           color = "black") +
+  geom_errorbar(aes(x = kondisi,
+                    ymin = gol_away - sd_away,
+                    ymax = gol_away + sd_away),width = .1,
+                color = "steelblue") +
+  theme_wsj() +
+  labs(title = "Perbandingan Goal yang Diciptakan oleh\nAway Team",
+       subtitle = "Data English Premier League 2019/2020") +
+  theme(legend.position = "none",
+        plot.title = element_text(size = 18),
+        plot.subtitle = element_text(size = 12))
+
+```
+
+```{r,fig.retina=10,message=FALSE,warning=FALSE,echo=FALSE}
+data %>% 
+  group_by(kondisi) %>% 
+  summarise(gol_home = mean(fthg),
+            sd_home = sd(fthg),
+            gol_away = mean(ftag),
+            sd_away = sd(ftag)) %>% 
+  rename(Kondisi = kondisi,
+         `Goal Home Team` = gol_home,
+         `StDev Goal Home Team` = sd_home,
+         `Goal Away Team` = gol_away,
+         `StDev Goal Away Team` = sd_away) %>% 
+  knitr::kable("html",caption = "Tabel: Apakah ada perbedaan goal yang tercipta?")
+```
+
+Melihat tabel di atas, sebenarnya tanpa melakukan uji apapun sudah bisa dilihat bahwa __tidak ada perbedaan__ goal yang dicetak oleh _home team_ atau _away team_ pada `pre COVID` dan `saat COVID`.
+
+Tapi biar pasti, akan saya uji menggunakan_ _t.Test__ untuk masing-masing _home team_ dan _away team_.
+
+Ingat kembali bahwa langkah-langkah uji hipotesis adalah:
+
+1. $H_0$: $mean(goal)_{preCOVID} = mean(goal)_{saatCOVID}$.
+1. $H_1$: $mean(goal)_{preCOVID} \neq mean(goal)_{saatCOVID}$.
+1. Jika $p_{-value}< 0.05$, tolak $H_0$.
+
+### Uji pertama: goal dari _home team_
+
+```{r,echo=FALSE}
+test_1 = t.test(fthg~kondisi,data)
+test_1
+ifelse(test_1$p.value<0.05,"Tolak H0","H0 tidak ditolak")
+```
+
+Oleh karena nilai $p_{-value} =$ `r test_1$p.value` $>0.05$, kita bisa ambil kesimpulan bahwa $H_0$ tidak ditolak.
+
+> Rata-rata goal _home team_ ketika `pre COVID` dan `saat COVID` tidak ada perbedaan.
+
+
+### Uji kedua: goal dari _away team_
+
+```{r,echo=FALSE}
+test_1 = t.test(ftag~kondisi,data)
+test_1
+ifelse(test_1$p.value<0.05,"Tolak H0","H0 tidak ditolak")
+```
+
+Oleh karena nilai $p_{-value} =$ `r test_1$p.value` $>0.05$, kita bisa ambil kesimpulan bahwa $H_0$ tidak ditolak.
+
+> Rata-rata goal _away team_ ketika `pre COVID` dan `saat COVID` tidak ada perbedaan.
+
+### Kesimpulan KEDUA:
+
+Ternyata tidak ada perbedaan rata-rata goal yang tercipta ketika `pre COVID` dan `saat COVID`.
+
+## KESIMPULAN
+
+Sebagai salah satu liga sepakbola terbaik di atas bumi ini, tampaknya kualitas pertandingan sebelum dan saat pandemi ini tidak ada perbedaan signifikan.
+
+> Mantab lah!
