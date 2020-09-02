@@ -6,17 +6,17 @@ library(tidyr)
 library(tidytext)
 
 load("alquran.rda")
-stop = readLines("https://raw.githubusercontent.com/ikanx101/ID-Stopwords/master/id.stopwords.02.01.2016.txt")
+#stop = readLines("https://raw.githubusercontent.com/ikanx101/ID-Stopwords/master/id.stopwords.02.01.2016.txt")
 
-data_pikir = data %>% filter(grepl("pikir",arti,ignore.case = T))
+data_pikir = data %>% filter(grepl("kiamat",arti,ignore.case = T))
 
 library(katadasaR)
 
 data_pikir = 
   data_pikir %>% 
   unnest_tokens(words,arti) %>% 
-  mutate(words = sapply(words,katadasar)) %>% 
-  filter(!words %in% stop) %>% 
+  #mutate(words = sapply(words,katadasar)) %>% 
+  #filter(!words %in% stop) %>% 
   group_by(ayat,surah.id) %>% 
   summarise(ayat_all = stringr::str_c(words,collapse = " ")) %>% 
   ungroup()
@@ -51,12 +51,12 @@ data_pikir %>%
   filter(n>2) %>% 
   separate(bigram,into=c('word1','word2'),sep=' ') %>%
   graph_from_data_frame() %>%
-  ggraph(layout = 'linear',circular = TRUE) +
-  geom_edge_arc(aes(edge_alpha=n),
+  ggraph(layout = 'fr') +
+  geom_edge_link(aes(edge_alpha=n),
                  show.legend = F,
                  color='darkred') +
   geom_node_point(size=1,color='steelblue') +
-  geom_node_text(aes(label=name),alpha=0.4,size=3,vjust=1,hjust=1) +
+  geom_node_text(aes(label=name),alpha=0.4,size=3,repel = T) +
   theme_void()
 
 
