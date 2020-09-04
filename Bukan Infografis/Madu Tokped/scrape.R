@@ -22,7 +22,7 @@ scrap = function(url){
 i = 1
 data = scrap(url[i])
 
-for(i in 2:length(url)){
+for(i in 294:length(url)){
   temp = scrap(url[i])
   data = rbind(data,temp)
   print(paste0('ambil data ke ',
