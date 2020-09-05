@@ -1,0 +1,102 @@
+---
+title: "Selalu Bermula Dari Tujuan"
+output: 
+  github_document:
+    pandoc_args: --webtex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("~/Documents/ikanx101.com/_posts")
+rm(list=ls())
+library(nomnoml)
+```
+
+Tulisan ini adalah kelanjutan dari tulisan saya sebelumnya mengenai [tipe data](https://ikanx101.com/blog/mengenal-data/). Jadi kalau belum baca, saya sarankan untuk membacanya terlebih dahulu _yah_. 
+
+Gara-gara saya sering _ngomongin_ soal data, seringkali saya mendapatkan pertanyaan seperti ini:
+
+> Data yang saya miliki ini sudah bagus atau belum?
+
+Seharusnya pertanyaan tersebut bukan saya yang pantas untuk menjawabnya. 
+
+> Lalu kalau begitu siapa?
+
+Sebenarnya pihak yang bisa menjawab pertanyaan tersebut adalah si penanya sendiri sebagai peneliti (_researcher_).
+
+## _Kok gitu?_
+
+Oke, untuk menjawabnya saya akan merunut dari pembahasan mengenai _workflow_ dalam melakukan suatu _project_ penelitian. Perhatikan _flow_ berikut ini.
+
+```{r,echo=FALSE}
+knitr::include_graphics("https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/puzzles/Timeline%20Survey/proses%20riset.png")
+```
+
+Bagi saya, ada `3` titik kritis pada _workflow_ di atas yang tidak boleh salah. Yakni:
+
+1. Formulasi masalah; Saya pernah menulis artikel mengenai _formulating market research problem_, _kindly refer to_ [_this post_](https://passingthroughresearcher.wordpress.com/2016/01/15/formulating-market-research-problem/) _yah_. Bagian ini adalah titik kritis terpenting yang tidak boleh salah. Salah dalam merumuskan masalah mengakibatkan keseluruhan _flow_ akan menjadi sia-sia. Luangkan waktu lebih banyak untuk merumuskan masalah. Jangan tergesa – gesa dalam hal ini!
+1. _Designing research_; Mencakup mendefinisikan data apa yang hendak diambil, _designing target sample_, _sampling technique_, _questioner making_, sampai _conducting interview_ jika _project_-nya terkait survey. 
+1. Analisa data; Jika dua titik kritis sebelumnya sudah benar, kesalahan pada saat analisa data cenderung bisa dimaafkan. Kemungkinan terburuknya adalah dengan mengulang analisa lagi selama sekian hari. 
+
+## _Lalu apa hubungannya dengan kualitas dari data?_
+
+Perhatikan bahwa pada titik kritis pertama dan kedua, kita hendaknya telah memiliki formulasi masalah yang tepat dan tajam. Masalah yang ada tersebut akan kita turunkan menjadi _research objectives_ atau tujuan. _Research objectives_ adalah petunjuk bagi kita dalam membuat suatu _design research_.
+
+> Data yang bagus adalah data yang bisa menjawab _research objectives_!
+
+```{r out.width="40%",echo=FALSE}
+nomnoml::nomnoml("#direction: down,
+                 [Masalah] -> [Tujuan]
+                 [Tujuan] <--> [Data]
+                 [Masalah|
+                    [Management problems] -> [Research Problems]
+                    ]
+                 ")
+```
+
+Selama syarat tersebut terpenuhi, maka saya bisa katakan bahwa data tersebut sudah bagus.
+
+Selain itu, ada juga `2` parameter yang bisa menjadi pertimbangan bagi kita untuk menilai seberapa bagus data yang kita miliki, yakni:
+
+- Data yang bagus __biasanya__ berasal dari _random sampling_. Ada kondisi dimana data tidak bisa cari secara acak. Tapi jika kita berhadapan dengan data yang relatif mudah diambil, saya akan sangat menyarankan untuk diambil secara acak atau ambil semua data yang ada.
+- Untuk data yang diambil berulang-ulang (periodik, misal harian, mingguan, bulanan, atau tahunan), sebaiknya cara pengambilan data harus sama.
+
+## Saatnya Untuk Menganalisa Data!
+
+Jangan terburu-buru untuk melakukan analisa data. Kenapa? 
+
+> Walaupun data kita sudah bisa menjawab tujuan __TAPI__ tetap harus dicek terlebih dahulu secara statistik.
+
+Apa saja proses pengecekannya?
+
+- _Data preparation_.
+- _Data cleaning_.
+
+```{r out.width="40%",echo=FALSE}
+nomnoml::nomnoml("#direction: down,
+                 [Raw Data] -> [Data Preparation|Consistency Check|Structured dan Format Checked]
+                 [Data Preparation] -> [Data Cleaning|Empty Cell(s)|Extreme value(s)]
+                 [Data Cleaning] -> [Data Analysis]
+                 [Data Analysis] -> [Data Visualization|Information|Insights]"
+                 )
+```
+
+_Consistency check_ adalah mengecek konsistensi _content_ dari suatu _cells_ yang ada di dalam data kita (misalkan tabel di __Ms. Excel__). Hal-hal yang biasa dicek adalah:
+
+- Konsistensi antara `character` atau `number`.
+- Penggunaan tanda baca tertentu seperti: `,` atau `.`.
+- Standarisasi penulisan `character` di dalam _cell_.
+- _Structured_ dan _format checked_. 
+  
+Ada kalanya kita menemui data yang kosong (bolong-bolong). Bagaimana menghadapi masalah ini?
+
+- Jangan terburu-buru untuk menghapus baris data yang kosong tersebut!
+- Jika kita memiliki baris data yang relatif banyak, kita bisa mempertimbangkan untuk menghapus baris data yang kosong tersebut.
+- Kita bisa mengisi kekosongan data yang ada dengan nilai `mean`, `median`, atau `modus` tergantung dari tipe data yang kita miliki.
+  
+Ada juga kalanya kita menemui data yang memiliki nilai pencilan (_extreme values_). Bagaimana menghadapi masalah ini?
+
+- Jangan terburu-buru untuk menghapus baris data yang memiliki nilai pencilan tersebut!
+- Ingat! untuk menghapus nilai pencilan ada aturan secara statistik yang harus dilakukan (analisa _boxplot_). 
+- Daripada menghapus baris data yang mengandung nilai pencilan, ada baiknya untuk menambah banyaknya baris data kita.
+
