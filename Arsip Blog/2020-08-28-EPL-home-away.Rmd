@@ -73,7 +73,7 @@ Ternyata `45.3%` dari laga yang ada pada musim lalu dimenangkan oleh tim kandang
 Uji hipotesis:
 
 1. $H_0$: $proporsi_{home} = proporsi_{away}$.
-1. $H_1$: $proporsi_{home} = proporsi_{away}$.
+1. $H_1$: $proporsi_{home} \neq proporsi_{away}$.
 1. Jika $p_{-value}< 0.05$, tolak $H_0$.
 
 ```{r,echo=FALSE,fig.retina=10,message=FALSE,warning=FALSE}
