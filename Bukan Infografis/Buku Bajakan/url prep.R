@@ -10,7 +10,6 @@ dummy = data.frame(id = c(1:length(link)),
 dummy = 
   dummy %>% 
   filter(!grepl('promo/v1/clicks|search',url)) %>% 
-  filter(grepl('madu|honey',url,ignore.case = T))
+  filter(grepl('novel|book|buku|repro|kw',url,ignore.case = T)) %>% 
+  filter(!grepl("facebook",url))
 url = dummy$url
-
-save(url,file='all data.rda')

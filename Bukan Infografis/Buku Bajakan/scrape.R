@@ -22,7 +22,7 @@ scrap = function(url){
 i = 1
 data = scrap(url[i])
 
-for(i in 600:length(url)){
+for(i in 2:length(url)){
   temp = scrap(url[i])
   data = rbind(data,temp)
   print(paste0('ambil data ke ',
@@ -32,7 +32,7 @@ for(i in 600:length(url)){
 
 data$waktu.scrape = Sys.time()
 data = distinct(data)
-
+raw = data
 raw = rbind(raw,data)
 
 save(raw,url,file = 'hasil scrape.rda')
