@@ -1,4 +1,5 @@
 rm(list=ls())
+setwd("~/Documents/belajaR/Bukan Infografis/HBR")
 
 library(dplyr)
 library(tidyr)
@@ -12,8 +13,8 @@ library(ggraph)
 load("artikel hbr.rda")
 # bersihin
 data = 
-  temp %>% 
-  mutate(id = c(1:length(url)),
+  data %>% 
+  mutate(id = c(1:length(links)),
          baca_new = janitor::make_clean_names(baca_new),
          baca_new = gsub("\\_"," ",baca_new))
 
@@ -42,7 +43,7 @@ stem_bro = function(kata){
 # --------------------------------------------------
 # stemming dan cleaning terhadap data
 new = 
-  data %>% select(id,baca_new) %>% 
+  data %>% select(id,kategori,baca_new) %>% 
   unnest_tokens("words",baca_new) %>% 
   mutate(words = ifelse(words == "m","am",words),
          words = ifelse(words == "ll","will",words),
@@ -51,9 +52,13 @@ new =
          words = ifelse(words == "t","not",words)) %>% 
   filter(!words %in% stop) %>% 
   mutate(words = sapply(words, stem_bro)) %>% 
-  group_by(id) %>% 
+  group_by(id,kategori) %>% 
   summarise(baca = stringr::str_c(words,collapse = " ")) 
-  
+
+save(new,file = "clean.rda")  
+
+
+# cukup sampai di atas
 tes = new %>% unnest_tokens("words",baca) %>% group_by(words) %>% summarise(n = n())
 wc = wordcloud2::wordcloud2(tes)
 

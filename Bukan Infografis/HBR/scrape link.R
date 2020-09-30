@@ -5,19 +5,37 @@ rm(list=ls())
 library(rvest)
 library(dplyr)
 
-load("artikel hbr.rda")
+data_1 = data.frame(
+  kategori = "leadership",
+  links = c("https://hbr.org/2020/09/3-ways-to-motivate-your-team-through-an-extended-crisis",
+            "https://hbr.org/2020/09/gravitas-is-a-quality-you-can-develop",
+            "https://hbr.org/2020/09/is-ceo-a-two-person-job",
+            "https://hbr.org/2020/09/4-strengths-of-family-friendly-work-cultures",
+            "https://hbr.org/2020/09/dont-just-lead-your-people-through-trauma-help-them-grow",
+            "https://hbr.org/2020/09/5-principles-to-guide-adaptive-leadership",
+            "https://hbr.org/2020/09/inside-twitters-response-to-the-covid-19-crisis")
+)
 
-url = read_html("https://hbr.org/") %>% html_nodes(".hed a") %>% html_attr("href")
+data_2 = data.frame(
+  kategori = "technology",
+  links = c("https://hbr.org/2020/09/are-you-ready-for-tech-that-connects-to-your-brain",
+            "https://hbr.org/2020/09/how-to-make-3d-printing-better",
+            "https://hbr.org/2020/09/how-to-harness-the-digital-transformation-of-the-covid-era",
+            "https://hbr.org/2020/09/the-next-big-breakthrough-in-ai-will-be-around-language",
+            "https://hbr.org/2020/09/ai-should-change-what-you-do-not-just-how-you-do-it",
+            "https://hbr.org/2020/09/how-green-is-your-software",
+            "https://hbr.org/2020/09/is-vr-the-future-of-corporate-training")
+)
+
+data = rbind(data_1,data_2)
 
 scrape = function(url){
   read_html(url) %>% html_nodes("p") %>% html_text(trim = T)
 }
 
-data = data.frame(id = c(1:length(url)),
-                  url = paste0("https://hbr.org/",url)) %>% 
-  mutate(baca = sapply(url, scrape))
+data = data %>% mutate(baca = sapply(links, scrape))
 
-for(i in 1:length(url)){
+for(i in 1:length(data$links)){
   tes = data$baca[[i]]
   tes = unlist(tes)
   tes = stringr::str_c(tes,collapse = " ")
@@ -26,6 +44,4 @@ for(i in 1:length(url)){
 
 data$baca = NULL
 
-temp = rbind(temp,data) %>% distinct()
-
-save(temp,file = "artikel hbr.rda")
+save(data,file = "artikel hbr.rda")
