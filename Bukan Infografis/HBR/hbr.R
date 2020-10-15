@@ -53,7 +53,8 @@ new =
   filter(!words %in% stop) %>% 
   mutate(words = sapply(words, stem_bro)) %>% 
   group_by(id,kategori) %>% 
-  summarise(baca = stringr::str_c(words,collapse = " ")) 
+  summarise(baca = stringr::str_c(words,collapse = " ")) %>% 
+  ungroup()
 
 save(new,file = "clean.rda")  
 
