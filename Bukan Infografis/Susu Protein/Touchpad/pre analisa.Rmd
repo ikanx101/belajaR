@@ -34,9 +34,11 @@ _Keywords_ yang digunakan:
 Berikut adalah hasil _scrape_ di hari pertama:
 
 ```{r,echo=FALSE}
-raw %>% 
-  filter(grepl("terjual",terjual,ignore.case = T)) %>% 
-  rmarkdown::paged_table()
+case = 
+  raw %>% 
+  filter(grepl("terjual",terjual,ignore.case = T)) 
+
+DT::datatable(case,options = list(pageLength = 20))
 ```
 
 # Brand yang muncul

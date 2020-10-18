@@ -19,12 +19,11 @@ scrap = function(url){
   return(data)
 }
 
-# yg gak ada: 60 2042
 
 i = 1
 data = scrap(url[i])
 
-for(i in 2042:length(url)){
+for(i in 2:length(url)){
   temp = scrap(url[i])
   data = rbind(data,temp)
   print(paste0('ambil data ke ',
