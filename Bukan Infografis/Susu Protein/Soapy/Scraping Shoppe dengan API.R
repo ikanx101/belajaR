@@ -11,6 +11,7 @@ scrape_shopee = function(url){
   #bentuk data frame
   data = data.frame(
     nama = tes$item$name,
+    kategori = tes$item$categories[[1]]$display_name,
     terjual = tes$item$historical_sold,
     merek = ifelse(is.null(tes$item$brand),'Tidak Ada Merek',tes$item$brand),
     harga = tes$item$price,
