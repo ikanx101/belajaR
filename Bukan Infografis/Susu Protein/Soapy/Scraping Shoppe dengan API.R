@@ -34,5 +34,4 @@ data$waktu.scrape = Sys.time()
 data = distinct(data)
 
 raw = rbind(raw,data)
-
 save(raw,url,file = 'hasil scrape.rda')
