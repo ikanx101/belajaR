@@ -13,7 +13,7 @@ library(dplyr)
 # input loc
 #ini aja nanti yang diganti
 input_loc = "~/belajaR/Bukan Infografis/tokopedia nyam/Link/"
-nama_file = "link 21 Oktober 2020" 
+nama_file = "21 Oktober 2020 minuman" 
 
 # ambil dbase links 
 url = paste0(input_loc,nama_file,".txt")
@@ -65,6 +65,9 @@ for(i in 2:length(url)){
 
 data$waktu.scrape = Sys.time()
 data = distinct(data)
-raw = rbind(raw,data)
 
-save(raw,url,file = 'hasil scrape.rda')
+setwd("~/belajaR/Bukan Infografis/tokopedia nyam")
+
+load("hasil scrape.rda")
+raw = rbind(raw,data)
+save(raw,file = 'hasil scrape.rda')
