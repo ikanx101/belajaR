@@ -13,7 +13,7 @@ library(dplyr)
 # input loc
 #ini aja nanti yang diganti
 input_loc = "~/belajaR/Bukan Infografis/tokopedia nyam/Link/"
-nama_file = "21 Oktober 2020 minuman" 
+nama_file = "21 Oktober 2020 flash 15" 
 
 # ambil dbase links 
 url = paste0(input_loc,nama_file,".txt")
