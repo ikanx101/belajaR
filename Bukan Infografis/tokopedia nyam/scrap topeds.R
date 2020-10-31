@@ -1,8 +1,3 @@
-# url yang dipakai adalah
-# https://www.tokopedia.com/discovery/flash-sale-tokopedia-nyam
-# https://www.tokopedia.com/discovery/nyam-minuman/
-# https://www.tokopedia.com/discovery/nyam-makanan/
-
 setwd("~/belajaR/Bukan Infografis/tokopedia nyam")
 
 rm(list=ls())
@@ -12,8 +7,8 @@ library(dplyr)
 # PART 1
 # input loc
 #ini aja nanti yang diganti
-input_loc = "~/belajaR/Bukan Infografis/tokopedia nyam/Link/"
-nama_file = "22 Oktober 2020 makanan"  #baru sampe mari yah
+input_loc = "~/belajaR/Bukan Infografis/tokopedia nyam/Links/"
+nama_file = "KOPI terbaru 31 Oktober 2020"  #baru sampe mari yah
 
 # ambil dbase links 
 url = paste0(input_loc,nama_file,".txt")
@@ -25,6 +20,9 @@ dbase_link =
     id = 1,
     url = url
   ) %>% 
+  filter(!grepl("mitra-toppers",url)) %>% 
+  filter(!grepl("promo",url)) %>% 
+  filter(grepl("tokopedia.com/",url)) %>% 
   filter(!grepl("discovery",url,ignore.case = T)) %>% 
   filter(!grepl("deal",url,ignore.case = T)) %>% 
   mutate(penanda = stringr::str_length(url)) %>% 
@@ -66,7 +64,6 @@ for(i in 2:length(url)){
 data$waktu.scrape = Sys.time()
 data = distinct(data)
 
-setwd("~/belajaR/Bukan Infografis/tokopedia nyam")
 
 load("hasil scrape.rda")
 raw = rbind(raw,data)
