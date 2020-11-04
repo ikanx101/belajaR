@@ -764,14 +764,6 @@ cek.dua.proporsi.donk = function(trial_1,
 # ==========================================
 # End of script
 
-x='i'
-print(x)
-for(i in 2:12){
-  c=seq(1:i)
-  nama=c('i','k','a','n','x','____','f','a','d','h','l','i')
-  x=paste(x,nama[i])
-  print(x)
-}
-print('===============================================================================================================')
+print('All functions are loaded')
 print('https://ikanx101.com/')
 print('Last update: 2020-11-04')
