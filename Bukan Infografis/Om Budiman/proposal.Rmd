@@ -1,0 +1,54 @@
+---
+title: "Rencana Kerja: Review Kinerja Ombudsman"
+subtitle: "Pengambilan Data dan Pembuatan Grafik"
+author: "Ikang Fadhli"
+date: "10 November 2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("~/belajaR/Bukan Infografis/Om Budiman")
+rm(list=ls())
+```
+
+# Latar Belakang
+
+Penyusunan dan pengerjaan __Buku Peristiwa Catatan Kegiatan Pimpinan Ombudsman RI 2016 - 2021__ membutuhkan data statistik dan grafik yang bisa memberikan informasi yang cukup dan baik kepada publik.
+
+# Tujuan
+
+Melakukan _media monitoring_ dengan menampilkan grafik data berikut:
+
+1. _Top issue_.
+1. _Media share_.
+1. _Sentiments_.
+1. _Shareability_.
+1. _Maps_.
+1. _Exposure indicator_.
+
+# Metode dan Cara Kerja
+
+## Proses _Scrape Data_
+
+Data terkait _media monitoring_ akan dicari dengan menggunakan metode _web scraping_, yakni: mengumpulkan dan melakukan kurasi data berbasis algoritma _machine learning_ pada beberapa portal berita berikut:
+
+1. detik.com
+1. liputan6.com
+1. kompas.com
+1. okezone.com
+1. viva.co.id
+1. merdeka.com
+1. cnnindonesia.com
+1. tempo.co
+1. antaranews.com
+1. sindonews.com
+1. jpnn.com
+
+Pada rentang waktu 2016 hingga 2020. Data berupa teks tersebut kemudian akan dikuantifikasi agar sesuai dengan tujuan penelitian.
+
+Selain itu, akan dicari juga data mengenai pencarian _Google_ terkait Ombudsman melalui _Google Trends_. Contoh kasus ini bisa dilihat di log saya berikut: [link](https://ikanx101.com/blog/tol-layang-japek/).
+
+## Proses Visualisasi Data
+
+Data hasil _web scrape_ di atas akan dibuat visualisasinya sesuai dengan format standar grafik yang disepakati.

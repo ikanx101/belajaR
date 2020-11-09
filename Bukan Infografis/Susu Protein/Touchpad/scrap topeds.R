@@ -29,7 +29,7 @@ url = dbase_link$url
 # PART 2
 # Fungsi scrape data
 scrap = function(url){
-  data = 
+  data = tryCatch(
     read_html(url) %>% {
       tibble(
         nama = html_nodes(.,'.css-x7lc0h') %>% html_text(),
@@ -38,8 +38,10 @@ scrap = function(url){
         terjual = html_nodes(.,'b') %>% html_text(),
         lokasi = html_nodes(.,".css-1s83bzu span") %>% html_text(),
         link = url
-        )
-    }
+      )
+    },
+    error = function(e){NA}
+  )
   return(data)
 }
 
@@ -47,7 +49,7 @@ scrap = function(url){
 i = 1
 data = scrap(url[i])
 
-for(i in 237:length(url)){
+for(i in 2:length(url)){
   temp = scrap(url[i])
   data = rbind(data,temp)
   print(paste0('ambil data ke ',

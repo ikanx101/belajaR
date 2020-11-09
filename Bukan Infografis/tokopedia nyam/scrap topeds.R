@@ -1,25 +1,25 @@
-setwd("~/belajaR/Bukan Infografis/tokopedia nyam")
-
 rm(list=ls())
 library(rvest)
 library(dplyr)
 
 # PART 1
 # input loc
-#ini aja nanti yang diganti
+# ambil semua txt links
 input_loc = "~/belajaR/Bukan Infografis/tokopedia nyam/Links/"
-nama_file = "ROTI ulasan 1 November 2020"  #baru sampe mari yah
+setwd(input_loc)
+nama_file = list.files()
+dbase_link = data.frame(sumber = c(),url = c())
+for(i in 1:length(nama_file)){
+  temp = readLines(nama_file[i])
+  dbase_temp = data.frame(sumber = nama_file[i],
+                          url = temp)
+  dbase_link = rbind(dbase_link,dbase_temp)
+}
 
-# ambil dbase links 
-url = paste0(input_loc,nama_file,".txt")
-url = readLines(url)
-
-# bebersih links
+# bebersih links 
 dbase_link = 
-  data.frame(
-    id = 1,
-    url = url
-  ) %>% 
+  dbase_link %>% 
+  mutate(sumber = gsub(".txt","",sumber)) %>% 
   filter(!grepl("mitra-toppers",url)) %>% 
   filter(!grepl("promo",url)) %>% 
   filter(grepl("tokopedia.com/",url)) %>% 
@@ -29,12 +29,11 @@ dbase_link =
   arrange(penanda) %>% 
   filter(penanda >= 50)
 
-url = dbase_link$url
 
 # PART 2
 # Fungsi scrape data
 scrap = function(url){
-  data = 
+  data = tryCatch(
     read_html(url) %>% {
       tibble(
         nama = html_nodes(.,'.css-x7lc0h') %>% html_text(),
@@ -42,19 +41,31 @@ scrap = function(url){
         seller = html_nodes(.,'.css-xmjuvc') %>% html_text(),
         terjual = html_nodes(.,'b') %>% html_text(),
         lokasi = html_nodes(.,".css-1s83bzu span") %>% html_text(),
-        link = url,
-        keterangan = nama_file
-        )
+        link = url
+      )
+    },
+    error = function(e){
+      data = tibble(
+        nama = NA,
+        harga = NA,
+        seller = NA,
+        terjual = NA,
+        lokasi = NA,
+        link = url
+      )
     }
+  )
   return(data)
 }
 
 
 i = 1
-data = scrap(url[i])
+data = scrap(dbase_link$url[i])
+data$keterangan = dbase_link$sumber[i]
 
-for(i in 2:length(url)){
-  temp = scrap(url[i])
+for(i in 82:length(dbase_link$url)){
+  temp = scrap(dbase_link$url[i])
+  temp$keterangan = dbase_link$sumber[i]
   data = rbind(data,temp)
   print(paste0('ambil data ke ',
                i,
@@ -64,7 +75,7 @@ for(i in 2:length(url)){
 data$waktu.scrape = Sys.time()
 data = distinct(data)
 
-
+setwd("~/belajaR/Bukan Infografis/tokopedia nyam")
 load("hasil scrape.rda")
 raw = rbind(raw,data)
 save(raw,file = 'hasil scrape.rda')
