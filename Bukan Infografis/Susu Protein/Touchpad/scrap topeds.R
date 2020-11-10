@@ -40,7 +40,16 @@ scrap = function(url){
         link = url
       )
     },
-    error = function(e){NA}
+    error = function(e){
+      data = tibble(
+        nama = NA,
+        harga = NA,
+        seller = NA,
+        terjual = NA,
+        lokasi = NA,
+        link = url
+      )
+    }
   )
   return(data)
 }
