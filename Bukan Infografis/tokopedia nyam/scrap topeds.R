@@ -63,7 +63,7 @@ i = 1
 data = scrap(dbase_link$url[i])
 data$keterangan = dbase_link$sumber[i]
 
-for(i in 82:length(dbase_link$url)){
+for(i in 2:length(dbase_link$url)){
   temp = scrap(dbase_link$url[i])
   temp$keterangan = dbase_link$sumber[i]
   data = rbind(data,temp)
