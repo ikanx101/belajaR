@@ -1,18 +1,29 @@
 rm(list=ls())
 library(dplyr)
 
-data_1 = read.csv("https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/CEO%20Talks/wordpress%20(1).csv") %>%
-        rename(artikel = kalimat)
-data_2 = read.csv("https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/CEO%20Talks/artikel%20leadership.csv")
+data_1 = read.csv("https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/CEO%20Talks/ramuan%20modelling/wordpress%20wumard.csv") %>%
+  rename(artikel = kalimat)
+data_2 = read.csv("https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/CEO%20Talks/ramuan%20modelling/artikel%20leadership.csv")
 
 str(data_1)
 str(data_2)
 
-rand = sample(450,50,replace=F)
+rand = sample(450,232,replace=F)
 data_1 = data_1[rand,]
 
 data = rbind(data_1,data_2)
 str(data)
+
+# nanti di sini kita hapus stopwords semuanya yah
+# stopwords
+# stopwords
+stopwoc = readLines("https://raw.githubusercontent.com/ikanx101/ID-Stopwords/master/id.stopwords.02.01.2016.txt")
+
+stopwoc = paste(stopwoc,collapse = "|")
+
+data$artikel = gsub(stopwoc,"",data$artikel)
+data$artikel = trimws(data$artikel)
+
 
 #install.packages("NLP")
 #install.packages("tm")
@@ -25,7 +36,7 @@ library(e1071)
 library(gmodels)
 
 set.seed(10104074)
-id_train = sample(95,76,replace = FALSE)
+id_train = sample(464,390,replace = FALSE)
 train_data = data[id_train,]
 train_data$label = factor(train_data$label)
 table(train_data$label)
@@ -76,5 +87,8 @@ actual=sms_test_labels
 trainTable.bayes=table(actual, predict)
 trainTable.bayes
 mean(actual==predict)
+
+new = predict(sms_classifier_train2, sms_test,type = "raw")
+head(new)
 
 save(sms_classifier_train2,file = "model.rda")

@@ -3,10 +3,10 @@ library(dplyr)
 library(janitor)
 
 artikel = readLines("https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/CEO%20Talks/another%20article.txt")
-
 str(artikel)
+
 gabung = ""
-for(i in 1:93){
+for(i in 1:length(artikel)){
   gabung = paste(gabung,artikel[i])
 }
 
@@ -22,7 +22,7 @@ gabung = gsub("\\_"," ",gabung)
 
 str(gabung)
 data_lain = data.frame(
-  id = c(1:45),
+  id = c(1:length(gabung)),
   artikel = gabung,
   label = "Bukan CEO"
 )
