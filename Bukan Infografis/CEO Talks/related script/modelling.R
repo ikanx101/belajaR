@@ -89,10 +89,16 @@ head(new)
 save(sms_classifier_train2,convert_counts,file = "model.rda")
 
 # ================
+setwd("~/belajaR/Bukan Infografis/CEO Talks")
+library(NLP)
+library(tm)
+library(e1071)
+library(gmodels)
+
 rm(list=ls())
 load("model.rda")
-text = c("leader ceo covid innovation",
-         "person year call risk")
+data = read.csv("olah.csv")
+text = data$Tulis.5...7.kata..Cukup.pisahkan.dengan.spasi
 coba = VCorpus(VectorSource(text))
 
 sms_corpus_clean.coba = tm_map(coba, content_transformer(tolower))
@@ -107,5 +113,26 @@ sms_data_freq_coba <- sms_dtm.coba[ , sms_freq_terms.coba]
 
 sms_coba <- apply(sms_data_freq_coba, MARGIN = 2, convert_counts)
 
-predict(sms_classifier_train2, sms_coba,type = "raw")
+hasil = predict(sms_classifier_train2, sms_coba,type = "raw")
 
+hasil = as.data.frame(hasil)
+hasil$nama = paste(data$Nama,data$Departemen)
+
+library(ggplot2)
+library(dplyr)
+
+plot = 
+  hasil %>% 
+  arrange(desc(CEO)) %>% 
+  head(3) %>% 
+  ggplot(aes(x = reorder(nama,CEO),
+             y = CEO)) +
+  geom_col(color = "black",
+           fill = "white") +
+  coord_flip() +
+  labs(title = "Top 20",
+       subtitle = "NCODE 2020 Games") +
+  theme_minimal() +
+  theme(axis.title = element_blank(),
+        axis.text.x = element_blank())
+ggsave(plot,filename = "hasil.png",dpi = 400,width = 4,height = 6)
