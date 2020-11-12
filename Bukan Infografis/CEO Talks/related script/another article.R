@@ -1,29 +1,63 @@
 rm(list=ls())
 library(dplyr)
 library(janitor)
+library(tidytext)
 
-artikel = readLines("https://raw.githubusercontent.com/ikanx101/belajaR/master/Bukan%20Infografis/CEO%20Talks/another%20article.txt")
-str(artikel)
+setwd("~/belajaR/Bukan Infografis/CEO Talks")
 
-gabung = ""
-for(i in 1:length(artikel)){
-  gabung = paste(gabung,artikel[i])
-}
+data = read.csv("~/belajaR/Bukan Infografis/CEO Talks/ramuan modelling/hasil scrape hbr.csv")
+str(data)
 
-gabung = gsub("\\n","",gabung)
-gabung = gsub("\\t","",gabung)
-gabung = gsub("\\r","",gabung)
-gabung = trimws(gabung)
+data = 
+  data %>% 
+  select(url,sumber,isi) %>% 
+  mutate(label = case_when(
+    grepl("leadership|managing|strategy",sumber) ~ "CEO",
+    !grepl("leadership|managing|strategy",sumber) ~ "Bukan CEO"
+  )
+        ) %>% 
+  mutate(isi = gsub("\\'","",isi),
+         isi = trimws(isi),
+         isi = tolower(isi))
 
-gabung = strsplit(gabung,split = "\\.")
-gabung = unlist(gabung)
-gabung = make_clean_names(gabung)
-gabung = gsub("\\_"," ",gabung)
+dummy = 
+  data %>% 
+  unnest_tokens("words",isi) %>% 
+  group_by(label,words) %>% 
+  summarise(freq = n()) %>% 
+  ungroup() %>% 
+  filter(!words %in% c(stopwords::stopwords(),
+                       "you’re","don't","it's","can","can’t",
+                       "us","u.s","mia","we","we’ve","we’re",
+                       "i'm","i","i’m","19","don’t","it’s","that’s")
+         ) %>% 
+  arrange(desc(freq))
 
-str(gabung)
-data_lain = data.frame(
-  id = c(1:length(gabung)),
-  artikel = gabung,
-  label = "Bukan CEO"
-)
-write.csv(data_lain,"artikel leadership.csv")
+CEO_200 = 
+  dummy %>% 
+  filter(label == "CEO") %>% 
+  arrange(desc(freq)) %>% 
+  head(200) %>% 
+  select(words)
+CEO_200 = CEO_200$words
+
+bukan_CEO_200 = 
+  dummy %>% 
+  filter(label != "CEO") %>% 
+  arrange(desc(freq)) %>% 
+  head(200) %>% 
+  select(words)
+bukan_CEO_200 = bukan_CEO_200$words
+
+words_400 = c(CEO_200,bukan_CEO_200)
+
+data = 
+  data %>% 
+  unnest_tokens("words",isi) %>% 
+  filter(words %in% words_400) %>% 
+  distinct() %>% 
+  group_by(label,url) %>% 
+  summarise(artikel = paste(words,collapse = " ")) %>% 
+  ungroup()
+  
+save(data,words_400,file = "untuk model.rda")
