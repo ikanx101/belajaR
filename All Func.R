@@ -1,21 +1,59 @@
-print('===============================================================================================================')
-print('Syarat dan ketentuan berlaku')
-print('Pastikan library berikut ini sudah terinstall yah:')
-print('readxl, dplyr, officer, gridExtra, ggplot2, expss, foreign')
-print('Khusus untuk membuat powerpoint menggunakan officer, pastikan bahwa template powerpoint diberikan nama doc yah')
-print('Khusus untuk melakukan tabulasi data, pastikan bahwa data diberikan nama data yah')
-print('===============================================================================================================')
+# =======================================================================================
+# Syarat dan ketentuan berlaku
+# Pastikan library berikut ini sudah terinstall yah:
+# Khusus untuk membuat powerpoint menggunakan officer, 
+  # pastikan bahwa template powerpoint diberikan nama doc yah
+# Khusus untuk melakukan tabulasi data, pastikan bahwa dataset diberikan nama data yah
+# ========================================================================================
 
-#load library yg dbutuhkan
-library(readxl)
-library(dplyr)
-library(officer)
-library(gridExtra)
-library(ggplot2)
-library(foreign)
-library(expss)
 
-#Gabung data dalam satu folder csv
+# ==========================================
+# load dan install libraries yg dbutuhkan
+if(!require(readxl)){
+  install.packages("readxl")
+  library(readxl)
+}
+if(!require(dplyr)){
+  install.packages("dplyr")
+  library(dplyr)
+}
+if(!require(officer)){
+  install.packages("officer")
+  library(officer)
+}
+if(!require(gridExtra)){
+  install.packages("gridExtra")
+  library(gridExtra)
+}
+if(!require(ggplot2)){
+  install.packages("ggplot2")
+  library(ggplot2)
+}
+if(!require(foreign)){
+  install.packages("foreign")
+  library(foreign)
+}
+if(!require(expss)){
+  install.packages("expss")
+  library(expss)
+}
+if(!require(janitor)){
+  install.packages("janitor")
+  library(janitor)
+}
+if(!require(tidyr)){
+  install.packages("tidyr")
+  library(tidyr)
+}
+if(!require(openxlsx)){
+  install.packages("openxlsx")
+  library(openxlsx)
+}
+
+# ==========================================
+# FUNGSI YANG BERGUNA UNTUK GABUNGIN DATA
+
+# Gabung data dalam satu folder csv
 gabungin.data.csv.saya.donk = function(path){
   setwd(path)
   i=1
@@ -26,10 +64,12 @@ gabungin.data.csv.saya.donk = function(path){
     data[setdiff(names(temp), names(data))] <- NA
     temp[setdiff(names(data), names(temp))] <- NA
     data=rbind(data,temp)}
-  write.csv(data,'Hasil Gabung Metode Ikanx.csv')
+  dir.create("Result Gabung Data")
+  write.csv(data,'Result Gabung Data/Hasil Gabung Data.csv')
+  openxlsx::write.xlsx(data,'Result Gabung Data/Hasil Gabung Data.xlsx')
 }
 
-#Gabung data dalam satu folder excel
+# Gabung data dalam satu folder excel
 gabungin.data.xls.saya.donk = function(path,skip){
   setwd(path)
   i=1
@@ -40,10 +80,12 @@ gabungin.data.xls.saya.donk = function(path,skip){
     data[setdiff(names(temp), names(data))] <- NA
     temp[setdiff(names(data), names(temp))] <- NA
     data=rbind(data,temp)}
-  write.csv(data,'Hasil Gabung Metode Ikanx.csv')
+  dir.create("Result Gabung Data")
+  write.csv(data,'Result Gabung Data/Hasil Gabung Data.csv')
+  openxlsx::write.xlsx(data,'Result Gabung Data/Hasil Gabung Data.xlsx')
 }
 
-#Gabung data dalam satu folder excel
+# Gabung data dalam satu folder excel
 gabungin.data.xlsx.saya.donk = function(path,skip){
   setwd(path)
   i=1
@@ -54,29 +96,38 @@ gabungin.data.xlsx.saya.donk = function(path,skip){
     data[setdiff(names(temp), names(data))] <- NA
     temp[setdiff(names(data), names(temp))] <- NA
     data=rbind(data,temp)}
-  write.csv(data,'Hasil Gabung Metode Ikanx.csv')
+  dir.create("Result Gabung Data")
+  write.csv(data,'Result Gabung Data/Hasil Gabung Data.csv')
+  openxlsx::write.xlsx(data,'Result Gabung Data/Hasil Gabung Data.xlsx')
 }
 
-#ubahin faktor variable ke character dr suatu data frame
+# ==========================================
+# FUNGSI YANG BERGUNA UNTUK DATA CARPENTRY
+
+# ubahin faktor variable ke character dr suatu data frame
 ubahin.data.dari.faktor.ke.karakter.donk=function(data){
   data = data %>% mutate_if(is.factor,as.character)
   return(data)}
 
-#tambahin slide judul utama
+
+# ==========================================
+# FUNGSI YANG BERGUNA UNTUK MEMBUAT SLIDES POWERPOINT
+
+# tambahin slide judul utama
 tambahin.slide.judul.donk=function(main.title,sub.title){
   doc=add_slide(x=doc,layout = 'Title Slide',master = 'Office Theme')
   doc=ph_with(x=doc,main.title,location=ph_location_type(type='ctrTitle')) #Title pertama
   doc=ph_with(x=doc,sub.title,location=ph_location_type(type='subTitle')) #Title kedua
 }
 
-#tambahin slide sub judul pemisah
+# tambahin slide sub judul pemisah
 tambahin.slide.pemisah.donk=function(main.title,sub.title){
   doc=add_slide(x=doc,layout = 'Section Header',master = 'Office Theme')
   doc=ph_with(x=doc,main.title,location=ph_location_type(type='title')) #Title slide
   doc=ph_with(x=doc,sub.title,location=ph_location_type(type='body')) #Title slide
 }
 
-#bikin list utk powerpoint
+# bikin list utk powerpoint
 bikinin.list.untuk.content.slide.donk=function(isi.content,urutan){
   ul <- unordered_list(
     level_list = urutan,
@@ -85,21 +136,21 @@ bikinin.list.untuk.content.slide.donk=function(isi.content,urutan){
   return(ul)
 }
 
-#tambahin slide title dan content
+# tambahin slide title dan content
 tambahin.slide.isi.donk=function(slide.title,isi){
   doc <- add_slide(doc,layout = "Title and Content", master = "Office Theme")
   doc <- ph_with(x=doc,slide.title, location = ph_location_type(type = "title"))
   doc <- ph_with(x=doc,isi, location = ph_location_type(type = "body"))
 }
 
-#tambahin slide Ending
+# tambahin slide Ending
 tambahin.slide.ending.donk=function(){
   doc <- add_slide(doc,layout = "Title Slide", master = "Office Theme")
   doc <- ph_with(x=doc,"This is AI Generated Presentation\nUsing R 3.6.1\ni k A n g", location = ph_location_type(type = "subTitle"))
   doc <- ph_with(x=doc,"Thank You", location = ph_location_type(type = "ctrTitle"))
 }
 
-#tambahin slide title dan two content
+# tambahin slide title dan two content
 tambahin.slide.isi.kanan.vs.kiri.donk=function(slide.title,isi1,isi2){
   doc=add_slide(x=doc,layout = 'Two Content',master = 'Office Theme')
   doc=ph_with(x=doc,slide.title,location=ph_location_type(type='title')) #Title slide
@@ -107,18 +158,35 @@ tambahin.slide.isi.kanan.vs.kiri.donk=function(slide.title,isi1,isi2){
   doc <- ph_with(x = doc,isi2,location=ph_location_label(ph_label='Content Placeholder 3'))
   }
 
-#import file spss dengan mudah
+
+bikinin.tabel.utk.di.slide.donk=function(tabel.data.frame){
+  qplot(1:20, 1:20, geom = "blank") + theme_bw() + theme(panel.border = element_blank(),line = element_blank(), text = element_blank()) + annotation_custom(grob = tableGrob(tabel.data.frame))
+}
+
+export.powerpoint.saya.donk=function(judul.ppt){
+  print(doc,paste(judul.ppt,'pptx',sep='.'))
+}
+
+
+# ==========================================
+# FUNGSI YANG BERGUNA UNTUK IMPORT FILE SPSS
+
+# import file spss dengan mudah
 import.data.spss.saya.donk=function(nama.file){
   read.spss(nama.file,to.data.frame=TRUE)
 }
 
-#melihat isi pertanyaan (variable label dari spss)
-liat.variable.labels.donk=function(data){
+# melihat isi pertanyaan (variable label dari spss)
+liat.pertanyaan.spss.donk=function(data){
   View(attributes(data)$variable.labels) #melihat pertanyaannya
   }
 
-#bikin pie chart
-# real number dan percentage
+
+# ==========================================
+# FUNGSI YANG BERGUNA UNTUK MEMBUAT GRAFIK
+
+# bikin pie chart
+  # real number dan percentage
 bikinin.pie.chart.dari.data.saya.donk=function(data,variabel,pertanyaan,sub.judul){
   tabulasi=data %>% tab_cells(variabel) %>% tab_stat_cpct() %>% tab_pivot()
   tabulasi$dummy=strsplit(tabulasi$row_labels,'\\|')
@@ -165,8 +233,8 @@ bikinin.pie.chart.dari.data.saya.donk=function(data,variabel,pertanyaan,sub.judu
 }
 
 
-#bikin pie chart facet
-# sudah revised
+# bikin pie chart facet
+  # sudah revised
 bikinin.pie.chart.facet.dari.data.saya.donk=function(data,variabel,facet,pertanyaan,sub.judul,caption){
   tabulasi=data %>% tab_cells(variabel) %>% tab_rows(facet) %>% 
     tab_stat_cpct() %>% tab_pivot()
@@ -204,8 +272,8 @@ bikinin.pie.chart.facet.dari.data.saya.donk=function(data,variabel,facet,pertany
     labs(title=pertanyaan,subtitle = sub.judul)
 }
 
-#bikin bar chart standar - dari tabulasi (sort)
-# real number dan percentage
+# bikin bar chart standar - dari tabulasi (sort)
+  # real number dan percentage
 bikinin.bar.chart.sort.dari.data.tabulasi.saya.donk=function(tabulasi,
                                                              pertanyaan,
                                                              sub.judul){
@@ -247,8 +315,8 @@ bikinin.bar.chart.sort.dari.data.tabulasi.saya.donk=function(tabulasi,
     labs(title=pertanyaan,subtitle = sub.judul)
 }
 
-#bikin bar chart standar - dari tabulasi (not sort)
-# real number dan percentage
+# bikin bar chart standar - dari tabulasi (not sort)
+  # real number dan percentage
 bikinin.bar.chart.not.sort.dari.data.tabulasi.saya.donk=function(tabulasi,
                                                                  pertanyaan,
                                                                  sub.judul){
@@ -289,8 +357,8 @@ bikinin.bar.chart.not.sort.dari.data.tabulasi.saya.donk=function(tabulasi,
     labs(title=pertanyaan,subtitle = sub.judul)
 }
 
-#bikin bar chart standar (sort) 
-#real number dan percentage
+# bikin bar chart standar (sort) 
+  # real number dan percentage
 bikinin.bar.chart.sort.dari.data.saya.donk=function(data,variabel,pertanyaan,sub.judul){
   tabulasi=data %>% tab_cells(variabel) %>% tab_stat_cpct() %>% tab_pivot()
   tabulasi$dummy=strsplit(tabulasi$row_labels,'\\|')
@@ -332,8 +400,8 @@ bikinin.bar.chart.sort.dari.data.saya.donk=function(data,variabel,pertanyaan,sub
     labs(title=pertanyaan,subtitle = sub.judul)
 }
 
-#bikin bar chart standar (not sort)
-# real number dan percentage
+# bikin bar chart standar (not sort)
+  # real number dan percentage
 bikinin.bar.chart.not.sort.dari.data.saya.donk=function(data,variabel,pertanyaan,sub.judul){
   tabulasi=data %>% tab_cells(variabel) %>% tab_stat_cpct() %>% tab_pivot()
   tabulasi$dummy=strsplit(tabulasi$row_labels,'\\|')
@@ -378,8 +446,8 @@ bikinin.bar.chart.not.sort.dari.data.saya.donk=function(data,variabel,pertanyaan
     labs(title=pertanyaan,subtitle = sub.judul)
 }
 
-#bikin bar chart standar facet (not sort)
-# sudah revised
+# bikin bar chart standar facet (not sort)
+  # sudah revised
 bikinin.bar.chart.facet.not.sort.dari.data.saya.donk=function(data,
                                                               variabel,
                                                               facet,
@@ -429,8 +497,8 @@ bikinin.bar.chart.facet.not.sort.dari.data.saya.donk=function(data,
                                           linetype="solid"))
 }
 
-#bikin bar chart standar facet (sort)
-# sudah revised
+# bikin bar chart standar facet (sort)
+  # sudah revised
 bikinin.bar.chart.facet.sort.dari.data.saya.donk=function(data,variabel,facet,pertanyaan,sub.judul,caption){
   tabulasi=data %>% tab_cells(variabel) %>% tab_rows(facet) %>% tab_stat_cpct() %>% tab_pivot()
   tabulasi$dummy=strsplit(tabulasi$row_labels,'\\|')
@@ -472,8 +540,8 @@ bikinin.bar.chart.facet.sort.dari.data.saya.donk=function(data,variabel,facet,pe
                                           linetype="solid"))
 }
 
-#bikin bar chart standar facet dari tabulasi (sort)
-# sudah revised
+# bikin bar chart standar facet dari tabulasi (sort)
+  # sudah revised
 bikinin.bar.chart.facet.sort.dari.tabulasi.saya.donk=function(tabulasi,pertanyaan,sub.judul,caption){
   tabulasi$dummy=strsplit(tabulasi$row_labels,'\\|')
   for(i in 1:length(tabulasi$dummy))
@@ -516,8 +584,8 @@ bikinin.bar.chart.facet.sort.dari.tabulasi.saya.donk=function(tabulasi,pertanyaa
                                           linetype="solid"))
 }
 
-#bikin bar chart standar facet dari tabulasi (not sort)
-# sudah revised
+# bikin bar chart standar facet dari tabulasi (not sort)
+  # sudah revised
 bikinin.bar.chart.facet.not.sort.dari.tabulasi.saya.donk=function(tabulasi,pertanyaan,sub.judul,caption){
   tabulasi$dummy=strsplit(tabulasi$row_labels,'\\|')
   for(i in 1:length(tabulasi$dummy))
@@ -561,8 +629,8 @@ bikinin.bar.chart.facet.not.sort.dari.tabulasi.saya.donk=function(tabulasi,perta
                                           linetype="solid"))
 }
 
-#bikin bar chart khusus skala 6
-# sudah revised
+# bikin bar chart khusus skala 6
+  # sudah revised
 bikinin.bar.chart.untuk.likert.6.skala.dari.data.saya.donk=function(data,variabel,pertanyaan){
   tabulasi=data %>% tab_cells(variabel) %>% tab_stat_cpct() %>% tab_pivot()
   tabulasi$dummy=strsplit(tabulasi$row_labels,'\\|')
@@ -607,7 +675,7 @@ bikinin.bar.chart.untuk.likert.6.skala.dari.data.saya.donk=function(data,variabe
                                           linetype="solid")) #kalau mau pakai facet
 }
 
-#bikin bar chart khusus cross tab
+# bikin bar chart khusus cross tab
 bikinin.bar.chart.crosstab.dari.data.saya.donk=function(data,variabel1,variabel2,pertanyaan){
   tabulasi=data %>% tab_cells(variabel1) %>% tab_rows(variabel2) %>% tab_stat_cpct() %>% tab_pivot()
   tabulasi$dummy=strsplit(tabulasi$row_labels,'\\|')
@@ -630,7 +698,7 @@ bikinin.bar.chart.crosstab.dari.data.saya.donk=function(data,variabel1,variabel2
   ggplot(tabulasi,aes(label.2,percent,label=paste(percent,'%',sep='')))+geom_bar(fill='steelblue',stat='identity')+scale_fill_brewer(palette="Accent") + theme_minimal() + theme(axis.title.y=element_blank(),axis.title.x=element_blank(),legend.position = 'none',plot.title=element_text(size=16),plot.caption=element_text(size=10),axis.text.y = element_blank())+geom_text(position = position_stack(vjust = 1.05),size=3.5) +labs(caption = paste('base: ',n,sep='')) + labs(title=pertanyaan) + facet_wrap(~label.1,scales='free_x') + theme(strip.background = element_rect(colour="black", fill="white",size=1.5, linetype="solid")) #kalau mau pakai facet
 }
 
-#bikin bar chart khusus NPS
+# bikin bar chart khusus NPS
 bikinin.bar.chart.untuk.NPS.dari.data.saya.donk=function(data,variabel,pertanyaan,sub.judul){
   tabulasi=data %>% tab_cells(variabel) %>% tab_stat_cpct() %>% tab_pivot()
   tabulasi$dummy=strsplit(tabulasi$row_labels,'\\|')
@@ -649,29 +717,15 @@ bikinin.bar.chart.untuk.NPS.dari.data.saya.donk=function(data,variabel,pertanyaa
   ggplot(tabulasi,aes(ket,percent,label=paste(percent,'%',sep='')))+geom_bar(fill='steelblue',stat='identity')+scale_fill_brewer(palette="Accent") + theme_minimal() + theme(axis.title.y=element_blank(),axis.title.x=element_blank(),legend.position = 'none',plot.title=element_text(size=16),plot.caption=element_text(size=10),axis.text.y = element_blank(),axis.text.x = element_text(angle=90))+geom_text(position = position_stack(vjust = 1.05),size=3.5) +labs(caption = paste('base:',ifelse(n>=30,n,paste(n,', indikasi',sep='')),sep='')) + labs(title=pertanyaan,subtitle=T2B) + facet_wrap(~kat,scales='free_x') + theme(strip.background = element_rect(colour="black", fill="white",size=1.5, linetype="solid"))+labs(subtitle = sub.judul) #kalau mau pakai facet
 }
 
-export.powerpoint.saya.donk=function(judul.ppt){
-  print(doc,paste(judul.ppt,'pptx',sep='.'))
-}
 
-#Buat line chart (tren line chart)
-bikinin.line.chart.dari.data.tren.waktu.donk=function(judul,sub.judul,caption,dataframe,var.x,var.y){
-ggplot(dataframe,aes(x=var.x, y=var.y,group=1,label=round(var.y,2)))+geom_line()+geom_point()+geom_label(size=3)+theme_minimal()+theme(axis.title.y = element_blank(),axis.title.x = element_blank(),axis.text.y = element_blank(),axis.text.x = element_text(size=11),plot.title=element_text(size=16))+labs(title = judul,subtitle = sub.judul,caption=caption)
-}
-
-#Buat bikin barchart facet dari dataframe
-bikinin.bar.chart.facet.dari.dataframe.donk=function(judul,sub.judul,caption,dataframe,var.x,var.y,facet){
-  ggplot(dataframe,aes(x=reorder(var.x,-var.y),y=var.y,label=var.y)) + geom_bar(stat='identity',fill='steelblue')+geom_text(position = position_stack(vjust = 1.03),size=2)+theme_minimal()+facet_wrap(~facet)+ theme(strip.background = element_rect(colour="black", fill="white",size=1.5, linetype="solid"))+theme(panel.grid = element_blank(),axis.title.y = element_blank(),axis.title.x = element_blank(),axis.text.x = element_text(size=8,angle = 90),plot.title=element_text(size=16))+labs(title = judul,subtitle = sub.judul,caption=caption)
-}
+# ==========================================
+# FUNGSI YANG BERGUNA UNTUK REMEH TEMEH
 
 liatin.package.yang.ada.di.R.saya.donk=function(){
   package=as.data.frame(installed.packages())
   nama.paket=package %>% arrange(Package)
   nama.paket=as.character(nama.paket$Package)
   return(nama.paket)}
-
-bikinin.tabel.utk.di.slide.donk=function(tabel.data.frame){
-  qplot(1:20, 1:20, geom = "blank") + theme_bw() + theme(panel.border = element_blank(),line = element_blank(), text = element_blank()) + annotation_custom(grob = tableGrob(tabel.data.frame))
-}
 
 gabung.string.donk=function(vector,vector.number){
   n=length(vector.number)
@@ -685,21 +739,31 @@ gabung.string.donk=function(vector,vector.number){
   return(x)
 }
 
-
-ubahin.rasio.jadi.persen.donk=function(rasio){
-  rasio=round(rasio*100,2)
-  return(rasio)
+cek.dua.proporsi.donk = function(trial_1,
+                                 n1,
+                                 trial_2,
+                                 n2){
+  hasil = prop.test(c(trial_1,trial_2),
+                    c(n1,n2))
+  print("Ada dua proporsi yang dicek, yakni:")
+  print(paste0(round(hasil$estimate*100,2),"%"))
+  print("Hasil uji signifikansinya:")
+  kesimpulan = ifelse(hasil$p.value < 0.5,
+                      "Proporsinya BERBEDA SIG",
+                      "TIDAK ADA perbedaan sig")
+  print(kesimpulan)
+  kesimpulan = ifelse((hasil$p.value < 0.5) &
+                        (hasil$estimate[1] < hasil$estimate[2]),
+                      paste0(round(hasil$estimate[1]*100,2),"% < ",round(hasil$estimate[2]*100,2),"%"),
+                      paste0(round(hasil$estimate[1]*100,2),"% > ",round(hasil$estimate[2]*100,2),"%"))
+  attributes(kesimpulan) = NULL
+  print(kesimpulan)
 }
 
-x='i'
-print(x)
-for(i in 2:12){
-  c=seq(1:i)
-  nama=c('i','k','a','n','x','____','f','a','d','h','l','i')
-  x=paste(x,nama[i])
-  print(x)
-}
-print('===============================================================================================================')
-print('https://passingthroughresearcher.wordpress.com/')
-print('Last update: 2020-05-26')
-#sir.ikanx
+
+# ==========================================
+# End of script
+
+print('All functions are loaded')
+print('https://ikanx101.com/')
+print('Last update: 2020-11-04')
