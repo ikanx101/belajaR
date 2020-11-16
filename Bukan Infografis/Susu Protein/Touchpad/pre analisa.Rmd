@@ -7,7 +7,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-setwd("~/belajaR/Bukan Infografis/Susu Protein/Touchpad")
+#setwd("~/belajaR/Bukan Infografis/Susu Protein/Touchpad")
 knitr::opts_chunk$set(echo = TRUE)
 rm(list=ls())
 
@@ -28,6 +28,8 @@ _Keywords_ yang digunakan:
 1. `LMen`
 1. `LMen Bar`
 1. `Susu protein`
+1. `Evolene`
+1. `Suplemen fitness`
 
 # Data hasil _scrape_
 

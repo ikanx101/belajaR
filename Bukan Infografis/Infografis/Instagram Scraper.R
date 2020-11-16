@@ -1,8 +1,8 @@
 rm(list=ls())
 setwd('C:/Users/fadhli.mohammad/AppData/Local/Programs/Python/Python38-32/Scripts')
 
-#system('instagram-scraper nutrifood -m 10')
-system('instagram-scraper nutrifood -m 100 --media-types none --comments')
+# system('instagram-scraper wumard -m 2')
+system('instagram-scraper wumard 5 --media-types none --comments')
 
 library(jsonlite)
 library(tidyverse)
