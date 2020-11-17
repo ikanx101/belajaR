@@ -27,7 +27,7 @@ sms_data_freq_coba <- sms_dtm.coba[ , sms_freq_terms.coba]
 sms_coba <- apply(sms_data_freq_coba, MARGIN = 2, convert_counts)
 hasil = predict(sms_classifier_train2, sms_coba,type = "raw")
 final = data.frame(
-  nama = paste(data$Nama,data$Departemen),
+  nama = paste(data$Nama,data$Departemen,sep = "-"),
   agility_score = hasil[,1]
 )
 
@@ -63,13 +63,27 @@ final =
   final %>% 
   mutate(score = (agility_score + inclusive_score + purposeful_score)/3)
 
-final %>% 
+library("RColorBrewer")
+
+for_wc = 
+  final %>% 
   select(nama,score) %>% 
   rename(word = nama,
-         n = score) %>% 
-  mutate(n = round(n*100,0)) %>% 
-  rename(freq = n) %>% 
-  wordcloud2::wordcloud2()
+         freq = score) %>% 
+  mutate(freq = round(freq*100,0)) %>% 
+  mutate(freq = as.integer(freq)) %>% 
+  arrange(desc(freq)) %>% 
+  head(40)
+png("Leaderboard cloud.png")
+#dev.new(width = 1000, height = 1000, unit = "px")
+wordcloud::wordcloud(words = for_wc$word, 
+                     freq = for_wc$freq, 
+                     min.freq = 0,
+                     max.words=40, 
+                     random.order=FALSE,
+                     rot.per = .25,
+                     colors=brewer.pal(10, "Dark2"))
+dev.off()
 
 plot = 
   final %>% 
