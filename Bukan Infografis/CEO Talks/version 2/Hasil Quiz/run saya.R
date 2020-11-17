@@ -63,6 +63,14 @@ final =
   final %>% 
   mutate(score = (agility_score + inclusive_score + purposeful_score)/3)
 
+final %>% 
+  select(nama,score) %>% 
+  rename(word = nama,
+         n = score) %>% 
+  mutate(n = round(n*100,0)) %>% 
+  rename(freq = n) %>% 
+  wordcloud2::wordcloud2()
+
 plot = 
   final %>% 
   arrange(desc(score)) %>% 
