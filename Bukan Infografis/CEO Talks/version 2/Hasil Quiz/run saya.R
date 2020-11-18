@@ -82,7 +82,7 @@ wordcloud::wordcloud(words = for_wc$word,
                      max.words=40, 
                      random.order=FALSE,
                      rot.per = .25,
-                     colors=brewer.pal(10, "Dark2"))
+                     colors=brewer.pal(5, "Dark2"))
 dev.off()
 
 plot = 
@@ -96,7 +96,7 @@ plot =
   coord_flip() +
   labs(title = "Leaderboard: TOP 40 Highest Score",
        subtitle = "NCODE 2020 Games",
-       caption = print(Sys.time())) +
+       caption = paste("created using R",print(Sys.time()),sep = "\n")) +
   theme_minimal() +
   theme(axis.title = element_blank(),
         axis.text.x = element_blank(),
