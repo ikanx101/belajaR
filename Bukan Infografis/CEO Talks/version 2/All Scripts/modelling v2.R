@@ -1,6 +1,6 @@
 rm(list=ls())
 library(dplyr)
-setwd("~/Documents/belajaR/Bukan Infografis/CEO Talks/version 2")
+setwd("~/belajaR/Bukan Infografis/CEO Talks/version 2")
 
 load("version 2.rda")
 data = dbase_link_new
@@ -20,10 +20,11 @@ library(gmodels)
 
 set.seed(10104074)
 id_train_agility = sample(1843,1700,replace = FALSE)
-id_train_inclusive = sample(1674,1500,replace = FALSE)
-id_train_purposeful = sample(1450,1300,replace = FALSE)
+id_train_inclusive = sample(1682,1500,replace = FALSE)
+id_train_purposeful = sample(1464,1300,replace = FALSE)
+id_train_digtrans = sample(799,680,replace = FALSE)
 
-# dipisah tiga
+# dipisah empat
 data_agility = 
   data %>% 
   filter(label == "agility")
@@ -33,16 +34,21 @@ data_inclusive =
 data_purposeful = 
   data %>% 
   filter(label == "purposeful")
+data_digtrans = 
+  data %>% 
+  filter(label == "digital transformation")
 
 train_data = rbind(data_agility[id_train_agility,],
                    data_inclusive[id_train_inclusive,],
-                   data_purposeful[id_train_purposeful,])
+                   data_purposeful[id_train_purposeful,],
+                   data_digtrans[id_train_digtrans,])
 train_data$label = factor(train_data$label)
 table(train_data$label)
 
 test_data = rbind(data_agility[-id_train_agility,],
                   data_inclusive[-id_train_inclusive,],
-                  data_purposeful[-id_train_purposeful,])
+                  data_purposeful[-id_train_purposeful,],
+                  data_digtrans[-id_train_digtrans,])
 train_data$label = factor(train_data$label)
 test_data$label = factor(test_data$label)
 table(test_data$label)
