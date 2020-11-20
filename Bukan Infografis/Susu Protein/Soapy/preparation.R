@@ -1,6 +1,8 @@
 rm(list=ls())
 library(dplyr)
 
+load("hasil scrape.rda")
+
 # ambil dbase links 
 link = readLines('link produk.txt')
 link = unique(link)
@@ -21,7 +23,6 @@ dummy = data.frame(id = c(1:length(link)),
                              info2,
                              '&shopid=',
                              info1))
-dummy %>% filter(is.na(info2)) %>% View()
 
 url = dummy$link_final
-save(url,file = 'hasil scrape.rda')
+save(raw,url,file = 'hasil scrape.rda')
