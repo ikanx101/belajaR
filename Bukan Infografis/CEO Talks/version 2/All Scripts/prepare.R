@@ -5,8 +5,9 @@ library(tidytext)
 library(tidyr)
 
 # ambilin links
-setwd("~/Documents/belajaR/Bukan Infografis/CEO Talks/version 2/Data Bank")
+setwd("~/belajaR/Bukan Infografis/CEO Talks/version 2/Data Bank")
 label = list.files()
+label = label[grep("txt",label)]
 dbase_link = data.frame(link = c(),label = c())
 for(i in 1:length(label)){
   link = readLines(label[i])
@@ -15,9 +16,10 @@ for(i in 1:length(label)){
 }
 
 # bebersih link
-setwd("~/Documents/belajaR/Bukan Infografis/CEO Talks/version 2")
+setwd("~/belajaR/Bukan Infografis/CEO Talks/version 2")
 dbase_link =
   dbase_link %>% 
+  distinct() %>% 
   filter(grepl("2020|2019|2018|2017|2016|2015|2014|2013|2012|2011|2010",link)) %>% 
   filter(!grepl("pdf|webinar|podcast|sponsored",link,ignore.case = T))
 
@@ -35,6 +37,23 @@ scrape_hbr = function(url){
 }
 dbase_link$artikel = sapply(dbase_link$link,scrape_hbr)
 
+# yang ini utk baca pdf agility dari nochay
+setwd("~/belajaR/Bukan Infografis/CEO Talks/version 2/Data Bank/pdf")
+pdf = list.files()
+library(pdftools)
+hasil = c()
+for(i in 1:7){
+  baca = pdf_text(pdf[i])
+  hasil = c(hasil,baca)
+}
+hasil = paste(hasil,collapse = " ")
+hasil = gsub("\n"," ",hasil)
+hasil = trimws(hasil)
+hasil = gsub("\t"," ",hasil)
+hasil = gsub("\r"," ",hasil)
+hasil = gsub("  "," ",hasil)
+dbase_link[73,] = c("pdf","agility",hasil)
+
 # sekarang kita bebersih
 dbase_new = 
   dbase_link %>% 
@@ -47,7 +66,8 @@ dbase_new =
 
 # english stopwords
 stop_en = readLines("https://raw.githubusercontent.com/stopwords-iso/stopwords-en/master/stopwords-en.txt")
-stop_en = c(stop_en,"they")
+stop_en = c(stop_en,"they","agile","agility","purposeful","purpose","digital","transformation","inclusive",
+            "dancer")
 
 # removing stopwords
 dbase_new = 
@@ -68,10 +88,12 @@ agility =
   group_by(words) %>% 
   count(sort = T) %>% 
   ungroup() %>% 
-  filter(!words %in% c("jeffrey","cynthia","mckinsey")) %>% 
+  filter(!words %in% c("jeffrey","cynthia","mckinsey","ebrahim","simon",
+                       "21st","sherina","https")) %>% 
   head(100)
 
-agility %>% wordcloud2::wordcloud2()
+agility %>% wordcloud2::wordcloud2(minRotation = -pi/6, maxRotation = -pi/6, rotateRatio = 1,
+                                   color='random-light', backgroundColor="black")
 
 # inclusive
 inclusive = 
@@ -80,9 +102,11 @@ inclusive =
   group_by(words) %>% 
   count(sort = T) %>% 
   ungroup() %>% 
+  filter(!words %in% c("inclusion","lgbt","black")) %>% 
   head(100) 
 
-inclusive %>% wordcloud2::wordcloud2()
+inclusive %>% wordcloud2::wordcloud2(minRotation = -pi/6, maxRotation = -pi/6, rotateRatio = 1,
+                                     color='random-light', backgroundColor="black")
 
 # purposeful
 purposeful = 
@@ -93,12 +117,33 @@ purposeful =
   ungroup() %>% 
   head(100)
 
-purposeful %>% wordcloud2::wordcloud2()
+purposeful %>% wordcloud2::wordcloud2(minRotation = -pi/6, maxRotation = -pi/6, rotateRatio = 1,
+                                      color='random-light', backgroundColor="black")
+
+
+# digital transformation
+digtrans = 
+  dbase_new %>% 
+  filter(label == "digital transformation") %>% 
+  group_by(words) %>% 
+  count(sort = T) %>% 
+  ungroup() %>% 
+  filter(!words %in% c("india")) %>% 
+  head(100)
+
+digtrans %>% wordcloud2::wordcloud2(minRotation = -pi/6, maxRotation = -pi/6, rotateRatio = 1,
+                                    color='random-light', backgroundColor="black")
 
 # sekarang gabung semua katanya
 kata = rbind(agility,inclusive)
 kata = rbind(kata,purposeful)
+kata = rbind(kata,digtrans)
 kata = sort(unique(kata$words))
+
+# kita save semua ya
+setwd("~/belajaR/Bukan Infografis/CEO Talks/version 2")
+kata_print = paste(kata,collapse = " ")
+sink("all words.txt");print(kata_print);sink()
 
 dbase_link_new = 
   dbase_new %>% 
