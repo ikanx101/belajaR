@@ -7,11 +7,11 @@ library(gmodels)
 library(ggplot2)
 
 # ambil model
-setwd("~/belajaR/Bukan Infografis/CEO Talks/version 2")
+setwd("~/Documents/belajaR/Bukan Infografis/CEO Talks/version 2")
 load("model version 2.rda")
 
 # ambil jawaban
-setwd("~/belajaR/Bukan Infografis/CEO Talks/version 2/Hasil Quiz")
+setwd("~/Documents/belajaR/Bukan Infografis/CEO Talks/version 2/Hasil Quiz")
 data = read.csv("Games of Words.csv")
 
 # agility
