@@ -3,6 +3,7 @@ library(dplyr)
 library(rvest)
 library(tidytext)
 library(tidyr)
+library(hunspell)
 
 # ambilin links
 setwd("~/Documents/belajaR/Bukan Infografis/CEO Talks/version 2/Data Bank")
@@ -52,7 +53,7 @@ hasil = trimws(hasil)
 hasil = gsub("\t"," ",hasil)
 hasil = gsub("\r"," ",hasil)
 hasil = gsub("  "," ",hasil)
-dbase_link[73,] = c("pdf","agility",hasil)
+dbase_link[(length(dbase_link$link)+1),] = c("pdf","agility",hasil)
 
 # yang ini utk baca pdf purposeful dari nochay
 setwd("~/Documents/belajaR/Bukan Infografis/CEO Talks/version 2/Data Bank/purposeful")
@@ -69,7 +70,7 @@ hasil = trimws(hasil)
 hasil = gsub("\t"," ",hasil)
 hasil = gsub("\r"," ",hasil)
 hasil = gsub("  "," ",hasil)
-dbase_link[73,] = c("pdf","purposeful",hasil)
+dbase_link[(length(dbase_link$link)+1),] = c("pdf","purposeful",hasil)
 
 # yang ini utk baca pdf inclusive dari nochay
 setwd("~/Documents/belajaR/Bukan Infografis/CEO Talks/version 2/Data Bank/inclusive")
@@ -86,12 +87,7 @@ hasil = trimws(hasil)
 hasil = gsub("\t"," ",hasil)
 hasil = gsub("\r"," ",hasil)
 hasil = gsub("  "," ",hasil)
-dbase_link[73,] = c("pdf","inclusive",hasil)
-
-# fungsi stemming
-# Stemming
-words <- c("love", "loving", "lovingly", "loved", "lover", "lovely")
-hunspell_stem(words)
+dbase_link[(length(dbase_link$link)+1),] = c("pdf","inclusive",hasil)
 
 # sekarang kita bebersih
 dbase_new = 
@@ -118,6 +114,21 @@ dbase_new =
   filter(is.na(penanda)) %>% 
   select(-penanda)
 
+# fungsi stemming
+stem_ikanx = function(kata){
+  hasil = hunspell_stem(kata)
+  hasil = unlist(hasil) 
+  hasil = hasil[nchar(hasil) == max(nchar(hasil))]
+  return(hasil)
+}
+
+# kita stem balik ke dbase_new
+dbase_new$words = sapply(dbase_new$words,stem_ikanx)
+dbase_new = 
+  dbase_new %>% 
+  mutate(words = as.character(words)) %>% 
+  filter(words != "character(0)")
+
 # =======================================
 # wordcloud
 # agility
@@ -127,8 +138,6 @@ agility =
   group_by(words) %>% 
   count(sort = T) %>% 
   ungroup() %>% 
-  filter(!words %in% c("jeffrey","cynthia","mckinsey","ebrahim","simon",
-                       "21st","sherina","https")) %>% 
   head(100)
 
 agility %>% wordcloud2::wordcloud2(minRotation = -pi/6, maxRotation = -pi/6, rotateRatio = 1,
@@ -180,7 +189,7 @@ kata = rbind(kata,digtrans)
 kata = sort(unique(kata$words))
 
 # kita save semua ya
-setwd("~/belajaR/Bukan Infografis/CEO Talks/version 2")
+setwd("~/Documents/belajaR/Bukan Infografis/CEO Talks/version 2")
 kata_print = paste(kata,collapse = " ")
 sink("all words.txt");print(kata_print);sink()
 
