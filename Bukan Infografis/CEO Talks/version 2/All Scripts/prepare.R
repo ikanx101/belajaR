@@ -5,7 +5,7 @@ library(tidytext)
 library(tidyr)
 
 # ambilin links
-setwd("~/belajaR/Bukan Infografis/CEO Talks/version 2/Data Bank")
+setwd("~/Documents/belajaR/Bukan Infografis/CEO Talks/version 2/Data Bank")
 label = list.files()
 label = label[grep("txt",label)]
 dbase_link = data.frame(link = c(),label = c())
@@ -16,7 +16,7 @@ for(i in 1:length(label)){
 }
 
 # bebersih link
-setwd("~/belajaR/Bukan Infografis/CEO Talks/version 2")
+setwd("~/Documents/belajaR/Bukan Infografis/CEO Talks/version 2")
 dbase_link =
   dbase_link %>% 
   distinct() %>% 
@@ -38,11 +38,28 @@ scrape_hbr = function(url){
 dbase_link$artikel = sapply(dbase_link$link,scrape_hbr)
 
 # yang ini utk baca pdf agility dari nochay
-setwd("~/belajaR/Bukan Infografis/CEO Talks/version 2/Data Bank/pdf")
+setwd("~/Documents/belajaR/Bukan Infografis/CEO Talks/version 2/Data Bank/agility")
 pdf = list.files()
 library(pdftools)
 hasil = c()
-for(i in 1:7){
+for(i in 1:length(pdf)){
+  baca = pdf_text(pdf[i])
+  hasil = c(hasil,baca)
+  }
+hasil = paste(hasil,collapse = " ")
+hasil = gsub("\n"," ",hasil)
+hasil = trimws(hasil)
+hasil = gsub("\t"," ",hasil)
+hasil = gsub("\r"," ",hasil)
+hasil = gsub("  "," ",hasil)
+dbase_link[73,] = c("pdf","agility",hasil)
+
+# yang ini utk baca pdf purposeful dari nochay
+setwd("~/Documents/belajaR/Bukan Infografis/CEO Talks/version 2/Data Bank/purposeful")
+pdf = list.files()
+library(pdftools)
+hasil = c()
+for(i in 1:length(pdf)){
   baca = pdf_text(pdf[i])
   hasil = c(hasil,baca)
 }
@@ -52,7 +69,29 @@ hasil = trimws(hasil)
 hasil = gsub("\t"," ",hasil)
 hasil = gsub("\r"," ",hasil)
 hasil = gsub("  "," ",hasil)
-dbase_link[73,] = c("pdf","agility",hasil)
+dbase_link[73,] = c("pdf","purposeful",hasil)
+
+# yang ini utk baca pdf inclusive dari nochay
+setwd("~/Documents/belajaR/Bukan Infografis/CEO Talks/version 2/Data Bank/inclusive")
+pdf = list.files()
+library(pdftools)
+hasil = c()
+for(i in 1:length(pdf)){
+  baca = pdf_text(pdf[i])
+  hasil = c(hasil,baca)
+}
+hasil = paste(hasil,collapse = " ")
+hasil = gsub("\n"," ",hasil)
+hasil = trimws(hasil)
+hasil = gsub("\t"," ",hasil)
+hasil = gsub("\r"," ",hasil)
+hasil = gsub("  "," ",hasil)
+dbase_link[73,] = c("pdf","inclusive",hasil)
+
+# fungsi stemming
+# Stemming
+words <- c("love", "loving", "lovingly", "loved", "lover", "lovely")
+hunspell_stem(words)
 
 # sekarang kita bebersih
 dbase_new = 
