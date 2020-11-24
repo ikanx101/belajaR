@@ -12,10 +12,10 @@ load("model version 2.rda")
 
 # ambil jawaban
 setwd("~/Documents/belajaR/Bukan Infografis/CEO Talks/version 2/Hasil Quiz")
-data = read.csv("Games of Words.csv")
+data = read.csv("CEO's Partner.csv")
 
 # agility
-text = data$Tulis.5.kata.yang.terkait.dengan.AGILITY..Cukup.pisahkan.dengan.spasi
+text = data$Tulis.5.kata.yang.terkait.dengan.AGILE..Cukup.pisahkan.dengan.spasi
 coba = VCorpus(VectorSource(text))
 sms_corpus_clean.coba = tm_map(coba, content_transformer(tolower))
 sms_corpus_clean.coba = tm_map(sms_corpus_clean.coba, removeNumbers)
