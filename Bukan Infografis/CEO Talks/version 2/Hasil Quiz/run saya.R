@@ -7,15 +7,15 @@ library(gmodels)
 library(ggplot2)
 
 # ambil model
-setwd("~/belajaR/Bukan Infografis/CEO Talks/version 2")
+setwd("~/Documents/belajaR/Bukan Infografis/CEO Talks/version 2")
 load("model version 2.rda")
 
 # ambil jawaban
-setwd("~/belajaR/Bukan Infografis/CEO Talks/version 2/Hasil Quiz")
-data = read.csv("Games of Words.csv")
+setwd("~/Documents/belajaR/Bukan Infografis/CEO Talks/version 2/Hasil Quiz")
+data = read.csv("CEO's Partner.csv")
 
 # agility
-text = data$Tulis.5.kata.yang.terkait.dengan.AGILITY..Cukup.pisahkan.dengan.spasi
+text = data$Tulis.5.kata.yang.terkait.dengan.AGILE..Cukup.pisahkan.dengan.spasi
 coba = VCorpus(VectorSource(text))
 sms_corpus_clean.coba = tm_map(coba, content_transformer(tolower))
 sms_corpus_clean.coba = tm_map(sms_corpus_clean.coba, removeNumbers)
@@ -88,21 +88,21 @@ for_wc =
   mutate(freq = as.integer(freq)) %>% 
   arrange(desc(freq)) %>% 
   head(40)
-png("Leaderboard cloud.png",width = 750,height = 500)
+png("Leaderboard cloud.png",width = 1500,height = 1050)
 #dev.new(width = 1000, height = 1000, unit = "px")
 wordcloud::wordcloud(words = for_wc$word, 
                      freq = for_wc$freq, 
                      min.freq = 0,
-                     max.words=40, 
+                     max.words=100, 
                      random.order=FALSE,
                      rot.per = .25,
                      colors=brewer.pal(5, "Dark2"))
 dev.off()
 
 plot = 
-  final %>% 
-  arrange(desc(score)) %>% 
-  head(40) %>% 
+  for_wc %>% 
+  mutate(nama = word,
+         score = freq) %>% 
   ggplot(aes(x = reorder(nama,score),
              y = score)) +
   geom_col(aes(fill = score),color = "black") +

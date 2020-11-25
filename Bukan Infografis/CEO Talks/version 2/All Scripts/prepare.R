@@ -3,9 +3,10 @@ library(dplyr)
 library(rvest)
 library(tidytext)
 library(tidyr)
+library(hunspell)
 
 # ambilin links
-setwd("~/belajaR/Bukan Infografis/CEO Talks/version 2/Data Bank")
+setwd("~/Documents/belajaR/Bukan Infografis/CEO Talks/version 2/Data Bank")
 label = list.files()
 label = label[grep("txt",label)]
 dbase_link = data.frame(link = c(),label = c())
@@ -16,7 +17,7 @@ for(i in 1:length(label)){
 }
 
 # bebersih link
-setwd("~/belajaR/Bukan Infografis/CEO Talks/version 2")
+setwd("~/Documents/belajaR/Bukan Infografis/CEO Talks/version 2")
 dbase_link =
   dbase_link %>% 
   distinct() %>% 
@@ -38,11 +39,28 @@ scrape_hbr = function(url){
 dbase_link$artikel = sapply(dbase_link$link,scrape_hbr)
 
 # yang ini utk baca pdf agility dari nochay
-setwd("~/belajaR/Bukan Infografis/CEO Talks/version 2/Data Bank/pdf")
+setwd("~/Documents/belajaR/Bukan Infografis/CEO Talks/version 2/Data Bank/agility")
 pdf = list.files()
 library(pdftools)
 hasil = c()
-for(i in 1:7){
+for(i in 1:length(pdf)){
+  baca = pdf_text(pdf[i])
+  hasil = c(hasil,baca)
+  }
+hasil = paste(hasil,collapse = " ")
+hasil = gsub("\n"," ",hasil)
+hasil = trimws(hasil)
+hasil = gsub("\t"," ",hasil)
+hasil = gsub("\r"," ",hasil)
+hasil = gsub("  "," ",hasil)
+dbase_link[(length(dbase_link$link)+1),] = c("pdf","agility",hasil)
+
+# yang ini utk baca pdf purposeful dari nochay
+setwd("~/Documents/belajaR/Bukan Infografis/CEO Talks/version 2/Data Bank/purposeful")
+pdf = list.files()
+library(pdftools)
+hasil = c()
+for(i in 1:length(pdf)){
   baca = pdf_text(pdf[i])
   hasil = c(hasil,baca)
 }
@@ -52,7 +70,24 @@ hasil = trimws(hasil)
 hasil = gsub("\t"," ",hasil)
 hasil = gsub("\r"," ",hasil)
 hasil = gsub("  "," ",hasil)
-dbase_link[73,] = c("pdf","agility",hasil)
+dbase_link[(length(dbase_link$link)+1),] = c("pdf","purposeful",hasil)
+
+# yang ini utk baca pdf inclusive dari nochay
+setwd("~/Documents/belajaR/Bukan Infografis/CEO Talks/version 2/Data Bank/inclusive")
+pdf = list.files()
+library(pdftools)
+hasil = c()
+for(i in 1:length(pdf)){
+  baca = pdf_text(pdf[i])
+  hasil = c(hasil,baca)
+}
+hasil = paste(hasil,collapse = " ")
+hasil = gsub("\n"," ",hasil)
+hasil = trimws(hasil)
+hasil = gsub("\t"," ",hasil)
+hasil = gsub("\r"," ",hasil)
+hasil = gsub("  "," ",hasil)
+dbase_link[(length(dbase_link$link)+1),] = c("pdf","inclusive",hasil)
 
 # sekarang kita bebersih
 dbase_new = 
@@ -79,6 +114,21 @@ dbase_new =
   filter(is.na(penanda)) %>% 
   select(-penanda)
 
+# fungsi stemming
+stem_ikanx = function(kata){
+  hasil = hunspell_stem(kata)
+  hasil = unlist(hasil) 
+  hasil = hasil[nchar(hasil) == max(nchar(hasil))]
+  return(hasil)
+}
+
+# kita stem balik ke dbase_new
+dbase_new$words = sapply(dbase_new$words,stem_ikanx)
+dbase_new = 
+  dbase_new %>% 
+  mutate(words = as.character(words)) %>% 
+  filter(words != "character(0)")
+
 # =======================================
 # wordcloud
 # agility
@@ -88,8 +138,6 @@ agility =
   group_by(words) %>% 
   count(sort = T) %>% 
   ungroup() %>% 
-  filter(!words %in% c("jeffrey","cynthia","mckinsey","ebrahim","simon",
-                       "21st","sherina","https")) %>% 
   head(100)
 
 agility %>% wordcloud2::wordcloud2(minRotation = -pi/6, maxRotation = -pi/6, rotateRatio = 1,
@@ -141,7 +189,7 @@ kata = rbind(kata,digtrans)
 kata = sort(unique(kata$words))
 
 # kita save semua ya
-setwd("~/belajaR/Bukan Infografis/CEO Talks/version 2")
+setwd("~/Documents/belajaR/Bukan Infografis/CEO Talks/version 2")
 kata_print = paste(kata,collapse = " ")
 sink("all words.txt");print(kata_print);sink()
 
