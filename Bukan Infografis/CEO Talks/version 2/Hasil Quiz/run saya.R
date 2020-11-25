@@ -88,21 +88,21 @@ for_wc =
   mutate(freq = as.integer(freq)) %>% 
   arrange(desc(freq)) %>% 
   head(40)
-png("Leaderboard cloud.png",width = 750,height = 500)
+png("Leaderboard cloud.png",width = 1500,height = 1050)
 #dev.new(width = 1000, height = 1000, unit = "px")
 wordcloud::wordcloud(words = for_wc$word, 
                      freq = for_wc$freq, 
                      min.freq = 0,
-                     max.words=40, 
+                     max.words=100, 
                      random.order=FALSE,
                      rot.per = .25,
                      colors=brewer.pal(5, "Dark2"))
 dev.off()
 
 plot = 
-  final %>% 
-  arrange(desc(score)) %>% 
-  head(40) %>% 
+  for_wc %>% 
+  mutate(nama = word,
+         score = freq) %>% 
   ggplot(aes(x = reorder(nama,score),
              y = score)) +
   geom_col(aes(fill = score),color = "black") +
