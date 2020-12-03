@@ -24,7 +24,7 @@ scrape_shopee = function(url){
 i = 1
 data = scrape_shopee(url[i])
 
-for(i in 284:length(url)){
+for(i in 2:length(url)){
   temp = tryCatch({scrape_shopee(url[i])},
                   error = function(e){
                     temp = data.frame(nama = NA,
