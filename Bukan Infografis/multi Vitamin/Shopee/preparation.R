@@ -23,7 +23,9 @@ dummy = data.frame(id = c(1:length(link)),
   mutate(link_final = paste0('https://shopee.co.id/api/v2/item/get?itemid=',
                              info2,
                              '&shopid=',
-                             info1))
+                             info1)) %>% 
+  filter(!is.na(info2))
 
 url = dummy$link_final
-save(raw,url,file = 'hasil scrape.rda')
+
+save(url,file = 'hasil scrape.rda')
