@@ -1,72 +1,35 @@
+setwd("~/Documents/belajaR/Bukan Infografis/multi Vitamin/Tokopedia")
 rm(list=ls())
 library(rvest)
 library(dplyr)
 
-# PART 1
-# input URL
-url = readLines("all available links.txt")
+setwd("~/Downloads")
+pages = list.files(pattern = "html")
 
-# bebersih links
-dbase_link = 
-  data.frame(
-    id = 1,
-    url = url
-  ) %>% 
-  filter(!grepl("mitra-toppers",url)) %>% 
-  filter(!grepl("promo",url)) %>% 
-  filter(grepl("tokopedia.com/",url)) %>% 
-  filter(!grepl("discovery",url,ignore.case = T)) %>% 
-  filter(!grepl("deal",url,ignore.case = T)) %>% 
-  mutate(penanda = stringr::str_length(url)) %>% 
-  arrange(penanda) %>% 
-  filter(penanda >= 50) %>% 
-  distinct()
-
-url = dbase_link$url
-
-# PART 2
-# Fungsi scrape data
-scrap = function(url){
-  data = tryCatch(
-    read_html(url) %>% {
-      tibble(
-        nama = html_nodes(.,'.css-x7lc0h') %>% html_text(),
-        harga = html_nodes(.,".css-c820vl") %>% html_text(),
-        seller = html_nodes(.,'.css-xmjuvc') %>% html_text(),
-        terjual = html_nodes(.,'b') %>% html_text(),
-        lokasi = html_nodes(.,".css-1s83bzu span") %>% html_text(),
-        link = url
-      )
-    },
-    error = function(e){
-      data = tibble(
-        nama = NA,
-        harga = NA,
-        seller = NA,
-        terjual = NA,
-        lokasi = NA,
-        link = url
-      )
-    }
-  )
-  return(data)
+# function
+scrape_donk = function(file){
+  data = read_html(file) %>% {
+    tibble(
+      nama = html_nodes(.,".css-v7vvdw") %>% html_text(),
+      terjual = html_nodes(.,".items div:nth-child(1)") %>% html_text(),
+      harga = html_nodes(.,".price") %>% html_text(),
+      toko = html_nodes(.,"#pdp_comp-shop_credibility h2") %>% html_text(),
+      asal = html_nodes(.,".css-1yi3n7g+ .css-15fasc b") %>% html_text()
+    )
+  }
 }
-
 
 i = 1
-data = scrap(url[i])
+data = scrape_donk(pages[i])
 
-for(i in 2:length(url)){
-  temp = scrap(url[i])
+for(i in 2:length(pages)){
+  temp = scrape_donk(pages[i])
   data = rbind(data,temp)
-  print(paste0('ambil data ke ',
-               i,
-               ' done - alhamdulillah'))
+  print(paste0("Alhamdulillah ",i))
 }
-
-data$waktu.scrape = Sys.time()
+data$waktu.scrape = Sys.Date()
 data = distinct(data)
 
-load("hasil scrape.rda")
-raw = rbind(raw,data)
+raw = data
+setwd("~/Documents/belajaR/Bukan Infografis/multi Vitamin/Tokopedia")
 save(raw,file = 'hasil scrape.rda')

@@ -1,4 +1,4 @@
-setwd("~/Documents/belajaR/Bukan Infografis/multi Vitamin/Shopee")
+#setwd("~/Documents/belajaR/Bukan Infografis/multi Vitamin/Shopee")
 rm(list=ls())
 library(dplyr)
 library(jsonlite)
@@ -42,6 +42,6 @@ for(i in 2:length(url)){
 
 data$waktu.scrape = Sys.Date()
 data = distinct(data)
+raw = rbind(raw,data)
 
-raw = data %>% distinct()
 save(raw,url,file = 'hasil scrape.rda')

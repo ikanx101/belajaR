@@ -27,5 +27,4 @@ dummy = data.frame(id = c(1:length(link)),
   filter(!is.na(info2))
 
 url = dummy$link_final
-
 save(url,file = 'hasil scrape.rda')
