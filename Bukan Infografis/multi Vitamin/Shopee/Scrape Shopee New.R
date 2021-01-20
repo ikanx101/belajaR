@@ -1,23 +1,47 @@
 setwd("~/Documents/belajaR/Bukan Infografis/multi Vitamin/Shopee")
 rm(list=ls())
-library(rvest)
 library(dplyr)
+library(jsonlite)
 
-url = "Enervon c isi 100 tablet _ Shopee Indonesia.html"
+load('hasil scrape.rda')
 
-# Fungsi Utama
-scrape_donk = function(link){
-  read_html(link) %>% {
-    tibble(
-    seller = html_nodes(.,"._3Lybjn") %>% html_text(),
-    nama = html_nodes(.,".qaNIZv span") %>% html_text(),
-    harga = html_nodes(.,"._3n5NQx") %>% html_text(),
-    terjual = html_nodes(.,"._22sp0A") %>% html_text(),
-    merek = html_nodes(.,"._2H-513") %>% html_text(),
-    kategori = html_nodes(.,"#main > div > div._1Bj1VS > div.page-product > div.container > div:nth-child(3) > div.page-product__content > div.page-product__content--left > div.product-detail.page-product__detail > div:nth-child(1) > div._2aZyWI > div:nth-child(1) > div > a:nth-child(5)
-") %>% html_text(),
-    asal = html_nodes(.,"._3yhtIY") %>% html_text()
-    )
-  }
+# bikin fungsi scrape
+scrape_shopee = function(url){
+  # buka json
+  tes = read_json(url)
+  #bentuk data frame
+  data = data.frame(
+    nama = tes$item$name,
+    kategori = tes$item$categories[[1]]$display_name,
+    terjual = tes$item$historical_sold,
+    merek = ifelse(is.null(tes$item$brand),'Tidak Ada Merek',tes$item$brand),
+    harga = tes$item$price,
+    harga_normal = tes$item$price_before_discount,
+    link = url
+  )
+  return(data)
 }
-data = scrape_donk(url)
+
+i = 1
+data = scrape_shopee(url[i])
+
+for(i in 2:length(url)){
+  temp = tryCatch({scrape_shopee(url[i])},
+                  error = function(e){
+                    temp = data.frame(nama = NA,
+                                      kategori = NA,
+                                      terjual = NA,
+                                      merek = NA,
+                                      harga = NA,
+                                      harga_normal = NA,
+                                      link = url)
+                  })
+  data = rbind(data,temp)
+  print(paste0('Alhamdulillah ',i,' sudah didapatkan...'))
+}
+
+data$waktu.scrape = Sys.Date()
+data = distinct(data)
+
+raw = data %>% distinct()
+save(raw,url,file = 'hasil scrape.rda')
