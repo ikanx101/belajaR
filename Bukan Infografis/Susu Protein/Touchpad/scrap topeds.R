@@ -1,5 +1,3 @@
-#setwd("~/belajaR/Bukan Infografis/Susu Protein/Touchpad")
-
 rm(list=ls())
 library(rvest)
 library(dplyr)
