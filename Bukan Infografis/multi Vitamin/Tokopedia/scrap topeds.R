@@ -3,7 +3,7 @@ rm(list=ls())
 library(rvest)
 library(dplyr)
 
-setwd("~/Downloads")
+setwd("~/Documents/belajaR/Bukan Infografis/multi Vitamin/Tokopedia/saved html")
 pages = list.files(pattern = "html")
 
 # function
@@ -30,6 +30,6 @@ for(i in 2:length(pages)){
 data$waktu.scrape = Sys.Date()
 data = distinct(data)
 
-raw = data
+raw = rbind(raw,data)
 setwd("~/Documents/belajaR/Bukan Infografis/multi Vitamin/Tokopedia")
 save(raw,file = 'hasil scrape.rda')
