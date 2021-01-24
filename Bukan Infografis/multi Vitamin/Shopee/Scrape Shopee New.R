@@ -3,7 +3,7 @@ rm(list=ls())
 library(dplyr)
 library(jsonlite)
 
-load('hasil scrape.rda')
+load('hasil scrape new.rda')
 
 # bikin fungsi scrape
 scrape_shopee = function(url){
@@ -44,4 +44,4 @@ data$waktu.scrape = Sys.Date()
 data = distinct(data)
 raw = rbind(raw,data)
 
-save(raw,url,file = 'hasil scrape.rda')
+save(raw,url,file = 'hasil scrape new.rda')
