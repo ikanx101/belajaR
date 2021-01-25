@@ -16,7 +16,7 @@ scrape_donk = function(file){
       terjual = html_nodes(.,".items div:nth-child(1)") %>% html_text(),	
       harga = html_nodes(.,".price") %>% html_text(),	
       toko = html_nodes(.,"#pdp_comp-shop_credibility h2") %>% html_text(),	
-      asal = html_nodes(.,".css-1yi3n7g+ .css-15fasc b") %>% html_text()
+      asal = "tidak"
     )
   }
 }
@@ -36,4 +36,4 @@ data = distinct(data)
 raw = rbind(raw,data)
 
 setwd("~/Documents/belajaR/Bukan Infografis/multi Vitamin/Tokopedia")
-save(raw,file = 'hasil scrape new.rda')
+save(raw,file = 'hasil scrape.rda')
