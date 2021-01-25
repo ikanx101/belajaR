@@ -36,4 +36,4 @@ data = distinct(data)
 raw = rbind(raw,data)
 
 setwd("~/Documents/belajaR/Bukan Infografis/multi Vitamin/Tokopedia")
-save(raw,file = 'hasil scrape.rda')
+save(raw,file = 'hasil scrape new.rda')
