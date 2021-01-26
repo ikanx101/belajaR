@@ -1,4 +1,4 @@
-#setwd("~/Documents/belajaR/Bukan Infografis/multi Vitamin/Shopee")
+setwd("~/Documents/belajaR/Bukan Infografis/multi Vitamin/Shopee")
 rm(list=ls())
 library(dplyr)
 library(jsonlite)
