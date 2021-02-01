@@ -21,7 +21,7 @@ scrape_donk = function(file){
   }
 }
 
-i = 1	
+i = 1
 data = scrape_donk(pages[i])
 
 for(i in 2:length(pages)){	
