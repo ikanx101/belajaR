@@ -30,7 +30,7 @@ for(i in 2:length(pages)){
   print(paste0("Alhamdulillah ",i))
 }
 
-data$waktu.scrape = Sys.Date()	
+data$waktu.scrape = Sys.Date()-1	
 data = distinct(data)
 
 raw = rbind(raw,data)
