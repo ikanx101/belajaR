@@ -1,6 +1,6 @@
 rm(list=ls())
 
-library(dpyr)
+library(dplyr)
 library(chromote)
 library(tictoc)
 
