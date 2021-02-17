@@ -5,7 +5,7 @@ library(chromote)
 library(tictoc)
 
 # links
-url = readLines("link final 2.txt")
+url = readLines("link final 3 done 3 Feb.txt")
 
 # setting
 b <- ChromoteSession$new()
@@ -17,7 +17,7 @@ b$Network$setCookies(cookies = cookies$cookies)
 chrome_do_your_magic = function(link){
   # navigate
   b$Page$navigate(link)
-  Sys.sleep(1)
+  Sys.sleep(10)
   # extract nama
   x <- b$Runtime$evaluate('document.querySelector(".css-v7vvdw").innerText')
   nama = x$result$value
@@ -52,7 +52,7 @@ for(i in 2:length(url)){
 
 toc()
 
-data$waktu.scrape = Sys.Date()-1	
+data$waktu.scrape = Sys.Date()	
 data = distinct(data)
 
 load("hasil scrape.rda")

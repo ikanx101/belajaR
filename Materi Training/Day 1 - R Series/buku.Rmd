@@ -77,9 +77,11 @@ prediksi (*machine learning*, *artificial intelligence*, dan *deep
 learning*) sampai membuat algoritma automasi menggunakan **R**.
 
 > Apa perbedaan R dan Python?
+
 Salah satu kelebihan **R** adalah:
 
 > R is made by statistician for statistician.
+
 Setiap *package* atau *library* yang di-*launching* di **R** biasanya
 disertakan dengan jurnal ilmiah sehingga kita bisa dengan yakin
 memakainya.
@@ -93,6 +95,7 @@ setiap saat.
 Bagaimana dengan __Python__?
 
 > Sejatinya Python digunakan untuk membangun aplikasi. Namun, belakangan ini ternyata Python disadari bisa untuk melakukan pengolahan data.
+
 Berbeda dengan __R__ yang memang dibangun untuk kebutuhan _data science_, __Python__ membutuhkan _libraries_ setiap kali melakukan pengolahan data.
 
 Materi _training_ ini saya kumpulkan dari berbagai sumber dan saya _customize_ sesuai dengan kebutuhan __Nutrifood__ berdasarkan pengalaman selama ini berkutat dengan data yang ada (dari mulai data pabrik hingga _finance_). Semoga menjadi manfaat bagi _Nutrifooders_ semua. 
