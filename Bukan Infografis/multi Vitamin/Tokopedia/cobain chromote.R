@@ -5,7 +5,13 @@ library(chromote)
 library(tictoc)
 
 # links
-url = readLines("link final 3 done 3 Feb.txt")
+url_1 = readLines("link final 2 done 17 Feb.txt")
+url_2 = readLines("link final 1 done.txt")
+url_3 = readLines("link final 3 done 3 Feb.txt")
+url_4 = readLines("link final 4 done 3 Feb.txt")
+url_5 = readLines("link final 5 done 3 Feb.txt")
+
+url = c(url_1,url_2,url_3,url_4,url_5)
 
 # setting
 b <- ChromoteSession$new()
@@ -44,7 +50,7 @@ data = chrome_do_your_magic(url[i])
 
 tic("start")
 
-for(i in 2:length(url)){
+for(i in 2860:length(url)){
   temp = chrome_do_your_magic(url[i])
   data = rbind(data,temp)
   print(i)
