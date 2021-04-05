@@ -11,7 +11,7 @@ library(googleway)
 library(ggmap)
 
 #key
-key = 'AIzaSyBN5lDKQnqlt6cBt0JpOXhP4fV6LSDUync'
+key = ''
 #alamat
 alamat = c('Bluebell Summarecon Bekasi',
            'SDIT Al Insan Bekasi Timur',
@@ -39,7 +39,7 @@ write.csv(init_data,'data awal.csv')
 
 #hitung jarak dengan gmapsdistance
 library(gmapsdistance)
-set.api.key("AIzaSyBRGZiPPLb_PD3ohlfqN_VGnethK30Qpxs")
+set.api.key("")
 jarak = gmapsdistance(origin = init_data$latlon,
                       destination = init_data$latlon,
                       combinations = 'all',

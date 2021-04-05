@@ -11,7 +11,7 @@ library(googleway)
 library(ggmap)
 
 #key
-key = 'AIzaSyC6RapKliyKXqlOXdhCIpdMxVWOBXJypCQ'
+key = ''
 
 #alamat
 init_data = read_excel('Raw Tempat.xlsx')
@@ -34,7 +34,7 @@ init_data$latlon = paste(init_data$lat,init_data$long,sep='+')
 
 #hitung jarak dengan gmapsdistance
 library(gmapsdistance)
-set.api.key("AIzaSyCP0gNTB_37o7lBf1whYde3ZRfMb5pYW78")
+set.api.key("")
 jarak = gmapsdistance(origin = init_data$latlon,
                       destination = init_data$latlon,
                       combinations = 'all',
