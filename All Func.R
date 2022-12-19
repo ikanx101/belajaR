@@ -248,7 +248,13 @@ bikinin.pie.chart.facet.dari.data.saya.donk=function(data,variabel,facet,pertany
   colnames(tabulasi)=c('ket','percent','facet')
   tabulasi$percent=round(tabulasi$percent,2)
   new=tabulasi %>% filter(grepl('total',ket,ignore.case=T)) %>% 
-    mutate(facet.new=paste(facet,'\nn=',percent,ifelse(percent<30,' - indikasi',''),sep=''))
+    mutate(facet.new = paste0(facet,
+                              '\n',
+                              'n=',
+                              percent,
+                              ifelse(percent<30,' - indikasi','')
+                             )
+          )
   new$ket=NULL
   new$percent=NULL #baru sampe sini yah
   tabulasi = tabulasi %>% 
