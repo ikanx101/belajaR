@@ -235,7 +235,7 @@ bikinin.pie.chart.dari.data.saya.donk=function(data,variabel,pertanyaan,sub.judu
 
 # bikin pie chart facet
   # sudah revised
-bikinin.pie.chart.facet.dari.data.saya.donk=function(data,variabel,facet,pertanyaan,sub.judul,caption){
+bikinin.pie.chart.facet.dari.data.saya.donk=function(data,variabel,facet,pertanyaan,sub.judul,ncol){
   tabulasi=data %>% tab_cells(variabel) %>% tab_rows(facet) %>% 
     tab_stat_cpct() %>% tab_pivot()
   tabulasi$dummy=strsplit(tabulasi$row_labels,'\\|')
@@ -255,11 +255,13 @@ bikinin.pie.chart.facet.dari.data.saya.donk=function(data,variabel,facet,pertany
     filter(!grepl('total',ket,ignore.case=T)) #tabulasi final untuk chart
   tabulasi = tabulasi %>% filter(!is.na(ket))
   tabulasi=merge(tabulasi,new)
-  ggplot(tabulasi,aes(x='',y=percent,fill=ket,label=paste(ket,', ',percent,'%',sep=''))) + 
+  tabulasi[is.na(tabulasi)] = 0  
+  ggplot(tabulasi,aes(x='',y=percent,fill=ket,label=paste(ket,'\n',percent,'%',sep=''))) + 
     geom_bar(stat='identity') + 
     coord_polar("y", start=0) +
     scale_fill_brewer(palette="Accent") + 
     theme_minimal() + 
+    facet_wrap(~facet.new,ncol = ncol) +
     theme(panel.grid=element_blank(),axis.title.y=element_blank(),
           axis.title.x=element_blank(),legend.position = 'none',
           plot.title = element_text(size=17),
@@ -268,7 +270,6 @@ bikinin.pie.chart.facet.dari.data.saya.donk=function(data,variabel,facet,pertany
           axis.text.y = element_blank(),
           axis.text.x = element_blank()) +
     geom_label(position = position_stack(vjust = 0.5),size=4.5) +
-    labs(caption = paste('n = ',ifelse(n>=30,n,paste(n,', indikasi',sep='')),sep='')) +
     labs(title=pertanyaan,subtitle = sub.judul)
 }
 
